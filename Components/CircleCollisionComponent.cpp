@@ -20,7 +20,7 @@ bool CircleCollisionComponent::CollidesWith(CircleCollisionComponent& other)
 bool CircleCollisionComponent::CollidesWith(RectangleCollisionComponent& other) 
 {
 
-
+    // Add code for the Collision of the rectangle and the circle
 
 
 
