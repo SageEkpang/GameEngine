@@ -22,10 +22,15 @@ bool RectangleCollisionComponent::CollidesWith(RectangleCollisionComponent& othe
 
 bool RectangleCollisionComponent::CollidesWith(CircleCollisionComponent& other) 
 {
-    
 
-
-
+    if (CheckCollisionCircleRec(other.GetTransform()->GetPosition(), other.GetRadius(), 
+    Rectangle{other.GetTransform()->GetPosition().x, other.GetTransform()->GetPosition().y, 
+    other.GetTransform()->GetScale().x, other.GetTransform()->GetScale().y})
+    )
+    {
+        m_HasCollided = true;
+        return m_HasCollided;
+    }
 
     m_HasCollided = false;
     return m_HasCollided;

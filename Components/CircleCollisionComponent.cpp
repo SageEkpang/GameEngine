@@ -20,9 +20,14 @@ bool CircleCollisionComponent::CollidesWith(CircleCollisionComponent& other)
 bool CircleCollisionComponent::CollidesWith(RectangleCollisionComponent& other) 
 {
 
-    // Add code for the Collision of the rectangle and the circle
-
-
+    if (CheckCollisionCircleRec(m_Transform->GetPosition(), m_Radius, 
+    Rectangle{m_Transform->GetPosition().x, m_Transform->GetPosition().y, 
+    m_Transform->GetScale().x, m_Transform->GetScale().y})
+    )
+    {
+        m_HasCollided = true;
+        return m_HasCollided;
+    }
 
     m_HasCollided = false;
     return m_HasCollided;

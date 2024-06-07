@@ -21,19 +21,19 @@ public:
     // CLASS FUNCTION(s)
 
     /// @brief Default Constructor for Class
-    RectangleCollisionComponent() { m_HasCollision = true; };
+    RectangleCollisionComponent() { m_HasCollision = true; }
 
     /// @brief Default Destructor for Class
-    ~RectangleCollisionComponent() { };
+    ~RectangleCollisionComponent() { }
 
 
     // BASE FUNCTIONS
 
     /// @brief Default Update function for Class
-    void Update(float deltaTime) override { };
+    void Update(float deltaTime) override { }
 
     /// @brief Default Draw function for Class
-    void Draw() override { };
+    void Draw() override { }
 
 
     // COLLIDER FUNCTION(s)

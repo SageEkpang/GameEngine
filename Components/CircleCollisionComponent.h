@@ -15,19 +15,19 @@ public:
     // CLASS FUNCTION(s)
 
     /// @brief Default Constructor for Class
-    CircleCollisionComponent() { m_HasCollision = true; };
+    CircleCollisionComponent() { m_HasCollision = true; }
 
     /// @brief Default Destructor for Class
-    ~CircleCollisionComponent() { };
+    ~CircleCollisionComponent() { }
     
 
     // BASE FUNCTION(s)
 
     /// @brief Default Update function for Class
-    void Update(float deltaTime) override { };
+    void Update(float deltaTime) override { }
 
     /// @brief Default Draw function for Class
-    void Draw() override { };
+    void Draw() override { }
 
 
     // COLLIDER FUNCTION(s)
