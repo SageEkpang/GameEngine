@@ -1,6 +1,7 @@
 #include "Structs.h"
 #include "Constants.h"
 #include "GameObjectManager.h"
+#include "StartUp.h"
 
 class GameScreen;
 
@@ -14,7 +15,7 @@ namespace GameUtility
     // GAME FUNCTION(s)
     namespace Game
     {
-        void StartUpContent();
+        void StartUpContent(StartUp startContent);
         void LoadContent(GameScreen* gameScreen, GameObjectManager* gameObjectManager); // For the Construnction of Everything (In Main File)
         void Process(float deltaTime); // Update / Process Game Utility (In Main File)
         void Showcase(); // Render / Showcase Game Utility (In Main File)

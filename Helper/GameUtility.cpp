@@ -6,9 +6,9 @@ namespace GameUtility
 {
     namespace Game
     {
-        void StartUpContent() 
+        void StartUpContent(StartUp startContent) 
         {
-            m_GameScreen;
+            
         }
     
         void LoadContent(GameScreen* gameScreen, GameObjectManager* gameObjectManager) 

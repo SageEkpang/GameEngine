@@ -6,7 +6,8 @@ int main()
     SetTargetFPS(60);
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE_NAME);
 
-    GameUtility::Game::StartUpContent();
+    StartUp* content = new StartUp();
+    GameUtility::Game::StartUpContent(content);
 
     while(!WindowShouldClose())
     {
