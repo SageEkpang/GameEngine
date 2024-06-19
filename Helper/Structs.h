@@ -31,81 +31,156 @@ enum ScreenState
     SCREEN_PREVIOUS = -1
 };
 
-typedef struct Tile
-{
-    std::string tag;
-    Vector2 position;
-    Texture2D texture;
+// DATA VARIABLE STRUCT(s)
 
-    Tile(std::string tag = " ", Vector2 position = Vector2(), Texture2D texture = Texture2D())
+typedef struct Vector2Utility
+{
+    float x;
+    float y;
+
+    // Conversions
+    Vector2 vec2 = Vector2{x, y};
+
+    Vector2Utility(float x = 0, float y = 0)
     {
-        this->tag = tag;
-        this->position = position;
-        this->texture = texture;
+        this->x = x;
+        this->y = y;
     }
 
-} Tile2D;
+    bool operator==(const Vector2Utility &value) const
+    {
+        return (this->x == value.x && this->y == value.y);
+    }
 
-typedef struct Transform2D
+    Vector2Utility operator++()
+    {
+        ++this->x;
+        ++this->y;
+        return *this;
+    }
+
+    Vector2Utility operator--()
+    {
+        --this->x;
+        --this->y;
+        return *this;
+    }
+
+    Vector2Utility operator=(const Vector2Utility &value)
+    {
+        this->x = value.x;
+        this->y = value.y;
+        return *this;
+    }
+
+    Vector2Utility operator+=(const Vector2Utility &value)
+    {
+        this->x += value.x;
+        this->y += value.y;
+        return *this;
+    }
+
+    Vector2Utility operator+=(const float &value)
+    {
+        this->x += value;
+        this->y += value;
+    }
+
+    Vector2Utility operator-=(const Vector2Utility &value)
+    {
+        this->x -= value.x;
+        this->y -= value.y;
+        return *this;
+    }
+
+    Vector2Utility operator-=(const float &value)
+    {
+        this->x -= value;
+        this->y -= value;
+        return *this;
+    }
+
+    Vector2Utility Normalise()
+    {
+
+    }
+
+    // Operator Overloads (default)
+
+    Vector2Utility operator/(const Vector2Utility &value)
+    {
+        return Vector2Utility(this->x / value.x, this->y / value.y);
+    }
+
+    Vector2Utility operator+(const Vector2Utility &value)
+    {
+        return Vector2Utility(value.x + this->x, value.y + this->y);
+    }
+
+    Vector2Utility operator+(const float &value)
+    {
+        return Vector2Utility(value + this->x, value + this->y);
+    }
+
+    Vector2Utility operator*(const Vector2Utility &value)
+    {
+        return Vector2Utility( value.x * this->x, value.y * this->y);
+    }
+
+    Vector2Utility operator*(const float &value)
+    {
+        return Vector2Utility( value * this->x, value * this->y);
+    }
+
+} Vector2Utility;
+
+typedef struct Vector3Utility
 {
-    Vector2 position;
-    Vector2 size;
+    float x;
+    float y;
+    float z;
+
+    Vector3Utility(float x = 0, float y = 0, float z = 0)
+    {
+        this->x = x;
+        this->y = y;
+        this->z = z;
+    }
+
+} Vector3Utility;
+
+typedef struct Transform2Utility
+{
+    Transform2Utility* parent;
+    Vector2Utility position;
+    Vector2Utility scale;
     float rotation;
 
-    Transform2D(Vector2 position = Vector2(), Vector2 size = Vector2(), float rotation = 0)
+    Transform2Utility(Transform2Utility* parent = nullptr, Vector2Utility position = Vector2Utility(), Vector2Utility scale = Vector2Utility(), float rotation = 0)
     {
+        parent = new Transform2Utility();
         this->position = position;
-        this->size = size;
+        this->scale = scale;
         this->rotation = rotation;
     }
 
-} Transform2D;
+} Transform2Utility;
 
-typedef struct GameInfo
+typedef struct Transform3Utility
 {
-    GameState State;
-    ScreenState ScState;
-    int LevelIndex;
+    Transform3Utility* parent;
+    Vector3Utility position;
+    Vector3Utility scale;
+    Vector3Utility rotation;
 
-    GameInfo() = default;
-
-    GameInfo(GameState State, ScreenState ScState, int levelIndex)
+    Transform3Utility(Transform3Utility* parent = nullptr, Vector3Utility position = Vector3Utility(), Vector3Utility scale = Vector3Utility(), Vector3Utility rotation = Vector3Utility())
     {
-        this->State = State;
-        this->ScState = ScState;
-        this->LevelIndex = levelIndex;
+        parent = new Transform3Utility();
+        this->position = position;
+        this->scale = scale;
+        this->rotation = rotation;
     }
 
-} GameInfo;
-
-typedef struct ButtonInfo
-{
-    const char* ButtonText;
-    std::string ButtonTextureName;
-
-    Texture2D ButtonImage;
-    Rectangle ButtonRect;
-    Vector2 ButtonPadding;
-
-    bool ButtonActive;
-    float ButtonTextSize;
-    GameInfo Info;
-
-    ButtonInfo()
-    {
-        ButtonText = "";
-        ButtonTextureName = "";
-        ButtonImage = Texture2D();
-        ButtonRect.x = 0;
-        ButtonRect.y = 0;
-        ButtonRect.width = 0;
-        ButtonRect.height = 0;
-        ButtonPadding.x = 0;
-        ButtonPadding.y = 0;
-        ButtonActive = false;
-        ButtonTextSize = 0;
-    }
-
-} ButtonInfo;
+} Transform3Utility;
 
 #endif

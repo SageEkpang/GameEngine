@@ -1,6 +1,6 @@
-#include "LevelComponent.h"
+#include "TileSetComponent.h"
 
-LevelComponent::LevelComponent(int level) 
+TileSetComponent::TileSetComponent(int level) 
 : m_TileSize(TILE_SIZE)
 {
     m_ID = "Level";
@@ -48,11 +48,12 @@ LevelComponent::LevelComponent(int level)
     CheckCollisionTiles();
 }
 
-void LevelComponent::Update(float DeltaTime) 
+void TileSetComponent::Update(float DeltaTime) 
 {
+    
 }
 
-void LevelComponent::Draw() 
+void TileSetComponent::Draw() 
 {
     for (size_t i = 0; i < m_TileArray.size(); ++i)
     {
@@ -69,7 +70,7 @@ void LevelComponent::Draw()
     }
 }
 
-void LevelComponent::LoadLevel(std::string levelName) 
+void TileSetComponent::LoadLevel(std::string levelName) 
 {
     // LOAD CHARS FROM FILE
     m_InFile.open(m_LevelName, ios::in);
@@ -109,16 +110,16 @@ void LevelComponent::LoadLevel(std::string levelName)
     }
 }
 
-void LevelComponent::CheckCollisionTiles() 
+void TileSetComponent::CheckCollisionTiles() 
 {
 
-    Vector2 Point = Vector2();
-    Vector2 PointPositions[4] = 
+    Vector2Utility Point = Vector2Utility();
+    Vector2Utility PointPositions[4] = 
     {
-        Vector2{0, -1}, // Up
-        Vector2{1, 0}, // Right
-        Vector2{0, 1}, // Down
-        Vector2{-1, 0} // Left
+        Vector2Utility{0, -1}, // Up
+        Vector2Utility{1, 0}, // Right
+        Vector2Utility{0, 1}, // Down
+        Vector2Utility{-1, 0} // Left
     };
 
     for (size_t i = 0; i < m_TileArray.size(); ++i)
@@ -132,10 +133,10 @@ void LevelComponent::CheckCollisionTiles()
         for (int j = 0; j < 4;)
         {
             // Set Point to Intersect with tiles
-            Point = Vector2Add(TempPosition, Vector2{PointPositions[j].x * m_TileSize, PointPositions[j].y * m_TileSize});
+            Point.vec2 = Vector2Add(TempPosition, Vector2{PointPositions[j].x * m_TileSize, PointPositions[j].y * m_TileSize});
 
             // Check if there is a collision
-            if (CheckCollisionPointRec(Point, Rectangle{TempPosition.x, TempPosition.y, m_TileSize, m_TileSize}))
+            if (CheckCollisionPointRec(Point.vec2, Rectangle{TempPosition.x, TempPosition.y, m_TileSize, m_TileSize}))
             {
                 ++j;
             }
@@ -149,7 +150,7 @@ void LevelComponent::CheckCollisionTiles()
     }
 }
 
-void LevelComponent::UnloadTextureVariables() 
+void TileSetComponent::UnloadTextureVariables() 
 {
     UnloadTexture(m_EmptyTile);
     UnloadTexture(m_GroundTile);

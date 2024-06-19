@@ -5,15 +5,34 @@
 #include "Structs.h"
 #include "Constants.h"
 
-// NEEDED INCLUDE(s)
-#include "Component.h"
+#include "GameUtility.h"
 
-class GameScreen : public Component
+typedef struct GameInfo
+{
+    GameState State;
+    ScreenState ScState;
+    int LevelIndex;
+
+    GameInfo() = default;
+
+    GameInfo(GameState State, ScreenState ScState, int levelIndex)
+    {
+        this->State = State;
+        this->ScState = ScState;
+        this->LevelIndex = levelIndex;
+    }
+
+} GameInfo;
+
+class GameScreen
 {
 protected:
 
     // CAMERA VARIABLE(s)
     Camera2D m_Camera;
+
+    // GAME OBJECT VARIABLE(s)
+    GameObjectManager* m_GameObjects;
 
     // SCREEN VARIABLE(s)
     std::string m_ScreenName;

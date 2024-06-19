@@ -60,7 +60,7 @@ void Gameplay::LoadContent()
 
         // If there are size problems, check the character base class
         Texture2D m_PlayerSprite = LoadTexture("Images/Player/PlayerSpriteSheet.png");
-        Transform2D PlayerTransform(Vector2{100, 600}, Vector2{100, 100}, 0);
+        // Transform2D PlayerTransform(Vector2{100, 600}, Vector2{100, 100}, 0);
         
         m_Player = new Player("Player", "Chief", PlayerTransform, 100, 50, 10, 2, m_PlayerSprite, m_PlayLevel);
 

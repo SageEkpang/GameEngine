@@ -5,9 +5,6 @@
 #include "Constants.h"
 #include "Structs.h"
 
-// NEEDED INCLUDE(s)
-#include "TransformUtility.h"
-
 // COMPONENT INCLUDE(s)
 #include "Component.h"
 
@@ -17,7 +14,7 @@ protected:
 
     // GAMEOBJECT VARIABLE(s)
     std::string m_Tag;
-    TransformUtility* m_Transform;
+    Transform2Utility* m_Transform;
 
     // COMPONENT VARIABLE(s)
     std::vector<Component*> m_Components;
@@ -44,16 +41,16 @@ public:
 
     // GETTER FUNCTION(s)
     inline std::string GetTag() { return this->m_Tag; }
-    inline virtual TransformUtility* GetTransform() { return this->m_Transform; }
-    inline virtual std::vector<Component*> GetComponents() { return m_Components; };
+    inline virtual Transform2Utility* GetTransform() { return this->m_Transform; }
+    inline virtual std::vector<Component*> GetComponents() { return m_Components; }
 
     // SETTER FUNCTION(s)
     inline void SetTag(std::string tag) { this->m_Tag = tag; }
     inline void AddComponent(Component* component) { m_Components.push_back(component); }
 
-    inline virtual void SetPosition(Vector2 position) { m_Transform->SetPosition(position); }
-    inline virtual void SetScale(Vector2 scale) { m_Transform->SetScale(scale); }
-    inline virtual void SetRotation(float rotation) { m_Transform->SetRotation(rotation); }
+    inline virtual void SetPosition(Vector2Utility position) { m_Transform->position = position; }
+    inline virtual void SetScale(Vector2Utility scale) { m_Transform->scale = scale; }
+    inline virtual void SetRotation(float rotation) { m_Transform->rotation = rotation; }
 };
 
 #endif

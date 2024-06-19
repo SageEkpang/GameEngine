@@ -1,5 +1,5 @@
-#ifndef LEVEL_COMPONENT_H
-#define LEVEL_COMPONENT_H
+#ifndef TILE_SET_COMPONENT_H
+#define TILE_SET_COMPONENT_H
 
 #include "Component.h"
 
@@ -8,11 +8,25 @@
 
 #define TILE_SIZE 100.0f
 
-
 // E - EMPTY
 // G - GROUND
 
-class LevelComponent : public Component
+typedef struct Tile
+{
+    std::string tag;
+    Vector2 position;
+    Texture2D texture;
+
+    Tile(std::string tag = " ", Vector2 position = Vector2(), Texture2D texture = Texture2D())
+    {
+        this->tag = tag;
+        this->position = position;
+        this->texture = texture;
+    }
+
+} Tile2D;
+
+class TileSetComponent : public Component
 {
 private: 
 
@@ -54,10 +68,10 @@ public:
     // CLASS FUNCTION(s)
 
     /// @brief Custom Constructor for Class 
-    LevelComponent(int level);
+    TileSetComponent(int level);
 
     /// @brief Default Destructor for Class
-    virtual ~LevelComponent() { };
+    virtual ~TileSetComponent() { };
 
 
     // BASE FUNCTION(s)

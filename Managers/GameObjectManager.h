@@ -14,7 +14,7 @@
 // GAME COMPONENTS(s)
 #include "CameraComponent.h"
 #include "ButtonComponent.h"
-#include "LevelComponent.h"
+#include "TileSetComponent.h"
 #include "UIComponent.h"
 #include "RenderComponent.h"
 

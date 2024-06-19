@@ -1,10 +1,15 @@
 #include "Title.h"
 
+// Start Up
+
 Title::Title() 
 {
+    // GameUtility::Game::LoadContent();
     m_ScreenName = "Title";
     m_Camera.zoom = 1.0f;
     m_GameInfo.State = GameState::STATE_TITLE;
+
+    GameUtility::Game::LoadContent(this, m_GameObjects);
 }
 
 Title::~Title() 

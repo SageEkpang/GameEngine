@@ -1,13 +1,7 @@
-#include "Structs.h"
-#include "GameScreen.h"
+#ifndef GAME_MANAGER_H
+#define GAME_MANAGER_H
 
-// DERIVED CLASS(ES) STATE
-
-class Title;
-class Menu;
-class LevelSelect;
-class Gameplay;
-class End;
+#include "GameScreens/GameScreen.h"
 
 class GameManager
 {
@@ -54,3 +48,5 @@ public:
     Camera2D GetCamera2D() { return m_CurrentGameScreen->GetCamera2D(); }
 
 };
+
+#endif

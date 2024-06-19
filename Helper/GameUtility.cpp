@@ -1,16 +1,25 @@
 #include "GameUtility.h"
+#include "GameScreen.h"
+#include "GameObjectManager.h"
 
 namespace GameUtility
 {
     namespace Game
     {
-        void LoadContent() 
+        void StartUpContent() 
         {
-            
+            m_GameScreen;
         }
-
+    
+        void LoadContent(GameScreen* gameScreen, GameObjectManager* gameObjectManager) 
+        {
+            m_GameScreen = gameScreen;
+            m_GameObjectManager = gameObjectManager;
+        }
+    
         void Process(float deltaTime) 
         {
+            m_GameScreen->Update(deltaTime);
             m_GameObjectManager->Process(deltaTime);
         }
         
@@ -22,9 +31,10 @@ namespace GameUtility
 
             ClearBackground(g_Background);
 
-                BeginMode2D(m_GameObjectManager->GetCurrentCamera());
+                BeginMode2D(m_GameScreen->GetCamera2D());
 
-                m_GameObjectManager->Showcase();
+                    m_GameScreen->Draw();
+                    m_GameObjectManager->Showcase();
 
                 EndMode2D();
 
@@ -35,27 +45,10 @@ namespace GameUtility
         {
             m_GameObjectManager->Destroy();
             m_GameObjectManager = nullptr;
-            delete m_GameObjectManager;
-        }
-        
-        void AddGameObjectManager(GameObjectManager* gameObjectManager) 
-        {
-            m_GameObjectManager = gameObjectManager;
-        }
-    }
-    
-    namespace UI
-    {
-        
-        void AddGameScreen() 
-        {
-            
-        }
-        
-        void TransitionGameScreen() 
-        {
-            
-        }
+            // delete m_GameObjectManager;
 
+            m_GameScreen = nullptr;
+            // delete m_GameScreen;
+        }
     }
 }
