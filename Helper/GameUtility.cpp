@@ -69,6 +69,32 @@ namespace GameUtility
             m_TransitionTime = time;
         }
         
+        void PlaySound(const char* sound, float volume, bool looping) 
+        {
+            Sound* temp = new Sound();
+            temp = &LoadSound(sound);
+            static bool IsSoundPlayed;
+            
+            // Play Sound for File
+            if (!IsSoundPlaying(*temp) && IsSoundPlayed == false) 
+            { 
+                PlaySoundMulti(*temp); IsSoundPlayed = true;
+            }
+
+            // Play Sound again if it is set to looping
+            if (!IsSoundPlaying(*temp) && looping == true) 
+            { 
+                temp = nullptr;
+                delete temp;
+                PlaySound(sound, volume, looping); 
+            }
+            else if (!IsSoundPlaying(*temp) && looping == false)
+            {
+                temp = nullptr;
+                delete temp;
+            }
+        }
+        
         void TransitionScreen(GameState state, float deltaTime) 
         {
             m_Timer += 60.0f * deltaTime;

@@ -28,7 +28,7 @@ public:
     StartUp();
 
     /// @brief Default Destructor for Class
-    ~StartUp();
+    ~StartUp() { }
 
 
     // BASE FUNCTION(s)

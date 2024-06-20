@@ -14,8 +14,3 @@ StartUp::StartUp()
     m_Screens.push_back(Gameplay());
     m_Screens.push_back(End());
 }
-
-StartUp::~StartUp() 
-{
-    
-}
