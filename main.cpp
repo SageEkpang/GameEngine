@@ -1,5 +1,6 @@
 #include "GameUtility.h"
 #include "GameManager.h"
+#include "StartUp.h"
 
 int main()
 {

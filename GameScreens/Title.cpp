@@ -9,7 +9,8 @@ Title::Title()
     m_Camera.zoom = 1.0f;
     m_GameInfo.State = GameState::STATE_TITLE;
 
-    GameUtility::Game::LoadContent(this, m_GameObjects);
+    GameUtility::Game::TransitionTime(5.0f);
+    GameUtility::Game::LoadContent(m_GameObjects);
 }
 
 Title::~Title() 
@@ -19,14 +20,11 @@ Title::~Title()
 
 void Title::Update(float DeltaTime) 
 {
+    m_GameObjects->Process(DeltaTime);
+
     if (IsKeyReleased(KEY_SPACE))
     {
-        m_GameInfo.LevelIndex = 1;
-
-        
-
-        m_GameCopy.LevelIndex = m_GameInfo.LevelIndex;
-        m_GameInfo.State = GameState::STATE_MENU;
+        GameUtility::Game::TransitionScreen(ScreenState::SCREEN_NEXT, DeltaTime);
     }
 }
 

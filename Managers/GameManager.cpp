@@ -5,12 +5,6 @@ GameManager::GameManager()
     m_CurrentGameState(GameState::STATE_NONE), 
     m_CurrentScreenState(ScreenState::SCREEN_CURRENT)
 {
-    // remake into enum map type
-    // m_ScreenVector.push_back(new Title());
-    // m_ScreenVector.push_back(new Menu());
-    // m_ScreenVector.push_back(new LevelSelect());
-    // m_ScreenVector.push_back(new Gameplay());
-    // m_ScreenVector.push_back(new End());
 
     // Set up screen for Display
     m_CurrentGameScreen = static_cast<GameScreen*>(m_ScreenVector[0]);

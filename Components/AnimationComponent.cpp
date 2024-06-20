@@ -54,6 +54,6 @@ void AnimationComponent::Update(float deltaTime)
 void AnimationComponent::Draw() 
 {
     Rectangle Source = Rectangle{m_Animate, (float)(16.7 * m_MoveDown), (float)(25 * m_Flip), 16.7}; // Rectangle Source = Rectangle{0, 0, m_Transform.size.x, m_Transform.size.y}; // x = 25, y = 16.5 (nth number of 4.25)
-    Rectangle Destination = Rectangle{m_Transform->GetPosition().x, m_Transform->GetPosition().y, m_Transform->GetPosition().x, m_Transform->GetPosition().y};
+    Rectangle Destination = Rectangle{m_Transform->position.x, m_Transform->position.y, m_Transform->position.x, m_Transform->position.y};
     DrawTexturePro(m_RenderComponent->GetImageSpriteSheet(), Source, Destination, Vector2{0, 0}, 0, WHITE);
 }

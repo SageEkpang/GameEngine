@@ -16,6 +16,8 @@ class StartUp
 {
 private:
 
+    // Private Variables
+
     std::vector<GameScreen> m_Screens;
 
 public:

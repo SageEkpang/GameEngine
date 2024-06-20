@@ -6,15 +6,14 @@
 #include "GameScreen.h"
 
 // GAME INCLUDE(s)
-#include "LevelComponent.h"
-#include "Player.h"
+
 
 class Gameplay : public GameScreen
 {
 private:
 
-    Player* m_Player;
-    LevelComponent* m_PlayLevel;
+    // Player* m_Player;
+    // LevelComponent* m_PlayLevel;
 
     bool m_IsLoaded;
 
