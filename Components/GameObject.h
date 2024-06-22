@@ -44,6 +44,9 @@ public:
     inline virtual Transform2Utility* GetTransform() { return this->m_Transform; }
     inline virtual std::vector<Component*> GetComponents() { return m_Components; }
 
+    template<typename T>
+    T GetComponent();
+
     // SETTER FUNCTION(s)
     inline void SetTag(std::string tag) { this->m_Tag = tag; }
     inline void AddComponent(Component* component) { m_Components.push_back(component); }

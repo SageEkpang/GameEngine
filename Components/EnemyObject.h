@@ -1,5 +1,5 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef ENEMY_H
+#define ENEMY_H
 
 // PARENT CLASS
 #include "GameObject.h"
@@ -10,7 +10,7 @@
 #include "PhysicsComponent.h"
 #include "RenderComponent.h"
 
-class PlayerObject : public GameObject
+class EnemyObject : public GameObject
 {
 private:
 public:
@@ -26,19 +26,19 @@ public:
     /// @param speed 
     /// @param maxJump 
     /// @param spriteSheet 
-    PlayerObject(std::string tag, std::string name, Transform2Utility transform, float health, float damage, float speed, float maxJump, Texture2D spriteSheet);
+    EnemyObject(std::string tag, std::string name, Transform2Utility transform, float health, float damage, float speed, float maxJump, Texture2D spriteSheet);
 
     /// @brief Default Destructor for Class
-    ~PlayerObject() { }
-    
+    virtual ~EnemyObject() { };
 
+    
     // BASE FUNCTION(s)
 
-    /// @brief Default Update function for Class
-    void Update(float DeltaTime) override;
+    /// @brief Default Update function for Class 
+    virtual void Update(float DeltaTime) override;
 
     /// @brief Default Draw function for Class
-    void Draw() override;
+    virtual void Draw() override;
 
 };
 

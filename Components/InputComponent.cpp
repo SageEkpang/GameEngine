@@ -2,11 +2,8 @@
 
 InputComponent::InputComponent() 
 {
-    m_KeyMap[Input::PLAYER_ONE] = new KeyboardKey[5] {KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE};
-    m_KeyMap[Input::PLAYER_TWO] = new KeyboardKey[5] {KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z};
+    
 }
-
-// TODO: Make key binding function (input flag, key flag, script object)
 
 InputComponent::~InputComponent() 
 {
@@ -18,33 +15,37 @@ InputComponent::~InputComponent()
 
 void InputComponent::Update(float deltaTime) 
 {
-    if (IsKeyDown(m_Keys[0])) m_Transform->MoveUp(PLAYER_SPEED * deltaTime);
-    if (IsKeyDown(m_Keys[1])) m_Transform->MoveLeft(PLAYER_SPEED * deltaTime);
-    if (IsKeyDown(m_Keys[2])) m_Transform->MoveDown(PLAYER_SPEED * deltaTime);
-    if (IsKeyDown(m_Keys[3])) m_Transform->MoveRight(PLAYER_SPEED * deltaTime);
-    // TODO: Need to do jump (if the jump button was pressed, it would manipulate the speed of which)
-    // you go up at so it would have something to do with the physics component that wil be written
-    // so for now leave the keys as they are and sort out the phyics and jump later
+    for (size_t i = 0; i < m_Keys.size(); ++i)
+    {
+        switch(m_Keys[i].type)
+        {
+            case InputType::KEY_IDLE: if (IsKeyUp(m_Keys[i].key)) { ExecuteKey<void>(m_Keys[i].key); } break;
+            case InputType::KEY_PRESS: if (IsKeyPressed(m_Keys[i].key)) { ExecuteKey<void>(m_Keys[i].key); } break;
+            case InputType::KEY_DOWN: if (IsKeyDown(m_Keys[i].key)) { ExecuteKey<void>(m_Keys[i].key); } break;
+            case InputType::KEY_RELEASE: if (IsKeyReleased(m_Keys[i].key)) { ExecuteKey<void>(m_Keys[i].key); } break;
+        }
+    }
 }
 
 void InputComponent::Draw() 
 {
 }
 
-inline void InputComponent::SetPlayerInput(Input playerType) 
+template<typename T>
+inline void InputComponent::SetKeyInput(InputType type, KeyboardKey value, T func) 
 {
-    switch(playerType)
-    {
-        case Input::PLAYER_ONE: InsertElements(m_KeyMap[Input::PLAYER_ONE], 5); break;
-        case Input::PLAYER_TWO: InsertElements(m_KeyMap[Input::PLAYER_TWO], 5); break;
-        default: InsertElements(m_KeyMap[Input::PLAYER_ONE], 5); break;
-    }
+    auto Ins = std::type_index(typeid(func));
+    m_Keys.push_back(KeyType{value, type});
+    m_KeyMap.insert(std::make_pair(value, std::make_pair((FunctionType)func, Ins)));
 }
 
-void InputComponent::InsertElements(KeyboardKey* values, int size) 
+template<typename T, typename... Args>
+inline T InputComponent::ExecuteKey(KeyboardKey& value, Args&&... args) 
 {
-    for (int i = 0; i < size; ++i)
-    {
-        m_Keys[i] = values[i];
-    }
+    auto MapIndex = m_KeyMap.find(value);
+    auto MapValue = MapIndex->second;
+    auto TypeCastFunc = (T(*)(Args...))(MapValue.first);
+
+    assert(MapValue.second == std::type_index(typeid(TypeCastFunc)));
+    return TypeCastFunc(std::forward<Args>(args)...);
 }

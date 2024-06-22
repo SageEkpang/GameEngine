@@ -11,6 +11,10 @@
 #include <sstream>
 #include <array>
 
+#include <typeinfo>
+#include <typeindex>
+#include <cassert>
+
 using namespace std;
 
 // GAME STATE ENUMS
@@ -120,6 +124,16 @@ typedef struct Vector2Utility
     Vector2Utility operator+(const float &value)
     {
         return Vector2Utility(value + this->x, value + this->y);
+    }
+
+    Vector2Utility operator-(const Vector2Utility &value)
+    {
+        return Vector2Utility(this->x - value.x, this->y - value.y);
+    }
+
+    Vector2Utility operator-(const float &value)
+    {
+        return Vector2Utility(this->x - value, this->y - value);
     }
 
     Vector2Utility operator*(const Vector2Utility &value)

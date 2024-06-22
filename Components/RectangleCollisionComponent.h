@@ -8,13 +8,13 @@ class RectangleCollisionComponent : public CollisionComponent
 {
 private:
 
-    Vector2 m_Max;
-    Vector2 m_Min;
+    Vector2Utility m_Max;
+    Vector2Utility m_Min;
 
-    Vector2 m_Extents;
-    Vector2 m_HalfExtents;
+    Vector2Utility m_Extents;
+    Vector2Utility m_HalfExtents;
 
-    Vector2 m_CentrePoint;
+    Vector2Utility m_CentrePoint;
 
 public:
 
@@ -43,13 +43,13 @@ public:
 
 
     // GETTER FUNCTION(s)
-    inline Vector2 GetMax() { return m_Max; }
-    inline Vector2 GetMin() { return m_Min; }
+    inline Vector2Utility GetMax() { return m_Max; }
+    inline Vector2Utility GetMin() { return m_Min; }
 
-    inline Vector2 GetExtents() { return m_Extents; }
-    inline Vector2 GetHalfExtents() { return m_HalfExtents; }
+    inline Vector2Utility GetExtents() { return m_Extents; }
+    inline Vector2Utility GetHalfExtents() { return m_HalfExtents; }
 
-    inline Vector2 GetCentrePoint() { return m_CentrePoint; }
+    inline Vector2Utility GetCentrePoint() { return m_CentrePoint; }
 };
 
 #endif

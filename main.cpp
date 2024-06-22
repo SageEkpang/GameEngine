@@ -19,6 +19,8 @@ int main()
     }
 
     GameUtility::Game::Destroy();
+    content = nullptr;
+    delete content;
 
     return 0;
 }

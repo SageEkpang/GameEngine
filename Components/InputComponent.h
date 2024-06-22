@@ -4,22 +4,32 @@
 // NEEDED INCLUDE(s)
 #include "Component.h"
 
-enum Input{
-    PLAYER_ONE,
-    PLAYER_TWO
+enum InputType
+{
+    KEY_IDLE = 0,
+    KEY_PRESS = 1,
+    KEY_DOWN = 2,
+    KEY_RELEASE = -1
 };
+
+struct KeyType
+{
+    KeyboardKey key;
+    InputType type;
+};
+
+typedef void (*FunctionType)(void);
 
 class InputComponent : public Component
 {
 private:
 
     // PRIVATE VARIABLE(s)
-    std::map<Input, KeyboardKey*> m_KeyMap;
-    std::map<KeyboardKey, int> m_KeyBoardScriptMap; // Takes in Key and Script tied to that key
-    KeyboardKey m_Keys[5];
+    std::vector<KeyType> m_Keys; // Takes in Key and Script tied to that key
+    std::map<KeyboardKey, std::pair<FunctionType, std::type_index>> m_KeyMap;
 
-    // PRIVATE FUNCTION(s)
-    void InsertElements(KeyboardKey* values, int size);
+    template<typename T, typename... Args>
+    inline T ExecuteKey(KeyboardKey& value, Args&&... args);
 
 public:
 
@@ -41,13 +51,13 @@ public:
     void Draw() override;
 
 
-
     // GETTER FUNCTION(s)
 
 
 
     // SETTER FUNCTION(s)
-    inline void SetPlayerInput(Input playerType);
+    template<typename T>
+    inline void SetKeyInput(InputType type, KeyboardKey value, T func);
 
 };
 

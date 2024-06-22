@@ -17,7 +17,6 @@ GameObject::~GameObject()
             *itr = nullptr;
             delete* itr;
         }
-
         m_Components.clear();
     }
 }
@@ -28,16 +27,16 @@ void GameObject::Update(float deltaTime)
     for (int i = 0; i < m_Components.size(); ++i)
     {
         // If Component has a parent, multiply parent position, scale and rotation
-        if (m_Components[i]->GetTransform()->GetParent() != nullptr)
+        if (m_Components[i]->GetTransform()->parent != nullptr)
         {
             // Position
-            m_Components[i]->GetTransform()->SetPosition(Vector2Multiply(this->m_Components[i]->GetTransform()->GetPosition(), this->m_Components[i]->GetTransform()->GetParent()->GetPosition()));
+            m_Components[i]->GetTransform()->position = this->m_Components[i]->GetTransform()->position * this->m_Components[i]->GetTransform()->parent->position;
 
             // Scale
-            m_Components[i]->GetTransform()->SetScale(Vector2Multiply(this->m_Components[i]->GetTransform()->GetScale(), this->m_Components[i]->GetTransform()->GetParent()->GetScale()));
+            m_Components[i]->GetTransform()->scale = this->m_Components[i]->GetTransform()->scale, this->m_Components[i]->GetTransform()->parent->scale;
 
             // Rotation
-            m_Components[i]->GetTransform()->SetRotation(this->m_Components[i]->GetTransform()->GetRotation() * this->m_Components[i]->GetTransform()->GetParent()->GetRotation());
+            m_Components[i]->GetTransform()->rotation = this->m_Components[i]->GetTransform()->rotation * this->m_Components[i]->GetTransform()->parent->rotation;
         }
    
         // Update Components
@@ -53,3 +52,10 @@ void GameObject::Draw()
         m_Components[i]->Draw();
     }
 }
+
+template<typename T>
+T GameObject::GetComponent() 
+{
+    return T;
+}
+
