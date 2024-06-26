@@ -1,15 +1,15 @@
 #include "GameUtility.h"
-#include "GameManager.h"
 #include "StartUp.h"
 
 int main()
 {
-    SetTargetFPS(60);
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE_NAME);
+    InitAudioDevice();
 
     StartUp* content = new StartUp();
     GameUtility::Game::StartUpContent(content);
 
+    SetTargetFPS(60);
     while(!WindowShouldClose())
     {
         float deltaTime = GetFrameTime();
@@ -22,5 +22,7 @@ int main()
     content = nullptr;
     delete content;
 
-    return 0;
+    CloseAudioDevice();
+    
+    return 0; // Return to Operator
 }

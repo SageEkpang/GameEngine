@@ -1,8 +1,10 @@
 #include "TileSetComponent.h"
 
-TileSetComponent::TileSetComponent(int level) 
+TileSetComponent::TileSetComponent(int level, int layerIndex) 
 : m_TileSize(TILE_SIZE)
 {
+    m_LayerIndex = layerIndex;
+
     m_ID = "Level";
     std::string Temp = to_string(level);
     m_LevelName = "Levels/Level" + Temp + ".txt";
@@ -61,13 +63,13 @@ void TileSetComponent::Draw()
     }
 
     // DEBUG
-    if (IsKeyDown(KEY_U))
-    {
-        for (size_t i = 0; i < m_CollisionArray.size(); ++i)
-        {
-            DrawRectangle(m_CollisionArray[i].x, m_CollisionArray[i].y, m_CollisionArray[i].width, m_CollisionArray[i].height, RED);
-        }
-    }
+    // if (IsKeyDown(KEY_U))
+    // {
+    //     for (size_t i = 0; i < m_CollisionArray.size(); ++i)
+    //     {
+    //         DrawRectangle(m_CollisionArray[i].x, m_CollisionArray[i].y, m_CollisionArray[i].width, m_CollisionArray[i].height, RED);
+    //     }
+    // }
 }
 
 void TileSetComponent::LoadLevel(std::string levelName) 
@@ -112,7 +114,6 @@ void TileSetComponent::LoadLevel(std::string levelName)
 
 void TileSetComponent::CheckCollisionTiles() 
 {
-
     Vector2Utility Point = Vector2Utility();
     Vector2Utility PointPositions[4] = 
     {

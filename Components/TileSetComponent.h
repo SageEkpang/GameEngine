@@ -31,6 +31,7 @@ class TileSetComponent : public Component
 private: 
 
     // PRIVATE FUNCTION
+    int m_LayerIndex = 0;
 
     /// @brief Private Function to Load Level 
     void LoadLevel(std::string levelName);
@@ -68,7 +69,7 @@ public:
     // CLASS FUNCTION(s)
 
     /// @brief Custom Constructor for Class 
-    TileSetComponent(int level);
+    TileSetComponent(int level, int layerIndex = 0);
 
     /// @brief Default Destructor for Class
     virtual ~TileSetComponent() { };

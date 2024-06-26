@@ -10,9 +10,10 @@ private:
     // Camera Component
     Camera2D* m_Camera;
 
+    Vector2Utility m_Offset;
+    Vector2Utility m_Target;
+
     // Camera Variables
-    Vector2 m_Offset;
-    Vector2 m_Target;
     float m_Rotation;
     float m_Zoom;
 
@@ -40,18 +41,18 @@ public:
 
     // GETTER FUNCTION(s)
     Camera2D GetCamera2D() { return *this->m_Camera; }
-    Vector2 GetCameraOffset() { return this->m_Offset; }
-    Vector2 GetCameraTarget() { return this->m_Target; }
+    Vector2Utility GetCameraOffset() { return this->m_Offset; }
+    Vector2Utility GetCameraTarget() { return this->m_Target; }
     float GetCameraRotation() { return this->m_Rotation; }
     float GetCameraZoom() { return this->m_Zoom; }
 
 
     // SETTER FUNCTION(s)
     void SetCamera2D(Camera2D* camera) { this->m_Camera = camera; }
-    Vector2 SetCameraOffset(Vector2 offset) { this->m_Offset = offset; }
-    Vector2 SetCameraTarget(Vector2 target) { this->m_Target = target; }
-    float SetCameraRotation(float rotation) { this->m_Rotation = rotation; }
-    float SetCameraZoom(float zoom) { this->m_Zoom = zoom; }
+    void SetCameraOffset(Vector2Utility offset) { this->m_Offset = offset; }
+    void SetCameraTarget(Vector2Utility target) { this->m_Target = target; }
+    void SetCameraRotation(float rotation) { this->m_Rotation = rotation; }
+    void SetCameraZoom(float zoom) { this->m_Zoom = zoom; }
 };
 
 #endif

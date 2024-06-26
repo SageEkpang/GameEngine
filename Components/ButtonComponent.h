@@ -24,7 +24,7 @@ private:
     bool m_Active;
     float m_TextSize;
 
-    GameInfo m_Info;
+    // GameInfo m_Info;
 
     // BUTTON COLOR
     Color m_IdleColour = Color{220, 220, 220, 255};

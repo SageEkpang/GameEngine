@@ -10,8 +10,8 @@ private:
     // RENDER COMPONENT VARIABLE(s)
     Texture2D m_SingleImage;
     Texture2D m_SpriteSheetImage;
-    Vector2 m_TexturePosition;
-    Vector2 m_TextureScale;
+    Vector2Utility m_TexturePosition;
+    Vector2Utility m_TextureScale;
     float m_TextureRotation;
 
 public:
@@ -38,15 +38,15 @@ public:
     Texture2D GetImageSpriteSingle() { return this->m_SingleImage; }
     Texture2D GetImageSpriteSheet() { return this->m_SpriteSheetImage; }
 
-    Vector2 GetImagePosition() { return this->m_TexturePosition; }
-    Vector2 GetImageScale() { return this->m_TextureScale; }
+    Vector2Utility GetImagePosition() { return this->m_TexturePosition; }
+    Vector2Utility GetImageScale() { return this->m_TextureScale; }
     float GetImageRotation() { return this->m_TextureRotation; }
     
     
     // SETTER FUNCTION(s)
     void SetTextureSingleImage(const char* textureName) { this->m_SingleImage = LoadTexture(textureName); }
     void SetTextureSpriteSheetImage(const char* textureSpriteSheetName) { this->m_SpriteSheetImage = LoadTexture(textureSpriteSheetName); }
-    void SetTexturePosition(Vector2 texturePosition) { this->m_TexturePosition = texturePosition; }
+    void SetTexturePosition(Vector2Utility texturePosition) { this->m_TexturePosition = texturePosition; }
 
 };
 

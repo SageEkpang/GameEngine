@@ -38,7 +38,10 @@ public:
     // CLASS FUNCTION(s)
 
     /// @brief Default Constructor for Class
-    PhysicsComponent(CollisionComponent* collisionComponent);
+    PhysicsComponent(); // Particles 
+
+    /// @brief Custom Constructr for Class
+    PhysicsComponent(CollisionComponent* collisionComponent); // Physics Bodies
 
     /// @brief Default Destructor for Class
     ~PhysicsComponent();

@@ -9,7 +9,7 @@ class Component
 {
 private:
 
-    bool m_Active = false;
+    bool m_Active = true;
 
 protected:
 
@@ -45,10 +45,9 @@ public:
 
     // SETTER FUNCTION(s)
     inline virtual void SetActiveState(bool active) { m_Active = active; }
+    inline virtual void SetTransform(Transform2Utility* transform) { m_Transform = transform; }
     inline virtual void SetPosition(Vector2Utility position) { m_Transform->position = position;}
-
     inline virtual void SetScale(Vector2Utility scale) { m_Transform->scale = scale; }
-
     inline virtual void SetRotation(float rotation) { m_Transform->rotation = rotation; }
 };
 

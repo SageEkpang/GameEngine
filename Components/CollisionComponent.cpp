@@ -14,6 +14,8 @@ void CollisionComponent::Update(float deltaTime)
     // // FIXME: Need to change this to the interpentration tests
     // // TODO: NEED TO PUT IN OWN COLLIDER CLASS
 
+    // FIXME: This can be for soft body physics and point checks
+
     // // CHECK POSITIONS (Default Positions)
     // Vector2 HeadPosition = Vector2{m_Transform->GetPosition().x + (m_Transform->GetScale().x / 2), m_Transform->GetPosition().y}; // Centre of the Head
     // Vector2 LeftPosition = Vector2{m_Transform->GetPosition().x, m_Transform->GetPosition().y + (m_Transform->GetScale().y / 2)}; // Centre of the Left Side

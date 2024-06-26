@@ -73,7 +73,6 @@ void GameObjectManager::Destroy()
         }
         m_Cameras.clear();
     }
-
 }
 
 

@@ -7,12 +7,22 @@
 // COMPONENT(s)
 #include "AnimationComponent.h"
 #include "CharacterComponent.h"
+#include "CollisionComponent.h"
+#include "InputComponent.h"
 #include "PhysicsComponent.h"
 #include "RenderComponent.h"
 
 class PlayerObject : public GameObject
 {
 private:
+
+    CharacterComponent* m_Character;
+    RenderComponent* m_Render;
+    AnimationComponent* m_Animation;
+    CollisionComponent* m_Collision;
+    InputComponent* m_Input;
+    PhysicsComponent* m_Physics;
+
 public:
 
     // CLASS FUNCTION(s)
@@ -26,10 +36,10 @@ public:
     /// @param speed 
     /// @param maxJump 
     /// @param spriteSheet 
-    PlayerObject(std::string tag, std::string name, Transform2Utility transform, float health, float damage, float speed, float maxJump, Texture2D spriteSheet);
+    PlayerObject(std::string tag, const char* name, Transform2Utility transform, float health, float maxHealth, float damage, float speed, float maxJump, const char* spriteSheet);
 
     /// @brief Default Destructor for Class
-    ~PlayerObject() { }
+    ~PlayerObject();
     
 
     // BASE FUNCTION(s)

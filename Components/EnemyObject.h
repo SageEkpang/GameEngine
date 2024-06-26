@@ -7,12 +7,20 @@
 // COMPONENT(s)
 #include "AnimationComponent.h"
 #include "CharacterComponent.h"
+#include "CollisionComponent.h"
 #include "PhysicsComponent.h"
 #include "RenderComponent.h"
 
 class EnemyObject : public GameObject
 {
 private:
+
+    // AnimationComponent* m_Animation;
+    CharacterComponent* m_Character;
+    CollisionComponent* m_Collision;
+    PhysicsComponent* m_Physics;
+    RenderComponent* m_Render;
+
 public:
 
     // CLASS FUNCTION(s)
@@ -26,10 +34,10 @@ public:
     /// @param speed 
     /// @param maxJump 
     /// @param spriteSheet 
-    EnemyObject(std::string tag, std::string name, Transform2Utility transform, float health, float damage, float speed, float maxJump, Texture2D spriteSheet);
+    EnemyObject(std::string tag, const char* name, Transform2Utility transform, float health, float damage, float speed, float maxJump, const char* sprite);
 
     /// @brief Default Destructor for Class
-    virtual ~EnemyObject() { };
+    virtual ~EnemyObject();
 
     
     // BASE FUNCTION(s)

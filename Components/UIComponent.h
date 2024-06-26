@@ -8,9 +8,9 @@ class UIComponent : public Component
 private:
 
     // UI COMPONENT VARIABLE(s)
-    Vector2 m_CanvasPosition;
-    Vector2 m_CanvasScale;
-    Vector2 m_AnchorPoint;
+    Vector2Utility m_CanvasPosition;
+    Vector2Utility m_CanvasScale;
+    Vector2Utility m_AnchorPoint;
 
 public:
 
@@ -36,9 +36,9 @@ public:
 
     // GETTER FUNCTION(s)
     Rectangle GetCanvas() { Rectangle{m_CanvasPosition.x, m_CanvasPosition.y, m_CanvasScale.x, m_CanvasScale.y}; }
-    Vector2 GetCanvasPosition() { this->m_CanvasPosition; }
-    Vector2 GetCanvasScale() { this->m_CanvasScale; }
-    Vector2 GetAnchorPoint() { this->m_AnchorPoint; }
+    Vector2Utility GetCanvasPosition() { this->m_CanvasPosition; }
+    Vector2Utility GetCanvasScale() { this->m_CanvasScale; }
+    Vector2Utility GetAnchorPoint() { this->m_AnchorPoint; }
 
 
     // SETTER FUNCTION(s)
@@ -49,9 +49,9 @@ public:
         m_CanvasScale.y = canvas.height;
     }
 
-    void SetPosition(Vector2 position) {m_CanvasPosition = position; }
-    void SetScale(Vector2 scale) { m_CanvasScale = scale; }
-    void SetAnchor(Vector2 anchor) { m_AnchorPoint = anchor; }
+    void SetPosition(Vector2Utility position) {m_CanvasPosition = position; }
+    void SetScale(Vector2Utility scale) { m_CanvasScale = scale; }
+    void SetAnchor(Vector2Utility anchor) { m_AnchorPoint = anchor; }
 
 };
 
