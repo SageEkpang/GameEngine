@@ -1,4 +1,4 @@
-#include "Helper/GameUtility.h"
+// #include "Helper/GameUtility.h"
 #include "Managers/StartUp.h"
 
 int main()
@@ -7,22 +7,23 @@ int main()
     InitAudioDevice();
 
     StartUp* content = new StartUp();
-    GameUtility::Game::StartUpContent(content);
+    // GameUtility::Game::StartUpContent(content);
 
     SetTargetFPS(60);
     while(!WindowShouldClose())
     {
-        float deltaTime = GetFrameTime();
+        // float deltaTime = GetFrameTime();
 
-        GameUtility::Game::Process(deltaTime);
-        GameUtility::Game::Showcase();
+        // GameUtility::Game::Process(deltaTime);
+        // GameUtility::Game::Showcase();
     }
-    
-    GameUtility::Game::Destroy();
+
+    // GameUtility::Game::Destroy();
     content = nullptr;
     delete content;
 
     CloseAudioDevice();
+    CloseWindow();
     
     return 0; // Return to Operator
 }

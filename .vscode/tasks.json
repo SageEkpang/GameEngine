@@ -68,6 +68,14 @@
             "args": [
                 "-g",
                 "${workspaceFolder}\\*.cpp",
+                // "${workspaceFolder}\\Helper",
+                // "${workspaceFolder}/Helper/*.h",
+                // "${workspaceFolder}/Managers/*.cpp",
+                // "${workspaceFolder}/Managers/*.h",
+                // "${workspaceFolder}/GameScreens/*.cpp",
+                // "${workspaceFolder}/GameScreens/*.h",
+                // "${workspaceFolder}/Components/*.cpp",
+                // "${workspaceFolder}/Components/*.h",
                 "${file}",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"

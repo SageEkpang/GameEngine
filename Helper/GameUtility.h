@@ -1,8 +1,8 @@
 #ifndef GAME_UTILITY_H
 #define GAME_UTILITY_H
 
-#include "Helper/Structs.h"
-#include "Helper/Constants.h"
+#include "Structs.h"
+#include "Constants.h"
 #include "Managers/GameObjectManager.h"
 
 class StartUp;
