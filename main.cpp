@@ -17,7 +17,7 @@ int main()
         GameUtility::Game::Process(deltaTime);
         GameUtility::Game::Showcase();
     }
-
+    
     GameUtility::Game::Destroy();
     content = nullptr;
     delete content;
