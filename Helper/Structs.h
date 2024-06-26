@@ -88,6 +88,7 @@ typedef struct Vector2Utility
     {
         this->x += value;
         this->y += value;
+        return *this;
     }
 
     Vector2Utility operator-=(const Vector2Utility &value)
@@ -104,10 +105,10 @@ typedef struct Vector2Utility
         return *this;
     }
 
-    Vector2Utility Normalise()
-    {
+    // Vector2Utility Normalise()
+    // {
 
-    }
+    // }
 
     // Operator Overloads (default)
 

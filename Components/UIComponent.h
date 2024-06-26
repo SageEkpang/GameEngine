@@ -35,10 +35,10 @@ public:
 
 
     // GETTER FUNCTION(s)
-    Rectangle GetCanvas() { Rectangle{m_CanvasPosition.x, m_CanvasPosition.y, m_CanvasScale.x, m_CanvasScale.y}; }
-    Vector2Utility GetCanvasPosition() { this->m_CanvasPosition; }
-    Vector2Utility GetCanvasScale() { this->m_CanvasScale; }
-    Vector2Utility GetAnchorPoint() { this->m_AnchorPoint; }
+    Rectangle GetCanvas() { return Rectangle{m_CanvasPosition.x, m_CanvasPosition.y, m_CanvasScale.x, m_CanvasScale.y}; }
+    Vector2Utility GetCanvasPosition() { return this->m_CanvasPosition; }
+    Vector2Utility GetCanvasScale() { return this->m_CanvasScale; }
+    Vector2Utility GetAnchorPoint() { return this->m_AnchorPoint; }
 
 
     // SETTER FUNCTION(s)

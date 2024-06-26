@@ -1,6 +1,9 @@
-#include "Structs.h"
-#include "Constants.h"
-#include "GameObjectManager.h"
+#ifndef GAME_UTILITY_H
+#define GAME_UTILITY_H
+
+#include "Helper/Structs.h"
+#include "Helper/Constants.h"
+#include "Managers/GameObjectManager.h"
 
 class StartUp;
 class GameScreen;
@@ -16,14 +19,13 @@ namespace GameUtility
     GameState m_CurrentGameState;
     ScreenState m_CurrentScreenState;
 
+
+
     float m_TransitionTime;
     float m_Timer;
 
-
     // Objects
     GameObjectManager* m_GameObjectManager;
-
-
 
     // TODO: Create script component using function pointer and call back functionality
 
@@ -45,3 +47,5 @@ namespace GameUtility
     }
 
 };
+
+#endif

@@ -13,34 +13,13 @@ GameObjectManager::~GameObjectManager()
 
 void GameObjectManager::Process(float deltaTime) 
 {
-    ProcessGameScreen(deltaTime);
     ProcessGameObject(deltaTime);
 }
 
 void GameObjectManager::Showcase() 
 {
-    ShowcaseGameScreen();
     ShowcaseGameObject();
 }
-
-void GameObjectManager::IncrementCameraIndex() 
-{
-    ++m_CameraIndex;
-    if (m_CameraIndex > m_Cameras.size() - 1)
-    {
-        m_CameraIndex = 0;
-    }
-}
-
-void GameObjectManager::DecrementCameraIndex() 
-{
-    --m_CameraIndex;
-    if (m_CameraIndex < 0)
-    {
-        m_CameraIndex = m_Cameras.size() - 1;
-    }
-}
-
 
 void GameObjectManager::AddGameObject(GameObject gameObject) 
 {
@@ -60,19 +39,6 @@ void GameObjectManager::Destroy()
         }
         m_GameObjects.clear();
     }
-
-   
-    // CAMERA COMPONENT DESTRUCTION
-    if (!m_Cameras.empty())
-    {
-        std::vector<CameraComponent*>::iterator itr;
-        for (itr = m_Cameras.begin(); itr != m_Cameras.end(); ++itr)
-        {
-            *itr = nullptr;
-            delete *itr;
-        }
-        m_Cameras.clear();
-    }
 }
 
 
@@ -85,28 +51,11 @@ void GameObjectManager::ProcessGameObject(float deltaTime)
     }
 }
 
-void GameObjectManager::ProcessComponents(float deltaTime) 
+void GameObjectManager::ShowcaseGameObject() 
 {
     for (int i = 0; i < m_GameObjects.size(); ++i)
     {
-        for (int j = 0; j < m_GameObjects[i]->GetComponents().size(); ++j)
-        {
-            m_GameObjects[i]->GetComponents()[j]->Update(deltaTime);
-        }
+        m_GameObjects[i]->Draw();
     }
 }
 
-void GameObjectManager::ProcessGameScreen(float deltaTime) 
-{
-    
-}
-
-void GameObjectManager::ShowcaseGameObject() 
-{
-    
-}
-
-void GameObjectManager::ShowcaseGameScreen() 
-{
-    
-}

@@ -2,10 +2,10 @@
 #define GAME_SCREEN_H
 
 // CUSTOM INCLUDE(s)
-#include "Structs.h"
-#include "Constants.h"
+#include "Helper/Structs.h"
+#include "Helper/Constants.h"
 
-#include "GameUtility.h"
+#include "Helper/GameUtility.h"
 
 typedef struct GameInfo
 {
@@ -55,10 +55,10 @@ public:
     // BASE FUNCTION(s)
 
     /// @brief Default Update function for Class
-    virtual void Update(float DeltaTime) = 0;
+    virtual void Update(float DeltaTime) { };
 
     /// @brief Default Draw function for Class
-    virtual void Draw() = 0;
+    virtual void Draw() { };
 
 
     // GETTER FUNCTION(s)

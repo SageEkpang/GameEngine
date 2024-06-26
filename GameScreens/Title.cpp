@@ -9,8 +9,8 @@ Title::Title()
     m_Camera.zoom = 1.0f;
     m_GameInfo.State = GameState::STATE_TITLE;
 
-    GameUtility::Game::TransitionTime(5.0f);
-    GameUtility::Game::LoadContent(m_GameObjects);
+    // GameUtility::Game::TransitionTime(5.0f);
+    // GameUtility::Game::LoadContent(m_GameObjects);
 }
 
 Title::~Title() 

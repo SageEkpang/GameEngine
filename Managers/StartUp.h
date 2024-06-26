@@ -1,11 +1,12 @@
 #ifndef START_UP_H
 #define START_UP_H
 
-#include "Structs.h"
-#include "Constants.h"
+#include "Helper/Structs.h"
+#include "Helper/Constants.h"
 
-#include "GameScreen.h"
+#include "GameScreens/GameScreen.h"
 
+// class GameScreen;
 class Title;
 class Menu;
 class LevelSelect;

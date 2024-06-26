@@ -8,7 +8,6 @@ namespace GameUtility
     {
         void StartUpContent(StartUp* startContent) 
         {
-
             // Screen Transitioning Variables
             m_CurrentGameState = GameState::STATE_NONE;
             m_CurrentScreenState = ScreenState::SCREEN_CURRENT;

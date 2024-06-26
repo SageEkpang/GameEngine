@@ -1,10 +1,10 @@
 #include "StartUp.h"
 
-#include "Title.h"
-#include "Menu.h"
-#include "LevelSelect.h"
-#include "Gameplay.h"
-#include "End.h"
+#include "GameScreens/Title.h"
+#include "GameScreens/Menu.h"
+#include "GameScreens/LevelSelect.h"
+#include "GameScreens/Gameplay.h"
+#include "GameScreens/End.h"
 
 StartUp::StartUp() 
 {

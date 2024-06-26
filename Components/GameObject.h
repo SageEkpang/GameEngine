@@ -2,8 +2,8 @@
 #define GAME_OBJECT_H
 
 // CUSTOM INCLUDE(s)
-#include "Constants.h"
-#include "Structs.h"
+#include "Helper/Constants.h"
+#include "Helper/Structs.h"
 
 // COMPONENT INCLUDE(s)
 #include "Component.h"

@@ -1,5 +1,5 @@
-#include "GameUtility.h"
-#include "StartUp.h"
+#include "Helper/GameUtility.h"
+#include "Managers/StartUp.h"
 
 int main()
 {
