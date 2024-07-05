@@ -17,7 +17,12 @@
                     "RAYLIB_PATH=C:/raylib/raylib",
                     "PROJECT_NAME=${fileBasenameNoExtension}",
                     "OBJS=*.cpp",
-                    "BUILD_MODE=DEBUG"
+                    "BUILD_MODE=DEBUG",
+                    "-Idir",
+                    "FILE=${relativeFileDirname}/Managers.h",
+                    // "FILE=${relativeFileDirname}/Helper.h",
+                    "FILE=${relativeFileDirname}/Components.h",
+                    "FILE=${relativeFileDirname}/GameScreens.h"
                 ],
             },
             "osx": {
@@ -68,16 +73,15 @@
             "args": [
                 "-g",
                 "${workspaceFolder}\\*.cpp",
-                // "${workspaceFolder}\\Helper",
-                // "${workspaceFolder}/Helper/*.h",
-                // "${workspaceFolder}/Managers/*.cpp",
-                // "${workspaceFolder}/Managers/*.h",
-                // "${workspaceFolder}/GameScreens/*.cpp",
-                // "${workspaceFolder}/GameScreens/*.h",
-                // "${workspaceFolder}/Components/*.cpp",
-                // "${workspaceFolder}/Components/*.h",
                 "${file}",
                 "-o",
+
+                "-Idir",
+                "${relativeFileDirname}/Managers.h",
+                // "${relativeFileDirname}/Helper.h",
+                "${relativeFileDirname}/Components.h",
+                "${relativeFileDirname}/GameScreens.h",
+
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],
             "options": {

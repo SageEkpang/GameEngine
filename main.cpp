@@ -6,7 +6,7 @@ int main()
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE_NAME);
     InitAudioDevice();
 
-    StartUp* content = new StartUp();
+    // StartUp* content = new StartUp();
     // GameUtility::Game::StartUpContent(content);
 
     SetTargetFPS(60);
@@ -19,8 +19,8 @@ int main()
     }
 
     // GameUtility::Game::Destroy();
-    content = nullptr;
-    delete content;
+    // content = nullptr;
+    // delete content;
 
     CloseAudioDevice();
     CloseWindow();
