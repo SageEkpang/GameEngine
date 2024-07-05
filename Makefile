@@ -24,7 +24,7 @@
 .PHONY: all clean
 
 # Define required raylib variables
-PROJECT_NAME       ?= game
+PROJECT_NAME       ?= main
 RAYLIB_VERSION     ?= 3.0.0
 RAYLIB_API_VERSION ?= 300
 RAYLIB_PATH        ?= ..\..
@@ -55,6 +55,7 @@ RAYLIB_LIBTYPE        ?= STATIC
 
 # Build mode for project: DEBUG or RELEASE
 BUILD_MODE            ?= RELEASE
+EXT                   ?= .exe
 
 # Use external GLFW library instead of rglfw module
 # TODO: Review usage on Linux. Target version of choice. Switch on -lglfw or -lglfw3
