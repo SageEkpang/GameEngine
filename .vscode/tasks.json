@@ -69,13 +69,6 @@
                 "${workspaceFolder}\\*.cpp",
                 "${file}",
                 "-o",
-
-                "-Idir",
-                "${relativeFileDirname}/Managers.h",
-                // "${relativeFileDirname}/Helper.h",
-                "${relativeFileDirname}/Components.h",
-                "${relativeFileDirname}/GameScreens.h",
-
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],
             "options": {

@@ -19,8 +19,6 @@ namespace GameUtility
     GameState m_CurrentGameState;
     ScreenState m_CurrentScreenState;
 
-
-
     float m_TransitionTime;
     float m_Timer;
 
@@ -39,7 +37,6 @@ namespace GameUtility
         void Destroy(); // Destroy Game / Assets
 
         void PlaySound(const char* sound, float volume = 0, bool looping = false);
-
 
         void TransitionTime(float time);
         void TransitionScreen(GameState state, float deltaTime);
