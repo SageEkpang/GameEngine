@@ -1,11 +1,9 @@
 #include "Gameplay.h"
 
-Gameplay::Gameplay() 
+Gameplay::Gameplay(std::string screenName) 
+: GameScreen(screenName) 
 {
-    m_ScreenName = "Gameplay";
     m_Camera.zoom = 1.0f;
-    m_GameInfo.State = GameState::STATE_GAME;
-    m_IsLoaded = false;
 }
 
 Gameplay::~Gameplay() 
@@ -21,7 +19,7 @@ void Gameplay::Update(float DeltaTime)
 {
     // LOAD GAME CONTENT
 
-    LoadContent();
+    // LoadContent();
 
     // MAIN UPDATE
 

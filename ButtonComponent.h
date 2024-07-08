@@ -36,7 +36,7 @@ public:
     // CLASS FUNCTION(s)
 
     /// @brief Default Constructor for Class
-    ButtonComponent();
+    ButtonComponent(); // TODO: Add UI Component reference here
 
     /// @brief Default Destructor for Class
     ~ButtonComponent();

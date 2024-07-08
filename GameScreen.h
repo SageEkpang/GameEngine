@@ -28,14 +28,12 @@ class GameScreen
 {
 protected:
 
-    // CAMERA VARIABLE(s)
-    Camera2D m_Camera;
-
-    // GAME OBJECT VARIABLE(s)
+    // DEFAULT SCREEN VARIABLE(s)
+    std::string m_ScreenName;
     GameObjectManager* m_GameObjects;
 
-    // SCREEN VARIABLE(s)
-    std::string m_ScreenName;
+    // CAMERA VARIABLE(s)
+    Camera2D m_Camera;
 
     // GAME INFO VARIABLE(s)
     static GameInfo m_GameCopy;
@@ -46,19 +44,19 @@ public:
     // CLASS FUNCTION(s)
 
     /// @brief Default Constructor for Class
-    GameScreen() {};
+    GameScreen(std::string screenName) { m_ScreenName = screenName; }
 
     /// @brief Default Destructor for Class
-    virtual ~GameScreen() {};
+    virtual ~GameScreen() {}
 
 
     // BASE FUNCTION(s)
 
     /// @brief Default Update function for Class
-    virtual void Update(float DeltaTime) { };
+    virtual void Update(float DeltaTime) { }
 
     /// @brief Default Draw function for Class
-    virtual void Draw() { };
+    virtual void Draw() { }
 
 
     // GETTER FUNCTION(s)
@@ -72,18 +70,8 @@ public:
     /// @brief Getter function for Camera 2D Info
     inline Camera2D GetCamera2D() { return this->m_Camera; }
 
-    /// @brief Getter function for Tag Info 
+    /// @brief Getter function for Screen Name
     inline std::string GetName() { return this->m_ScreenName; }
-
-
-    // SETTER FUNCTION()
-
-    /// @brief Setter function for Setteing Specific Game Info
-    void SetGameInfo(GameInfo NewGameInfo) { this->m_GameInfo = NewGameInfo; }
-
-    /// @brief Setter function for Setting the Screen Info to Current
-    void ResetScreenToCurrent() { this->m_GameInfo.ScState = ScreenState::SCREEN_CURRENT; }
-
 };
 
 #endif

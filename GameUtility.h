@@ -4,18 +4,23 @@
 #include "Structs.h"
 #include "Constants.h"
 #include "GameObjectManager.h"
+#include "CameraComponent.h"
 
 class StartUp;
 class GameScreen;
 
 namespace GameUtility
 {
-    // AUDIO VARIABLES
+    // AUDIO VARIABLE(s)
     std::vector<Sound> m_Sounds;
+
+    // CAMERA VARIABLE(s)
+    CameraComponent* m_Camera;
 
     // SCREEN VARIABLE(s)
     GameScreen* m_GameScreen;
     std::vector<GameScreen> m_Screens;
+
     GameState m_CurrentGameState;
     ScreenState m_CurrentScreenState;
 

@@ -16,7 +16,7 @@ public:
     // CLASS FUNCTION(s)
 
     /// @brief Default Constructor for Class
-    End();
+    End(std::string screenName);
 
     /// @brief Default Destructor for Class
     ~End();

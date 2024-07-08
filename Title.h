@@ -10,13 +10,14 @@ class Title : public GameScreen
 private:
 
     // NEED CAMERA HERE
+    
 
 public:
 
     // CLASS FUNCTION(s)
 
     /// @brief Default Constructor for Class
-    Title();
+    Title(std::string screenName);
 
     /// @brief Default Destructor for Class
     ~Title();

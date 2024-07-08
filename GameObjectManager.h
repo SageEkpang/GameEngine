@@ -1,22 +1,8 @@
 #ifndef GAME_OBJECT_MANAGER_H
 #define GAME_OBJECT_MANAGER_H
 
-/*
-    #include "PlayerComponent.h"
-    #include "EnemyComponent.h"
-    #include "CharacterComponent.h"
-*/
-
 // GAME OBJECTS(s)
 #include "GameObject.h"
-
-
-// GAME COMPONENTS(s)
-#include "CameraComponent.h"
-#include "ButtonComponent.h"
-#include "TileSetComponent.h"
-#include "UIComponent.h"
-#include "RenderComponent.h"
 
 class GameObjectManager
 {

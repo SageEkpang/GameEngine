@@ -1,11 +1,9 @@
 #include "LevelSelect.h"
 
-LevelSelect::LevelSelect() 
+LevelSelect::LevelSelect(std::string screenName) 
+: GameScreen(screenName)
 {
-    m_ScreenName = "Level Select";
     m_Camera.zoom = 1.0f;
-    m_GameInfo.State = GameState::STATE_LEVEL_SELECT;
-    m_IsLoaded = false;
 }
 
 LevelSelect::~LevelSelect() 

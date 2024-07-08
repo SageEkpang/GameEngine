@@ -17,8 +17,7 @@ class StartUp
 {
 private:
 
-    // Private Variables
-
+    // BAE VARIABLE(s)
     std::vector<GameScreen> m_Screens;
 
 public:
@@ -36,7 +35,6 @@ public:
 
     /// @brief Getter function for Screen Array
     std::vector<GameScreen> GetScreenVector() { return m_Screens; }
-
 };
 
 

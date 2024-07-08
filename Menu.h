@@ -8,15 +8,12 @@
 class Menu : public GameScreen
 {
 private:
-
-
-
 public:
 
     // CLASS FUNCTION(s)
 
     /// @brief Default Constructor for Class
-    Menu();
+    Menu(std::string screenName);
 
     /// @brief Default Destructor for Class
     ~Menu();

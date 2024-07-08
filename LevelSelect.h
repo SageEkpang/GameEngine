@@ -8,23 +8,19 @@
 // CUSTOM INCLUDE(s)
 #include "GameScreen.h"
 #include "GameObject.h"
-#include "GameObjectManager.h"
 
 class LevelSelect : public GameScreen
 {
 private:
 
-    std::vector<GameObject*> m_LevelSelectButtons;
-    GameObjectManager* m_GameObjectManager;
+    // std::vector<GameObject*> m_LevelSelectButtons;
     
-    bool m_IsLoaded;
-
 public:
 
     // CLASS FUNCTION(s)
 
     /// @brief Default Constructor for Class
-    LevelSelect();
+    LevelSelect(std::string screenName);
 
     /// @brief Default Destructor for Class
     ~LevelSelect();

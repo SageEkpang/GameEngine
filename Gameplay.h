@@ -5,9 +5,6 @@
 // CUSTOM INCLUDE(s)
 #include "GameScreen.h"
 
-// GAME INCLUDE(s)
-
-
 class Gameplay : public GameScreen
 {
 private:
@@ -15,14 +12,12 @@ private:
     // Player* m_Player;
     // LevelComponent* m_PlayLevel;
 
-    bool m_IsLoaded;
-
 public:
 
     // CLASS FUNCTION(s)
 
     /// @brief Default Constructor for Class
-    Gameplay();
+    Gameplay(std::string screenName);
 
     /// @brief Default Destructor for Class
     ~Gameplay();

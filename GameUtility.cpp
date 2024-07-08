@@ -43,7 +43,7 @@ namespace GameUtility
 
             ClearBackground(g_Background);
 
-                BeginMode2D(m_GameScreen->GetCamera2D());
+                BeginMode2D(m_GameScreen->GetCamera2D()); // FIXME: Works for now however, it means that the camera component will not work later on, so change this to the camera component within the gameobject manager
 
                     m_GameScreen->Draw();
                     m_GameObjectManager->Showcase();
