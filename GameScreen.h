@@ -2,10 +2,10 @@
 #define GAME_SCREEN_H
 
 // CUSTOM INCLUDE(s)
-#include "Helper/Structs.h"
-#include "Helper/Constants.h"
+#include "Structs.h"
+#include "Constants.h"
 
-#include "Helper/GameUtility.h"
+#include "GameUtility.h"
 
 typedef struct GameInfo
 {

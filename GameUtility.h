@@ -3,7 +3,7 @@
 
 #include "Structs.h"
 #include "Constants.h"
-#include "Managers/GameObjectManager.h"
+#include "GameObjectManager.h"
 
 class StartUp;
 class GameScreen;

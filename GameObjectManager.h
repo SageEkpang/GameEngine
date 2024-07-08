@@ -8,15 +8,15 @@
 */
 
 // GAME OBJECTS(s)
-#include "Components/GameObject.h"
+#include "GameObject.h"
 
 
 // GAME COMPONENTS(s)
-#include "Components/CameraComponent.h"
-#include "Components/ButtonComponent.h"
-#include "Components/TileSetComponent.h"
-#include "Components/UIComponent.h"
-#include "Components/RenderComponent.h"
+#include "CameraComponent.h"
+#include "ButtonComponent.h"
+#include "TileSetComponent.h"
+#include "UIComponent.h"
+#include "RenderComponent.h"
 
 class GameObjectManager
 {

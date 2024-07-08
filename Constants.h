@@ -2,7 +2,7 @@
 // WINDOW DEFINE(s)
 #define SCREEN_WIDTH 1440.0f
 #define SCREEN_HEIGHT 900.0f
-#define TITLE_NAME "Cooked!"
+#define TITLE_NAME "OK Engine 2D"
 
 // GRAVITY DEFINE(s)
 #define GRAVITY_DEFAULT 1.0f

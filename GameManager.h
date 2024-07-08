@@ -1,7 +1,7 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
 
-#include "GameScreens/GameScreen.h"
+#include "GameScreen.h"
 
 class GameManager
 {

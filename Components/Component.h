@@ -2,8 +2,8 @@
 #define COMPONENT_H
 
 // CUSTOM INCLUDE(s)
-#include "Helper/Constants.h"
-#include "Helper/Structs.h"
+#include "Constants.h"
+#include "Structs.h"
 
 class Component
 {
