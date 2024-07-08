@@ -1,10 +1,10 @@
 #ifndef START_UP_H
 #define START_UP_H
 
-#include "Helper/Structs.h"
-#include "Helper/Constants.h"
+#include "Structs.h"
+#include "Constants.h"
 
-#include "GameScreens/GameScreen.h"
+#include "GameScreen.h"
 
 // class GameScreen;
 class Title;
