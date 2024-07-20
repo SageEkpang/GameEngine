@@ -133,11 +133,12 @@ void TileSetComponent::CheckCollisionTiles()
         // Cache tiles that SHOULD have collision on them
         for (int j = 0; j < 4;)
         {
+            Vector2 TempPoint = Vector2{Point.x, Point.y};
             // Set Point to Intersect with tiles
-            Point.vec2 = Vector2Add(TempPosition, Vector2{PointPositions[j].x * m_TileSize, PointPositions[j].y * m_TileSize});
+            TempPoint = Vector2Add(TempPosition, Vector2{PointPositions[j].x * m_TileSize, PointPositions[j].y * m_TileSize});
 
             // Check if there is a collision
-            if (CheckCollisionPointRec(Point.vec2, Rectangle{TempPosition.x, TempPosition.y, m_TileSize, m_TileSize}))
+            if (CheckCollisionPointRec(TempPoint, Rectangle{TempPosition.x, TempPosition.y, m_TileSize, m_TileSize}))
             {
                 ++j;
             }

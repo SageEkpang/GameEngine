@@ -43,7 +43,7 @@ typedef struct Vector2Utility
     float y;
 
     // Conversions
-    Vector2 vec2 = Vector2{x, y};
+    // Vector2 vec2 = Vector2{x, y};
 
     Vector2Utility(float x = 0, float y = 0)
     {

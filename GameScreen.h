@@ -4,8 +4,7 @@
 // CUSTOM INCLUDE(s)
 #include "Structs.h"
 #include "Constants.h"
-
-#include "GameUtility.h"
+#include "GameObjectManager.h"
 
 typedef struct GameInfo
 {

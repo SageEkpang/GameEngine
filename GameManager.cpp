@@ -1,112 +1,125 @@
 #include "GameManager.h"
+#include "StartUp.h"
 
-GameManager::GameManager() 
-: 
-    m_CurrentGameState(GameState::STATE_NONE), 
-    m_CurrentScreenState(ScreenState::SCREEN_CURRENT)
+GameManager::GameManager(StartUp* startContent) 
 {
+    m_CurrentGameState = GameState::STATE_NONE;
+    m_CurrentScreenState = ScreenState::SCREEN_CURRENT;
 
-    // Set up screen for Display
-    m_CurrentGameScreen = static_cast<GameScreen*>(m_ScreenVector[0]);
-    m_CurrentGameScreen = m_ScreenVector[0];
-    m_CurrentGameScreen->ResetScreenToCurrent();
-
-    // Setting checking states
-    m_CheckState = m_CurrentGameState;
-    m_CheckScreenState = ScreenState::SCREEN_CURRENT;
-
-    m_Delay = 1.0f * 60.0f;
+    m_TransitionTime = 1.0f * 60.0f;
     m_Timer = 0.0f;
+
+    for (size_t i = 0; i < startContent->GetScreenVector().size(); ++i)
+    {
+        m_Screens.push_back(startContent->GetScreenVector()[i]);
+    }
+
+    m_GameScreen = &m_Screens[0];
+}
+
+void GameManager::LoadContent(GameObjectManager* gameObjectManager) 
+{
+    m_GameObjectManager = gameObjectManager;
 }
 
 GameManager::~GameManager() 
 {
-    // GAME SCREEN DELETE
-    if (m_CurrentGameScreen != nullptr)
-    { 
-        m_CurrentGameScreen = nullptr;
-        delete m_CurrentGameScreen;
-    }
-
-    // DELETE VECTOR ELEMENTS
-    for (size_t i = 0; i < m_ScreenVector.size(); ++i)
-    {
-        m_ScreenVector[i] = nullptr;
-        delete m_ScreenVector[i];
-    }
+    Destroy();
 }
 
-void GameManager::Update(float DeltaTime) 
+void GameManager::Process(float deltaTime) 
 {
-    // Game Screen Update Function Call
-    // TODO: Pause can be implemented here however, need to check if it is the gameplay screen so they pause can not be used in any state
-    // if (m_IsTransitioning == false) 
+    m_GameScreen->Update(deltaTime);
+    m_GameObjectManager->Process(deltaTime);
+}
 
-    if (IsKeyUp(KEY_P))
+void GameManager::Showcase() 
+{
+    Color g_Background = Color{137, 207, 240, 255}; // Light Blue
+
+    BeginDrawing();
+
+    ClearBackground(g_Background);
+
+        BeginMode2D(m_GameScreen->GetCamera2D()); // FIXME: Works for now however, it means that the camera component will not work later on, so change this to the camera component within the gameobject manager
+
+            m_GameScreen->Draw();
+            m_GameObjectManager->Showcase();
+
+        EndMode2D();
+
+    EndDrawing();
+}
+
+void GameManager::PlaySound(const char* sound, float volume, bool looping) 
+{
+    // Sound Loading Functionality
+    static bool HasLoaded;
+    Sound tempSound;
+    bool tempLoop = looping;
+
+    if (HasLoaded == false) { tempSound = LoadSound(sound); HasLoaded = true; }
+
+    float tempVol = volume;
+    SetSoundVolume(tempSound, tempVol);
+
+    // Play Sound Functionality
+    static bool HasSoundPlayed;
+    if (tempLoop == false)
     {
-        m_CurrentGameScreen->Update(DeltaTime); 
-    }
-
-    // Check GameState and ScreenState of Game
-    m_CurrentGameState = m_CurrentGameScreen->GetGameInfo().State;
-    // m_CurrentGameState = m_CurrentGameScreen->GetCopyGame().State;
-    m_CurrentScreenState = m_CurrentGameScreen->GetGameInfo().ScState;
-
-    // Switching Game Screen (Screen State)
-    if (m_CurrentScreenState != m_CheckScreenState)
-    {
-        m_IsTransitioning = true;
-        // Timer delay to switch screens
-        m_Timer += 60.0f * DeltaTime;
-
-        if (m_Timer >= m_Delay)
+        // Play Sound (Once)
+        if (!IsSoundPlaying(tempSound) && HasSoundPlayed == false)
         {
-            // Calculate Switch Index
-            int Index = 0;
-            Index = (int)m_CurrentGameState + (int)m_CurrentGameScreen->GetGameInfo().ScState;
-
-            // Clear Current Screen and assign new Screen
-            // m_CurrentGameScreen = nullptr;
-            // delete m_CurrentGameScreen;
-            m_CurrentGameScreen = m_ScreenVector[Index - 1];
-
-            // Set current screen state to current
-            m_CurrentScreenState = ScreenState::SCREEN_CURRENT;
-            m_CurrentGameScreen->ResetScreenToCurrent();
-            m_IsTransitioning = false;
-            m_Timer = 0.0f;
+            PlaySoundMulti(tempSound);
+            HasSoundPlayed = true;
         }
     }
-    
-    // Switching Game Screen (Game State)
-    if (m_CurrentGameState != m_CheckState)
+    else if (tempLoop == true)
     {
-        m_IsTransitioning = true;
-        // Timer delay to switch screens
-        m_Timer += 60.0f * DeltaTime;
-
-        if (m_Timer >= m_Delay)
+        // Play Sound (Looping)
+        if (!IsSoundPlaying(tempSound))
         {
-            // Calculate Switch Index
-            int Index = 0;
-            Index = (int)m_CurrentGameScreen->GetGameInfo().State;
-
-            // Clear Current Screen and assign new Screen
-            m_CurrentGameScreen = nullptr;
-            delete m_CurrentGameScreen;
-            m_CurrentGameScreen = m_ScreenVector[Index - 1];
-
-            // Set check to new screen created
-            m_CheckState = m_CurrentGameState;
-            m_CurrentGameScreen->ResetScreenToCurrent();
-            m_IsTransitioning = false;
-            m_Timer = 0.0f;
+            PlaySoundMulti(tempSound);
         }
     }
 }
 
-void GameManager::Draw() 
+void GameManager::TransitionScreen(GameState state, float deltaTime) 
 {
-    // Game Screen Draw function call
-    m_CurrentGameScreen->Draw();
+    m_Timer += 60.0f * deltaTime;
+
+    if (m_Timer >= m_TransitionTime)
+    {
+        int Index = 0;
+        Index = (int)state;
+
+        m_GameScreen = nullptr;
+        m_GameScreen = &m_Screens[Index - 1];
+        m_Timer = 0.0f;
+    }
+}
+
+void GameManager::TransitionScreen(ScreenState state, float deltaTime) 
+{
+    m_Timer += 60.0f * deltaTime;
+
+    if (m_Timer >= m_TransitionTime)
+    {
+        int Index = 0;
+        Index = (int)m_CurrentGameState + (int)state;
+
+        m_GameScreen = nullptr;
+        m_GameScreen = &m_Screens[Index - 1];
+        m_CurrentScreenState = ScreenState::SCREEN_CURRENT;
+        m_Timer = 0.0f;
+    }
+}
+
+
+void GameManager::Destroy() 
+{
+    m_GameObjectManager->Destroy();
+    m_GameObjectManager = nullptr;
+
+    m_GameScreen = nullptr;
 }

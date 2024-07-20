@@ -34,4 +34,5 @@ bool RectangleCollisionComponent::CollidesWith(CircleCollisionComponent& other)
 
     // m_HasCollided = false;
     // return m_HasCollided;
+    return false;
 }

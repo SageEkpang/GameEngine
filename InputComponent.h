@@ -6,10 +6,10 @@
 
 enum InputType
 {
-    KEY_IDLE = 0,
-    KEY_PRESS = 1,
-    KEY_DOWN = 2,
-    KEY_RELEASE = -1
+    INPUT_KEY_IDLE, // 0
+    INPUT_KEY_PRESS, // 1
+    INPUT_KEY_DOWN, // 2
+    INPUT_KEY_RELEASE // -1
 };
 
 struct KeyType

@@ -45,7 +45,7 @@ void GameObjectManager::Destroy()
 // PRIVATE FUNCTION(s)
 void GameObjectManager::ProcessGameObject(float deltaTime) 
 {
-    for (int i = 0; i < m_GameObjects.size(); ++i) 
+    for (size_t i = 0; i < m_GameObjects.size(); ++i) 
     {
         m_GameObjects[i]->Update(deltaTime);
     }
@@ -53,7 +53,7 @@ void GameObjectManager::ProcessGameObject(float deltaTime)
 
 void GameObjectManager::ShowcaseGameObject() 
 {
-    for (int i = 0; i < m_GameObjects.size(); ++i)
+    for (size_t i = 0; i < m_GameObjects.size(); ++i)
     {
         m_GameObjects[i]->Draw();
     }

@@ -1,35 +1,45 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
 
+#include "Structs.h"
+#include "Constants.h"
+#include "GameObjectManager.h"
 #include "GameScreen.h"
+
+class StartUp;
 
 class GameManager
 {
 private:
 
-    // SCREEN VARIABLE(s)    
-    GameScreen* m_CurrentGameScreen;
+    // AUDIO VARIABLE(s)
+    static std::vector<Sound> m_Sounds;
 
-    GameState m_CurrentGameState;
-    GameState m_CheckState;
+    // SCREEN VARIABLE(s)
+    static GameScreen* m_GameScreen;
+    static std::vector<GameScreen> m_Screens;
 
-    ScreenState m_CurrentScreenState;
-    ScreenState m_CheckScreenState;
+    static GameState m_CurrentGameState;
+    static ScreenState m_CurrentScreenState;
 
-    // SCREEN TRANSITION VARIABLE(s)
-    float m_Delay;
-    float m_Timer;
-    bool m_IsTransitioning;
+    static float m_TransitionTime;
+    static float m_Timer;
 
-    // SCREEN ARRAY VARIABLE(s)
-    std::vector<GameScreen*> m_ScreenVector;
+    // Objects
+    GameObjectManager* m_GameObjectManager;
+
+    /// @brief Default Destroy function for Class
+    void Destroy();
 
 public:
 
     // CLASS FUNCTION(s)
 
     /// @brief Default Constructor for Class
-    GameManager();
+    GameManager(StartUp* startContent);
+
+    /// @brief Default Load Content for Class
+    void LoadContent(GameObjectManager* gameObjectManager);
 
     /// @brief Default Destructor for Class
     ~GameManager();
@@ -38,14 +48,25 @@ public:
     // BASE FUNCTION(s)
 
     /// @brief Default Update function for Class 
-    void Update(float DeltaTime);
+    void Process(float deltaTime);
 
     /// @brief Default Draw function for Class
-    void Draw();
+    void Showcase();
 
 
-    // GETTER FUNCTION(s)
-    Camera2D GetCamera2D() { return m_CurrentGameScreen->GetCamera2D(); }
+    // EXTRA FUNCTION(s)
+
+    // SOUND
+
+    /// @brief Extra function to play sound
+    static void PlaySound(const char* sound, float volume = 0, bool looping = false);
+
+
+    // SCREEN TRANSITION
+
+    static void TransitionTime(float time) { m_TransitionTime = time; }
+    static void TransitionScreen(GameState state, float deltaTime);
+    static void TransitionScreen(ScreenState state, float deltaTime);
 
 };
 

@@ -1,27 +1,38 @@
-#include "GameUtility.h"
-#include "StartUp.h"
+// #include "GameManager.h"
+// #include "GameUtility.h"
+// #include "StartUp.h"
+#include "Structs.h"
+#include "Constants.h"
 
 int main()
 {
+    // Init Main Window and Audio Device
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE_NAME);
     InitAudioDevice();
 
-    StartUp* content = new StartUp();
-    GameUtility::Game::StartUpContent(content);
+    // Load in Start Up Content
+    // StartUp* content = new StartUp();
+    // GameManager* game = new GameManager(content);
 
-    SetTargetFPS(60);
+    SetTargetFPS(DESIRED_FPS);
+
+    // Run Game Processes and Showcases
     while(!WindowShouldClose())
     {
         float deltaTime = GetFrameTime();
 
-        GameUtility::Game::Process(deltaTime);
-        GameUtility::Game::Showcase();
+        // game->Process(deltaTime);
+        // game->Showcase();
     }
 
-    GameUtility::Game::Destroy();
-    content = nullptr;
-    delete content;
+    // Delete Game Data 
+    // content = nullptr;
+    // delete content;
 
+    // game = nullptr;
+    // delete game;
+
+    // Close Audio and Window Contexts
     CloseAudioDevice();
     CloseWindow();
     

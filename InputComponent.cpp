@@ -19,10 +19,10 @@ void InputComponent::Update(float deltaTime)
     {
         switch(m_Keys[i].type)
         {
-            case InputType::KEY_IDLE: if (IsKeyUp(m_Keys[i].key)) { ExecuteKey<void>(m_Keys[i].key); } break;
-            case InputType::KEY_PRESS: if (IsKeyPressed(m_Keys[i].key)) { ExecuteKey<void>(m_Keys[i].key); } break;
-            case InputType::KEY_DOWN: if (IsKeyDown(m_Keys[i].key)) { ExecuteKey<void>(m_Keys[i].key); } break;
-            case InputType::KEY_RELEASE: if (IsKeyReleased(m_Keys[i].key)) { ExecuteKey<void>(m_Keys[i].key); } break;
+            case InputType::INPUT_KEY_IDLE: if (IsKeyUp(m_Keys[i].key)) { ExecuteKey<void>(m_Keys[i].key); } break;
+            case InputType::INPUT_KEY_PRESS: if (IsKeyPressed(m_Keys[i].key)) { ExecuteKey<void>(m_Keys[i].key); } break;
+            case InputType::INPUT_KEY_DOWN: if (IsKeyDown(m_Keys[i].key)) { ExecuteKey<void>(m_Keys[i].key); } break;
+            case InputType::INPUT_KEY_RELEASE: if (IsKeyReleased(m_Keys[i].key)) { ExecuteKey<void>(m_Keys[i].key); } break;
         }
     }
 }

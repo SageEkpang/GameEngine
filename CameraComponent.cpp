@@ -17,8 +17,8 @@ CameraComponent::~CameraComponent()
 
 void CameraComponent::Update(float deltaTime) 
 {
-    m_Camera->offset = m_Offset.vec2;    
-    m_Camera->target = m_Target.vec2;
+    m_Camera->offset = Vector2{m_Offset.x, m_Offset.y};    
+    m_Camera->target = Vector2{m_Target.x, m_Target.y};
     m_Camera->rotation = m_Rotation;
     m_Camera->zoom = m_Zoom;
 }

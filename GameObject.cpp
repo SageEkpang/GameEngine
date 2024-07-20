@@ -24,7 +24,7 @@ GameObject::~GameObject()
 void GameObject::Update(float deltaTime) 
 {
     // UPDATE CURRENT COMPONENT(s)
-    for (int i = 0; i < m_Components.size(); ++i)
+    for (size_t i = 0; i < m_Components.size(); ++i)
     {
         // If Component has a parent, multiply parent position, scale and rotation
         if (m_Components[i]->GetTransform()->parent != nullptr)
@@ -47,7 +47,7 @@ void GameObject::Update(float deltaTime)
 void GameObject::Draw() 
 {
     // DRAW CURRENT COMPONENT(s)
-    for (int i = 0; i < m_Components.size(); ++i)
+    for (size_t i = 0; i < m_Components.size(); ++i)
     {
         m_Components[i]->Draw();
     }
@@ -56,6 +56,6 @@ void GameObject::Draw()
 template<typename T>
 T GameObject::GetComponent() 
 {
-    return T;
+    // return T;
 }
 

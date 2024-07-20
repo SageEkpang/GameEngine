@@ -26,7 +26,7 @@ void Title::Update(float DeltaTime)
 
 void Title::Draw() 
 {
-    // DrawRectangle(0, 0, 50, 50, RED);
+    DrawRectangle(0, 0, 50, 50, RED);
     // DrawText("Title", 300, 300, 50, RED);
     // DrawText(TextFormat("%d", m_GameInfo.State), 600, 300, 50, BLUE);
 }

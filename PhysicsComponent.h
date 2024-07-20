@@ -22,8 +22,6 @@ private:
 
     bool m_IsGrounded;
     bool m_IsInAir;
-    bool m_IsMoving;
-
 
     // FORCES VARIABLES(s)
 

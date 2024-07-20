@@ -3,7 +3,7 @@
 
 bool CircleCollisionComponent::CollidesWith(CircleCollisionComponent& other) 
 {
-    Vector2 DistanceBetweenPoints = Vector2Subtract(other.m_Transform->position.vec2, m_Transform->position.vec2);
+    Vector2 DistanceBetweenPoints = Vector2Subtract(Vector2{other.m_Transform->position.x, other.m_Transform->position.y}, Vector2{m_Transform->position.x, m_Transform->position.y});
     float CombinedRadii = other.m_Radius + m_Radius;
     float Magnitude = sqrt((DistanceBetweenPoints.x * DistanceBetweenPoints.x) + (DistanceBetweenPoints.y * DistanceBetweenPoints.y));
 
@@ -31,5 +31,6 @@ bool CircleCollisionComponent::CollidesWith(RectangleCollisionComponent& other)
 
     // m_HasCollided = false;
     // return m_HasCollided;
+    return false;
 }
 

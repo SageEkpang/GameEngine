@@ -38,7 +38,7 @@ public:
     void Showcase();
 
     // SETTER FUNCTION(s)
-    void AddGameObject(GameObject gameObject) { m_GameObjects.push_back(&gameObject); } // Add GameObject to Specific Screen, (Takes in Game Object, Takes in Screen it coresponds to)
+    void AddGameObject(GameObject gameObject); // Add GameObject to Specific Screen, (Takes in Game Object, Takes in Screen it coresponds to)
 
 };
 
