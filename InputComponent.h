@@ -56,8 +56,8 @@ public:
 
 
     // SETTER FUNCTION(s)
-    template<typename T>
-    inline void SetKeyInput(InputType type, KeyboardKey value, T func);
+    // template<typename T>
+    // inline void SetKeyInput(InputType type, KeyboardKey value, T func);
 
 };
 

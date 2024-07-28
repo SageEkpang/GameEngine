@@ -43,9 +43,9 @@ PlayerObject::PlayerObject(std::string tag, const char* name, Transform2Utility 
     void MoveLeft(); { m_Transform->position.x += m_Character->GetSpeed(); }
     void MoveRight(); { m_Transform->position.x -= m_Character->GetSpeed(); }
 
-    m_Input->SetKeyInput(InputType::INPUT_KEY_PRESS, KEY_SPACE, Jump);
-    m_Input->SetKeyInput(InputType::INPUT_KEY_DOWN, KEY_A, MoveLeft);
-    m_Input->SetKeyInput(InputType::INPUT_KEY_DOWN, KEY_D, MoveRight);
+    // m_Input->SetKeyInput(InputType::INPUT_KEY_PRESS, KEY_SPACE, Jump);
+    // m_Input->SetKeyInput(InputType::INPUT_KEY_DOWN, KEY_A, MoveLeft);
+    // m_Input->SetKeyInput(InputType::INPUT_KEY_DOWN, KEY_D, MoveRight);
 
     AddComponent(m_Input);
 

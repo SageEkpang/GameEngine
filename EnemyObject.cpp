@@ -15,7 +15,7 @@ EnemyObject::EnemyObject(std::string tag, const char* name, Transform2Utility tr
 
     AddComponent(m_Character);
 
-    m_Collision = new CollisionComponent();
+    m_Collision = new RectangleCollisionComponent();
     m_Collision->SetTransform(&transform);
 
     AddComponent(m_Collision);

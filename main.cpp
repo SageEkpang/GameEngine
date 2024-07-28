@@ -19,7 +19,7 @@ int main()
     // Run Game Processes and Showcases
     while(!WindowShouldClose())
     {
-        float deltaTime = GetFrameTime();
+        // float deltaTime = GetFrameTime();
 
         // game->Process(deltaTime);
         // game->Showcase();

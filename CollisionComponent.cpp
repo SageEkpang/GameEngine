@@ -2,6 +2,7 @@
 
 CollisionComponent::CollisionComponent() 
 {
+
 }
 
 CollisionComponent::~CollisionComponent() 

@@ -20,10 +20,7 @@ public:
 
     /// @brief Default Constructor for Class
     CollisionComponent();
-
-    /// @brief Default Destructor for Class
-    ~CollisionComponent();
-
+    
 
     // BASE FUNCTION(s)
 
@@ -35,9 +32,9 @@ public:
 
 
     // BASE COLLISION FUNCTION(s)
-    virtual bool CollidesWith(CollisionComponent& other);
-    virtual bool CollidesWith(CircleCollisionComponent& other);
-    virtual bool CollidesWith(RectangleCollisionComponent& other);
+    virtual bool CollidesWith(CollisionComponent& other) = 0;
+    virtual bool CollidesWith(CircleCollisionComponent& other) = 0;
+    virtual bool CollidesWith(RectangleCollisionComponent& other) = 0;
 
 
     // GETTER FUNCTION(s)

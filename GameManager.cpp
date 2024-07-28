@@ -1,6 +1,8 @@
 #include "GameManager.h"
 #include "StartUp.h"
 
+float GameManager::m_Timer = 0.0f;
+
 GameManager::GameManager(StartUp* startContent) 
 {
     m_CurrentGameState = GameState::STATE_NONE;

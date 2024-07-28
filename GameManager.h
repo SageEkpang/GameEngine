@@ -13,16 +13,16 @@ class GameManager
 private:
 
     // AUDIO VARIABLE(s)
-    static std::vector<Sound> m_Sounds;
+    std::vector<Sound> m_Sounds;
 
     // SCREEN VARIABLE(s)
-    static GameScreen* m_GameScreen;
-    static std::vector<GameScreen> m_Screens;
+    GameScreen* m_GameScreen;
+    std::vector<GameScreen> m_Screens;
 
-    static GameState m_CurrentGameState;
-    static ScreenState m_CurrentScreenState;
+    GameState m_CurrentGameState;
+    ScreenState m_CurrentScreenState;
 
-    static float m_TransitionTime;
+    float m_TransitionTime;
     static float m_Timer;
 
     // Objects
@@ -59,14 +59,14 @@ public:
     // SOUND
 
     /// @brief Extra function to play sound
-    static void PlaySound(const char* sound, float volume = 0, bool looping = false);
+    void PlaySound(const char* sound, float volume = 0, bool looping = false);
 
 
     // SCREEN TRANSITION
 
-    static void TransitionTime(float time) { m_TransitionTime = time; }
-    static void TransitionScreen(GameState state, float deltaTime);
-    static void TransitionScreen(ScreenState state, float deltaTime);
+    void TransitionTime(float time) { m_TransitionTime = time; }
+    void TransitionScreen(GameState state, float deltaTime);
+    void TransitionScreen(ScreenState state, float deltaTime);
 
 };
 

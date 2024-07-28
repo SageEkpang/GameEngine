@@ -31,13 +31,13 @@ void InputComponent::Draw()
 {
 }
 
-template<typename T>
-inline void InputComponent::SetKeyInput(InputType type, KeyboardKey value, T func) 
-{
-    auto Ins = std::type_index(typeid(func));
-    m_Keys.push_back(KeyType{value, type});
-    m_KeyMap.insert(std::make_pair(value, std::make_pair((FunctionType)func, Ins)));
-}
+// template<typename T>
+// inline void InputComponent::SetKeyInput(InputType type, KeyboardKey value, T func) 
+// {
+//     auto Ins = std::type_index(typeid(func));
+//     m_Keys.push_back(KeyType{value, type});
+//     m_KeyMap.insert(std::make_pair(value, std::make_pair((FunctionType)func, Ins)));
+// }
 
 template<typename T, typename... Args>
 inline T InputComponent::ExecuteKey(KeyboardKey& value, Args&&... args) 
