@@ -1,0 +1,69 @@
+﻿  Button.cpp
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Button.cpp(39,33): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Button.cpp(40,33): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Button.cpp(59,20): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Button.cpp(58,20): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Button.cpp(69,24): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Button.cpp(68,24): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Button.cpp(80,24): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Button.cpp(79,24): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Button.cpp(90,9): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Button.cpp(89,23): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Button.cpp(88,23): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  Camera.cpp
+  Collider.cpp
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Collider.cpp(45,221): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Collider.cpp(45,183): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Collider.cpp(45,145): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Collider.cpp(45,104): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Collider.cpp(47,139): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Collider.cpp(47,98): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Collider.cpp(79,16): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Collider.cpp(89,20): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  ColliderManager.cpp
+D:\GitHubRepoNew\GameEngine\OkomaEngine\ColliderManager.cpp(106,49): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\ColliderManager.cpp(106,49): warning C4244:         with
+D:\GitHubRepoNew\GameEngine\OkomaEngine\ColliderManager.cpp(106,49): warning C4244:         [
+D:\GitHubRepoNew\GameEngine\OkomaEngine\ColliderManager.cpp(106,49): warning C4244:             T=float
+D:\GitHubRepoNew\GameEngine\OkomaEngine\ColliderManager.cpp(106,49): warning C4244:         ]
+D:\GitHubRepoNew\GameEngine\OkomaEngine\ColliderManager.cpp(107,49): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\ColliderManager.cpp(107,49): warning C4244:         with
+D:\GitHubRepoNew\GameEngine\OkomaEngine\ColliderManager.cpp(107,49): warning C4244:         [
+D:\GitHubRepoNew\GameEngine\OkomaEngine\ColliderManager.cpp(107,49): warning C4244:             T=float
+D:\GitHubRepoNew\GameEngine\OkomaEngine\ColliderManager.cpp(107,49): warning C4244:         ]
+D:\GitHubRepoNew\GameEngine\OkomaEngine\ColliderManager.cpp(140,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\ColliderManager.cpp(169,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\ColliderManager.cpp(205,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\ColliderManager.cpp(239,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\GitHubRepoNew\GameEngine\OkomaEngine\ColliderManager.cpp(247,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  CollisionManifold.cpp
+  Component.cpp
+  Entity.cpp
+  GameObjectManager.cpp
+  main.cpp
+  OKTransform2.cpp
+  OKVector2.cpp
+  Particle.cpp
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Particle.h(41,42): warning C4305: 'argument': truncation from 'double' to 'T'
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Particle.h(41,42): warning C4305:         with
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Particle.h(41,42): warning C4305:         [
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Particle.h(41,42): warning C4305:             T=float
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Particle.h(41,42): warning C4305:         ]
+  (compiling source file 'Particle.cpp')
+  
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Particle.cpp(95,28): warning C4305: 'initializing': truncation from 'double' to 'float'
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Particle.cpp(97,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Rigidbody.cpp
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Particle.h(41,42): warning C4305: 'argument': truncation from 'double' to 'T'
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Particle.h(41,42): warning C4305:         with
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Particle.h(41,42): warning C4305:         [
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Particle.h(41,42): warning C4305:             T=float
+D:\GitHubRepoNew\GameEngine\OkomaEngine\Particle.h(41,42): warning C4305:         ]
+  (compiling source file 'Rigidbody.cpp')
+  
+  Scene.cpp
+  Timer.cpp
+  Generating Code...
+  OkomaEngine.vcxproj -> D:\GitHubRepoNew\GameEngine\x64\Debug\OkomaEngine.exe
+  'pwsh.exe' is not recognized as an internal or external command,
+  operable program or batch file.

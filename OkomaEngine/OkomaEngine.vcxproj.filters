@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Components">
+      <UniqueIdentifier>{0e51f70a-a17a-44d0-b619-c6b48e075833}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helper">
+      <UniqueIdentifier>{99f0fea9-5725-4496-bdae-d740a098bbe6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects">
+      <UniqueIdentifier>{90d2fc5b-6c30-42b6-8999-9c37e5fa3b31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Header">
+      <UniqueIdentifier>{cc017b77-4b37-42c8-81ce-1f1168499e59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Source">
+      <UniqueIdentifier>{59e7815b-1a10-4d41-a649-873038bc8866}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Structs">
+      <UniqueIdentifier>{cebdde52-8ce8-40ca-97ea-1167dcfcd83f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Structs\Header">
+      <UniqueIdentifier>{40f2b70a-9986-43fa-8b49-0d8f2b54f9d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Structs\Source">
+      <UniqueIdentifier>{e9cfbe9f-de82-48f0-a47d-c041084b9a30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Constants">
+      <UniqueIdentifier>{16f8146c-a31d-4870-b5e1-a9b02ac3b4a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{8fb6ffae-46a1-4cd9-a68b-ce9eb9842b71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Header">
+      <UniqueIdentifier>{5c961b7a-5e05-436d-836a-ff88be6ef410}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Source">
+      <UniqueIdentifier>{9842683a-3575-41ed-a566-b771c29af8d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helper\Header">
+      <UniqueIdentifier>{d1125775-ad54-4bfe-a07b-1f85e496a1c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helper\Source">
+      <UniqueIdentifier>{4ca5ab2c-9a74-4214-9bd8-85d75cf479a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers">
+      <UniqueIdentifier>{2d0d36f2-9231-4bb9-8811-611d02606163}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers\Header">
+      <UniqueIdentifier>{d9366abf-bf43-44f7-b016-9f02df7af2f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers\Source">
+      <UniqueIdentifier>{f099c611-202a-4fca-9c3b-01cc33145541}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OKVector2.cpp">
+      <Filter>Structs\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="OKTransform2.cpp">
+      <Filter>Structs\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Scenes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Components\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Components\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Helper\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>Components\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManifold.cpp">
+      <Filter>Structs\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Components\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Rigidbody.cpp">
+      <Filter>Components\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Components\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Components\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderManager.cpp">
+      <Filter>Managers\Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="OKVector2.h">
+      <Filter>Structs\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="OKTransform2.h">
+      <Filter>Structs\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GravityConstants.h">
+      <Filter>Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeStepConstants.h">
+      <Filter>Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowConstants.h">
+      <Filter>Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Scenes\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Components\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Components\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderManager.h">
+      <Filter>Helper\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Helper\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>Components\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManifold.h">
+      <Filter>Structs\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Components\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Rigidbody.h">
+      <Filter>Components\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Components\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Components\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderManager.h">
+      <Filter>Managers\Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
