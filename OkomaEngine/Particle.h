@@ -38,10 +38,10 @@ protected: // PROTECTED VARIABLE(s)
     float m_CrossSectionalArea{ 1.0 }; // NOTE: width x height
 
     // FORCES CONSTANT(s)
-    mutable OKVector2<float> m_Gravity = GRAVITY_EARTH;
+    mutable OKVector2<float> m_Gravity = OKVector2<float>(0, 50);
 
     // NOTE: Coefficients
-    mutable float m_Drag{ 0.0 };
+    mutable float m_Drag{ 3.f };
     mutable float m_Lift{ 0.0 };
     mutable float m_DynamicFriction{ 0.0 };
     mutable float m_StaticFriction{ 0.0 };
@@ -54,7 +54,7 @@ protected: // PROTECTED VARIABLE(s)
 
     // NOTE: Debug Lines
     bool m_DrawVelocity = true;
-    bool m_DrawDrag = false;
+    bool m_DrawDrag = true;
     bool m_DrawLift = false;
     bool m_DrawGravity = false;
     bool m_DrawStaticFriction = false;
@@ -101,6 +101,10 @@ public: // PUBLIC FUNCTION(s)
     inline OKVector2<float> GetRotation() { return m_Transform->rotation; }
 
     // PHYSICS GETTER(s)
+    inline const float GetMass() { return m_Mass; }
+    inline const float GetInverseMass() { return -m_Mass; }
+    inline const OKVector2<float> GetVelocity() { return m_Velocity; }
+    inline const OKVector2<float> GetAcceleration() { return m_Acceleration; }
     inline const OKVector2<float> GetGravity() { return m_Gravity; }
     inline const OKVector2<float> GetDrag() { return m_Drag; }
     inline const OKVector2<float> GetLift() { return m_Lift; }
@@ -118,6 +122,9 @@ public: // PUBLIC FUNCTION(s)
     inline void SetRotation(OKVector2<float> rotation) { m_Transform->rotation = rotation; }
 
     // PHYSICS SETTER(s)
+    inline void SetMass(float mass) { m_Mass = mass; }
+    inline void SetVelocity(OKVector2<float> velocity) { m_Velocity = velocity; }
+    inline void SetAcceleration(OKVector2<float> acceleration) { m_Acceleration = acceleration; }
     inline void SetGravity(OKVector2<float> gravity) { m_Gravity = gravity; }
     inline void SetDrag(float drag) { m_Drag = drag; }
     inline void SetLift(float lift) { m_Lift = lift; }

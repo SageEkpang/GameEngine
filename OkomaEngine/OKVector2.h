@@ -89,6 +89,13 @@ public: // OPERATOR OVERLOAD FUNCTION(s)
         return *this;
     }
 
+    OKVector2 operator -()
+    {
+        -x;
+        -y;
+        return *this;
+    }
+
     OKVector2 operator =(const OKVector2& value)
     {
         this->x = value.x;
@@ -112,6 +119,11 @@ public: // OPERATOR OVERLOAD FUNCTION(s)
     OKVector2 operator -(const OKVector2& value)
     {
         return OKVector2(this->x - value.x, this->y - value.y);
+    }
+
+    friend OKVector2 operator -(const T value, OKVector2<T> rhs)
+    {
+        return rhs - value;
     }
 
     OKVector2 operator +=(const OKVector2& value)
@@ -144,6 +156,48 @@ public: // OPERATOR OVERLOAD FUNCTION(s)
         return OKVector2(this->x / value.x, this->y / value.y);
     }
 
+    OKVector2 operator /(const T& value)
+    {
+
+        return OKVector2(this->x / value, this->y / value);
+    }
+
+    friend OKVector2 operator /(const T value, OKVector2<T> rhs)
+    {
+        return rhs * value;
+    }
+
+    bool operator >(const OKVector2& value)
+    {
+        bool GreaterX = this->x > value.x ? true : false;
+        bool GreaterY = this->y > value.y ? true : false;
+
+        return (GreaterX && GreaterY);
+    }
+
+    bool operator <(const OKVector2& value)
+    {
+        bool LessorX = this->x < value.x ? true : false;
+        bool LessorY = this->y < value.y ? true : false;
+
+        return (LessorX && LessorY);
+    }
+
+    bool operator >=(const OKVector2& value)
+    {
+        bool GreaterEqualX = this->x >= value.x ? true : false;
+        bool GreaterEqualY = this->y >= value.y ? true : false;
+
+        return (GreaterEqualX && GreaterEqualY);
+    }
+
+    bool operator <=(const OKVector2& value)
+    {
+        bool LessorEqualX = this->x <= value.x ? true : false;
+        bool LessorEqualY = this->y <= value.y ? true : false;
+
+        return (LessorEqualX && LessorEqualY);
+    }
 };
 
 #define OKVECTOR2_ZERO {0, 0}

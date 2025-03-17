@@ -38,32 +38,32 @@ void Particle::Draw()
     // NOTE: Debug Drawing
 
     // Draw Velocity Direction (Not Normalised)
-    if (m_DrawVelocity)
-    {
-        Vector2 t_VecEnd = Vector2Multiply(m_Velocity.normalise().ConvertToVec2(), Vector2{ m_Velocity.magnitude(), m_Velocity.magnitude() });
-        t_VecEnd = Vector2Add(t_VecEnd, m_Transform->position.ConvertToVec2());
-        DrawLineV(m_Transform->position.ConvertToVec2(), t_VecEnd, GREEN);
-    }
+    //if (m_DrawVelocity)
+    //{
+    //    Vector2 t_VecEnd = Vector2Multiply(m_Velocity.normalise().ConvertToVec2(), Vector2{ m_Velocity.magnitude(), m_Velocity.magnitude() });
+    //    t_VecEnd = Vector2Add(t_VecEnd, m_Transform->position.ConvertToVec2());
+    //    DrawLineV(m_Transform->position.ConvertToVec2(), t_VecEnd, GREEN);
+    //}
 
-    // Draw Gravity Force Line
-    if (m_DrawGravity)
-    {
-        Vector2 t_GravityVec = Vector2Add(pm_CalculatedGravity.ConvertToVec2(), m_Transform->position.ConvertToVec2());
-        DrawLineV(m_Transform->position.ConvertToVec2(), t_GravityVec, PURPLE);
-    }
+    //// Draw Gravity Force Line
+    //if (m_DrawGravity)
+    //{
+    //    Vector2 t_GravityVec = Vector2Add(pm_CalculatedGravity.ConvertToVec2(), m_Transform->position.ConvertToVec2());
+    //    DrawLineV(m_Transform->position.ConvertToVec2(), t_GravityVec, PURPLE);
+    //}
 
-    // Draw Drag Force Line
-    if (m_DrawDrag)
-    {
-        Vector2 t_DragVec = Vector2Add(pm_CalculatedDrag.ConvertToVec2(), m_Transform->position.ConvertToVec2());
-        DrawLineV(m_Transform->position.ConvertToVec2(), t_DragVec, BLUE);
-    }
+    //// Draw Drag Force Line
+    //if (m_DrawDrag)
+    //{
+    //    Vector2 t_DragVec = Vector2Add(pm_CalculatedDrag.ConvertToVec2(), m_Transform->position.ConvertToVec2());
+    //    DrawLineV(m_Transform->position.ConvertToVec2(), t_DragVec, BLUE);
+    //}
 
-    // Draw Lift Force Line
-    if (m_DrawLift)
-    {
+    //// Draw Lift Force Line
+    //if (m_DrawLift)
+    //{
 
-    }
+    //}
 }
 
 void Particle::CalculateAcceleration(const float deltaTime)
@@ -97,7 +97,7 @@ OKVector2<float> Particle::ApplyDrag()
     float t_Drag = t_CalculateDrag.magnitude() * 0.5;
 
     // NOTE: Intergrate Drag
-    pm_CalculatedDrag = m_Velocity.negate();
+    pm_CalculatedDrag = m_Velocity * -1;
     pm_CalculatedDrag = pm_CalculatedDrag.normalise() * t_Drag;
     return pm_CalculatedDrag;
 }

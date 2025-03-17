@@ -6,12 +6,18 @@ Collider::Collider(const char* tag, OKTransform2<float>* transform, bool IsCapsu
     // NOTE: Set the Collider Type in the Constructor
     m_ColliderType = ColliderType::COLLIDER_RECTANGLE;
 
-    if (IsCapsule == true) { m_ColliderType = ColliderType::COLLIDER_CAPSULE; }
-    if (lockZRot == true) { transform->rotation = OKVector2<float>(0, 0); }
+    if (IsCapsule == true) 
+    { 
+        m_ColliderType = ColliderType::COLLIDER_CAPSULE; 
+    }
+
+    if (lockZRot == true) 
+    { 
+        transform->rotation = OKVector2<float>(0, 0); 
+    }
 
     // NOTE: Set Member Variable Types
-    strcpy_s(m_Tag, strlen(tag), tag);
-    m_Transform = new OKTransform2<float>();
+    // strcpy_s(m_Tag, strlen(tag), tag);
     m_Transform = transform;
 }
 
@@ -22,15 +28,14 @@ Collider::Collider(const char* tag, OKTransform2<float>* transform, float radius
     m_ColliderType = ColliderType::COLLIDER_CIRCLE;
 
     // NOTE: Set Member Variable Types
-    strcpy_s(m_Tag, strlen(tag), tag);
-    m_Transform = new OKTransform2<float>();
+    // strcpy_s(m_Tag, strlen(tag), tag);
     m_Transform = transform;
     m_Radius = radius;
 }
 
 Collider::~Collider()
 {
-    if (m_Transform) { delete m_Transform; }
+
 }
 
 void Collider::Update(const float deltaTime)

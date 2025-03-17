@@ -29,7 +29,7 @@ public: // PUBLIC FUNCTION(s)
         m_CollisionPoints[3] = OKVector2<float>(0, 0);
     }
 
-    ~CollisionManifold() { }
+    // ~CollisionManifold() { }
 };
 
 #endif

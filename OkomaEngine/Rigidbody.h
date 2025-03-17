@@ -40,15 +40,11 @@ public:
 
     // RECTANGLE
     /// @brief Rectangle Rigidbody Constructor
-    Rigidbody(const char* tag, OKTransform2<float>* transform, float mass, RigidbodyMovementType rigidbodyMovementType);
+    Rigidbody(const char* tag, OKTransform2<float>* transform, float mass, RigidbodyMovementType rigidbodyMovementType, bool IsCapsule = false, bool lockZRot = true);
 
     // CIRCLE
     /// @brief Circle Rigidbody Constructor
     Rigidbody(const char* tag, OKTransform2<float>* transform, float mass, float radius, RigidbodyMovementType rigidbodyMovementType);
-
-    // CAPSULE
-    /// @brief Capsule Rigidbody Constructor
-    Rigidbody(const char* tag, OKTransform2<float>* transform, float mass, float height, float circularExpands, RigidbodyMovementType rigidbodyMovementType);
 
     // DESTRUCTOR
     ~Rigidbody() override;

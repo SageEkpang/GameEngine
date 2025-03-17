@@ -32,21 +32,21 @@ CollisionManifold ColliderManager::CheckCollisions(Collider* colliderA, Collider
 
 	switch (m_CollisionMapping[collision_made_pair])
 	{
-	case RECTANGLE_TO_RECTANGLE: return t_ColMani = RectangleToRectangle(colliderA, colliderB); break;
+		case RECTANGLE_TO_RECTANGLE: return t_ColMani = RectangleToRectangle(colliderA, colliderB); break;
 
-	case CIRCLE_TO_CIRCLE: return t_ColMani = CircleToCircle(colliderA, colliderB); break;
-	case CIRCLE_TO_RECTANGLE: return t_ColMani = CircleToRectangle(colliderA, colliderB); break;
+		case CIRCLE_TO_CIRCLE: return t_ColMani = CircleToCircle(colliderA, colliderB); break;
+		case CIRCLE_TO_RECTANGLE: return t_ColMani = CircleToRectangle(colliderA, colliderB); break;
 
-	case CAPSULE_TO_CAPSULE: return t_ColMani = CapsuleToCapsule(colliderA, colliderB); break;
-	case CAPSULE_TO_RECTANGLE: return t_ColMani = CapsuleToRectangle(colliderA, colliderB); break;
-	case CAPSULE_TO_CIRCLE: return t_ColMani = CapsuleToCircle(colliderA, colliderB); break;
+		case CAPSULE_TO_CAPSULE: return t_ColMani = CapsuleToCapsule(colliderA, colliderB); break;
+		case CAPSULE_TO_RECTANGLE: return t_ColMani = CapsuleToRectangle(colliderA, colliderB); break;
+		case CAPSULE_TO_CIRCLE: return t_ColMani = CapsuleToCircle(colliderA, colliderB); break;
 
-	case ORIENTED_TO_ORIENTED: return t_ColMani = OrientedRectangleToOrientedRectangle(colliderA, colliderB); break;
-	case ORIENTED_TO_RECTANGLE: return t_ColMani = OrientedRectangleToRectangle(colliderA, colliderB); break;
-	case ORIENTED_TO_CIRCLE: return t_ColMani = OrientedRectangleToCircle(colliderA, colliderB); break;
-	case ORIENTED_TO_CAPSULE: return t_ColMani = OrientedRectangleToCapsule(colliderA, colliderB); break;
+		case ORIENTED_TO_ORIENTED: return t_ColMani = OrientedRectangleToOrientedRectangle(colliderA, colliderB); break;
+		case ORIENTED_TO_RECTANGLE: return t_ColMani = OrientedRectangleToRectangle(colliderA, colliderB); break;
+		case ORIENTED_TO_CIRCLE: return t_ColMani = OrientedRectangleToCircle(colliderA, colliderB); break;
+		case ORIENTED_TO_CAPSULE: return t_ColMani = OrientedRectangleToCapsule(colliderA, colliderB); break;
 
-	default: t_ColMani = CollisionManifold();
+		default: t_ColMani = CollisionManifold();
 	}
 
 	return t_ColMani;
@@ -61,10 +61,26 @@ CollisionManifold ColliderManager::RectangleToRectangle(Collider* rectA, Collide
 	bool t_OverlapYTop = rectA->GetPosition().y < (rectB->GetPosition().y + rectB->GetScale().y);
 	bool t_OverlapYBottom = (rectA->GetPosition().y + rectA->GetScale().y) > rectB->GetPosition().y;
 
+	/*
+		// Given point p, return the point q on or in AABB b that is closest to p
+		void ClosestPtPointAABB(Point p, AABB b, Point &q)
+		{
+			// For each coordinate axis, if the point coordinate value is
+			// outside box, clamp it to the box, else keep it as is
+			for(inti=0;i<3;
+				 float v = p[i];
+				  if (v < b.min[i]) v = b.min[i]; // v = max(v, b.min[i])
+				  if (v > b.max[i]) v = b.max[i]; // v = min(v, b.max[i])
+				  q[i] = v;
+			}
+		}
+	*/
+
+
 	if (t_OverlapXLeft && t_OverlapXRight && t_OverlapYTop && t_OverlapYBottom)
 	{
 		t_ColMani.m_HasCollision = true;
-		t_ColMani.m_CollisionNormal = rectB->GetTransform()->position - rectA->GetTransform()->position;
+		t_ColMani.m_CollisionNormal = (rectA->GetTransform()->position + (rectA->GetScale() / 2)) - (rectB->GetTransform()->position + (rectB->GetScale() / 2));
 		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
 		t_ColMani.m_ContactPointAmount = 1;
 		t_ColMani.m_PenetrationDepth = OKVector2<float>(rectA->GetTransform()->position - rectB->GetTransform()->position).magnitude();
@@ -86,7 +102,7 @@ CollisionManifold ColliderManager::CircleToCircle(Collider* circA, Collider* cir
 	if (distance.magnitude() <= radii_sum)
 	{
 		t_ColMani.m_HasCollision = true;
-		t_ColMani.m_CollisionNormal = circB->GetTransform()->position - circA->GetTransform()->position;
+		t_ColMani.m_CollisionNormal = circA->GetTransform()->position - circB->GetTransform()->position;
 		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
 		t_ColMani.m_ContactPointAmount = 1;
 		t_ColMani.m_PenetrationDepth = OKVector2<float>(circA->GetTransform()->position - circB->GetTransform()->position).magnitude();
@@ -102,50 +118,38 @@ CollisionManifold ColliderManager::CircleToRectangle(Collider* circA, Collider* 
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
-	OKVector2<float> t_CenterPoint;
-	t_CenterPoint.x = (int)(rectB->GetPosition().x + rectB->GetScale().x / 2.0f);
-	t_CenterPoint.y = (int)(rectB->GetPosition().y + rectB->GetScale().y / 2.0f);
+	float t_TestX = circA->GetPosition().x;
+	float t_TestY = circA->GetPosition().y;
 
-	OKVector2<float> t_Distance;
-	t_Distance.x = fabsf(circA->GetPosition().x - t_CenterPoint.x);
-	t_Distance.y = fabsf(circA->GetPosition().y - t_CenterPoint.y);
-
-	if (t_Distance.x > (rectB->GetScale().x / 2.f + circA->GetRadius())) { return t_ColMani; }
-	if (t_Distance.y > (rectB->GetScale().y / 2.f + circA->GetRadius())) { return t_ColMani; }
-
-	if (t_Distance.x <= (rectB->GetScale().x / 2.f))
+	if (circA->GetPosition().x < rectB->GetPosition().x)
 	{
-		t_ColMani.m_HasCollision = true;
-		t_ColMani.m_CollisionNormal = circA->GetTransform()->position - rectB->GetTransform()->position;
-		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
-		t_ColMani.m_ContactPointAmount = 1;
-		t_ColMani.m_PenetrationDepth = OKVector2<float>(rectB->GetTransform()->position - circA->GetTransform()->position).magnitude();
-		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
-
-		return t_ColMani;
+		t_TestX = rectB->GetPosition().x;
+	}
+	else if (circA->GetPosition().x > (rectB->GetPosition().x + rectB->GetScale().x))
+	{
+		t_TestX = rectB->GetPosition().x + rectB->GetScale().x;
 	}
 
-	if (t_Distance.y <= (rectB->GetScale().y / 2.f))
+	if (circA->GetPosition().y < rectB->GetPosition().y)
 	{
-		t_ColMani.m_HasCollision = true;
-		t_ColMani.m_CollisionNormal = circA->GetTransform()->position - rectB->GetTransform()->position;
-		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
-		t_ColMani.m_ContactPointAmount = 1;
-		t_ColMani.m_PenetrationDepth = OKVector2<float>(rectB->GetTransform()->position - circA->GetTransform()->position).magnitude();
-		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
-
-		return t_ColMani;
+		t_TestY = rectB->GetPosition().y;
+	}
+	else if (circA->GetPosition().y > (rectB->GetPosition().y + rectB->GetScale().y))
+	{
+		t_TestY = rectB->GetPosition().y + rectB->GetScale().y;
 	}
 
-	float t_CornerDistance = (std::pow(t_Distance.x - rectB->GetScale().x, 2)) + (std::pow(t_Distance.y - rectB->GetScale().y, 2));
+	float DistX = circA->GetPosition().x - t_TestX;
+	float DistY = circA->GetPosition().y - t_TestY;
+	float Distance = sqrt( (DistX * DistX) + (DistY * DistY));
 
-	if (t_CornerDistance >= (circA->GetRadius() * circA->GetRadius()))
+	if (Distance <= circA->GetRadius())
 	{
 		t_ColMani.m_HasCollision = true;
 		t_ColMani.m_CollisionNormal = circA->GetTransform()->position - rectB->GetTransform()->position;
-		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+	 	t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
 		t_ColMani.m_ContactPointAmount = 1;
-		t_ColMani.m_PenetrationDepth = OKVector2<float>(rectB->GetTransform()->position - circA->GetTransform()->position).magnitude();
+		t_ColMani.m_PenetrationDepth = OKVector2<float>(circA->GetTransform()->position - rectB->GetTransform()->position).magnitude();
 		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
 
 		return t_ColMani;
@@ -176,13 +180,13 @@ CollisionManifold ColliderManager::CapsuleToCircle(Collider* capsuleA, Collider*
 	closest_point.x = Clamp(closest_point.x, base_a.x, tip_a.x);
 	closest_point.y = Clamp(closest_point.y, base_a.y, tip_a.y);
 
-	DrawCircleV(closest_point.ConvertToVec2(), capsuleA->GetScale().x, PURPLE);
+	// DrawCircleV(closest_point.ConvertToVec2(), capsuleA->GetScale().x, PURPLE);
 
 	// NOTE: Create the circle based of the capsule components
 	OKTransform2<float> circle_transform = OKTransform2<float>(closest_point, OKVector2<float>(0, 0), OKVector2<float>(capsuleA->GetScale().x, capsuleA->GetScale().x));
-	Collider circle_temp = Collider("temp rep", &circle_transform, capsuleA->GetScale().x);
+	Collider circle_temp = Collider("temp rep", &circle_transform, capsuleA->GetScale().x / 2);
 
-	DrawCircleV(closest_point.ConvertToVec2(), capsuleA->GetScale().x, PURPLE);
+	DrawCircleV(closest_point.ConvertToVec2(), capsuleA->GetScale().x / 2, PURPLE);
 
 	t_ColMani = CircleToCircle(&circle_temp, circB);
 
@@ -212,13 +216,11 @@ CollisionManifold ColliderManager::CapsuleToRectangle(Collider* capsuleA, Collid
 	closest_point.x = Clamp(closest_point.x, base_a.x, tip_a.x);
 	closest_point.y = Clamp(closest_point.y, base_a.y, tip_a.y);
 
-	DrawCircleV(closest_point.ConvertToVec2(), 4, BLUE);
-
 	// NOTE: Create the circle based of the capsule components
 	OKTransform2<float> circle_transform = OKTransform2<float>(closest_point, OKVector2<float>(0, 0), OKVector2<float>(0, 0));
-	Collider circle_temp = Collider("temp rep", &circle_transform, capsuleA->GetScale().x);
+	Collider circle_temp = Collider("temp rep", &circle_transform, capsuleA->GetScale().x / 2);
 
-	DrawCircleV(closest_point.ConvertToVec2(), capsuleA->GetScale().x, PURPLE);
+	DrawCircleV(closest_point.ConvertToVec2(), capsuleA->GetScale().x / 2, PURPLE);
 
 	t_ColMani = CircleToRectangle(&circle_temp, rectB);
 
