@@ -1,5 +1,26 @@
 #include "ColliderManager.h"
 
+OKVector2<float> ColliderManager::ProjectPointOntoLine(OKVector2<float> point, OKVector2<float> lineStart, OKVector2<float> lineEnd)
+{
+	// NOTE: Capsule Position and Variable(s)
+	OKVector2<float> tip_a = lineStart;
+	OKVector2<float> base_a = lineEnd;
+
+	float t_DistanceX = tip_a.x - base_a.x;
+	float t_DistanceY = tip_a.y - base_a.y;
+	float len = sqrt((t_DistanceX * t_DistanceX) + (t_DistanceY * t_DistanceY));
+	float dot = ((point.x - tip_a.x) * (base_a.x - tip_a.x)) + ((point.y - tip_a.y) * (base_a.y - tip_a.y)) / pow(len, 2);
+
+	// NOTE: Closest Point
+	OKVector2<float> closest_point;
+	closest_point.x = tip_a.x + (dot * (base_a.x - tip_a.x));
+	closest_point.y = tip_a.y + (dot * (base_a.y - tip_a.y));
+	closest_point.x = Clamp(closest_point.x, base_a.x, tip_a.x);
+	closest_point.y = Clamp(closest_point.y, base_a.y, tip_a.y);
+
+	return closest_point;
+}
+
 ColliderManager::ColliderManager()
 {
 	m_CollisionMapping[std::make_pair(COLLIDER_RECTANGLE, COLLIDER_RECTANGLE)] = RECTANGLE_TO_RECTANGLE;
@@ -54,6 +75,10 @@ CollisionManifold ColliderManager::CheckCollisions(Collider* colliderA, Collider
 
 CollisionManifold ColliderManager::RectangleToRectangle(Collider* rectA, Collider* rectB)
 {
+
+	// NOTE: Can use closest point checks and treat the rectangles like lines instead of box and rectangles
+	// Need to implement a closest line function check
+
 	CollisionManifold t_ColMani = CollisionManifold();
 
 	bool t_OverlapXLeft = rectA->GetPosition().x < (rectB->GetPosition().x + rectB->GetScale().x);
@@ -61,26 +86,15 @@ CollisionManifold ColliderManager::RectangleToRectangle(Collider* rectA, Collide
 	bool t_OverlapYTop = rectA->GetPosition().y < (rectB->GetPosition().y + rectB->GetScale().y);
 	bool t_OverlapYBottom = (rectA->GetPosition().y + rectA->GetScale().y) > rectB->GetPosition().y;
 
-	/*
-		// Given point p, return the point q on or in AABB b that is closest to p
-		void ClosestPtPointAABB(Point p, AABB b, Point &q)
-		{
-			// For each coordinate axis, if the point coordinate value is
-			// outside box, clamp it to the box, else keep it as is
-			for(inti=0;i<3;
-				 float v = p[i];
-				  if (v < b.min[i]) v = b.min[i]; // v = max(v, b.min[i])
-				  if (v > b.max[i]) v = b.max[i]; // v = min(v, b.max[i])
-				  q[i] = v;
-			}
-		}
-	*/
-
-
 	if (t_OverlapXLeft && t_OverlapXRight && t_OverlapYTop && t_OverlapYBottom)
 	{
 		t_ColMani.m_HasCollision = true;
-		t_ColMani.m_CollisionNormal = (rectA->GetTransform()->position + (rectA->GetScale() / 2)) - (rectB->GetTransform()->position + (rectB->GetScale() / 2));
+
+		OKVector2<float> CentreA = rectA->GetPosition() + (rectA->GetScale() / 2); // B
+		OKVector2<float> CentreB = rectB->GetPosition() + (rectB->GetScale() / 2); // C
+
+		t_ColMani.m_CollisionNormal = CentreA - CentreB;
+
 		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
 		t_ColMani.m_ContactPointAmount = 1;
 		t_ColMani.m_PenetrationDepth = OKVector2<float>(rectA->GetTransform()->position - rectB->GetTransform()->position).magnitude();
@@ -180,8 +194,6 @@ CollisionManifold ColliderManager::CapsuleToCircle(Collider* capsuleA, Collider*
 	closest_point.x = Clamp(closest_point.x, base_a.x, tip_a.x);
 	closest_point.y = Clamp(closest_point.y, base_a.y, tip_a.y);
 
-	// DrawCircleV(closest_point.ConvertToVec2(), capsuleA->GetScale().x, PURPLE);
-
 	// NOTE: Create the circle based of the capsule components
 	OKTransform2<float> circle_transform = OKTransform2<float>(closest_point, OKVector2<float>(0, 0), OKVector2<float>(capsuleA->GetScale().x, capsuleA->GetScale().x));
 	Collider circle_temp = Collider("temp rep", &circle_transform, capsuleA->GetScale().x / 2);
@@ -230,6 +242,16 @@ CollisionManifold ColliderManager::CapsuleToRectangle(Collider* capsuleA, Collid
 CollisionManifold ColliderManager::CapsuleToCapsule(Collider* capsuleA, Collider* capsuleB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
+
+	//OKVector2<float> CapA = ProjectPointOntoLine(capsuleB->GetPosition(), 
+	//	OKVector2<float>(capsuleA->GetPosition().x, capsuleA->GetPosition().y + (capsuleA->GetScale().y / 2) - (capsuleA->GetScale().x / 2)),
+	//	OKVector2<float>(capsuleA->GetPosition().x, capsuleA->GetPosition().y - (capsuleA->GetScale().y / 2) + (capsuleA->GetScale().x / 2))
+	//);
+
+	//OKVector2<float> CapB = ProjectPointOntoLine(capsuleA->GetPosition(),
+	//	capsuleB->GetPosition().y + (capsuleB->GetScale().y / 2) - (capsuleB->GetScale().x / 2),
+	//	capsuleB->GetPosition().y - (capsuleB->GetScale().y / 2) + (capsuleB->GetScale().x / 2)
+	//);
 
 	// Capsule (A)
 	// NOTE: Capsule Position and Variable(s)

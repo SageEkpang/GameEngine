@@ -10,7 +10,7 @@
 int main()
 {
 	// Game Utility (namespace) over Game Manager (class)
-	InitWindow(500, 500, "OkomaEngine");
+	InitWindow(1000, 800, "OkomaEngine");
 	InitAudioDevice();
 
 	
@@ -20,7 +20,7 @@ int main()
 
 	std::vector<PhysicsObject*> m_PhysicsObjects;
 
-	OKTransform2<float>* TransformFirst = new OKTransform2<float>(OKVector2<float>(30, 200), OKVector2<float>(0, 0), OKVector2<float>(20, 60));
+	OKTransform2<float>* TransformFirst = new OKTransform2<float>(OKVector2<float>(30, 200), OKVector2<float>(0, 0), OKVector2<float>(30, 30));
 	PhysicsObject* m_PhysicsFirst = new PhysicsObject("Phy1", TransformFirst, 10, RIGIDBODY_DYNAMIC);
 	m_PhysicsObjects.push_back(m_PhysicsFirst);
 
@@ -28,8 +28,8 @@ int main()
 	//PhysicsObject* m_PhysicsSecond = new PhysicsObject("Phy2", TransformSecond, 0, 40, RIGIDBODY_STATIC);
 	//m_PhysicsObjects.push_back(m_PhysicsSecond);
 
-	OKTransform2<float>* TransformThird = new OKTransform2<float>(OKVector2<float>(150, 400), OKVector2<float>(0, 0), OKVector2<float>(40, 50));
-	PhysicsObject* m_PhysicsThird = new PhysicsObject("Phy3", TransformThird, 0, 40, RIGIDBODY_STATIC);
+	OKTransform2<float>* TransformThird = new OKTransform2<float>(OKVector2<float>(100, 400), OKVector2<float>(0, 0), OKVector2<float>(300, 40));
+	PhysicsObject* m_PhysicsThird = new PhysicsObject("Phy3", TransformThird, 0, RIGIDBODY_STATIC);
 	m_PhysicsObjects.push_back(m_PhysicsThird);
 
 	ColliderManager* t_ColliderManager = new ColliderManager();
@@ -67,11 +67,16 @@ int main()
 			m_PhysicsObjects[0]->GetRigidbody()->AddImpulse(0, -200);
 		}
 
+		for (auto& v : m_PhysicsObjects)
+		{
+			v->Draw();
+		}
+
 		for (int i = 0; i < m_PhysicsObjects.size(); ++i)
 		{
 			for (int j = 0; j < m_PhysicsObjects.size(); ++j)
 			{
-				if (i == j) continue;
+				if (i == j) { continue; }
 
 				t_ColMani = t_ColliderManager->CheckCollisions(m_PhysicsObjects[i]->GetCollider(), m_PhysicsObjects[j]->GetCollider());
 
@@ -87,10 +92,7 @@ int main()
 		//	m_Accumulator -= FPS_60;
 		//}
 
-		for (auto& v : m_PhysicsObjects)
-		{
-			v->Draw();
-		}
+
 
 		timer->Tick();
 

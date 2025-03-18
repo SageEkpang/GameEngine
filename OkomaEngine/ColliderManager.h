@@ -35,6 +35,10 @@ private:
 
     col_mapping m_CollisionMapping;
 
+    // NOTE: This is for the Rectangle Collision Code
+    OKVector2<float> LineToLine(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4);
+    OKVector2<float> ProjectPointOntoLine(OKVector2<float> point, OKVector2<float> lineStart, OKVector2<float> lineEnd);
+
 public:
 
     // CLASS FUNCTION(s)
