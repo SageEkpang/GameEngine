@@ -28,7 +28,7 @@ int main()
 	//PhysicsObject* m_PhysicsSecond = new PhysicsObject("Phy2", TransformSecond, 0, 40, RIGIDBODY_STATIC);
 	//m_PhysicsObjects.push_back(m_PhysicsSecond);
 
-	OKTransform2<float>* TransformThird = new OKTransform2<float>(OKVector2<float>(100, 400), OKVector2<float>(0, 0), OKVector2<float>(300, 40));
+	OKTransform2<float>* TransformThird = new OKTransform2<float>(OKVector2<float>(300, 400), OKVector2<float>(0, 0), OKVector2<float>(300, 40));
 	PhysicsObject* m_PhysicsThird = new PhysicsObject("Phy3", TransformThird, 0, RIGIDBODY_STATIC);
 	m_PhysicsObjects.push_back(m_PhysicsThird);
 

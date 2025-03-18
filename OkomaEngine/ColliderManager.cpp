@@ -79,12 +79,47 @@ CollisionManifold ColliderManager::RectangleToRectangle(Collider* rectA, Collide
 	// NOTE: Can use closest point checks and treat the rectangles like lines instead of box and rectangles
 	// Need to implement a closest line function check
 
+	// NOTE: Line Intersection Testing
+
 	CollisionManifold t_ColMani = CollisionManifold();
 
 	bool t_OverlapXLeft = rectA->GetPosition().x < (rectB->GetPosition().x + rectB->GetScale().x);
 	bool t_OverlapXRight = (rectA->GetPosition().x + rectA->GetScale().x) > rectB->GetPosition().x;
 	bool t_OverlapYTop = rectA->GetPosition().y < (rectB->GetPosition().y + rectB->GetScale().y);
 	bool t_OverlapYBottom = (rectA->GetPosition().y + rectA->GetScale().y) > rectB->GetPosition().y;
+
+	OKVector2<float> CentreA = rectA->GetPosition() + rectA->GetScale() / 2;
+	OKVector2<float> CentreB = rectB->GetPosition() + rectB->GetScale() / 2;
+
+	// NOTE: Pairs
+	/*
+		- Top, Bottom
+		- Left, Right
+		- Bottom, Top
+		- Right, Left
+	*/
+
+	#pragma region TOP BOTTOM
+
+	OKVector2<float> TOP_A = OKVector2<float>(CentreA.x, CentreA.y - (rectA->GetScale().x / 2));
+	OKVector2<float> BOTTOM_A = OKVector2<float>(CentreA.x, CentreA.y + (rectA->GetScale().y / 2));
+
+	float t_DistanceX = TOP_A.x - BOTTOM_A.x;
+	float t_DistanceY = TOP_A.y - BOTTOM_A.y;
+	float len = sqrt((t_DistanceX * t_DistanceX) + (t_DistanceY * t_DistanceY));
+	float dot = ((CentreB.x - TOP_A.x) * (BOTTOM_A.x - BOTTOM_A.x)) + ((CentreB.y - TOP_A.y) * (BOTTOM_A.y - TOP_A.y)) / pow(len, 2);
+
+	// NOTE: Closest Point
+	OKVector2<float> closest_point;
+	closest_point.x = TOP_A.x + (dot * (BOTTOM_A.x - TOP_A.x));
+	closest_point.y = TOP_A.y + (dot * (BOTTOM_A.y - TOP_A.y));	
+	closest_point.x = Clamp(closest_point.x, BOTTOM_A.x, TOP_A.x);
+	closest_point.y = Clamp(closest_point.y, BOTTOM_A.y, TOP_A.y);
+
+	#pragma endregion
+
+	DrawCircle(closest_point.x, closest_point.y, 4, PINK);
+
 
 	if (t_OverlapXLeft && t_OverlapXRight && t_OverlapYTop && t_OverlapYBottom)
 	{
