@@ -36,7 +36,7 @@ private:
     col_mapping m_CollisionMapping;
 
     // NOTE: This is for the Rectangle Collision Code
-    OKVector2<float> ProjectPointOntoLine(OKVector2<float> point, OKVector2<float> lineStart, OKVector2<float> lineEnd);
+    OKVector2<float> ProjectPointOntoLine(OKVector2<float> point, OKVector2<float> positionReference, OKVector2<float> lineStart, OKVector2<float> lineEnd, OKVector2<float> offsetLine);
 
 public:
 

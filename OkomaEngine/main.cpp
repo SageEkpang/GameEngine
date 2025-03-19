@@ -20,7 +20,7 @@ int main()
 
 	std::vector<PhysicsObject*> m_PhysicsObjects;
 
-	OKTransform2<float>* TransformFirst = new OKTransform2<float>(OKVector2<float>(30, 200), OKVector2<float>(0, 0), OKVector2<float>(30, 30));
+	OKTransform2<float>* TransformFirst = new OKTransform2<float>(OKVector2<float>(30, 200), OKVector2<float>(0, 0), OKVector2<float>(60, 60)); // 30, 60
 	PhysicsObject* m_PhysicsFirst = new PhysicsObject("Phy1", TransformFirst, 10, RIGIDBODY_DYNAMIC);
 	m_PhysicsObjects.push_back(m_PhysicsFirst);
 
@@ -28,13 +28,17 @@ int main()
 	//PhysicsObject* m_PhysicsSecond = new PhysicsObject("Phy2", TransformSecond, 0, 40, RIGIDBODY_STATIC);
 	//m_PhysicsObjects.push_back(m_PhysicsSecond);
 
-	OKTransform2<float>* TransformThird = new OKTransform2<float>(OKVector2<float>(300, 400), OKVector2<float>(0, 0), OKVector2<float>(300, 40));
-	PhysicsObject* m_PhysicsThird = new PhysicsObject("Phy3", TransformThird, 0, RIGIDBODY_STATIC);
+	OKTransform2<float>* TransformThird = new OKTransform2<float>(OKVector2<float>(300, 400), OKVector2<float>(0, 0), OKVector2<float>(300, 40)); // 300, 40
+	PhysicsObject* m_PhysicsThird = new PhysicsObject("Phy3", TransformThird, 0, 40, RIGIDBODY_STATIC);
 	m_PhysicsObjects.push_back(m_PhysicsThird);
 
 	ColliderManager* t_ColliderManager = new ColliderManager();
 	CollisionManifold t_ColMani = CollisionManifold();
 	CollisionResolution* t_CollisionResolution = new CollisionResolution();
+
+
+	Vector2 LineStart = Vector2{100, 300};
+	Vector2 LineEnd = Vector2{200, 300};
 
 	while (!WindowShouldClose())
 	{
@@ -92,7 +96,15 @@ int main()
 		//	m_Accumulator -= FPS_60;
 		//}
 
+		//OKVector2<float> Normal = OKVector2<float>(0, -1);
+		//float NormalDot = Normal.dot(m_PhysicsObjects[0]->GetRigidbody()->GetPosition());
+		//OKVector2<float> ClosestPoint = m_PhysicsObjects[0]->GetRigidbody()->GetPosition() - (Normal * NormalDot) + m_PhysicsObjects[0]->GetRigidbody()->GetScale() / 2;
 
+		//ClosestPoint.x = Clamp(ClosestPoint.x, LineStart.x, LineEnd.x);
+		//ClosestPoint.y = LineStart.y;
+
+		//DrawLineV(LineStart, LineEnd, GREEN);
+		//DrawCircleV(ClosestPoint.ConvertToVec2(), 4, RED);
 
 		timer->Tick();
 
