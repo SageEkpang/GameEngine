@@ -113,6 +113,9 @@
     <ClCompile Include="GameObjectManager.cpp">
       <Filter>Managers\Source</Filter>
     </ClCompile>
+    <ClCompile Include="TriggerArea.cpp">
+      <Filter>Components\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OKVector2.h">
@@ -174,6 +177,9 @@
     </ClInclude>
     <ClInclude Include="GameObjectManager.h">
       <Filter>Managers\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="TriggerArea.h">
+      <Filter>Components\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

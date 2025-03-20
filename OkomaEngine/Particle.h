@@ -40,12 +40,12 @@ protected: // PROTECTED VARIABLE(s)
     mutable OKVector2<float> m_Gravity = OKVector2<float>(0, 50);
 
     // NOTE: Coefficients
-    mutable float m_Drag{ 1.f };
+    mutable float m_Drag{ 0.1f };
     mutable float m_Lift{ 0.0 };
     mutable float m_Friction{ 0.0 };
 
     bool m_SimulateGravity = true;
-    bool m_SimulateDrag = false;
+    bool m_SimulateDrag = true;
     bool m_SimulateLift = false;
     bool m_SimulateFriction = false;
 
@@ -98,7 +98,7 @@ public: // PUBLIC FUNCTION(s)
     // PHYSICS GETTER(s)
     inline const float GetMass() { return m_Mass; }
     inline const float GetInverseMass() { return -m_Mass; }
-    inline const OKVector2<float> GetVelocity() { return m_Velocity; }
+    inline OKVector2<float> GetVelocity() { return m_Velocity; }
     inline const OKVector2<float> GetAcceleration() { return m_Acceleration; }
     inline const OKVector2<float> GetGravity() { return m_Gravity; }
     inline const OKVector2<float> GetDrag() { return m_Drag; }

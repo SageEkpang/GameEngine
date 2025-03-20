@@ -29,16 +29,6 @@ protected: // PROTECTED VARIABLE(s)
 
     // COLLIDER VARIABLE(s)
     ColliderType m_ColliderType;
-    bool m_IsCollidable = false;
-    bool m_IsTrigger = false;
-    bool m_AbsoluteEnter = false; // NOTE: This would be for the trigger box, potentially its own child class
-
-    // typedef std::pair<ColliderType, ColliderType> Col2;
-    // typedef CollisionManifold (*CollFunc)(Collider*, Collider*, CollisionManifold&);
-    // std::unordered_map<ColliderType, CollFunc> m_MapColliderFunction;
-
-    // TO THINK: This is either going to be for a GJK and EPA algo because of how points are constructed
-    // I do not know how like 2D collisions work like this but hey ho
 
     std::vector<OKVector2<float>> m_Vertices;
 
@@ -68,9 +58,6 @@ public: // PUBLIC FUNCTION(s)
 
     // NOTE: Check if it is an absolute enter or a partial enter
 
-    void TriggerEntered();
-    void TriggerState();
-    void TriggerExit();
 
     // GETTER FUNCTION(s)
     inline const char* GetTag() { return m_Tag; }
@@ -80,8 +67,6 @@ public: // PUBLIC FUNCTION(s)
     inline OKVector2<float> GetRotation() { return m_Transform->rotation; }
 
     inline ColliderType GetColliderType() const { return m_ColliderType; }
-    inline bool GetIsCollidable() const { return m_IsCollidable; }
-    inline bool GetIsTrigger() const { return m_IsTrigger; } // TODO Change this to something else
 
     inline float GetRadius() const { return m_Radius; }
 
@@ -90,8 +75,6 @@ public: // PUBLIC FUNCTION(s)
     inline void SetTransform(OKTransform2<float>* transform) { m_Transform = transform; }
 
     inline void SetColliderType(ColliderType colliderType) { m_ColliderType = colliderType; }
-    inline void SetIsCollidable(bool isCollidable) { m_IsCollidable = isCollidable; }
-    inline void SetIsTrigger(bool isTrigger) { m_IsTrigger = isTrigger; }
 
 
     // POLYGONE FUNCTION(s)

@@ -3,13 +3,10 @@
 CollisionResolution::CollisionResolution()
 {
 
-
-
 }
 
 CollisionResolution::~CollisionResolution()
 {
-
 
 }
 
@@ -72,7 +69,7 @@ void CollisionResolution::ResolveInterpenetration(Rigidbody* rigidbodyA, Rigidbo
 	OKVector2<float> t_MoveOutA = t_MovePerMass * rigidbodyA->GetInverseMass();
 	OKVector2<float> t_MoveOutB = t_MovePerMass * -rigidbodyB->GetInverseMass();
 
-	// NOTE: Move out the objects from each other dependant on where they are, object position may need to be at the centre of the object rather than the top left
+	// NOTE:
 	rigidbodyA->GetTransform()->position += t_MoveOutA;
 	rigidbodyB->GetTransform()->position += t_MoveOutB;
 }

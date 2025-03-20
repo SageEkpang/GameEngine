@@ -75,7 +75,7 @@ void Rigidbody::Draw()
         case RigidbodyShapeType::RIGIDBODY_CAPSULE:
         {
             Rectangle t_SmoothRec = Rectangle{ m_Transform->position.x - (m_Transform->scale.x / 2), m_Transform->position.y - (m_Transform->scale.y / 2), m_Transform->scale.x, m_Transform->scale.y };
-            DrawRectangleRoundedLines(t_SmoothRec, 10, 10, RED);
+            DrawRectangleRounded(t_SmoothRec, 10, 10, RED);
         }
         break;
 

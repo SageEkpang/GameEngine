@@ -146,6 +146,7 @@ CollisionManifold ColliderManager::CheckCollisions(Collider* colliderA, Collider
 	// NOTE: Reverse pair if it is not within the collision map
 	if (m_CollisionMapping.count(collision_made_pair) == 0)
 	{
+		// std::swap()
 		ColliderType temp = collision_made_pair.first;
 		collision_made_pair.first = collision_made_pair.second;
 		collision_made_pair.second = temp;
@@ -286,12 +287,13 @@ CollisionManifold ColliderManager::RectangleToRectangle(Collider* rectA, Collide
 		NearPointA.x = BottomSide.x;
 	}
 
-	
+	DrawCircleV(NearPointA.ConvertToVec2(), 3, BLUE);
+
 	OKTransform2<float> circle_transform_A = OKTransform2<float>(NearPointA, OKVector2<float>(0, 0), OKVector2<float>(0, 0));
-	Collider circle_temp_A = Collider("temp rep A", &circle_transform_A, 1.f);
+	Collider circle_temp_A = Collider("temp rep A", &circle_transform_A, 0.1f);
 
 	OKTransform2<float> circle_transform_B = OKTransform2<float>(NearPointB, OKVector2<float>(0, 0), OKVector2<float>(0, 0));
-	Collider circle_temp_B = Collider("temp rep A", &circle_transform_B, 1.f);
+	Collider circle_temp_B = Collider("temp rep B", &circle_transform_B, 0.1f);
 
 	return t_ColMani = CircleToCircle(&circle_temp_A, &circle_temp_B);
 }
