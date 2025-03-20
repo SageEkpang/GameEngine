@@ -20,8 +20,8 @@ int main()
 
 	std::vector<PhysicsObject*> m_PhysicsObjects;
 
-	OKTransform2<float>* TransformFirst = new OKTransform2<float>(OKVector2<float>(30, 200), OKVector2<float>(0, 0), OKVector2<float>(30, 30)); // 30, 60
-	PhysicsObject* m_PhysicsFirst = new PhysicsObject("Phy1", TransformFirst, 10, RIGIDBODY_DYNAMIC);
+	OKTransform2<float>* TransformFirst = new OKTransform2<float>(OKVector2<float>(100, 200), OKVector2<float>(0, 0), OKVector2<float>(30, 60)); // 30, 60
+	PhysicsObject* m_PhysicsFirst = new PhysicsObject("Phy1", TransformFirst, 10, 20, RIGIDBODY_DYNAMIC);
 	m_PhysicsObjects.push_back(m_PhysicsFirst);
 
 	//OKTransform2<float>* TransformSecond = new OKTransform2<float>(OKVector2<float>(20, 400), OKVector2<float>(0, 0), OKVector2<float>(40, 40));
@@ -51,10 +51,7 @@ int main()
 		m_Accumulator += timer->GetDeltaTime();
 		m_SimpleCounter += timer->GetDeltaTime();
 
-		for (auto& v : m_PhysicsObjects)
-		{
-			v->Update(timer->GetDeltaTime());
-		}
+
 
 		if (IsKeyDown(KEY_A))
 		{
@@ -88,8 +85,29 @@ int main()
 				{
 					// NOTE: Coef is Bounce Level to the collision detection
 					t_CollisionResolution->ResolveCollision(m_PhysicsObjects[i]->GetRigidbody(), m_PhysicsObjects[j]->GetRigidbody(), 0.9f, t_ColMani.m_PenetrationDepth, t_ColMani.m_CollisionNormal, timer->GetDeltaTime());
+					
+					//m_PhysicsObjects[i]->GetRigidbody()->SimulateDrag(false);
+					//m_PhysicsObjects[j]->GetRigidbody()->SimulateDrag(false);
+
+					//m_PhysicsObjects[i]->GetRigidbody()->SimulateFriction(true);
+					//m_PhysicsObjects[j]->GetRigidbody()->SimulateFriction(true);
 				}
+				else if (t_ColMani.m_HasCollision == false)
+				{
+					//m_PhysicsObjects[i]->GetRigidbody()->SimulateDrag(true);
+					//m_PhysicsObjects[j]->GetRigidbody()->SimulateDrag(true);
+
+					//m_PhysicsObjects[i]->GetRigidbody()->SimulateFriction(false);
+					//m_PhysicsObjects[j]->GetRigidbody()->SimulateFriction(false);
+				}
+
 			}
+
+		}
+
+		for (auto& v : m_PhysicsObjects)
+		{
+			v->Update(timer->GetDeltaTime());
 		}
 
 		//if (m_Accumulator >= FPS_60)

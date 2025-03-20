@@ -21,6 +21,41 @@ enum RigidbodyMovementType
     RIGIDBODY_DYNAMIC
 };
 
+struct Mat22
+{
+    OKVector2<float> xCol;
+    OKVector2<float> yCol;
+
+    Mat22(const OKVector2<float> x, const OKVector2<float> y)
+    {
+        xCol = x;
+        yCol = y;
+    }
+
+    Mat22(float radians)
+    {
+        float c = std::cos(radians);
+        float s = std::sin(radians);
+
+        xCol.x = c;
+        xCol.y = -s;
+
+        yCol.x = s;
+        yCol.y = c;
+    }
+
+    const OKVector2<float> operator*(const OKVector2<float>& rhs) const
+    {
+        // m00 -> xCol.x
+        // m01 -> xCol.y
+
+        // m10 -> yCol.x
+        // m11 -> yCol.y
+
+        return OKVector2<float>(xCol.x * rhs.x + xCol.y * rhs.y, yCol.x * rhs.x + yCol.y * rhs.y);
+    }
+};
+
 class Rigidbody : public Particle
 {
 private:
@@ -29,6 +64,10 @@ private:
     float m_Radius{};
     float m_Height{};
     float m_CircularExpands{};
+
+    float m_Orientation;
+    float m_AngularVelocity;
+    float m_Torque;
 
     // RIGIDBODY VARIABLE(s)
     RigidbodyShapeType m_RigidbodyShapeType;
@@ -56,13 +95,21 @@ public:
 
 
     // GETTER FUNCTION(s)
-    inline RigidbodyShapeType GetRigidbodyShapeType() { return m_RigidbodyShapeType; }
-    inline RigidbodyMovementType GetRigidbodyMovementType() { return m_RigidbodyMovementType; }
+    inline RigidbodyShapeType GetRigidbodyShapeType() const { return m_RigidbodyShapeType; }
+    inline RigidbodyMovementType GetRigidbodyMovementType() const { return m_RigidbodyMovementType; }
 
 
     // SETTER FUNCTION(s)
     inline void SetRigidbodyShapeType(RigidbodyShapeType rigidbodyShapeType) { m_RigidbodyShapeType = rigidbodyShapeType; }
     inline void SetRigidbodyMovementType(RigidbodyMovementType rigidbodyMovementType) { m_RigidbodyMovementType = rigidbodyMovementType; }
+
+    // TODO: Move these to the OKVector2<float> struct when done
+    float CrossProduct(const OKVector2<float>& a, const OKVector2<float>& b);
+    OKVector2<float> CrossProduct(const OKVector2<float>& a, float s);
+    OKVector2<float> CrossProduct(float s, const OKVector2<float> a);
+
+    OKVector2<float> GetSupport(const OKVector2<float> direction);
+    // float FindAxisLeastPenetration(int* faceIndex, Collider* a, Collider* b);
 
 };
 

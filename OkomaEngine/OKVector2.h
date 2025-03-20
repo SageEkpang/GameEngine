@@ -59,6 +59,11 @@ public: // MATH FUNCTION(s)
         return OKVector2(powf(this->x, value), powf(this->y, value));
     }
 
+    float* asArray()
+    {
+        return &this->x;
+    }
+
     Vector2 ConvertToVec2()
     {
         Vector2 t_VecTemp{ x, y };
@@ -171,7 +176,20 @@ public: // OPERATOR OVERLOAD FUNCTION(s)
     {
         bool GreaterX = this->x > value.x ? true : false;
         bool GreaterY = this->y > value.y ? true : false;
+        return (GreaterX && GreaterY);
+    }
 
+    bool operator >(const T& value)
+    {
+        bool GreaterX = this->x > value ? true : false;
+        bool GreaterY = this->y > value ? true : false;
+        return (GreaterX && GreaterY);
+    }
+
+    friend bool operator >(const T value, OKVector2<T> rhs)
+    {
+        bool GreaterX = rhs.x > value ? true : false;
+        bool GreaterY = rhs.y > value ? true : false;
         return (GreaterX && GreaterY);
     }
 
@@ -179,7 +197,20 @@ public: // OPERATOR OVERLOAD FUNCTION(s)
     {
         bool LessorX = this->x < value.x ? true : false;
         bool LessorY = this->y < value.y ? true : false;
+        return (LessorX && LessorY);
+    }
 
+    bool operator <(const T& value)
+    {
+        bool LessorX = this->x < value ? true : false;
+        bool LessorY = this->y < value ? true : false;
+        return (LessorX && LessorY);
+    }
+
+    friend bool operator <(const T value, OKVector2<T> rhs)
+    {
+        bool LessorX = rhs.x < value ? true : false;
+        bool LessorY = rhs.y < value ? true : false;
         return (LessorX && LessorY);
     }
 

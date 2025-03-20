@@ -17,6 +17,107 @@ OKVector2<float> ColliderManager::ProjectPointOntoLine(OKVector2<float> point, O
 	return ClosestPoint;
 }
 
+bool ColliderManager::Multiply(float* out, const float* matA, int aRows, int aCols, const float* matB, int bRows, int bCols)
+{
+	if (aCols != bRows) { return false; }
+
+	for (int i = 0; i < aRows; ++i) 
+	{
+		for (int j = 0; j < bCols; ++j) 
+		{
+			out[bCols * i + j] = 0.0f;
+
+			for (int k = 0; k < bRows; ++k) 
+			{
+				int a = aCols * i + k;
+				int b = bCols * k + j;
+				out[bCols * i + j] += matA[a] * matB[b];
+			}
+		}
+	}
+
+	return true;
+}
+
+Interval2D ColliderManager::GetOrientedRectangleInterval(Collider* orRectA, OKVector2<float> axis)
+{
+	OKTransform2<float> lRect = OKTransform2<float>(orRectA->GetPosition() - orRectA->GetScale() / 2, OKVector2<float>(0, 0), orRectA->GetScale());
+	Collider rectangle_temp = Collider("rect rep", &lRect);
+
+	OKVector2<float> MaxB = orRectA->GetPosition() - orRectA->GetScale() / 2;
+	OKVector2<float> MinB = orRectA->GetPosition() + orRectA->GetScale() / 2;
+
+	OKVector2<float> verts[] = {
+		MinB, MaxB,
+		OKVector2<float>(MinB.x, MaxB.y),  OKVector2<float>(MaxB.x, MinB.y)
+	};
+
+	float theta = orRectA->GetRotation().x * DEG2RAD;
+
+	float zRotation2x2[] = {
+		std::cosf(theta), std::sinf(theta),
+		-std::sinf(theta), std::cosf(theta)
+	};
+
+	for (int i = 0; i < 4; ++i)
+	{
+		OKVector2<float> r = verts[i] - orRectA->GetPosition();
+		Multiply(r.asArray(), OKVector2<float>(r.x, r.y).asArray(), 1, 2, zRotation2x2, 2, 2);
+		verts[i] = r + orRectA->GetPosition();
+	}
+
+	Interval2D res;
+	res.min = res.max = verts[0].dot(axis);
+
+	for (int i = 1; i < 4; ++i)
+	{
+		float proj = verts[i].dot(axis);
+		res.min = (proj < res.min) ? proj : res.min;
+		res.max = (proj > res.max) ? proj : res.max;
+	}
+
+	return res;
+}
+
+Interval2D ColliderManager::GetRectangleInterval(Collider* rectA, OKVector2<float> axis)
+{
+	Interval2D result;
+
+	OKVector2<float> Max = rectA->GetPosition() - rectA->GetScale();
+	OKVector2<float> Min = rectA->GetPosition() + rectA->GetScale();
+
+	OKVector2<float> verts[] =
+	{
+		OKVector2<float>(Min.x, Min.y), OKVector2<float>(Min.x, Max.y),
+		OKVector2<float>(Max.x, Max.y), OKVector2<float>(Max.x, Min.y)
+	};
+
+	result.min = result.max = verts[0].dot(axis);
+
+	for (int i = 1; i < 4; ++i) {
+		float projection = verts[i].dot(axis);
+
+		if (projection < result.min) 
+		{
+			result.min = projection;
+		}
+
+		if (projection > result.max) 
+		{
+			result.max = projection;
+		}
+	}
+
+	return result;
+}
+
+bool ColliderManager::OverlapOnAxis(Collider* rectA, Collider* orRectB, OKVector2<float> axis)
+{
+	Interval2D A = GetRectangleInterval(rectA, axis);
+	Interval2D B = GetOrientedRectangleInterval(orRectB, axis);
+	return ((B.min <= A.max) && (A.min <= B.max));
+}
+
 ColliderManager::ColliderManager()
 {
 	m_CollisionMapping[std::make_pair(COLLIDER_RECTANGLE, COLLIDER_RECTANGLE)] = RECTANGLE_TO_RECTANGLE;
@@ -131,7 +232,6 @@ CollisionManifold ColliderManager::RectangleToRectangle(Collider* rectA, Collide
 
 		NearPointB.x = BottomSide.x;
 	}
-
 
 	OKVector2<float> RectCentreA = rectA->GetPosition() + rectA->GetScale() / 2;
 	OKVector2<float> NearPointA;
@@ -419,6 +519,40 @@ CollisionManifold ColliderManager::OrientedRectangleToRectangle(Collider* OrRect
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
+	OKVector2<float> AxisToTest[]{
+		OKVector2<float>(1, 0), OKVector2<float>(0, 1),
+		OKVector2<float>(), OKVector2<float>()
+	};
+
+	float theta = DEG2RAD * OrRectA->GetRotation().x;
+
+	float zRotation2x2[] = {
+		std::cosf(theta), std::sinf(theta),
+		-std::sinf(theta), std::cosf(theta)
+	};
+
+	// NEEDS TO BE FINISHED: TODO:
+	OKVector2<float> axis = OrRectA->GetScale().normalise();
+	Multiply(AxisToTest[2].asArray(), axis.asArray(), 1, 2, zRotation2x2, 2, 2);
+
+	axis = OrRectA->GetScale().normalise();
+	Multiply(AxisToTest[2].asArray(), axis.asArray(), 1, 2, zRotation2x2, 2, 2);
+
+	for (int i = 0; i < 4; ++i)
+	{
+		if (!OverlapOnAxis(rectB, OrRectA, AxisToTest[i]))
+		{
+			return t_ColMani;
+		}
+	}
+
+	t_ColMani.m_HasCollision = true;
+	t_ColMani.m_CollisionNormal = OrRectA->GetTransform()->position - rectB->GetTransform()->position;
+	t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+	t_ColMani.m_ContactPointAmount = 1;
+	t_ColMani.m_PenetrationDepth = OKVector2<float>(OrRectA->GetTransform()->position - rectB->GetTransform()->position).magnitude();
+	t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+
 	return t_ColMani;
 }
 
@@ -426,22 +560,25 @@ CollisionManifold ColliderManager::OrientedRectangleToCircle(Collider* OrRectA, 
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
-	OKVector2<float> OrRectCentre = OrRectA->GetPosition() + OrRectA->GetScale() / 2;
-	OKVector2<float> Rad = circB->GetPosition() - OrRectA->GetPosition();
+	//OKVector2<float> OrRectCentre = OrRectA->GetPosition() + OrRectA->GetScale() / 2;
 
+	OKVector2<float> Rad = circB->GetPosition() - (OrRectA->GetPosition() + OrRectA->GetScale() / 2);
+	float theta = -DEG2RAD * OrRectA->GetRotation().x;
+	
+	float zRotation2x2[] = {
+		std::cosf(theta), std::sinf(theta),
+		-std::sinf(theta), std::cosf(theta)
+	};
 
+	Multiply(Rad.asArray(), OKVector2<float>(Rad.x, Rad.y).asArray(), 1, 2, zRotation2x2, 2, 2);
 
+	OKTransform2<float> lcircle = OKTransform2<float>(Rad + (OrRectA->GetScale() / 2), OKVector2<float>(0, 0), OKVector2<float>(0, 0));
+	Collider circle_temp = Collider("circ rep", &lcircle, circB->GetRadius());
 
+	OKTransform2<float> lRect = OKTransform2<float>(OKVector2<float>(0, 0), OKVector2<float>(0, 0), OrRectA->GetScale());
+	Collider rectangle_temp = Collider("rect rep", &lRect);
 
-
-
-
-
-
-
-
-
-	return t_ColMani;
+	return t_ColMani = CircleToRectangle(&circle_temp, &rectangle_temp);
 }
 
 CollisionManifold ColliderManager::OrientedRectangleToCapsule(Collider* OrRectA, Collider* capsuleB)

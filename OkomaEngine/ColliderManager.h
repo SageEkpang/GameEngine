@@ -23,6 +23,12 @@ enum Collider_Type_Collisions
     ORIENTED_TO_CAPSULE
 };
 
+struct Interval2D
+{
+    OKVector2<float> max;
+    OKVector2<float> min;
+};
+
 class ColliderManager
 {
 private:
@@ -37,6 +43,13 @@ private:
 
     // NOTE: This is for the Rectangle Collision Code
     OKVector2<float> ProjectPointOntoLine(OKVector2<float> point, OKVector2<float> positionReference, OKVector2<float> lineStart, OKVector2<float> lineEnd, OKVector2<float> offsetLine);
+    bool Multiply(float* out, const float* matA, int aRows, int aCols, const float* matB, int bRows, int bCols);
+
+
+    // SAT / OBB Testing
+    Interval2D GetOrientedRectangleInterval(Collider* orRectA, OKVector2<float> axis);
+    Interval2D GetRectangleInterval(Collider* rectA, OKVector2<float> axis);
+    bool OverlapOnAxis(Collider* rectA, Collider* orRectB, OKVector2<float> axis);
 
 public:
 
@@ -67,6 +80,7 @@ public:
     // ORIENTED RECTANGLE 
     CollisionManifold OrientedRectangleToOrientedRectangle(Collider* OrRectA, Collider* OrRectB);
     CollisionManifold OrientedRectangleToRectangle(Collider* OrRectA, Collider* rectB);
+
     CollisionManifold OrientedRectangleToCircle(Collider* OrRectA, Collider* circB);
     CollisionManifold OrientedRectangleToCapsule(Collider* OrRectA, Collider* capsuleB);
 

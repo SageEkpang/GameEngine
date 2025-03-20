@@ -20,8 +20,7 @@ void Particle::Update(const float deltaTime)
     // NOTE: Apply Physics Forces to Particle
     if (m_SimulateGravity) { m_NetForce += ApplyGravity(); }
     if (m_SimulateDrag) { m_NetForce += ApplyDrag(); }
-    if (m_SimulateDynamicFriction) { m_NetForce += ApplyDynamicFriction(); }
-    if (m_SimulateStaticFriction) { m_NetForce += ApplyStaticFriction(); }
+    if (m_SimulateFriction) { m_NetForce += ApplyFriction(); }
 
     // NOTE: Force Calculation
     CalculateAcceleration(deltaTime);
@@ -108,21 +107,16 @@ OKVector2<float> Particle::ApplyLift()
     return OKVector2<float>();
 }
 
-OKVector2<float> Particle::ApplyDynamicFriction()
+OKVector2<float> Particle::ApplyFriction()
 {
     // NOTE: This would have to do with collision response
     // FORMULA: Dynamic Friction = Dynamic Friction Coefficient * Normal Reaction Between the 2 Surfaces
     // Ff = uKR
 
+
+
     return OKVector2<float>();
 }
 
-OKVector2<float> Particle::ApplyStaticFriction()
-{
-    // NOTE: This would have to do with collision response
-    // FORMULA: Static Friction = Normal Force * Static Friction Coefficient
-    // F = Us * NormalForce
-    return OKVector2<float>();
-}
 
 
