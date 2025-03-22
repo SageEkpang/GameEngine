@@ -38,7 +38,7 @@ public: // PUBLIC FUNCTION(s)
 
     // RECTANGLE
     /// @brief Rectangle Collider Constructor
-    Collider(const char* tag, OKTransform2<float>* transform, bool IsCapsule = false, bool lockZRot = true);
+    Collider(const char* tag, OKTransform2<float>* transform, bool IsCapsule = false, bool lockZRot = true); // REFACT: bool solveRotation
 
     // CIRCLE
     /// @brief Circle Collider Constructor
@@ -64,7 +64,7 @@ public: // PUBLIC FUNCTION(s)
     inline OKTransform2<float>* GetTransform() { return m_Transform; }
     inline OKVector2<float> GetPosition() { return m_Transform->position; }
     inline OKVector2<float> GetScale() { return m_Transform->scale; }
-    inline OKVector2<float> GetRotation() { return m_Transform->rotation; }
+    inline float GetRotation() { return m_Transform->rotation; }
 
     inline ColliderType GetColliderType() const { return m_ColliderType; }
 

@@ -4,15 +4,10 @@ Rigidbody::Rigidbody(const char* tag, OKTransform2<float>* transform, float mass
     : Particle(tag, transform, mass)
 {
     m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_RECTANGLE;
-    if (IsCapsule == true)
-    {
-        m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_CAPSULE;
-    }
 
-    if (lockZRot == true)
-    {
-        transform->rotation = OKVector2<float>(0, 0);
-    }
+    if (transform->rotation != 0) { m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_ORIENTED_RECTANGLE; }
+    if (IsCapsule == true) { m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_CAPSULE; }
+    if (lockZRot == true) { transform->rotation = 0; }
 
     m_RigidbodyMovementType = rigidbodyMovementType;
 }
@@ -40,13 +35,13 @@ void Rigidbody::Update(const float deltaTime)
         m_AngularVelocity += m_Torque * (1.0f / momentOfInteria) * deltaTime;
     }
 
-    Mat22 m(PI / 2.0f);
-    OKVector2<float> r = m.xCol;
+    //Mat22 m(PI / 2.0f);
+    //OKVector2<float> r = m.xCol;
 
-    float angle = 0;
-    float a = angle;
-    std::cos(a); -std::sin(a);
-    std::sin(a); std::cos(a);
+    //float angle = 0;
+    //float a = angle;
+    //std::cos(a); -std::sin(a);
+    //std::sin(a); std::cos(a);
 
     // T = r x w
     // Torque = rotation force
@@ -66,8 +61,17 @@ void Rigidbody::Draw()
 {
     switch (m_RigidbodyShapeType)
     {
-        case RigidbodyShapeType::RIGIDBODY_RECTANGLE: 
-            DrawRectangleV(m_Transform->position.ConvertToVec2(), m_Transform->scale.ConvertToVec2(), RED); 
+        case RigidbodyShapeType::RIGIDBODY_RECTANGLE:
+        {
+            DrawRectangleV(m_Transform->position.ConvertToVec2(), m_Transform->scale.ConvertToVec2(), RED);
+        }
+        break;
+
+        case RIGIDBODY_ORIENTED_RECTANGLE:
+        {
+            Rectangle t_Rec = Rectangle{ m_Transform->position.x - (m_Transform->scale.x / 2), m_Transform->position.y - (m_Transform->scale.y / 2), m_Transform->scale.x, m_Transform->scale.y };
+            DrawRectanglePro(t_Rec, m_Transform->scale.ConvertToVec2(), m_Transform->rotation, RED);
+        }
         break;
 
         case RigidbodyShapeType::RIGIDBODY_CIRCLE: DrawCircleV(m_Transform->position.ConvertToVec2(), m_Radius, RED); break;

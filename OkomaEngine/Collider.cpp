@@ -6,15 +6,9 @@ Collider::Collider(const char* tag, OKTransform2<float>* transform, bool IsCapsu
     // NOTE: Set the Collider Type in the Constructor
     m_ColliderType = ColliderType::COLLIDER_RECTANGLE;
 
-    if (IsCapsule == true) 
-    { 
-        m_ColliderType = ColliderType::COLLIDER_CAPSULE; 
-    }
-
-    if (lockZRot == true) 
-    { 
-        transform->rotation = OKVector2<float>(0, 0); 
-    }
+    if (transform->rotation != 0) { m_ColliderType = ColliderType::COLLIDER_ORIENTED_RECTANGLE; }
+    if (IsCapsule == true) { m_ColliderType = ColliderType::COLLIDER_CAPSULE; }
+    if (lockZRot == true) { transform->rotation = 0; }
 
     // NOTE: Set Member Variable Types
     // strcpy_s(m_Tag, strlen(tag), tag);
@@ -47,9 +41,24 @@ void Collider::Draw()
 {
     switch (m_ColliderType)
     {
-        case ColliderType::COLLIDER_RECTANGLE: DrawRectangleLines(m_Transform->position.ConvertToVec2().x, m_Transform->position.ConvertToVec2().y, m_Transform->scale.ConvertToVec2().x, m_Transform->scale.ConvertToVec2().y, GREEN); break;
+        case ColliderType::COLLIDER_RECTANGLE: 
+        {
+            DrawRectangleLines(m_Transform->position.ConvertToVec2().x, m_Transform->position.ConvertToVec2().y, m_Transform->scale.ConvertToVec2().x, m_Transform->scale.ConvertToVec2().y, GREEN);
+        }
+        break;
 
-        case ColliderType::COLLIDER_CIRCLE: DrawCircleLines(m_Transform->position.ConvertToVec2().x, m_Transform->position.ConvertToVec2().y, m_Radius, GREEN); break;
+        case ColliderType::COLLIDER_CIRCLE:
+        {
+            DrawCircleLines(m_Transform->position.ConvertToVec2().x, m_Transform->position.ConvertToVec2().y, m_Radius, GREEN);
+        }
+        break;
+
+        case ColliderType::COLLIDER_ORIENTED_RECTANGLE:
+        {
+            Rectangle t_Rec = Rectangle{ m_Transform->position.x - (m_Transform->scale.x / 2), m_Transform->position.y - (m_Transform->scale.y / 2), m_Transform->scale.x, m_Transform->scale.y };
+            DrawRectanglePro(t_Rec, Vector2{m_Transform->scale.x / 2, m_Transform->scale.y / 2}, m_Transform->rotation, GREEN);
+        }
+        break;
 
         case ColliderType::COLLIDER_CAPSULE:
         {

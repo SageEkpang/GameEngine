@@ -116,6 +116,15 @@ public: // OPERATOR OVERLOAD FUNCTION(s)
         return (s_CheckX && s_CheckY);
     }
 
+    bool operator !=(const OKVector2& value)
+    {
+        bool s_CheckX = this->x != value.x ? true : false;
+        bool s_CheckY = this->y != value.y ? true : false;
+
+        return (s_CheckX && s_CheckY);
+    }
+
+
     OKVector2 operator +(const OKVector2& value)
     {
         return OKVector2(this->x + value.x, this->y + value.y);

@@ -21,23 +21,23 @@ int main()
 
 	std::vector<PhysicsObject*> m_PhysicsObjects;
 
-	OKTransform2<float>* TransformFirst = new OKTransform2<float>(OKVector2<float>(100, 200), OKVector2<float>(0, 0), OKVector2<float>(30, 60)); // 30, 60
-	PhysicsObject* m_PhysicsFirst = new PhysicsObject("Phy1", TransformFirst, 10, RIGIDBODY_DYNAMIC, true);
+	OKTransform2<float>* TransformFirst = new OKTransform2<float>(OKVector2<float>(100, 200), OKVector2<float>(30, 30), 0); // 30, 60
+	PhysicsObject* m_PhysicsFirst = new PhysicsObject("Phy1", TransformFirst, 10, 40, RIGIDBODY_DYNAMIC);
 	m_PhysicsObjects.push_back(m_PhysicsFirst);
 
 	//OKTransform2<float>* TriggerTransformFirst = new OKTransform2<float>(OKVector2<float>(100, 200), OKVector2<float>(0, 0), OKVector2<float>(30, 60)); // 30, 60
 	//TriggerArea* m_TriggerAreaFirst = new TriggerArea("Trigger First", TriggerTransformFirst);
 	//m_TriggerAreas.push_back(m_TriggerAreaFirst);
 
-	//OKTransform2<float>* TransformSecond = new OKTransform2<float>(OKVector2<float>(20, 400), OKVector2<float>(0, 0), OKVector2<float>(40, 80)); // 100, 40
-	//PhysicsObject* m_PhysicsSecond = new PhysicsObject("Phy2", TransformSecond, 0, RIGIDBODY_STATIC, true);
-	//m_PhysicsObjects.push_back(m_PhysicsSecond);
+	OKTransform2<float>* TransformSecond = new OKTransform2<float>(OKVector2<float>(20, 400), OKVector2<float>(40, 80), 0); // 100, 40
+	PhysicsObject* m_PhysicsSecond = new PhysicsObject("Phy2", TransformSecond, 0, RIGIDBODY_STATIC, true);
+	m_PhysicsObjects.push_back(m_PhysicsSecond);
 
-	OKTransform2<float>* TransformThird = new OKTransform2<float>(OKVector2<float>(300, 400), OKVector2<float>(0, 0), OKVector2<float>(300, 40)); // 300, 40
-	PhysicsObject* m_PhysicsThird = new PhysicsObject("Phy3", TransformThird, 0, 40, RIGIDBODY_STATIC);
-	m_PhysicsObjects.push_back(m_PhysicsThird);
+	//OKTransform2<float>* TransformThird = new OKTransform2<float>(OKVector2<float>(300, 400), OKVector2<float>(300, 40), 0); // 300, 40
+	//PhysicsObject* m_PhysicsThird = new PhysicsObject("Phy3", TransformThird, 0, RIGIDBODY_STATIC);
+	//m_PhysicsObjects.push_back(m_PhysicsThird);
 
-	OKTransform2<float>* TransformFour = new OKTransform2<float>(OKVector2<float>(0, 700), OKVector2<float>(0, 0), OKVector2<float>(1000, 40)); // 300, 40
+	OKTransform2<float>* TransformFour = new OKTransform2<float>(OKVector2<float>(0, 700), OKVector2<float>(1000, 40), 0); // 300, 40
 	PhysicsObject* m_PhysicsFour = new PhysicsObject("Phy3", TransformFour, 0, RIGIDBODY_STATIC);
 	m_PhysicsObjects.push_back(m_PhysicsFour);
 
@@ -82,12 +82,12 @@ int main()
 				if (i == j) { continue; }
 
 				t_ColMani = t_ColliderManager->CheckCollisions(m_PhysicsObjects[i]->GetCollider(), m_PhysicsObjects[j]->GetCollider());
-				DrawText(TextFormat("col: %d", t_ColMani.m_HasCollision), 10, 10, 40, PINK);
+				// DrawText(TextFormat("col: %d", t_ColMani.m_HasCollision), 10, 10, 40, PINK);
 				
 				if (t_ColMani.m_HasCollision == true)
 				{
 					// NOTE: Coef is Bounce Level to the collision detection
-					t_CollisionResolution->ResolveCollision(m_PhysicsObjects[i]->GetRigidbody(), m_PhysicsObjects[j]->GetRigidbody(), 1.0f, t_ColMani.m_PenetrationDepth, t_ColMani.m_CollisionNormal, GetFrameTime());
+					t_CollisionResolution->ResolveCollision(m_PhysicsObjects[i]->GetRigidbody(), m_PhysicsObjects[j]->GetRigidbody(), 0.3f, t_ColMani.m_PenetrationDepth, t_ColMani.m_CollisionNormal, GetFrameTime());
 				}
 			}
 		}
