@@ -6,9 +6,16 @@ Collider::Collider(const char* tag, OKTransform2<float>* transform, bool IsCapsu
     // NOTE: Set the Collider Type in the Constructor
     m_ColliderType = ColliderType::COLLIDER_RECTANGLE;
 
-    if (transform->rotation != 0) { m_ColliderType = ColliderType::COLLIDER_ORIENTED_RECTANGLE; }
+    if (transform->rotation != 0)
+    { 
+        m_ColliderType = ColliderType::COLLIDER_ORIENTED_RECTANGLE; 
+    }
+
     if (IsCapsule == true) { m_ColliderType = ColliderType::COLLIDER_CAPSULE; }
-    if (lockZRot == true) { transform->rotation = 0; }
+    if (lockZRot == true) 
+    { 
+        transform->rotation = 0; 
+    }
 
     // NOTE: Set Member Variable Types
     // strcpy_s(m_Tag, strlen(tag), tag);
@@ -43,37 +50,37 @@ void Collider::Draw()
     {
         case ColliderType::COLLIDER_RECTANGLE: 
         {
-            DrawRectangleLines(m_Transform->position.ConvertToVec2().x, m_Transform->position.ConvertToVec2().y, m_Transform->scale.ConvertToVec2().x, m_Transform->scale.ConvertToVec2().y, GREEN);
+            //DrawRectangleLines(m_Transform->position.ConvertToVec2().x, m_Transform->position.ConvertToVec2().y, m_Transform->scale.ConvertToVec2().x, m_Transform->scale.ConvertToVec2().y, GREEN);
         }
         break;
 
         case ColliderType::COLLIDER_CIRCLE:
         {
-            DrawCircleLines(m_Transform->position.ConvertToVec2().x, m_Transform->position.ConvertToVec2().y, m_Radius, GREEN);
+            //DrawCircleLines(m_Transform->position.ConvertToVec2().x, m_Transform->position.ConvertToVec2().y, m_Radius, GREEN);
         }
         break;
 
         case ColliderType::COLLIDER_ORIENTED_RECTANGLE:
         {
-            Rectangle t_Rec = Rectangle{ m_Transform->position.x - (m_Transform->scale.x / 2), m_Transform->position.y - (m_Transform->scale.y / 2), m_Transform->scale.x, m_Transform->scale.y };
-            DrawRectanglePro(t_Rec, Vector2{m_Transform->scale.x / 2, m_Transform->scale.y / 2}, m_Transform->rotation, GREEN);
+            /*Rectangle t_Rec = Rectangle{ m_Transform->position.x, m_Transform->position.y, m_Transform->scale.x, m_Transform->scale.y };
+            DrawRectanglePro(t_Rec, Vector2{m_Transform->scale.x / 2, m_Transform->scale.y / 2}, m_Transform->rotation, GREEN);*/
         }
         break;
 
         case ColliderType::COLLIDER_CAPSULE:
         {
             // TO BE ADDED: Rendering for CAPSULE
-            OKVector2<float> tip_a = OKVector2<float>(m_Transform->position.x, m_Transform->position.y + (m_Transform->scale.y / 2) - (m_Transform->scale.x / 2));
-            OKVector2<float> base_a = OKVector2<float>(m_Transform->position.x, m_Transform->position.y - (m_Transform->scale.y / 2) + (m_Transform->scale.x / 2));
-            OKVector2<float> line_a = tip_a + base_a;
-            DrawLineV(tip_a.ConvertToVec2(), base_a.ConvertToVec2(), GREEN);
+            //OKVector2<float> tip_a = OKVector2<float>(m_Transform->position.x, m_Transform->position.y + (m_Transform->scale.y / 2) - (m_Transform->scale.x / 2));
+            //OKVector2<float> base_a = OKVector2<float>(m_Transform->position.x, m_Transform->position.y - (m_Transform->scale.y / 2) + (m_Transform->scale.x / 2));
+            //OKVector2<float> line_a = tip_a + base_a;
+            //DrawLineV(tip_a.ConvertToVec2(), base_a.ConvertToVec2(), GREEN);
 
-            // NOTE: Closest Point
-            float line_length = line_a.magnitude();
-            float dot = line_a.dot(m_Transform->position) / line_length * line_length;
-            OKVector2<float> closest_point = line_a + (dot * (base_a - tip_a));
+            //// NOTE: Closest Point
+            //float line_length = line_a.magnitude();
+            //float dot = line_a.dot(m_Transform->position) / line_length * line_length;
+            //OKVector2<float> closest_point = line_a + (dot * (base_a - tip_a));
 
-            DrawCircleV(closest_point.ConvertToVec2(), 3, BLUE);
+            //DrawCircleV(closest_point.ConvertToVec2(), 3, BLUE);
         }
         break;
 

@@ -47,8 +47,8 @@ private:
 
 
     // SAT / OBB Testing
-    Interval2D GetOrientedRectangleInterval(Collider* orRectA, OKVector2<float> axis);
-    Interval2D GetRectangleInterval(Collider* rectA, OKVector2<float> axis);
+    Interval2D GetOrientedRectangleInterval(Collider* orRectA, OKVector2<float>& axis);
+    Interval2D GetRectangleInterval(Collider* rectA, OKVector2<float>& axis);
     bool OverlapOnAxis(Collider* rectA, Collider* orRectB, OKVector2<float> axis);
 
 public:

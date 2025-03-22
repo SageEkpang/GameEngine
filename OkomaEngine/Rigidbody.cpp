@@ -5,9 +5,16 @@ Rigidbody::Rigidbody(const char* tag, OKTransform2<float>* transform, float mass
 {
     m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_RECTANGLE;
 
-    if (transform->rotation != 0) { m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_ORIENTED_RECTANGLE; }
+    if (transform->rotation != 0) 
+    { 
+        m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_ORIENTED_RECTANGLE; 
+    }
+
     if (IsCapsule == true) { m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_CAPSULE; }
-    if (lockZRot == true) { transform->rotation = 0; }
+    if (lockZRot == true) 
+    { 
+        transform->rotation = 0; 
+    }
 
     m_RigidbodyMovementType = rigidbodyMovementType;
 }
@@ -67,14 +74,18 @@ void Rigidbody::Draw()
         }
         break;
 
-        case RIGIDBODY_ORIENTED_RECTANGLE:
+        case RigidbodyShapeType::RIGIDBODY_ORIENTED_RECTANGLE:
         {
-            Rectangle t_Rec = Rectangle{ m_Transform->position.x - (m_Transform->scale.x / 2), m_Transform->position.y - (m_Transform->scale.y / 2), m_Transform->scale.x, m_Transform->scale.y };
-            DrawRectanglePro(t_Rec, m_Transform->scale.ConvertToVec2(), m_Transform->rotation, RED);
+            Rectangle t_Rec = Rectangle{ m_Transform->position.x, m_Transform->position.y, m_Transform->scale.x, m_Transform->scale.y };
+            DrawRectanglePro(t_Rec, Vector2{ m_Transform->scale.x / 2, m_Transform->scale.y / 2 }, m_Transform->rotation, RED);
         }
         break;
 
-        case RigidbodyShapeType::RIGIDBODY_CIRCLE: DrawCircleV(m_Transform->position.ConvertToVec2(), m_Radius, RED); break;
+        case RigidbodyShapeType::RIGIDBODY_CIRCLE: 
+        {
+            DrawCircleV(m_Transform->position.ConvertToVec2(), m_Radius, RED); 
+        }
+        break;
 
         case RigidbodyShapeType::RIGIDBODY_CAPSULE:
         {
