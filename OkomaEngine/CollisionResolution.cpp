@@ -17,6 +17,17 @@ void CollisionResolution::ResolveCollision(Rigidbody* rigidbodyA, Rigidbody* rig
 	ResolveInterpenetration(rigidbodyA, rigidbodyB, CoefRest, collisionNormal);
 }
 
+void CollisionResolution::ResolveCollisionsWithRotation(Rigidbody* rigidbodyA, Rigidbody* rigidbodyB, float CoefRest, float penetration, OKVector2<float> collisionNormal, float deltaTime)
+{
+
+
+
+
+
+
+
+}
+
 void CollisionResolution::ResolveVelocity(Rigidbody* rigidbodyA, Rigidbody* rigidbodyB, float CoefRest, float deltaTime, OKVector2<float> collisionNormal)
 {
 	OKVector2<float> t_SeperatingVelocity = CalculateSeperatingVelocity(rigidbodyA, rigidbodyB, collisionNormal);
@@ -54,6 +65,7 @@ void CollisionResolution::ResolveVelocity(Rigidbody* rigidbodyA, Rigidbody* rigi
 	rigidbodyB->AddImpulse(t_ImpulsePerMass * -rigidbodyB->GetInverseMass() * 2);
 }
 
+// NOTE: This Collision Function can only be for collisions that have no rotations to them
 void CollisionResolution::ResolveInterpenetration(Rigidbody* rigidbodyA, Rigidbody* rigidbodyB, float penetration, OKVector2<float> collisionNormal)
 {
 	// No Penetration, so no need for it

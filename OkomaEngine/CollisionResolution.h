@@ -16,12 +16,12 @@ public:
 
 	// BASE FUNCTION(s)
 	void ResolveCollision(Rigidbody* rigidbodyA, Rigidbody* rigidbodyB, float CoefRest, float penetration, OKVector2<float> collisionNormal, float deltaTime);
-
-	void ResolveVelocity(Rigidbody* rigidbodyA, Rigidbody* rigidbodyB, float CoefRest, float deltaTime, OKVector2<float> collisionNormal);
-	void ResolveInterpenetration(Rigidbody* rigidbodyA, Rigidbody* rigidbodyB, float penetration, OKVector2<float> collisionNormal);
+	void ResolveCollisionsWithRotation(Rigidbody* rigidbodyA, Rigidbody* rigidbodyB, float CoefRest, float penetration, OKVector2<float> collisionNormal, float deltaTime);
 
 private:
 
+	void ResolveVelocity(Rigidbody* rigidbodyA, Rigidbody* rigidbodyB, float CoefRest, float deltaTime, OKVector2<float> collisionNormal);
+	void ResolveInterpenetration(Rigidbody* rigidbodyA, Rigidbody* rigidbodyB, float penetration, OKVector2<float> collisionNormal);
 	OKVector2<float> CalculateSeperatingVelocity(Rigidbody* rigidbodyA, Rigidbody* rigidbodyB, OKVector2<float> contactNormal) const;
 
 };
