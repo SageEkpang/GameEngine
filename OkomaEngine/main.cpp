@@ -22,12 +22,11 @@ int main()
 	std::vector<PhysicsObject*> m_PhysicsObjects;
 
 	OKTransform2<float>* TransformFirst = new OKTransform2<float>(OKVector2<float>(100, 200), OKVector2<float>(100, 100), 0); // 30, 60
-	PhysicsObject* m_PhysicsFirst = new PhysicsObject("Phy1", TransformFirst, 10, RIGIDBODY_DYNAMIC, false, false);
+	PhysicsObject* m_PhysicsFirst = new PhysicsObject("Phy1", TransformFirst, 10, 40, RIGIDBODY_DYNAMIC);
 	m_PhysicsObjects.push_back(m_PhysicsFirst);
 
-	//OKTransform2<float>* TriggerTransformFirst = new OKTransform2<float>(OKVector2<float>(100, 200), OKVector2<float>(0, 0), OKVector2<float>(30, 60)); // 30, 60
-	//TriggerArea* m_TriggerAreaFirst = new TriggerArea("Trigger First", TriggerTransformFirst);
-	//m_TriggerAreas.push_back(m_TriggerAreaFirst);
+	OKTransform2<float>* TriggerTransformFirst = new OKTransform2<float>(OKVector2<float>(700, 200), OKVector2<float>(60, 60), 0); // 30, 60
+	TriggerArea* m_TriggerAreaFirst = new TriggerArea("Trigger First", TriggerTransformFirst, 40.f);
 
 	OKTransform2<float>* TransformSecond = new OKTransform2<float>(OKVector2<float>(80, 400), OKVector2<float>(80, 50), 45); // 100, 40
 	PhysicsObject* m_PhysicsSecond = new PhysicsObject("Phy2", TransformSecond, 0, RIGIDBODY_STATIC, false, false);
@@ -98,10 +97,13 @@ int main()
 			v->Update(GetFrameTime());
 		}
 
+
 		for (auto& v : m_PhysicsObjects)
 		{
 			v->Draw();
 		}
+
+		m_TriggerAreaFirst->Draw();
 
 		//if (m_Accumulator >= FPS_60)
 		//{

@@ -18,8 +18,9 @@ private:
 	bool m_HasExited = false;
 
 	std::set<PhysicsObject*> m_ObjectList;
-	std::set<PhysicsObject*> m_ObjectInTrigger;
 	ColliderManager* m_ColliderManifest;
+
+	//std::set<std::unique_ptr<PhysicsObject>> thing;
 
 public:
 
@@ -38,7 +39,6 @@ public:
 	~TriggerArea();
 
 	// BASE FUNCTION(s)
-	void CheckCollisions(PhysicsObject* physicsObject);
 	void Draw();
 
 	// TRIGGER RESPONSE FUNCTION(s)
@@ -49,10 +49,10 @@ public:
 
 	// GETTER FUNCTION(s)
 	std::set<PhysicsObject*>& GetObjects() { return m_ObjectList; }
-
+	inline bool GetActiveState() const { return m_IsActive; }
 
 	// SETTER FUNCTION(s)
-
+	inline bool SetActiveState(bool active) { m_IsActive = active; }
 
 };
 

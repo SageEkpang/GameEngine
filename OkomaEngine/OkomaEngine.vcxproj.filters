@@ -60,6 +60,12 @@
     <Filter Include="Managers\Source">
       <UniqueIdentifier>{f099c611-202a-4fca-9c3b-01cc33145541}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObjects\Header">
+      <UniqueIdentifier>{a2f1d3e9-f587-4464-bd4d-37f2d6950ac2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\Source">
+      <UniqueIdentifier>{888d6dd3-8882-4574-bd5f-e69a333732d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -104,17 +110,17 @@
     <ClCompile Include="ColliderManager.cpp">
       <Filter>Managers\Source</Filter>
     </ClCompile>
-    <ClCompile Include="PhysicsObject.cpp">
-      <Filter>GameObjects</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionResolution.cpp">
       <Filter>Managers\Source</Filter>
     </ClCompile>
     <ClCompile Include="GameObjectManager.cpp">
       <Filter>Managers\Source</Filter>
     </ClCompile>
+    <ClCompile Include="PhysicsObject.cpp">
+      <Filter>GameObjects\Source</Filter>
+    </ClCompile>
     <ClCompile Include="TriggerArea.cpp">
-      <Filter>Components\Source</Filter>
+      <Filter>GameObjects\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -169,17 +175,17 @@
     <ClInclude Include="ColliderManager.h">
       <Filter>Managers\Header</Filter>
     </ClInclude>
-    <ClInclude Include="PhysicsObject.h">
-      <Filter>GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="CollisionResolution.h">
       <Filter>Managers\Header</Filter>
     </ClInclude>
     <ClInclude Include="GameObjectManager.h">
       <Filter>Managers\Header</Filter>
     </ClInclude>
+    <ClInclude Include="PhysicsObject.h">
+      <Filter>GameObjects\Header</Filter>
+    </ClInclude>
     <ClInclude Include="TriggerArea.h">
-      <Filter>Components\Header</Filter>
+      <Filter>GameObjects\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -31,20 +31,6 @@ TriggerArea::~TriggerArea()
 	}
 }
 
-void TriggerArea::CheckCollisions(PhysicsObject* physicsObject)
-{
-	if (m_ColliderManifest->CheckCollisions(this, physicsObject->GetCollider()).m_HasCollision)
-	{
-		// NOTE: Entered 
-
-		// NOTE: Stayed
-		
-		// NOTE: Exit
-
-		m_ObjectList.insert(physicsObject);
-	}
-}
-
 void TriggerArea::Draw()
 {
 	Collider::Draw();
@@ -52,35 +38,50 @@ void TriggerArea::Draw()
 
 void TriggerArea::TriggerEntered(PhysicsObject* physicsObject, void (*func)())
 {
-	if (m_ObjectList.find(physicsObject) == m_ObjectList.end())
+	if (m_IsActive == false) { return; }
+	if (m_ColliderManifest->CheckCollisions(this, physicsObject->GetCollider()).m_HasCollision)
 	{
-		m_HasEntered = true;
-		m_HasStayed = false;
-		m_HasExited = false;
+		if (m_ObjectList.find(physicsObject) == m_ObjectList.end())
+		{
+			m_HasEntered = true;
+			m_HasStayed = false;
+			m_HasExited = false;
 
-		m_ObjectList.insert(physicsObject);
+			m_ObjectList.insert(physicsObject);
+			func();
+		}
 	}
-
-	func();
 }
 
 void TriggerArea::TriggerStayed(PhysicsObject* physicsObject, void (*func)())
 {
-	m_HasEntered = false;
-	m_HasStayed = true;
-	m_HasExited = false;
+	if (m_IsActive == false) { return; }
+	if (m_ColliderManifest->CheckCollisions(this, physicsObject->GetCollider()).m_HasCollision)
+	{
+		if (m_ObjectList.empty()) { return; }
 
-	func();
+		if (!m_ObjectList.count(physicsObject) == 0)
+		{
+			m_HasEntered = true;
+			m_HasStayed = true;
+			m_HasExited = false;
+			func();
+		}
+	}
 }
 
 void TriggerArea::TriggerExited(PhysicsObject* physicsObject, void (*func)())
 {
-	if (m_ObjectList.count(physicsObject) == 0)
+	if (m_IsActive == false) { return; }
+	if (m_HasStayed == true && (!m_ObjectList.count(physicsObject) == 0) && !m_ColliderManifest->CheckCollisions(this, physicsObject->GetCollider()).m_HasCollision)
 	{
+		if (m_ObjectList.empty()) { return; }
+	
 		m_HasEntered = false;
 		m_HasStayed = false;
 		m_HasExited = true;
-	}
 
-	func();
+		m_ObjectList.erase(physicsObject);
+		func();
+	}
 }
