@@ -287,7 +287,7 @@ CollisionManifold ColliderManager::RectangleToRectangle(Collider* rectA, Collide
 		NearPointA.x = BottomSide.x;
 	}
 
-	DrawCircleV(NearPointA.ConvertToVec2(), 3, BLUE);
+	// DrawCircleV(NearPointA.ConvertToVec2(), 3, BLUE);
 
 	// REFACTOR: Fix the size of the circle  
 	OKTransform2<float> circle_transform_A = OKTransform2<float>(NearPointA, OKVector2<float>(0, 0), 0);
@@ -410,8 +410,6 @@ CollisionManifold ColliderManager::CapsuleToCircle(Collider* capsuleA, Collider*
 	OKTransform2<float> circle_transform = OKTransform2<float>(closest_point, OKVector2<float>(capsuleA->GetScale().x, capsuleA->GetScale().x), 0);
 	Collider circle_temp = Collider("temp rep", &circle_transform, capsuleA->GetScale().x / 2);
 
-	DrawCircleV(closest_point.ConvertToVec2(), capsuleA->GetScale().x / 2, PURPLE);
-
 	t_ColMani = CircleToCircle(&circle_temp, circB);
 
 	return t_ColMani;
@@ -443,8 +441,6 @@ CollisionManifold ColliderManager::CapsuleToRectangle(Collider* capsuleA, Collid
 	// NOTE: Create the circle based of the capsule components
 	OKTransform2<float> circle_transform = OKTransform2<float>(closest_point, OKVector2<float>(0, 0), 0);
 	Collider circle_temp = Collider("temp rep", &circle_transform, capsuleA->GetScale().x / 2);
-
-	DrawCircleV(closest_point.ConvertToVec2(), capsuleA->GetScale().x / 2, PURPLE);
 
 	return t_ColMani = CircleToRectangle(&circle_temp, rectB);;
 }
@@ -501,9 +497,6 @@ CollisionManifold ColliderManager::CapsuleToCapsule(Collider* capsuleA, Collider
 	// NOTE: Circle Construction (B)
 	OKTransform2<float> circle_transform_B = OKTransform2<float>(closest_point_B, OKVector2<float>(0, 0), 0);
 	Collider circle_temp_B = Collider("temp rep B", &circle_transform_B, capsuleB->GetScale().x / 2);
-
-	DrawCircleV(closest_point_A.ConvertToVec2(), capsuleA->GetScale().x / 2, PURPLE);
-	DrawCircleV(closest_point_B.ConvertToVec2(), capsuleB->GetScale().x / 2, PURPLE);
 
 	t_ColMani = CircleToCircle(&circle_temp_A, &circle_temp_B);
 	return t_ColMani;

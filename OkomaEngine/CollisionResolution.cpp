@@ -20,12 +20,6 @@ void CollisionResolution::ResolveCollision(Rigidbody* rigidbodyA, Rigidbody* rig
 void CollisionResolution::ResolveCollisionsWithRotation(Rigidbody* rigidbodyA, Rigidbody* rigidbodyB, float CoefRest, float penetration, OKVector2<float> collisionNormal, float deltaTime)
 {
 
-
-
-
-
-
-
 }
 
 void CollisionResolution::ResolveVelocity(Rigidbody* rigidbodyA, Rigidbody* rigidbodyB, float CoefRest, float deltaTime, OKVector2<float> collisionNormal)

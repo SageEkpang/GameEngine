@@ -27,6 +27,6 @@ void PhysicsObject::Update(const float deltaTime)
 void PhysicsObject::Draw()
 {
 	m_Rigidbody->Draw();
-	m_Collider->Draw();
+	// m_Collider->Draw();
 }
 

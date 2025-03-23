@@ -50,6 +50,9 @@ public:
 	// GETTER FUNCTION(s)
 	std::set<PhysicsObject*>& GetObjects() { return m_ObjectList; }
 	inline bool GetActiveState() const { return m_IsActive; }
+	inline bool GetHasEntered() const { return m_HasEntered; }
+	inline bool GetHasStayed() const { return m_HasStayed; }
+	inline bool GetHasExited() const { return m_HasExited; }
 
 	// SETTER FUNCTION(s)
 	inline bool SetActiveState(bool active) { m_IsActive = active; }

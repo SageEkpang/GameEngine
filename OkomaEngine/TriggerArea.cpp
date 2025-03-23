@@ -48,7 +48,7 @@ void TriggerArea::TriggerEntered(PhysicsObject* physicsObject, void (*func)())
 			m_HasExited = false;
 
 			m_ObjectList.insert(physicsObject);
-			func();
+			if (func != nullptr) { func(); }
 		}
 	}
 }
@@ -56,6 +56,7 @@ void TriggerArea::TriggerEntered(PhysicsObject* physicsObject, void (*func)())
 void TriggerArea::TriggerStayed(PhysicsObject* physicsObject, void (*func)())
 {
 	if (m_IsActive == false) { return; }
+	// TriggerEntered(physicsObject);
 	if (m_ColliderManifest->CheckCollisions(this, physicsObject->GetCollider()).m_HasCollision)
 	{
 		if (m_ObjectList.empty()) { return; }
@@ -65,7 +66,7 @@ void TriggerArea::TriggerStayed(PhysicsObject* physicsObject, void (*func)())
 			m_HasEntered = true;
 			m_HasStayed = true;
 			m_HasExited = false;
-			func();
+			if (func != nullptr) { func(); }
 		}
 	}
 }
@@ -73,6 +74,8 @@ void TriggerArea::TriggerStayed(PhysicsObject* physicsObject, void (*func)())
 void TriggerArea::TriggerExited(PhysicsObject* physicsObject, void (*func)())
 {
 	if (m_IsActive == false) { return; }
+	// TriggerEntered(physicsObject);
+	// TriggerStayed(physicsObject);
 	if (m_HasStayed == true && (!m_ObjectList.count(physicsObject) == 0) && !m_ColliderManifest->CheckCollisions(this, physicsObject->GetCollider()).m_HasCollision)
 	{
 		if (m_ObjectList.empty()) { return; }
@@ -82,6 +85,6 @@ void TriggerArea::TriggerExited(PhysicsObject* physicsObject, void (*func)())
 		m_HasExited = true;
 
 		m_ObjectList.erase(physicsObject);
-		func();
+		if (func != nullptr) { func(); }
 	}
 }

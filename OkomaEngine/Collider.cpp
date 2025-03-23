@@ -69,18 +69,9 @@ void Collider::Draw()
 
         case ColliderType::COLLIDER_CAPSULE:
         {
-            // TO BE ADDED: Rendering for CAPSULE
-            //OKVector2<float> tip_a = OKVector2<float>(m_Transform->position.x, m_Transform->position.y + (m_Transform->scale.y / 2) - (m_Transform->scale.x / 2));
-            //OKVector2<float> base_a = OKVector2<float>(m_Transform->position.x, m_Transform->position.y - (m_Transform->scale.y / 2) + (m_Transform->scale.x / 2));
-            //OKVector2<float> line_a = tip_a + base_a;
-            //DrawLineV(tip_a.ConvertToVec2(), base_a.ConvertToVec2(), GREEN);
+            Rectangle t_SmoothRec = Rectangle{ m_Transform->position.x - (m_Transform->scale.x / 2), m_Transform->position.y - (m_Transform->scale.y / 2), m_Transform->scale.x, m_Transform->scale.y };
+            DrawRectangleRoundedLines(t_SmoothRec, 10, 10, GREEN);
 
-            //// NOTE: Closest Point
-            //float line_length = line_a.magnitude();
-            //float dot = line_a.dot(m_Transform->position) / line_length * line_length;
-            //OKVector2<float> closest_point = line_a + (dot * (base_a - tip_a));
-
-            //DrawCircleV(closest_point.ConvertToVec2(), 3, BLUE);
         }
         break;
 
