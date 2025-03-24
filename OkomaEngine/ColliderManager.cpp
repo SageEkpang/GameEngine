@@ -442,22 +442,12 @@ CollisionManifold ColliderManager::CapsuleToRectangle(Collider* capsuleA, Collid
 	OKTransform2<float> circle_transform = OKTransform2<float>(closest_point, OKVector2<float>(0, 0), 0);
 	Collider circle_temp = Collider("temp rep", &circle_transform, capsuleA->GetScale().x / 2);
 
-	return t_ColMani = CircleToRectangle(&circle_temp, rectB);;
+	return t_ColMani = CircleToRectangle(&circle_temp, rectB);
 }
 
 CollisionManifold ColliderManager::CapsuleToCapsule(Collider* capsuleA, Collider* capsuleB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
-
-	//OKVector2<float> CapA = ProjectPointOntoLine(capsuleB->GetPosition(), 
-	//	OKVector2<float>(capsuleA->GetPosition().x, capsuleA->GetPosition().y + (capsuleA->GetScale().y / 2) - (capsuleA->GetScale().x / 2)),
-	//	OKVector2<float>(capsuleA->GetPosition().x, capsuleA->GetPosition().y - (capsuleA->GetScale().y / 2) + (capsuleA->GetScale().x / 2))
-	//);
-
-	//OKVector2<float> CapB = ProjectPointOntoLine(capsuleA->GetPosition(),
-	//	capsuleB->GetPosition().y + (capsuleB->GetScale().y / 2) - (capsuleB->GetScale().x / 2),
-	//	capsuleB->GetPosition().y - (capsuleB->GetScale().y / 2) + (capsuleB->GetScale().x / 2)
-	//);
 
 	// Capsule (A)
 	// NOTE: Capsule Position and Variable(s)

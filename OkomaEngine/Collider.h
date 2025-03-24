@@ -29,7 +29,6 @@ protected: // PROTECTED VARIABLE(s)
 
     // COLLIDER VARIABLE(s)
     ColliderType m_ColliderType;
-
     std::vector<OKVector2<float>> m_Vertices;
 
 public: // PUBLIC FUNCTION(s)
