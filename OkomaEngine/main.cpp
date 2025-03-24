@@ -69,7 +69,7 @@ int main()
 	}
 
 	{
-		OKTransform2<float>* TransformFive = new OKTransform2<float>(OKVector2<float>(850, 710), OKVector2<float>(40, 40), 0); // 300, 40
+		OKTransform2<float>* TransformFive = new OKTransform2<float>(OKVector2<float>(850, 730), OKVector2<float>(40, 40), 0); // 300, 40
 		PhysicsObject* m_PhysicsFive = new PhysicsObject("Phy5", TransformFive, 0, 40, RIGIDBODY_STATIC);
 		m_PhysicsObjects.push_back(m_PhysicsFive);
 	}
@@ -132,13 +132,13 @@ int main()
 
 		m_TriggerAreaThird->Draw();
 
-		m_TriggerAreaThird->TriggerEntered(m_PhysicsObjects[0],
-		[]{
+		m_TriggerAreaThird->TriggerEntered(m_PhysicsObjects[0]);
+		m_TriggerAreaThird->TriggerStayed(m_PhysicsObjects[0], []
+		{
 			DrawText("this has entered the capsule", 10, 10, 50, ORANGE);
-		});
 
-		m_TriggerAreaThird->TriggerStayed(m_PhysicsObjects[0]);
-		m_TriggerAreaThird->TriggerExited(m_PhysicsObjects[0]);
+		});
+		// m_TriggerAreaThird->TriggerExited(m_PhysicsObjects[0]);
 
 		for (int i = 0; i < m_PhysicsObjects.size(); ++i)
 		{
