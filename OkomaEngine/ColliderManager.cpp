@@ -325,7 +325,6 @@ CollisionManifold ColliderManager::CircleToRectangle(Collider* circA, Collider* 
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 	OKVector2<float> RectCentre = rectB->GetPosition() + rectB->GetScale() / 2;
-
 	OKVector2<float> NearPoint = OKVector2<float>(0, 0);
 
 	if (circA->GetPosition().x < rectB->GetPosition().x)
