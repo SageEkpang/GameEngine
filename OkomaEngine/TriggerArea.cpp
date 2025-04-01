@@ -76,7 +76,8 @@ void TriggerArea::TriggerExited(PhysicsObject* physicsObject, void (*func)())
 	if (m_IsActive == false) { return; }
 	// TriggerEntered(physicsObject);
 	// TriggerStayed(physicsObject);
-	if (m_HasStayed == true && (!m_ObjectList.count(physicsObject) == 0) && !m_ColliderManifest->CheckCollisions(this, physicsObject->GetCollider()).m_HasCollision)
+
+	if (m_HasStayed == true && m_HasEntered == true && !m_ColliderManifest->CheckCollisions(this, physicsObject->GetCollider()).m_HasCollision)
 	{
 		if (m_ObjectList.empty()) { return; }
 	

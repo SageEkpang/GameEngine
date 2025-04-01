@@ -29,7 +29,7 @@ void CollisionResolution::ResolveVelocity(Rigidbody* rigidbodyA, Rigidbody* rigi
 	// If there is no need for seperating velocity, then we do not need to run the function
 	if (t_SeperatingVelocity > OKVector2<float>(0, 0)) { return; }
 
-	OKVector2<float> t_NewSeperatingVelocity = -t_SeperatingVelocity * CoefRest;
+	OKVector2<float> t_NewSeperatingVelocity = t_SeperatingVelocity * CoefRest * -1;
 
 	OKVector2<float> t_AccumulatedVelocity = rigidbodyA->GetAcceleration();
 	t_AccumulatedVelocity -= rigidbodyB->GetAcceleration();
@@ -84,5 +84,6 @@ OKVector2<float> CollisionResolution::CalculateSeperatingVelocity(Rigidbody* rig
 {
 	OKVector2<float> t_RelativeVelocity = rigidbodyA->GetVelocity();
 	t_RelativeVelocity -= rigidbodyB->GetVelocity();
+
 	return t_RelativeVelocity * contactNormal;
 }

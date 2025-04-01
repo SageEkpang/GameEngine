@@ -5,6 +5,7 @@
 #include "Collider.h"
 #include "ColliderManager.h"
 #include <set>
+#include <bitset>
 
 class PhysicsObject;
 
@@ -19,8 +20,6 @@ private:
 
 	std::set<PhysicsObject*> m_ObjectList;
 	ColliderManager* m_ColliderManifest;
-
-	//std::set<std::unique_ptr<PhysicsObject>> thing;
 
 public:
 
