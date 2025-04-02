@@ -29,7 +29,7 @@ void CollisionResolution::ResolveVelocity(Rigidbody* rigidbodyA, Rigidbody* rigi
 	// If there is no need for seperating velocity, then we do not need to run the function
 	if (t_SeperatingVelocity > OKVector2<float>(0, 0)) { return; }
 
-	OKVector2<float> t_NewSeperatingVelocity = t_SeperatingVelocity * CoefRest * -1;
+	OKVector2<float> t_NewSeperatingVelocity = t_SeperatingVelocity * CoefRest;
 
 	OKVector2<float> t_AccumulatedVelocity = rigidbodyA->GetAcceleration();
 	t_AccumulatedVelocity -= rigidbodyB->GetAcceleration();
@@ -55,8 +55,15 @@ void CollisionResolution::ResolveVelocity(Rigidbody* rigidbodyA, Rigidbody* rigi
 	OKVector2<float> t_Impulse = t_DeltaVelocity / t_TotalInverseMass;
 	OKVector2<float> t_ImpulsePerMass = collisionNormal * t_Impulse;
 
-	rigidbodyA->AddImpulse(t_ImpulsePerMass * rigidbodyA->GetInverseMass() * 2);
-	rigidbodyB->AddImpulse(t_ImpulsePerMass * -rigidbodyB->GetInverseMass() * 2);
+	if (rigidbodyA->GetRigidbodyMovementType() == RIGIDBODY_DYNAMIC)
+	{
+		rigidbodyA->AddImpulse(t_ImpulsePerMass * rigidbodyA->GetInverseMass() * 2);
+	}
+
+	if (rigidbodyB->GetRigidbodyMovementType() == RIGIDBODY_DYNAMIC)
+	{
+		rigidbodyB->AddImpulse(t_ImpulsePerMass * -rigidbodyB->GetInverseMass() * 2);
+	}
 }
 
 // NOTE: This Collision Function can only be for collisions that have no rotations to them
@@ -76,8 +83,15 @@ void CollisionResolution::ResolveInterpenetration(Rigidbody* rigidbodyA, Rigidbo
 	OKVector2<float> t_MoveOutB = t_MovePerMass * -rigidbodyB->GetInverseMass();
 
 	// NOTE:
-	rigidbodyA->GetTransform()->position += t_MoveOutA;
-	rigidbodyB->GetTransform()->position += t_MoveOutB;
+	if (rigidbodyA->GetRigidbodyMovementType() == RIGIDBODY_DYNAMIC)
+	{
+		rigidbodyA->GetTransform()->position += t_MoveOutA;
+	}
+
+	if (rigidbodyB->GetRigidbodyMovementType() == RIGIDBODY_DYNAMIC)
+	{
+		rigidbodyB->GetTransform()->position += t_MoveOutB;
+	}
 }
 
 OKVector2<float> CollisionResolution::CalculateSeperatingVelocity(Rigidbody* rigidbodyA, Rigidbody* rigidbodyB, OKVector2<float> contactNormal) const

@@ -1,26 +1,19 @@
 #include "Rigidbody.h"
 
-Rigidbody::Rigidbody(const char* tag, OKTransform2<float>* transform, float mass, RigidbodyMovementType rigidbodyMovementType, bool IsCapsule, bool lockZRot)
-    : Particle(tag, transform, mass)
+Rigidbody::Rigidbody(OKTransform2<float>* transform, float mass, RigidbodyMovementType rigidbodyMovementType, bool IsCapsule, bool lockZRot)
+    : Particle(transform, mass)
 {
     m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_RECTANGLE;
 
-    if (transform->rotation != 0) 
-    { 
-        m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_ORIENTED_RECTANGLE; 
-    }
-
+    if (transform->rotation != 0) { m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_ORIENTED_RECTANGLE; }
     if (IsCapsule == true) { m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_CAPSULE; }
-    if (lockZRot == true) 
-    { 
-        transform->rotation = 0; 
-    }
+    if (lockZRot == true) { transform->rotation = 0; }
 
     m_RigidbodyMovementType = rigidbodyMovementType;
 }
 
-Rigidbody::Rigidbody(const char* tag, OKTransform2<float>* transform, float mass, float radius, RigidbodyMovementType rigidbodyMovementType)
-    : Particle(tag, transform, mass)
+Rigidbody::Rigidbody(OKTransform2<float>* transform, float mass, float radius, RigidbodyMovementType rigidbodyMovementType)
+    : Particle(transform, mass)
 {
     m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_CIRCLE;
     m_RigidbodyMovementType = rigidbodyMovementType;

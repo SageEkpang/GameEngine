@@ -13,6 +13,7 @@ class TriggerArea : public Collider
 {
 private:
 
+	std::string m_Tag;
 	bool m_IsActive = true;
 	bool m_HasEntered = false;
 	bool m_HasStayed = false;
@@ -27,11 +28,11 @@ public:
 
 	// RECTANGLE
 	/// @brief Rectangle Collider Constructor
-	TriggerArea(const char* tag, OKTransform2<float>* transform, bool IsCapsule = false, bool lockZRot = true);
+	TriggerArea(std::string tag, OKTransform2<float>* transform, bool IsCapsule = false, bool lockZRot = true);
 
 	// CIRCLE
 	/// @brief Circle Collider Constructor
-	TriggerArea(const char* tag, OKTransform2<float>* transform, float radius);
+	TriggerArea(std::string tag, OKTransform2<float>* transform, float radius);
 
 
 	// DESTRUCTOR
@@ -47,6 +48,7 @@ public:
 
 
 	// GETTER FUNCTION(s)
+	inline std::string GetTag() const { return m_Tag; }
 	std::set<PhysicsObject*>& GetObjects() { return m_ObjectList; }
 	inline bool GetActiveState() const { return m_IsActive; }
 	inline bool GetHasEntered() const { return m_HasEntered; }
@@ -54,7 +56,8 @@ public:
 	inline bool GetHasExited() const { return m_HasExited; }
 
 	// SETTER FUNCTION(s)
-	inline bool SetActiveState(bool active) { m_IsActive = active; }
+	inline void SetActiveState(bool active) { m_IsActive = active; }
+	inline void SetTag(std::string tag) { m_Tag = tag; }
 
 };
 

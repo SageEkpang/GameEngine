@@ -1,15 +1,15 @@
 #include "TriggerArea.h"
 #include "PhysicsObject.h"
 
-TriggerArea::TriggerArea(const char* tag, OKTransform2<float>* transform, bool IsCapsule, bool lockZRot)
-	: Collider(tag, transform, IsCapsule, lockZRot)
+TriggerArea::TriggerArea(std::string tag, OKTransform2<float>* transform, bool IsCapsule, bool lockZRot)
+	: Collider(transform, IsCapsule, lockZRot)
 {
 	m_ColliderManifest = new ColliderManager();
 	m_ObjectList.clear();
 }
 
-TriggerArea::TriggerArea(const char* tag, OKTransform2<float>* transform, float radius)
-	: Collider(tag, transform, radius)
+TriggerArea::TriggerArea(std::string tag, OKTransform2<float>* transform, float radius)
+	: Collider(transform, radius)
 {
 	m_ColliderManifest = new ColliderManager();
 	m_ObjectList.clear();

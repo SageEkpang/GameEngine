@@ -23,7 +23,6 @@ class Collider : public Component
 protected: // PROTECTED VARIABLE(s)
 
     // BASE VARIABLE(s)
-    char* m_Tag;
     OKTransform2<float>* m_Transform;
     float m_Radius{};
 
@@ -37,11 +36,11 @@ public: // PUBLIC FUNCTION(s)
 
     // RECTANGLE
     /// @brief Rectangle Collider Constructor
-    Collider(const char* tag, OKTransform2<float>* transform, bool IsCapsule = false, bool lockZRot = true); // REFACT: bool solveRotation
+    Collider(OKTransform2<float>* transform, bool IsCapsule = false, bool lockZRot = true); // REFACT: bool solveRotation
 
     // CIRCLE
     /// @brief Circle Collider Constructor
-    Collider(const char* tag, OKTransform2<float>* transform, float radius);
+    Collider(OKTransform2<float>* transform, float radius);
 
     // COMPLEX
     /// @brief Complex Collider Constructor 
@@ -59,7 +58,6 @@ public: // PUBLIC FUNCTION(s)
 
 
     // GETTER FUNCTION(s)
-    inline const char* GetTag() { return m_Tag; }
     inline OKTransform2<float>* GetTransform() { return m_Transform; }
     inline OKVector2<float> GetPosition() { return m_Transform->position; }
     inline OKVector2<float> GetScale() { return m_Transform->scale; }
@@ -70,7 +68,6 @@ public: // PUBLIC FUNCTION(s)
     inline float GetRadius() const { return m_Radius; }
 
     // SETTER FUNCTION(s)
-    inline void SetTag(char* tag) { strcpy_s(m_Tag, strlen(tag), tag); }
     inline void SetTransform(OKTransform2<float>* transform) { m_Transform = transform; }
 
     inline void SetColliderType(ColliderType colliderType) { m_ColliderType = colliderType; }

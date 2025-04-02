@@ -10,11 +10,6 @@
 
 std::vector<PhysicsObject*> m_PhysicsObjects;
 
-void SpawnAnotherPhysicsObject()
-{
-
-}
-
 int main()
 {
 	// Game Utility (namespace) over Game Manager (class)
@@ -27,42 +22,33 @@ int main()
 	float m_SimpleCounter = 0;
 
 	// PLAYER 
-	{
-		OKTransform2<float>* TransformFirst = new OKTransform2<float>(OKVector2<float>(100, 200), OKVector2<float>(40, 80), 0); // 30, 60
-		PhysicsObject* m_PhysicsFirst = new PhysicsObject("Phy1", TransformFirst, 10, RIGIDBODY_DYNAMIC, true);
-		m_PhysicsObjects.push_back(m_PhysicsFirst);
-	}
+	std::unique_ptr<OKTransform2<float>> TransformFirst =  std::make_unique<OKTransform2<float>>(OKVector2<float>(100, 200), OKVector2<float>(40, 80), 0); // 30, 60
+	PhysicsObject* m_PhysicsFirst = new PhysicsObject("Phy1", TransformFirst, 10, RIGIDBODY_DYNAMIC, true);
+	m_PhysicsObjects.push_back(m_PhysicsFirst);
+	
 
-	{
-		OKTransform2<float>* TransformFirst = new OKTransform2<float>(OKVector2<float>(600, 200), OKVector2<float>(40, 80), 0); // 30, 60
-		PhysicsObject* m_PhysicsFirst = new PhysicsObject("Phy1", TransformFirst, 10, 20, RIGIDBODY_DYNAMIC);
-		m_PhysicsObjects.push_back(m_PhysicsFirst);
+	// CIRLCE PHYSICS OBJECTS
+	std::unique_ptr<OKTransform2<float>> Circ_One = std::make_unique<OKTransform2<float>>(OKVector2<float>(600, 200), OKVector2<float>(40, 80), 0); // 30, 60
+	PhysicsObject* Circ_One_Object = new PhysicsObject("Phy1", Circ_One, 10, 20, RIGIDBODY_DYNAMIC);
+	m_PhysicsObjects.push_back(Circ_One_Object);
 
-		OKTransform2<float>* AltFirst = new OKTransform2<float>(OKVector2<float>(650, 200), OKVector2<float>(40, 80), 0); // 30, 60
-		PhysicsObject* m_AltObjFirst = new PhysicsObject("Phy1", AltFirst, 10, 20, RIGIDBODY_DYNAMIC);
-		m_PhysicsObjects.push_back(m_AltObjFirst);
-	}
-
-
-	{
-		OKTransform2<float>* TransformSecond = new OKTransform2<float>(OKVector2<float>(80, 400), OKVector2<float>(80, 50), 0); // 100, 40
-		PhysicsObject* m_PhysicsSecond = new PhysicsObject("Phy2", TransformSecond, 0, RIGIDBODY_STATIC, false, false);
-		m_PhysicsObjects.push_back(m_PhysicsSecond);
-	}
-
-	{
-		OKTransform2<float>* TransformThird = new OKTransform2<float>(OKVector2<float>(300, 400), OKVector2<float>(300, 40), 0); // 300, 40
-		PhysicsObject* m_PhysicsThird = new PhysicsObject("Phy3", TransformThird, 0, RIGIDBODY_STATIC);
-		m_PhysicsObjects.push_back(m_PhysicsThird);
-	}
-
+	std::unique_ptr<OKTransform2<float>> AltFirst = std::make_unique<OKTransform2<float>>(OKVector2<float>(650, 200), OKVector2<float>(40, 80), 0); // 30, 60
+	PhysicsObject* m_AltObjFirst = new PhysicsObject("Phy1", AltFirst, 10, 20, RIGIDBODY_DYNAMIC);
+	m_PhysicsObjects.push_back(m_AltObjFirst);
+	
+	std::unique_ptr<OKTransform2<float>> TransformSecond = std::make_unique<OKTransform2<float>>(OKVector2<float>(80, 400), OKVector2<float>(80, 50), 0);
+	PhysicsObject* m_PhysicsSecond = new PhysicsObject("Phy2", TransformSecond, 0, RIGIDBODY_STATIC, false, false);
+	m_PhysicsObjects.push_back(m_PhysicsSecond);
+	
+	std::unique_ptr<OKTransform2<float>> TransformThird = std::make_unique<OKTransform2<float>>(OKVector2<float>(300, 400), OKVector2<float>(300, 40), 0); // 300, 40
+	PhysicsObject* m_PhysicsThird = new PhysicsObject("Phy3", TransformThird, 0, RIGIDBODY_STATIC);
+	m_PhysicsObjects.push_back(m_PhysicsThird);
+	
 	// FLOOR
-	{
-		OKTransform2<float>* TransformFour = new OKTransform2<float>(OKVector2<float>(0, 700), OKVector2<float>(1000, 40), 0); // 300, 40
-		PhysicsObject* m_PhysicsFour = new PhysicsObject("Phy4", TransformFour, 0, RIGIDBODY_STATIC);
-		m_PhysicsObjects.push_back(m_PhysicsFour);
-	}
-
+	std::unique_ptr<OKTransform2<float>> TransformFour = std::make_unique<OKTransform2<float>>(OKVector2<float>(0, 700), OKVector2<float>(1000, 40), 0); // 300, 40
+	PhysicsObject* m_PhysicsFour = new PhysicsObject("Phy4", TransformFour, 0, RIGIDBODY_STATIC);
+	m_PhysicsObjects.push_back(m_PhysicsFour);
+	
 
 	//OKTransform2<float>* TriggerTransformFirst = new OKTransform2<float>(OKVector2<float>(380, 250), OKVector2<float>(150, 150), 0); // 30, 60
 	//TriggerArea* m_TriggerAreaFirst = new TriggerArea("Trigger First", TriggerTransformFirst);
@@ -77,6 +63,7 @@ int main()
 	CollisionManifold t_ColMani = CollisionManifold();
 	CollisionResolution* t_CollisionResolution = new CollisionResolution();
 
+	// SetTargetFPS(60);
 	while (!WindowShouldClose())
 	{
 		// UPDATE
@@ -103,31 +90,6 @@ int main()
 		{
 			m_PhysicsObjects[0]->GetRigidbody()->AddImpulse(0, -1000);
 		}
-
-		//m_TriggerAreaFirst->Draw();
-
-		//m_TriggerAreaFirst->TriggerEntered(m_PhysicsObjects[0]);
-		//m_TriggerAreaFirst->TriggerStayed(m_PhysicsObjects[0],
-		//	[] {
-		//		DrawText("this has entered the box", 10, 10, 50, PURPLE);
-		//	});
-
-		//m_TriggerAreaSecond->Draw();
-
-		//m_TriggerAreaSecond->TriggerEntered(m_PhysicsObjects[0]);
-		//m_TriggerAreaSecond->TriggerStayed(m_PhysicsObjects[0],
-		//	[] {
-		//		DrawText("this has entered the circle", 10, 10, 50, PURPLE);
-		//	});
-
-		//m_TriggerAreaThird->Draw();
-
-		//m_TriggerAreaThird->TriggerEntered(m_PhysicsObjects[0]);
-		//m_TriggerAreaThird->TriggerStayed(m_PhysicsObjects[0], []
-		//{
-		//	// DrawText("this has entered the capsule", 10, 10, 50, ORANGE);
-
-		//});
 
 		for (int i = 0; i < m_PhysicsObjects.size(); ++i)
 		{
@@ -156,10 +118,10 @@ int main()
 			v->Draw();
 		}
 
-		//if (m_Accumulator >= FPS_60)
-		//{
-		//	m_Accumulator -= FPS_60;
-		//}
+		if (m_Accumulator >= FPS_60)
+		{
+			m_Accumulator -= FPS_60;
+		}
 
 		timer->Tick();
 

@@ -1,7 +1,7 @@
 #include "Collider.h"
 
 // RECTANGLE / Capsule
-Collider::Collider(const char* tag, OKTransform2<float>* transform, bool IsCapsule, bool lockZRot)
+Collider::Collider(OKTransform2<float>* transform, bool IsCapsule, bool lockZRot)
 {
     // NOTE: Set the Collider Type in the Constructor
     m_ColliderType = ColliderType::COLLIDER_RECTANGLE;
@@ -23,7 +23,7 @@ Collider::Collider(const char* tag, OKTransform2<float>* transform, bool IsCapsu
 }
 
 // CIRCLE
-Collider::Collider(const char* tag, OKTransform2<float>* transform, float radius)
+Collider::Collider(OKTransform2<float>* transform, float radius)
 {
     // NOTE: Set the Collider Type in the Constructor
     m_ColliderType = ColliderType::COLLIDER_CIRCLE;

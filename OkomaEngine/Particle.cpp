@@ -1,16 +1,14 @@
 #include "Particle.h"
 
-Particle::Particle(const char* tag, OKTransform2<float>* transform, float mass)
+Particle::Particle(OKTransform2<float>* transform, float mass)
 {
-    m_Tag = tag;
-    // m_Transform = new OKTransform2<float>();
     m_Transform = transform;
     m_Mass = mass;
 }
 
 Particle::~Particle()
 {
-    delete m_Transform;
+    
 }
 
 void Particle::Update(const float deltaTime)

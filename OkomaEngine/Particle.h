@@ -25,7 +25,6 @@ private: // PRIVATE VARIABLE(s)
 protected: // PROTECTED VARIABLE(s)
 
     // TRANSFORM VARIABLE(s)
-    const char* m_Tag;
     OKTransform2<float>* m_Transform;
 
     // FORCE VARIABLE(s)
@@ -60,7 +59,7 @@ protected: // PROTECTED VARIABLE(s)
 public: // PUBLIC FUNCTION(s)
 
     // CLASS FUNCTION(s)
-    Particle(const char* tag, OKTransform2<float>* transform, float mass);
+    Particle(OKTransform2<float>* transform, float mass);
     virtual ~Particle();
 
     // BASE FUNCTION(s)
@@ -88,8 +87,7 @@ public: // PUBLIC FUNCTION(s)
 
     // GETTER FUNCTION(s)
 
-        // TRANSFORM GETTER(s)
-    inline const char* GetTag() { return m_Tag; }
+    // TRANSFORM GETTER(s)
     inline OKTransform2<float>* GetTransform() { return m_Transform; }
     inline OKVector2<float> GetPosition() { return m_Transform->position; }
     inline OKVector2<float> GetScale() { return m_Transform->scale; }
@@ -99,6 +97,7 @@ public: // PUBLIC FUNCTION(s)
     inline const float GetMass() { return m_Mass; }
     inline const float GetInverseMass() { return -m_Mass; }
     inline OKVector2<float> GetVelocity() { return m_Velocity; }
+    inline OKVector2<float> GetDirection() { return m_Velocity.normalise(); }
     inline const OKVector2<float> GetAcceleration() { return m_Acceleration; }
     inline const OKVector2<float> GetGravity() { return m_Gravity; }
     inline const OKVector2<float> GetDrag() { return m_Drag; }
@@ -108,8 +107,7 @@ public: // PUBLIC FUNCTION(s)
 
     // SETTER FUNCTION(s)
 
-        // TRANSFORM SETTER(s)
-    inline void SetTag(const char* tag) { m_Tag = tag; }
+    // TRANSFORM SETTER(s)
     inline void SetTransform(OKTransform2<float>* transform) { m_Transform = transform; }
     inline void SetPosition(OKVector2<float> position) { m_Transform->position = position; }
     inline void SetScale(OKVector2<float> scale) { m_Transform->scale = scale; }
@@ -123,6 +121,7 @@ public: // PUBLIC FUNCTION(s)
 
     inline void SetMass(float mass) { m_Mass = mass; }
     inline void SetVelocity(OKVector2<float> velocity) { m_Velocity = velocity; }
+    inline void SetDirection()
     inline void SetAcceleration(OKVector2<float> acceleration) { m_Acceleration = acceleration; }
     inline void SetGravity(OKVector2<float> gravity) { m_Gravity = gravity; }
     inline void SetDrag(float drag) { m_Drag = drag; }
