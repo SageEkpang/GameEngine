@@ -16,13 +16,12 @@ int main()
 	InitWindow(1000, 800, "OkomaEngine");
 	InitAudioDevice();
 
-	
 	Timer* timer = new Timer();
 	float m_Accumulator = 0;
 	float m_SimpleCounter = 0;
 
 	// PLAYER 
-	std::unique_ptr<OKTransform2<float>> TransformFirst =  std::make_unique<OKTransform2<float>>(OKVector2<float>(100, 200), OKVector2<float>(40, 80), 0); // 30, 60
+	OKTransform2<float> TransformFirst(OKVector2<float>(100, 200), OKVector2<float>(40, 80), 0);
 	PhysicsObject* m_PhysicsFirst = new PhysicsObject("Phy1", TransformFirst, 10, RIGIDBODY_DYNAMIC, true);
 	m_PhysicsObjects.push_back(m_PhysicsFirst);
 	

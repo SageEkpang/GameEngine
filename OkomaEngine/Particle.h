@@ -36,7 +36,7 @@ protected: // PROTECTED VARIABLE(s)
     float m_CrossSectionalArea{ 1.0 }; // NOTE: width x height
 
     // FORCES CONSTANT(s)
-    mutable OKVector2<float> m_Gravity = OKVector2<float>(0, 50);
+    mutable OKVector2<float> m_Gravity = OKVector2<float>(0, 100);
 
     // NOTE: Coefficients
     mutable float m_Drag{ 0.1f };
@@ -44,7 +44,7 @@ protected: // PROTECTED VARIABLE(s)
     mutable float m_Friction{ 0.0 };
 
     bool m_SimulateGravity = true;
-    bool m_SimulateDrag = true;
+    bool m_SimulateDrag = false;
     bool m_SimulateLift = false;
     bool m_SimulateFriction = false;
 
@@ -59,6 +59,7 @@ protected: // PROTECTED VARIABLE(s)
 public: // PUBLIC FUNCTION(s)
 
     // CLASS FUNCTION(s)
+    Particle() = default;
     Particle(OKTransform2<float>* transform, float mass);
     virtual ~Particle();
 
@@ -121,7 +122,6 @@ public: // PUBLIC FUNCTION(s)
 
     inline void SetMass(float mass) { m_Mass = mass; }
     inline void SetVelocity(OKVector2<float> velocity) { m_Velocity = velocity; }
-    inline void SetDirection()
     inline void SetAcceleration(OKVector2<float> acceleration) { m_Acceleration = acceleration; }
     inline void SetGravity(OKVector2<float> gravity) { m_Gravity = gravity; }
     inline void SetDrag(float drag) { m_Drag = drag; }

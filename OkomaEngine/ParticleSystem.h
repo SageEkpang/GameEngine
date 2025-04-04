@@ -2,6 +2,8 @@
 #define PARTICLE_SYSTEM_H
 
 #include "Particle.h"
+#include <memory>
+#include <vector>
 // NOTE: In the collab project, rendering will have to be included here as well
 
 // NOTE: Variables to Manipulate for Each Area
@@ -53,13 +55,56 @@ class ParticleSystem
 {
 private:
 
+	// PARTICLE VARIABLE(s)
+	std::vector<Particle> m_Particles;
+
+	// BASE VARIABLE(s)
+	unsigned int m_MaxParticleCount;
+	float m_Duration = { 1.0f };
+	bool m_IsLooping{ false };
+	float m_StartDelay{ 0.0f }; // NOTE: In Seconds
+	float m_StartLiftTime{ 5.0f };
+	float m_StartSpeed{ 5.0f };
+	float m_StartSize{ 1.0f };
+	OKVector2<float> m_Gravity{ 0.0f, 0.0f };
+	bool m_SimulateGravity{ false };
+	float m_SimulationSpeed{ 1.0f };
 
 
+	// EMISSION VARIABLE(s)
+	unsigned int m_RateOverTimer{ 5.0 };
+	unsigned int m_RateOverDistance{ 1.0 };
+
+
+	// SHAPE VARIABE(s)
+	ParticleSpawnArea m_ParticleSpawnArea;
+
+	// NOTE: These will overwrite previous variables that were set
+
+	// VELOCITY OVER LIFE TIME VARIABLE(s)
+	OKVector2<float> m_StartingVelocityOverLiftTime;
+	OKVector2<float> m_EndingVelocityOverLiftTime;
+
+	// FORCE OVER LIFE TIME VARIABLE(s)
+	OKVector2<float> m_StartingForceOverLifeTime;
+	OKVector2<float> m_EndingForceOverLifeTime;
+
+
+	// SIZE OVER LIFE TIME VARIABLE(s)
+	OKVector2<float> m_StartingSizeOverLiftTime;
+	OKVector2<float> m_EndingSizeOverLiftTime;
+
+	// SIZE BY SPEED VARIABLE(s) --> Links to Variables Above
+	float m_StartingSizeBySpeed;
+	float m_EndingSizeBySpeed;
+
+	// COLLISION
+	bool m_HasCollision;
 
 public:
 
 	// CLASS FUNCTION(s)
-	ParticleSystem();
+	ParticleSystem(int maxParticleCount);
 	~ParticleSystem();
 
 
@@ -73,7 +118,7 @@ public:
 
 	// SETTER FUNCTION(s)
 
-	ParticleSystem* GetInstance() { return this; }
+	//ParticleSystem* GetInstance() { return this; }
 
 };
 
