@@ -11,15 +11,15 @@ class PhysicsObject
 private:
 
 	std::string m_Tag;
-	OKTransform2<float>* m_transform;
+	OKTransform2<float> m_transform;
 	Collider* m_Collider;
 	Rigidbody* m_Rigidbody;
 
 public:
 
 	// Rectangle Collider Constructor
-	PhysicsObject(std::string tag, std::unique_ptr<OKTransform2<float>>& transform, float mass, RigidbodyMovementType rigidbodyMovementType, bool IsCapsule = false, bool lockZRot = true);
-	PhysicsObject(std::string tag, std::unique_ptr<OKTransform2<float>>& transform, float mass, float radius, RigidbodyMovementType rigidbodyMovementType);
+	PhysicsObject(std::string tag, OKTransform2<float> transform, float mass, RigidbodyMovementType rigidbodyMovementType, bool IsCapsule = false, bool lockZRot = true);
+	PhysicsObject(std::string tag, OKTransform2<float> transform, float mass, float radius, RigidbodyMovementType rigidbodyMovementType);
 	
 	~PhysicsObject();
 

@@ -4,21 +4,17 @@
 TriggerArea::TriggerArea(std::string tag, OKTransform2<float>* transform, bool IsCapsule, bool lockZRot)
 	: Collider(transform, IsCapsule, lockZRot)
 {
-	m_ColliderManifest = new ColliderManager();
 	m_ObjectList.clear();
 }
 
 TriggerArea::TriggerArea(std::string tag, OKTransform2<float>* transform, float radius)
 	: Collider(transform, radius)
 {
-	m_ColliderManifest = new ColliderManager();
 	m_ObjectList.clear();
 }
 
 TriggerArea::~TriggerArea()
 {
-	delete m_ColliderManifest;
-
 	if (!m_ObjectList.empty())
 	{
 		std::set<PhysicsObject*>::iterator itr;
@@ -39,7 +35,7 @@ void TriggerArea::Draw()
 void TriggerArea::TriggerEntered(PhysicsObject* physicsObject, void (*func)())
 {
 	if (m_IsActive == false) { return; }
-	if (m_ColliderManifest->CheckCollisions(this, physicsObject->GetCollider()).m_HasCollision)
+	if (m_ColliderManifest.CheckCollisions(this, physicsObject->GetCollider()).m_HasCollision)
 	{
 		if (m_ObjectList.find(physicsObject) == m_ObjectList.end())
 		{
@@ -57,7 +53,7 @@ void TriggerArea::TriggerStayed(PhysicsObject* physicsObject, void (*func)())
 {
 	if (m_IsActive == false) { return; }
 	// TriggerEntered(physicsObject);
-	if (m_ColliderManifest->CheckCollisions(this, physicsObject->GetCollider()).m_HasCollision)
+	if (m_ColliderManifest.CheckCollisions(this, physicsObject->GetCollider()).m_HasCollision)
 	{
 		if (m_ObjectList.empty()) { return; }
 
@@ -77,7 +73,7 @@ void TriggerArea::TriggerExited(PhysicsObject* physicsObject, void (*func)())
 	// TriggerEntered(physicsObject);
 	// TriggerStayed(physicsObject);
 
-	if (m_HasStayed == true && m_HasEntered == true && !m_ColliderManifest->CheckCollisions(this, physicsObject->GetCollider()).m_HasCollision)
+	if (m_HasStayed == true && m_HasEntered == true && !m_ColliderManifest.CheckCollisions(this, physicsObject->GetCollider()).m_HasCollision)
 	{
 		if (m_ObjectList.empty()) { return; }
 	

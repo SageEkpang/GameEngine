@@ -36,7 +36,7 @@ protected: // PROTECTED VARIABLE(s)
     float m_CrossSectionalArea{ 1.0 }; // NOTE: width x height
 
     // FORCES CONSTANT(s)
-    mutable OKVector2<float> m_Gravity = OKVector2<float>(0, 100);
+    mutable OKVector2<float> m_Gravity = OKVector2<float>(0, 50);
 
     // NOTE: Coefficients
     mutable float m_Drag{ 0.1f };

@@ -20,7 +20,7 @@ private:
 	bool m_HasExited = false;
 
 	std::set<PhysicsObject*> m_ObjectList;
-	ColliderManager* m_ColliderManifest;
+	ColliderManager m_ColliderManifest;
 
 public:
 

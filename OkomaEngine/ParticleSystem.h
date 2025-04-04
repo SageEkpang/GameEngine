@@ -72,8 +72,8 @@ private:
 
 
 	// EMISSION VARIABLE(s)
-	unsigned int m_RateOverTimer{ 5.0 };
-	unsigned int m_RateOverDistance{ 1.0 };
+	unsigned int m_RateOverTimer{ 5u };
+	unsigned int m_RateOverDistance{ 1u };
 
 
 	// SHAPE VARIABE(s)
