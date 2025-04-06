@@ -66,8 +66,8 @@ void ParticleSystem::Update(const float deltaTime)
 	for (auto v : m_Particles)
 	{
 		// NOTE: Set the Spawn Point of the Particle (Spawn Area) and Process the Desired Action (Particle Action)
-		m_ParticleAreaMap[m_ParticleSpawnArea](v);
-		m_ParticleActionMap[m_ParticleAction](v);
+		m_ParticleAreaMap[m_ParticleSpawnArea](m_Transform, v);
+		m_ParticleActionMap[m_ParticleAction](m_Transform, v);
 		v.Update(deltaTime);
 	}
 }
@@ -80,100 +80,98 @@ void ParticleSystem::Draw()
 	}
 }
 
-void ParticleSystem::ProcessSpawnAreaNone(Particle& particle)
+void ParticleSystem::ProcessSpawnAreaNone(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessSpawnAreaCircle(Particle& particle)
+void ParticleSystem::ProcessSpawnAreaCircle(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessSpawnAreaHalfCircle(Particle& particle)
+void ParticleSystem::ProcessSpawnAreaHalfCircle(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessSpawnAreaRectangle(Particle& particle)
+void ParticleSystem::ProcessSpawnAreaRectangle(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessSpawnAreaTriangle(Particle& particle)
+void ParticleSystem::ProcessSpawnAreaTriangle(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessSpawnAreaCapsule(Particle& particle)
+void ParticleSystem::ProcessSpawnAreaCapsule(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessSpawnAreaDonut(Particle& particle)
+void ParticleSystem::ProcessSpawnAreaDonut(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessSpawnAreaEdge(Particle& particle)
+void ParticleSystem::ProcessSpawnAreaEdge(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessActionNone(Particle& particle)
+void ParticleSystem::ProcessActionNone(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessActionBurstOut(Particle& particle)
+void ParticleSystem::ProcessActionBurstOut(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessActionBurstIn(Particle& particle)
+void ParticleSystem::ProcessActionBurstIn(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessActionScreen(Particle& particle)
+void ParticleSystem::ProcessActionScreen(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessActionScreenOut(Particle& particle)
+void ParticleSystem::ProcessActionScreenOut(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessActionScreenIn(Particle& particle)
+void ParticleSystem::ProcessActionScreenIn(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessActionFall(Particle& particle)
+void ParticleSystem::ProcessActionFall(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessActionRise(Particle& particle)
+void ParticleSystem::ProcessActionRise(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessActionRight(Particle& particle)
+void ParticleSystem::ProcessActionRight(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessActionLeft(Particle& particle)
+void ParticleSystem::ProcessActionLeft(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessActionSpray(Particle& particle)
-{
-
-}
-
-void ParticleSystem::ProcessActionSpiral(Particle& particle)
+void ParticleSystem::ProcessActionSpray(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessActionFire(Particle& particle)
+void ParticleSystem::ProcessActionSpiral(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessActionSmoke(Particle& particle)
+void ParticleSystem::ProcessActionFire(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessActionSpark(Particle& particle)
+void ParticleSystem::ProcessActionSmoke(OKTransform2<float> transform, Particle& particle)
 {
 }
 
-void ParticleSystem::ProcessActionWave(Particle& particle)
+void ParticleSystem::ProcessActionSpark(OKTransform2<float> transform, Particle& particle)
 {
 }
 
+void ParticleSystem::ProcessActionWave(OKTransform2<float> transform, Particle& particle)
+{
+}

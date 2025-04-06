@@ -59,13 +59,12 @@ class ParticleSystem
 private:
 
 	// CUSTOM DATA TYPE
-	typedef void (*particle_func)(Particle&);
+	typedef void (*particle_func)(OKTransform2<float>, Particle&);
 	typedef std::map<ParticleSpawnArea, particle_func> particle_spawn_area_map;
 	typedef std::map<ParticleAction, particle_func> particle_action_map;
 
 	// TRANSFORM VARIABLE(s)
 	OKTransform2<float> m_Transform;
-	OKVector2<float> m_SpawnPosition;
 
 	// PARTICLE VARIABLE(s)
 	std::vector<Particle> m_Particles;
@@ -114,9 +113,6 @@ private:
 	OKVector2<float> m_StartingSizeBySpeed;
 	OKVector2<float> m_EndingSizeBySpeed;
 
-	// COLLISION
-	bool m_HasCollision;
-
 public:
 
 	// CLASS FUNCTION(s)
@@ -132,38 +128,38 @@ public:
 	// HELPER FUNCTION(s)
 
 		// NOTE: PARTICLE SPAWN AREA FUNCTION(s)
-		static void ProcessSpawnAreaNone(Particle& particle);
-		static void ProcessSpawnAreaCircle(Particle& particle);
-		static void ProcessSpawnAreaHalfCircle(Particle& particle);
-		static void ProcessSpawnAreaRectangle(Particle& particle);
-		static void ProcessSpawnAreaTriangle(Particle& particle);
-		static void ProcessSpawnAreaCapsule(Particle& particle);
-		static void ProcessSpawnAreaDonut(Particle& particle);
-		static void ProcessSpawnAreaEdge(Particle& particle);
+		static void ProcessSpawnAreaNone(OKTransform2<float> transform, Particle& particle);
+		static void ProcessSpawnAreaCircle(OKTransform2<float> transform, Particle& particle);
+		static void ProcessSpawnAreaHalfCircle(OKTransform2<float> transform, Particle& particle);
+		static void ProcessSpawnAreaRectangle(OKTransform2<float> transform, Particle& particle);
+		static void ProcessSpawnAreaTriangle(OKTransform2<float> transform, Particle& particle);
+		static void ProcessSpawnAreaCapsule(OKTransform2<float> transform, Particle& particle);
+		static void ProcessSpawnAreaDonut(OKTransform2<float> transform, Particle& particle);
+		static void ProcessSpawnAreaEdge(OKTransform2<float> transform, Particle& particle);
 
 
 		// NOTE: PARTICLE ACTION FUNCTION(s)
-		static void ProcessActionNone(Particle& particle);
+		static void ProcessActionNone(OKTransform2<float> transform, Particle& particle);
 
-		static void ProcessActionBurstOut(Particle& particle);
-		static void ProcessActionBurstIn(Particle& particle);
+		static void ProcessActionBurstOut(OKTransform2<float> transform, Particle& particle);
+		static void ProcessActionBurstIn(OKTransform2<float> transform, Particle& particle);
 
-		static void ProcessActionScreen(Particle& particle);
-		static void ProcessActionScreenOut(Particle& particle);
-		static void ProcessActionScreenIn(Particle& particle);
+		static void ProcessActionScreen(OKTransform2<float> transform, Particle& particle);
+		static void ProcessActionScreenOut(OKTransform2<float> transform, Particle& particle);
+		static void ProcessActionScreenIn(OKTransform2<float> transform, Particle& particle);
 
-		static void ProcessActionFall(Particle& particle);
-		static void ProcessActionRise(Particle& particle);
-		static void ProcessActionRight(Particle& particle);
-		static void ProcessActionLeft(Particle& particle);
+		static void ProcessActionFall(OKTransform2<float> transform, Particle& particle);
+		static void ProcessActionRise(OKTransform2<float> transform, Particle& particle);
+		static void ProcessActionRight(OKTransform2<float> transform, Particle& particle);
+		static void ProcessActionLeft(OKTransform2<float> transform, Particle& particle);
 
-		static void ProcessActionSpray(Particle& particle);
-		static void ProcessActionSpiral(Particle& particle);
+		static void ProcessActionSpray(OKTransform2<float> transform, Particle& particle);
+		static void ProcessActionSpiral(OKTransform2<float> transform, Particle& particle);
 
-		static void ProcessActionFire(Particle& particle);
-		static void ProcessActionSmoke(Particle& particle);
-		static void ProcessActionSpark(Particle& particle);
-		static void ProcessActionWave(Particle& particle);
+		static void ProcessActionFire(OKTransform2<float> transform, Particle& particle);
+		static void ProcessActionSmoke(OKTransform2<float> transform, Particle& particle);
+		static void ProcessActionSpark(OKTransform2<float> transform, Particle& particle);
+		static void ProcessActionWave(OKTransform2<float> transform, Particle& particle);
 
 
 	// GETTER FUNCTION(s)
