@@ -63,7 +63,7 @@ int main()
 	//CollisionManifold t_ColMani = CollisionManifold();
 	//CollisionResolution* t_CollisionResolution = new CollisionResolution();
 
-	ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(600, 600), 1, 100, PARTICLE_SPAWN_AREA_CIRCLE);
+	ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(500, 400), 1, 10, false, PARTICLE_SPAWN_AREA_NONE, PARTICLE_ACTION_NONE);
 
 
 	// SetTargetFPS(60);
@@ -133,6 +133,8 @@ int main()
 
 		EndDrawing();
 	}
+
+	delete m_ParticleSystem;
 	
 	CloseAudioDevice();
 	CloseWindow();

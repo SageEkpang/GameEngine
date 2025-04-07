@@ -8,7 +8,7 @@ Particle::Particle(OKTransform2<float>* transform, float mass)
 
 Particle::~Particle()
 {
-    
+
 }
 
 void Particle::Update(const float deltaTime)
