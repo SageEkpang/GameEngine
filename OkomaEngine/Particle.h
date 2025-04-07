@@ -110,8 +110,13 @@ public: // PUBLIC FUNCTION(s)
 
     // TRANSFORM SETTER(s)
     inline void SetTransform(OKTransform2<float>* transform) { m_Transform = transform; }
+
     inline void SetPosition(OKVector2<float> position) { m_Transform->position = position; }
+    inline void SetPosition(float x, float y) { m_Transform->position = OKVector2<float>(x, y); }
+
     inline void SetScale(OKVector2<float> scale) { m_Transform->scale = scale; }
+    inline void SetScale(float width, float height) { m_Transform->scale = OKVector2<float>(width, height); }
+
     inline void SetRotation(float rotation) { m_Transform->rotation = rotation; }
 
     // PHYSICS SETTER(s)
@@ -122,6 +127,7 @@ public: // PUBLIC FUNCTION(s)
 
     inline void SetMass(float mass) { m_Mass = mass; }
     inline void SetVelocity(OKVector2<float> velocity) { m_Velocity = velocity; }
+    inline void SetDirection(OKVector2<float> direction) { m_Velocity = direction; }
     inline void SetAcceleration(OKVector2<float> acceleration) { m_Acceleration = acceleration; }
     inline void SetGravity(OKVector2<float> gravity) { m_Gravity = gravity; }
     inline void SetDrag(float drag) { m_Drag = drag; }

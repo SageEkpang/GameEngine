@@ -6,6 +6,7 @@
 #include <vector>
 #include <utility>
 #include <map>
+#include <random>
 // NOTE: In the collab project, rendering will have to be included here as well
 
 // NOTE: Variables to Manipulate for Each Area
@@ -54,20 +55,62 @@ enum ParticleAction
 	PARTICLE_ACTION_WAVE
 };
 
+struct c_ParticleSystemObject
+{
+	Particle particle;
+	float duration;
+	float startDelay; // NOTE: In Seconds
+	float startLifeTime;
+	float startSpeed;
+	OKVector2<float> startSize;
+	OKVector2<float> gravity;
+
+	OKVector2<float> startingVelocityOverLifeTime;
+	OKVector2<float> endingVelocityOverLifeTime;
+
+	OKVector2<float> startingForceOverLifeTime;
+	OKVector2<float> endingForceOverLifeTime;
+
+	OKVector2<float> startingSizeOverLifeTime;
+	OKVector2<float> endingSizeOverLifeTime;
+
+	OKVector2<float> startingSizeBySpeed;
+	OKVector2<float> endingSizeBySpeed;
+
+	c_ParticleSystemObject() = default;
+	c_ParticleSystemObject(OKTransform2<float> transform, float mass)
+	{
+		particle = Particle(&transform, mass);
+		
+
+	}
+
+	~c_ParticleSystemObject()
+	{
+
+	}
+
+};
+
+
 class ParticleSystem
 {
 private:
 
 	// CUSTOM DATA TYPE
-	typedef void (*particle_func)(OKTransform2<float>, Particle&);
-	typedef std::map<ParticleSpawnArea, particle_func> particle_spawn_area_map;
-	typedef std::map<ParticleAction, particle_func> particle_action_map;
+	typedef void (*particle_spawn_area_func)(OKTransform2<float>, c_ParticleSystemObject&);
+	typedef void (*particle_action_func)(c_ParticleSystemObject&);
+
+	typedef std::map<ParticleSpawnArea, particle_spawn_area_func> particle_spawn_area_map;
+	typedef std::map<ParticleAction, particle_action_func> particle_action_map;
 
 	// TRANSFORM VARIABLE(s)
 	OKTransform2<float> m_Transform;
 
 	// PARTICLE VARIABLE(s)
-	std::vector<Particle> m_Particles;
+	std::vector<c_ParticleSystemObject> m_Particles;
+	std::vector<Particle> m_SimulateParticles;
+	bool m_IsExecuted = false;
 
 	ParticleSpawnArea m_ParticleSpawnArea;
 	ParticleAction m_ParticleAction;
@@ -78,45 +121,30 @@ private:
 
 	// BASE VARIABLE(s)
 	unsigned int m_MaxParticleCount;
-	float m_Duration = { 1.0f };
 	bool m_IsLooping{ false };
-	float m_StartDelay{ 0.0f }; // NOTE: In Seconds
-	float m_StartLifeTime{ 5.0f };
-	float m_StartSpeed{ 5.0f };
-	OKVector2<float> m_StartSize{ 1.0f, 1.0f };
-
-	OKVector2<float> m_Gravity{ 0.0f, 0.0f };
 	bool m_SimulateGravity{ false };
 	float m_SimulationSpeed{ 1.0f };
-
 
 	// EMISSION VARIABLE(s)
 	unsigned int m_EmissionRateOverTime{ 5u };
 	unsigned int m_EmissionRateOverDistance{ 1u };
 
-	// NOTE: These will overwrite previous variables that were set
+private: // SPAWN AREA VARIABLE(s)
 
-	// VELOCITY OVER LIFE TIME VARIABLE(s)
-	OKVector2<float> m_StartingVelocityOverLifeTime;
-	OKVector2<float> m_EndingVelocityOverLifeTime;
+	OKVector2<float> m_RectangleScale{ 5.f, 5.f};
+	float m_CircleRadius{ 1.0f };
+	OKVector2<float> m_TriangleScale{ 5.f, 5.f};
 
-	// FORCE OVER LIFE TIME VARIABLE(s)
-	OKVector2<float> m_StartingForceOverLifeTime;
-	OKVector2<float> m_EndingForceOverLifeTime;
+	OKVector2<float> m_InnerDonutScale{ 1.0f, 1.0f};
+	OKVector2<float> m_OuterDonutScale{ 4.0f, 4.0f};
 
-
-	// SIZE OVER LIFE TIME VARIABLE(s)
-	OKVector2<float> m_StartingSizeOverLifeTime;
-	OKVector2<float> m_EndingSizeOverLifeTime;
-
-	// SIZE BY SPEED VARIABLE(s) --> Links to Variables Above
-	OKVector2<float> m_StartingSizeBySpeed;
-	OKVector2<float> m_EndingSizeBySpeed;
+	float m_CapsuleHeight{ 40.0f };
+	float m_CapsuleWidth{ 20.0f };
 
 public:
 
 	// CLASS FUNCTION(s)
-	ParticleSystem(OKTransform2<float> transform, float mass, unsigned int maxParticleCount, ParticleSpawnArea particleSpawnArea = PARTICLE_SPAWN_AREA_NONE, ParticleAction particleAction = PARTICLE_ACTION_NONE);
+	ParticleSystem(OKVector2<float> position, float mass, unsigned int maxParticleCount, ParticleSpawnArea particleSpawnArea = PARTICLE_SPAWN_AREA_NONE, ParticleAction particleAction = PARTICLE_ACTION_NONE);
 	~ParticleSystem();
 
 
@@ -128,38 +156,38 @@ public:
 	// HELPER FUNCTION(s)
 
 		// NOTE: PARTICLE SPAWN AREA FUNCTION(s)
-		static void ProcessSpawnAreaNone(OKTransform2<float> transform, Particle& particle);
-		static void ProcessSpawnAreaCircle(OKTransform2<float> transform, Particle& particle);
-		static void ProcessSpawnAreaHalfCircle(OKTransform2<float> transform, Particle& particle);
-		static void ProcessSpawnAreaRectangle(OKTransform2<float> transform, Particle& particle);
-		static void ProcessSpawnAreaTriangle(OKTransform2<float> transform, Particle& particle);
-		static void ProcessSpawnAreaCapsule(OKTransform2<float> transform, Particle& particle);
-		static void ProcessSpawnAreaDonut(OKTransform2<float> transform, Particle& particle);
-		static void ProcessSpawnAreaEdge(OKTransform2<float> transform, Particle& particle);
+		static void ProcessSpawnAreaNone(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
+		static void ProcessSpawnAreaCircle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
+		static void ProcessSpawnAreaHalfCircle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
+		static void ProcessSpawnAreaRectangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
+		static void ProcessSpawnAreaTriangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
+		static void ProcessSpawnAreaCapsule(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
+		static void ProcessSpawnAreaDonut(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
+		static void ProcessSpawnAreaEdge(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
 
 
 		// NOTE: PARTICLE ACTION FUNCTION(s)
-		static void ProcessActionNone(OKTransform2<float> transform, Particle& particle);
+		static void ProcessActionNone(c_ParticleSystemObject& particle_system_object);
 
-		static void ProcessActionBurstOut(OKTransform2<float> transform, Particle& particle);
-		static void ProcessActionBurstIn(OKTransform2<float> transform, Particle& particle);
+		static void ProcessActionBurstOut(c_ParticleSystemObject& particle_system_object);
+		static void ProcessActionBurstIn(c_ParticleSystemObject& particle_system_object);
 
-		static void ProcessActionScreen(OKTransform2<float> transform, Particle& particle);
-		static void ProcessActionScreenOut(OKTransform2<float> transform, Particle& particle);
-		static void ProcessActionScreenIn(OKTransform2<float> transform, Particle& particle);
+		static void ProcessActionScreen(c_ParticleSystemObject& particle_system_object);
+		static void ProcessActionScreenOut(c_ParticleSystemObject& particle_system_object);
+		static void ProcessActionScreenIn(c_ParticleSystemObject& particle_system_object);
 
-		static void ProcessActionFall(OKTransform2<float> transform, Particle& particle);
-		static void ProcessActionRise(OKTransform2<float> transform, Particle& particle);
-		static void ProcessActionRight(OKTransform2<float> transform, Particle& particle);
-		static void ProcessActionLeft(OKTransform2<float> transform, Particle& particle);
+		static void ProcessActionFall(c_ParticleSystemObject& particle_system_object);
+		static void ProcessActionRise(c_ParticleSystemObject& particle_system_object);
+		static void ProcessActionRight(c_ParticleSystemObject& particle_system_object);
+		static void ProcessActionLeft(c_ParticleSystemObject& particle_system_object);
 
-		static void ProcessActionSpray(OKTransform2<float> transform, Particle& particle);
-		static void ProcessActionSpiral(OKTransform2<float> transform, Particle& particle);
+		static void ProcessActionSpray(c_ParticleSystemObject& particle_system_object);
+		static void ProcessActionSpiral(c_ParticleSystemObject& particle_system_object);
 
-		static void ProcessActionFire(OKTransform2<float> transform, Particle& particle);
-		static void ProcessActionSmoke(OKTransform2<float> transform, Particle& particle);
-		static void ProcessActionSpark(OKTransform2<float> transform, Particle& particle);
-		static void ProcessActionWave(OKTransform2<float> transform, Particle& particle);
+		static void ProcessActionFire(c_ParticleSystemObject& particle_system_object);
+		static void ProcessActionSmoke(c_ParticleSystemObject& particle_system_object);
+		static void ProcessActionSpark(c_ParticleSystemObject& particle_system_object);
+		static void ProcessActionWave(c_ParticleSystemObject& particle_system_object);
 
 
 	// GETTER FUNCTION(s)
@@ -170,61 +198,67 @@ public:
 		inline float GetRotation() const { return m_Transform.rotation; }
 
 		inline unsigned int GetMaxParticleCount() const { return m_MaxParticleCount; }
-		inline float GetDuration() const { return m_Duration; }
-		inline bool GetLooping() const { return m_IsLooping; }
-		inline float GetStartDelay() const { return m_StartDelay; }
-		inline float GetStartLifeTime() const { return m_StartLifeTime; }
-		inline float GetStartSpeed() const { return m_StartSpeed; }
-		inline OKVector2<float> GetStartSize() const { return m_StartSize; }
 
-		inline OKVector2<float> GetGravity() const { return m_Gravity; }
+		inline float GetDuration() const { return m_Particles[0].duration; }
+
+		inline bool GetLooping() const { return m_IsLooping; }
+		inline float GetStartDelay() const { return m_Particles[0].startDelay; }
+		inline float GetStartLifeTime() const { return m_Particles[0].startLifeTime; }
+		inline float GetStartSpeed() const { return m_Particles[0].startSpeed; }
+		inline OKVector2<float> GetStartSize() const { return m_Particles[0].startSize; }
+
+		inline OKVector2<float> GetGravity() const { return m_Particles[0].gravity; }
 		inline bool GetSimulateGravity() const { return m_SimulateGravity; }
 		inline float GetSimulationSpeed() const { return m_SimulationSpeed; }
 
 		inline unsigned int GetEmissionRateOverTime() const { return m_EmissionRateOverTime; }
 		inline unsigned int GetEmissionRateOverDistance() const { return m_EmissionRateOverDistance; }
 
-		inline OKVector2<float> GetStartingVelocityOverLifeTime() const { return m_StartingVelocityOverLifeTime; }
-		inline OKVector2<float> GetEndingVelocityOverLifeTime() const { return m_EndingVelocityOverLifeTime; }
+		inline OKVector2<float> GetStartingVelocityOverLifeTime() const { return m_Particles[0].startingVelocityOverLifeTime; }
+		inline OKVector2<float> GetEndingVelocityOverLifeTime() const { return m_Particles[0].endingVelocityOverLifeTime; }
 
-		inline OKVector2<float> GetStartingForceOverLifeTime() const { return m_StartingForceOverLifeTime; }
-		inline OKVector2<float> GetEndingForceOverLifeTime() const { return m_EndingForceOverLifeTime; }
+		inline OKVector2<float> GetStartingForceOverLifeTime() const { return m_Particles[0].startingForceOverLifeTime; }
+		inline OKVector2<float> GetEndingForceOverLifeTime() const { return m_Particles[0].endingForceOverLifeTime; }
 
-		inline OKVector2<float> GetStartingSizeBySpeed() const { return m_StartingSizeBySpeed; }
-		inline OKVector2<float> GetEndingSizeBySpeed() const { return m_EndingSizeBySpeed; }
+		inline OKVector2<float> GetStartingSizeBySpeed() const { return m_Particles[0].startingSizeBySpeed; }
+		inline OKVector2<float> GetEndingSizeBySpeed() const { return m_Particles[0].endingSizeBySpeed; }
 
 
 	// SETTER FUNCTION(s)
 
+		// BASE FUNCTION(s)
 		inline void SetTransform(OKTransform2<float> transform) { m_Transform = transform; }
 		inline void SetPosition(OKVector2<float> position) { m_Transform.position = position; }
 		inline void SetScale(OKVector2<float> scale) { m_Transform.scale = scale; }
 		inline void SetRotation(float rotation) { m_Transform.rotation = rotation; }
-
-
+			
+		// PARTICLE SYSTEM FUNCTION(s)
 		inline void SetMaxParticleCount(unsigned int maxParticleCount) { m_MaxParticleCount = maxParticleCount; }
-		inline void SetDuration(float duration) { m_Duration = duration; }
 		inline void SetLooping(bool looping) { m_IsLooping = looping; }
-		inline void SetStartDelay(float startDelay) { m_StartDelay = startDelay; }
-		inline void SetStartLifeTime(float startLifeTime) { m_StartLifeTime = startLifeTime; }
-		inline void SetStartSpeed(float startSpeed) { m_StartSpeed = startSpeed; }
-		inline void SetStartSize(OKVector2<float> startSize) { m_StartSize = startSize; }
-
-		inline void SetGravity(OKVector2<float> gravity) { m_Gravity = gravity; }
 		inline void SetSimulateGravity(bool simulateGravity) { m_SimulateGravity = simulateGravity; }
 		inline void SetSimulationSpeed(float simulateSpeed) { m_SimulationSpeed = simulateSpeed; }
-
 		inline void SetEmissionRateOverTime(unsigned int emissionRateOverTime) { m_EmissionRateOverTime = emissionRateOverTime; }
 		inline void SetEmissionRateOverDistance(unsigned int emissionRateOverDistance) { m_EmissionRateOverDistance = emissionRateOverDistance; }
 
-		inline void SetStartingVelocityOverLifeTime(OKVector2<float> startingVelocityOverLifeTime) { m_StartingVelocityOverLifeTime = startingVelocityOverLifeTime; }
-		inline void SetEndingVelocityOverLifeTime(OKVector2<float> endingVelocityOverLifeTime) { m_EndingVelocityOverLifeTime = endingVelocityOverLifeTime; }
+		//void SetDuration(float duration) 
+		//{
+		//	// m_Particles.insert(m_Particles.begin(), m_Particles.begin(), m_Particles.end());
+		//}
+		//inline void SetStartDelay(float startDelay) { m_StartDelay = startDelay; }
+		//inline void SetStartLifeTime(float startLifeTime) { m_StartLifeTime = startLifeTime; }
+		//inline void SetStartSpeed(float startSpeed) { m_StartSpeed = startSpeed; }
+		//inline void SetStartSize(OKVector2<float> startSize) { m_StartSize = startSize; }
 
-		inline void SetStartingForceOverLifeTime(OKVector2<float> startingForceOverLifeTime) { m_StartingForceOverLifeTime = startingForceOverLifeTime; }
-		inline void SetEndingForceOverLifeTime(OKVector2<float> endingForceOverLifeTime) { m_EndingForceOverLifeTime = endingForceOverLifeTime; }
+		//inline void SetGravity(OKVector2<float> gravity) { m_Gravity = gravity; }
 
-		inline void SetStartingSizeBySpeed(OKVector2<float> startingSizeBySpeed) { m_StartingSizeBySpeed = startingSizeBySpeed; }
-		inline void SetEndingSizeBySpeed(OKVector2<float> endingSizeBySpeed) { m_EndingSizeBySpeed = endingSizeBySpeed; }
+		//inline void SetStartingVelocityOverLifeTime(OKVector2<float> startingVelocityOverLifeTime) { m_StartingVelocityOverLifeTime = startingVelocityOverLifeTime; }
+		//inline void SetEndingVelocityOverLifeTime(OKVector2<float> endingVelocityOverLifeTime) { m_EndingVelocityOverLifeTime = endingVelocityOverLifeTime; }
+
+		//inline void SetStartingForceOverLifeTime(OKVector2<float> startingForceOverLifeTime) { m_StartingForceOverLifeTime = startingForceOverLifeTime; }
+		//inline void SetEndingForceOverLifeTime(OKVector2<float> endingForceOverLifeTime) { m_EndingForceOverLifeTime = endingForceOverLifeTime; }
+
+		//inline void SetStartingSizeBySpeed(OKVector2<float> startingSizeBySpeed) { m_StartingSizeBySpeed = startingSizeBySpeed; }
+		//inline void SetEndingSizeBySpeed(OKVector2<float> endingSizeBySpeed) { m_EndingSizeBySpeed = endingSizeBySpeed; }
 };
 
 #endif
