@@ -14,7 +14,7 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, float mass, unsigned i
 	
 	// NOTE: Fill Vector and reserve the set size for the particles
 	m_MaxParticleCount = maxParticleCount;
-	//m_Particles.reserve(m_MaxParticleCount);
+	m_Particles.reserve(m_MaxParticleCount);
 	// m_SimulateParticles.reserve(m_MaxParticleCount);
 
 	// NOTE: Fill Simulation Variables
@@ -28,7 +28,7 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, float mass, unsigned i
 	m_EmissionRateOverDistance = 0u;
 
 	// NOTE: Set Defauls for Particles
-	c_ParticleSystemObject particle_system_objects = c_ParticleSystemObject(&m_Transform, mass);
+	c_ParticleSystemObject particle_system_objects = c_ParticleSystemObject(m_Transform, mass);
 	particle_system_objects.particle.SimulateGravity(m_SimulateGravity);
 
 	particle_system_objects.startDelay = 0.0f;
@@ -50,10 +50,7 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, float mass, unsigned i
 	particle_system_objects.startingSizeBySpeed = OKVector2<float>(1.0f, 1.0f);
 	particle_system_objects.endingSizeBySpeed = OKVector2<float>(1.0f, 1.0f);
 
-	for (unsigned int i = 0; i < m_MaxParticleCount; ++i)
-	{
-		m_Particles.push_back(particle_system_objects);
-	}
+	for (unsigned int i = 0; i < m_MaxParticleCount; ++i) { m_Particles.push_back(particle_system_objects); }
 
 	// NOTE: Set and "Proccess" Spawn Area
 	#pragma region PARTICLE SYSTEM SPAWN AREA INIT
@@ -158,7 +155,8 @@ void ParticleSystem::Draw()
 {
 	for (auto& v : m_Particles)
 	{
-		DrawCircleV(v.particle.GetPosition().ConvertToVec2(), 10, RED);
+		DrawRectangleV(v.particle.GetPosition().ConvertToVec2(), OKVector2<float>(10.f, 10.f).ConvertToVec2(), RED);
+		// DrawCircleV(v.particle.GetPosition().ConvertToVec2(), 10, RED);
 	}
 }
 
@@ -172,30 +170,88 @@ void ParticleSystem::ProcessSpawnAreaCircle(OKTransform2<float> transform, c_Par
 {
 	OKVector2<float> CentrePosition = transform.position;
 
-	int MaxX = 20;
-	int MinX = 10;
+	int theta = rand() % 360; // 360 (degrees)
+
+	int MaxRadius = 100;
+	int Min = 1;
+	int Range = MaxRadius - Min + 1;
+	int TotalNumber = rand() % MaxRadius + Min;
+	int radius = TotalNumber;
+
+	float PositionX = CentrePosition.x + radius * cos(theta);
+	float PositionY = CentrePosition.y + radius * sin(theta);
+
+	particle_system_object.particle.SetPosition(PositionX, PositionY);
+}
+
+// CHECK THIS: Fix this Function
+void ParticleSystem::ProcessSpawnAreaHalfCircle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
+{
+	const OKVector2<float> CentrePosition = transform.position;
+
+	float radius = 100;
+
+	// NOTE: X Position of the New Area
+	int MaxX = radius;
+	int MinX = -radius;
 	int RangeX = MaxX - MinX + 1;
 	int NumX = rand() % RangeX + MinX;
 
-	int MaxY = 20;
-	int MinY = 10;
-	int RangeY = MaxY - MinY + 1;
-	int NumY = rand() % RangeY + MinY;
+	float RandXRange = CentrePosition.x + NumX;
 
-	particle_system_object.particle.SetPosition(NumX + CentrePosition.x, NumY + CentrePosition.y);
-}
+	// NOTE: Y Position of the New Area
+	int theta = rand() % 360; // 360 (degrees)
+	float PositionY = CentrePosition.y + radius * sin(theta);
 
-
-void ParticleSystem::ProcessSpawnAreaHalfCircle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
-{
+	particle_system_object.particle.SetPosition(RandXRange, PositionY);
 }
 
 void ParticleSystem::ProcessSpawnAreaRectangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
 {
+	OKVector2<float> CentrePosition = transform.position;
+
+	int ExtentX = 100;
+	int ExtentY = 100;
+
+	int MaxX = ExtentX;
+	int MinX = -ExtentX;
+	int RangeX = MaxX - MinX + 1;
+	int NumX = rand() % RangeX + MinX;
+
+	int MaxY = ExtentY;
+	int MinY = -ExtentY;
+	int RangeY = MaxY - MinY + 1;
+	int NumY = rand() % RangeY + MinY;
+
+	float PositionX = CentrePosition.x + NumX;
+	float PositionY = CentrePosition.y + NumY;
+
+	particle_system_object.particle.SetPosition(PositionX, PositionY);
 }
 
 void ParticleSystem::ProcessSpawnAreaTriangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
 {
+	OKVector2<float> CentrePosition = transform.position;
+
+	float TriangleHeight = 5.f;
+
+	int MaxX = TriangleHeight;
+	int MinX = -TriangleHeight;
+	int RangeX = MaxX - MinX + 1;
+	int NumX = rand() % RangeX + MinX;
+
+	float RandXRange = CentrePosition.x + NumX;
+	
+	// float LerpY = lerp(TriangleHeight, CentrePosition.x, RandXRange);
+	
+	
+
+
+
+
+
+
+	particle_system_object.particle.SetPosition(RandXRange, CentrePosition.y);
 }
 
 void ParticleSystem::ProcessSpawnAreaCapsule(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
@@ -214,29 +270,38 @@ void ParticleSystem::ProcessSpawnAreaEdge(OKTransform2<float> transform, c_Parti
 
 void ParticleSystem::ProcessActionNone(c_ParticleSystemObject& particle_system_object)
 {
-	int MaxX = 10;
-	int MinX = 1;
+
+}
+
+void ParticleSystem::ProcessActionBurstOut(c_ParticleSystemObject& particle_system_object)
+{
+	int MaxX = 360;
+	int MinX = -360;
 	int RangeX = MaxX - MinX + 1;
 	int NumX = rand() % RangeX + MinX;
 
-	int MaxY = 10;
-	int MinY = 1;
+	int MaxY = 360;
+	int MinY = -360;
 	int RangeY = MaxY - MinY + 1;
 	int NumY = rand() % RangeY + MinY;
 
 	particle_system_object.particle.AddImpulse(NumX, NumY);
 }
 
-void ParticleSystem::ProcessActionBurstOut(c_ParticleSystemObject& particle_system_object)
-{
-}
-
 void ParticleSystem::ProcessActionBurstIn(c_ParticleSystemObject& particle_system_object)
 {
+	// SPEED = DISTANCE / TIME
+
+
+
+
 }
 
 void ParticleSystem::ProcessActionScreen(c_ParticleSystemObject& particle_system_object)
 {
+
+	// particle_system_object.particle.AddForce(1, 0);
+
 }
 
 void ParticleSystem::ProcessActionScreenOut(c_ParticleSystemObject& particle_system_object)

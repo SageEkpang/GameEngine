@@ -6,6 +6,7 @@
 #include <vector>
 #include <utility>
 #include <map>
+#include <cmath>
 #include <random>
 // NOTE: In the collab project, rendering will have to be included here as well
 
@@ -79,7 +80,7 @@ struct c_ParticleSystemObject
 	OKVector2<float> endingSizeBySpeed;
 
 	c_ParticleSystemObject() = default;
-	c_ParticleSystemObject(OKTransform2<float>* transform, float mass)
+	c_ParticleSystemObject(OKTransform2<float> transform, float mass)
 	{
 		particle = Particle(transform, mass);
 		startDelay = 0.f;
@@ -101,7 +102,6 @@ struct c_ParticleSystemObject
 		startingSizeBySpeed = OKVector2<float>(1.0f, 1.0f);
 		endingSizeBySpeed = OKVector2<float>(1.0f, 1.0f);
 	}
-
 };
 
 class ParticleSystem
@@ -149,7 +149,7 @@ private: // SPAWN AREA VARIABLE(s)
 
 	OKVector2<float> m_RectangleScale{ 5.f, 5.f};
 	float m_CircleRadius{ 1.0f };
-	OKVector2<float> m_TriangleScale{ 5.f, 5.f};
+	float m_TriangleScale{ 5.f };
 
 	OKVector2<float> m_InnerDonutScale{ 1.0f, 1.0f};
 	OKVector2<float> m_OuterDonutScale{ 4.0f, 4.0f};
@@ -168,8 +168,19 @@ public:
 	void Update(const float deltaTime);
 	void Draw();
 
+	/*
+	
+		remove static and move to a normal function
+
+	*/
 
 	// HELPER FUNCTION(s)
+
+		// NOTE: MATHS NEED
+		float lerp(float a, float b, float f)
+		{
+			return (a * (1.0 - f)) + (b * f);
+		}
 
 		// NOTE: PARTICLE SPAWN AREA FUNCTION(s)
 		static void ProcessSpawnAreaNone(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);

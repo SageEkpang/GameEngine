@@ -85,12 +85,12 @@ void CollisionResolution::ResolveInterpenetration(Rigidbody* rigidbodyA, Rigidbo
 	// NOTE:
 	if (rigidbodyA->GetRigidbodyMovementType() == RIGIDBODY_DYNAMIC)
 	{
-		rigidbodyA->GetTransform()->position += t_MoveOutA;
+		rigidbodyA->GetTransform().position += t_MoveOutA;
 	}
 
 	if (rigidbodyB->GetRigidbodyMovementType() == RIGIDBODY_DYNAMIC)
 	{
-		rigidbodyB->GetTransform()->position += t_MoveOutB;
+		rigidbodyB->GetTransform().position += t_MoveOutB;
 	}
 }
 
