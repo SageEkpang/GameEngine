@@ -106,6 +106,8 @@ ParticleSystem::~ParticleSystem()
 
 void ParticleSystem::Update(const float deltaTime)
 {
+	(*const_cast<float*>(&deltaTime)) *= 0.1f;
+
 	// NOTE: Check if the Particles should be Looping through everything
 	if (m_IsLooping == false)
 	{
@@ -115,7 +117,7 @@ void ParticleSystem::Update(const float deltaTime)
 			for (auto& v : m_Particles)
 			{
 				m_ParticleAreaMap[m_ParticleSpawnArea](m_Transform, v);
-				ProcessActionNone(v);
+				// ProcessActionNone(v);
 			}
 
 			m_IsExecuted = true;
@@ -229,48 +231,114 @@ void ParticleSystem::ProcessSpawnAreaRectangle(OKTransform2<float> transform, c_
 	particle_system_object.particle.SetPosition(PositionX, PositionY);
 }
 
+float lerp(float a, float b, float f)
+{
+	return (a * (1.0 - f)) + (b * f);
+}
+
+float remap( float value, float sourceMin, float sourceMax, float destMin = 0, float destMax = 1)
+{
+	return destMin + ((value - sourceMin) / (sourceMax - sourceMin)) * (destMax - destMin);
+}
+
 void ParticleSystem::ProcessSpawnAreaTriangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
 {
 	OKVector2<float> CentrePosition = transform.position;
 
-	float TriangleHeight = 5.f;
+	float TriangleHeight = 100.f;
 
+	// NOTE: Work out the base of the Triangle
 	int MaxX = TriangleHeight;
-	int MinX = -TriangleHeight;
+	int MinX = 0;
 	int RangeX = MaxX - MinX + 1;
 	int NumX = rand() % RangeX + MinX;
-
 	float RandXRange = CentrePosition.x + NumX;
-	
-	// float LerpY = lerp(TriangleHeight, CentrePosition.x, RandXRange);
-	
-	
+	float RandCopy = CentrePosition.x + NumX;
 
+	// NOTE: Work out the Height of the triangle
+	int MaxY = TriangleHeight * 3;
+	int MinY = 0;
+	int RangeY = MaxY - MinY + 1;
+	int NumY = rand() % RangeY + MinY;
 
+	float Line_Start_X = MaxX + CentrePosition.x;
+	float Line_End_X = MinX + CentrePosition.x;
+	float ClampRanged = Clamp(RandXRange + 50, Line_End_X, Line_Start_X);
+	float LerpValue = remap(ClampRanged, Line_Start_X, Line_End_X);
+	float LerpY = lerp(CentrePosition.y, TriangleHeight + NumY, LerpValue);
 
-
-
-
-	particle_system_object.particle.SetPosition(RandXRange, CentrePosition.y);
+	particle_system_object.particle.SetPosition(RandCopy, LerpY);
 }
 
 void ParticleSystem::ProcessSpawnAreaCapsule(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
 {
+	OKVector2<float> CentrePosition = transform.position;
+
+	float EdgeLength = 100.f;
+
+	int MaxX = EdgeLength;
+	int MinX = -EdgeLength;
+	int RangeX = MaxX - MinX + 1;
+	int NumY = rand() % RangeX + MinX;
+
+	float RandYRange = CentrePosition.y + NumY;
+
+	OKTransform2<float> temp_transform = OKTransform2<float>(OKVector2<float>(CentrePosition.x, RandYRange), OKVector2<float>(1.f, 1.f), 0);
+
+	ProcessSpawnAreaCircle(temp_transform, particle_system_object);
 }
 
 void ParticleSystem::ProcessSpawnAreaDonut(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
 {
+	OKVector2<float> CentrePosition = transform.position;
+
+	int theta = rand() % 360; // 360 (degrees)
+
+	int sec_radius = 90;
+	int MaxRadius = 100 - sec_radius;
+	int Min = 1;
+
+	int Range = MaxRadius - Min + 1;
+	int TotalNumber = rand() % MaxRadius + Min;
+	int radius = TotalNumber + sec_radius;
+
+	float PositionX = CentrePosition.x + radius * cos(theta);
+	float PositionY = CentrePosition.y + radius * sin(theta);
+
+	particle_system_object.particle.SetPosition(PositionX, PositionY);
 }
 
 void ParticleSystem::ProcessSpawnAreaEdge(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
 {
+	OKVector2<float> CentrePosition = transform.position;
+
+	float EdgeLength = 100.f;
+
+	int MaxX = EdgeLength;
+	int MinX = -EdgeLength;
+	int RangeX = MaxX - MinX + 1;
+	int NumX = rand() % RangeX + MinX;
+
+	float RandXRange = CentrePosition.x + NumX;
+
+	particle_system_object.particle.SetPosition(RandXRange, CentrePosition.y);
 }
 
 // NOTE: Action Functions
 
 void ParticleSystem::ProcessActionNone(c_ParticleSystemObject& particle_system_object)
 {
+	int MaxX = 360;
+	int MinX = -360;
+	int RangeX = MaxX - MinX + 1;
+	int NumX = rand() % RangeX + MinX;
 
+	int MaxY = 360;
+	int MinY = -360;
+	int RangeY = MaxY - MinY + 1;
+	int NumY = rand() % RangeY + MinY;
+
+	particle_system_object.particle.AddImpulse(NumX, NumY);
 }
 
 void ParticleSystem::ProcessActionBurstOut(c_ParticleSystemObject& particle_system_object)

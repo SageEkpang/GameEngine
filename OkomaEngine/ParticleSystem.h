@@ -177,20 +177,20 @@ public:
 	// HELPER FUNCTION(s)
 
 		// NOTE: MATHS NEED
-		float lerp(float a, float b, float f)
-		{
-			return (a * (1.0 - f)) + (b * f);
-		}
+		//float lerp(float a, float b, float f)
+		//{
+		//	return (a * (1.0 - f)) + (b * f);
+		//}
 
 		// NOTE: PARTICLE SPAWN AREA FUNCTION(s)
-		static void ProcessSpawnAreaNone(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
-		static void ProcessSpawnAreaCircle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
+		static void ProcessSpawnAreaNone(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
+		static void ProcessSpawnAreaCircle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
 		static void ProcessSpawnAreaHalfCircle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
-		static void ProcessSpawnAreaRectangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
+		static void ProcessSpawnAreaRectangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
 		static void ProcessSpawnAreaTriangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
-		static void ProcessSpawnAreaCapsule(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
-		static void ProcessSpawnAreaDonut(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
-		static void ProcessSpawnAreaEdge(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
+		static void ProcessSpawnAreaCapsule(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
+		static void ProcessSpawnAreaDonut(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
+		static void ProcessSpawnAreaEdge(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
 
 
 		// NOTE: PARTICLE ACTION FUNCTION(s)

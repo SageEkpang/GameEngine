@@ -89,7 +89,7 @@ public: // PUBLIC FUNCTION(s)
     // GETTER FUNCTION(s)
 
     // TRANSFORM GETTER(s)
-    inline OKTransform2<float> GetTransform() { return m_Transform; }
+    inline OKTransform2<float>& GetTransform() { return m_Transform; }
     inline OKVector2<float> GetPosition() { return m_Transform.position; }
     inline OKVector2<float> GetScale() { return m_Transform.scale; }
     inline float GetRotation() { return m_Transform.rotation; }
