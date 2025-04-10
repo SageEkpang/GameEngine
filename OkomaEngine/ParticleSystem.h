@@ -30,6 +30,7 @@ enum ParticleSpawnArea
 	PARTICLE_SPAWN_AREA_CAPSULE,
 	PARTICLE_SPAWN_AREA_DONUT,
 	PARTICLE_SPAWN_AREA_EDGE,
+	PARTICLE_SPAWN_AREA_CUSTOM
 };
 
 enum ParticleAction
@@ -53,7 +54,9 @@ enum ParticleAction
 	PARTICLE_ACTION_FIRE,
 	PARTICLE_ACTION_SMOKE,
 	PARTICLE_ACTION_SPARK,
-	PARTICLE_ACTION_WAVE
+	PARTICLE_ACTION_WAVE,
+
+	PARTICLE_ACTION_CUSTOM
 };
 
 struct c_ParticleSystemObject
@@ -64,6 +67,7 @@ struct c_ParticleSystemObject
 	float startDelay; // NOTE: In Seconds
 	float startLifeTime;
 	float startSpeed;
+	float theta;
 	OKVector2<float> startSize;
 	OKVector2<float> gravity;
 
@@ -86,6 +90,7 @@ struct c_ParticleSystemObject
 		startDelay = 0.f;
 		startLifeTime = 1.0f;
 		startSpeed = 1.0f;
+		theta = 0.f;
 
 		startSize = OKVector2<float>(1.0f);
 		gravity = OKVector2<float>(0.f, 0.0f);
@@ -109,26 +114,20 @@ class ParticleSystem
 private:
 
 	// CUSTOM DATA TYPE
-	typedef void (*particle_spawn_area_func)(OKTransform2<float>, c_ParticleSystemObject&);
-	typedef void (*particle_action_func)(c_ParticleSystemObject&);
-
-	typedef std::map<ParticleSpawnArea, particle_spawn_area_func> particle_spawn_area_map;
-	typedef std::map<ParticleAction, particle_action_func> particle_action_map;
+	void (*m_ParticleActionFunctionPtr)();
+	void (*m_ParticleSpawnAreaFunctionPtr)();
 
 	// TRANSFORM VARIABLE(s)
 	OKTransform2<float> m_Transform;
 
 	// PARTICLE VARIABLE(s)
 	std::vector<c_ParticleSystemObject> m_Particles;
-	// std::vector<Particle> m_SimulateParticles; // NOTE: This is to push simulating particles from the loaded map
+	std::vector<c_ParticleSystemObject> m_SimulateParticles; // NOTE: This is to push simulating particles from the loaded map
 
 	bool m_IsExecuted = false;
 
 	ParticleSpawnArea m_ParticleSpawnArea;
 	ParticleAction m_ParticleAction;
-
-	particle_spawn_area_map m_ParticleAreaMap;
-	particle_action_map m_ParticleActionMap;
 
 
 	// BASE VARIABLE(s)
@@ -168,53 +167,57 @@ public:
 	void Update(const float deltaTime);
 	void Draw();
 
-	/*
-	
-		remove static and move to a normal function
+	// LOCAL MATHS FUNCTION(s)
 
-	*/
+	float lerp(float a, float b, float f) { return (a * (1.0 - f)) + (b * f); }
+	float remap(float value, float sourceMin, float sourceMax, float destMin = 0, float destMax = 1) { return destMin + ((value - sourceMin) / (sourceMax - sourceMin)) * (destMax - destMin); }
 
 	// HELPER FUNCTION(s)
 
-		// NOTE: MATHS NEED
-		//float lerp(float a, float b, float f)
-		//{
-		//	return (a * (1.0 - f)) + (b * f);
-		//}
+
+		void CreateParticleAction(void (*particle_action_lamda)());
+		void CreateParticleSpawnArea(void (*particle_spawn_area_lambda)());
+
+		void CheckParticleAction(ParticleAction particle_action, c_ParticleSystemObject& particle_system_object);
+		void CheckParticleSpawnArea(OKTransform2<float> transform, ParticleSpawnArea particle_spawn_area, c_ParticleSystemObject& particle_system_object);
+
 
 		// NOTE: PARTICLE SPAWN AREA FUNCTION(s)
-		static void ProcessSpawnAreaNone(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
-		static void ProcessSpawnAreaCircle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
-		static void ProcessSpawnAreaHalfCircle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
-		static void ProcessSpawnAreaRectangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
-		static void ProcessSpawnAreaTriangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
-		static void ProcessSpawnAreaCapsule(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
-		static void ProcessSpawnAreaDonut(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
-		static void ProcessSpawnAreaEdge(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
-
+		void ProcessSpawnAreaNone(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
+		void ProcessSpawnAreaCircle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
+		void ProcessSpawnAreaHalfCircle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
+		void ProcessSpawnAreaRectangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
+		void ProcessSpawnAreaTriangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); 
+		void ProcessSpawnAreaCapsule(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
+		void ProcessSpawnAreaDonut(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
+		void ProcessSpawnAreaEdge(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
+		void ProcessSpawnAreaCustom(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
 
 		// NOTE: PARTICLE ACTION FUNCTION(s)
-		void ProcessActionNone(c_ParticleSystemObject& particle_system_object);
+		void ProcessActionNone(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
 
-		static void ProcessActionBurstOut(c_ParticleSystemObject& particle_system_object);
-		static void ProcessActionBurstIn(c_ParticleSystemObject& particle_system_object);
+		void ProcessActionBurstOut(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
+		void ProcessActionBurstIn(c_ParticleSystemObject& particle_system_object);
 
-		static void ProcessActionScreen(c_ParticleSystemObject& particle_system_object);
-		static void ProcessActionScreenOut(c_ParticleSystemObject& particle_system_object);
-		static void ProcessActionScreenIn(c_ParticleSystemObject& particle_system_object);
+		void ProcessActionScreen(c_ParticleSystemObject& particle_system_object); // Update Type: Constant (Done)
+		void ProcessActionScreenOut(c_ParticleSystemObject& particle_system_object); // Update Type: Constant (Done)
+		void ProcessActionScreenIn(c_ParticleSystemObject& particle_system_object); // Update Type: Constant (Done)
 
-		static void ProcessActionFall(c_ParticleSystemObject& particle_system_object);
-		static void ProcessActionRise(c_ParticleSystemObject& particle_system_object);
-		static void ProcessActionRight(c_ParticleSystemObject& particle_system_object);
-		static void ProcessActionLeft(c_ParticleSystemObject& particle_system_object);
+		// NOTE: Reverse these values when it comes to the projects
+		void ProcessActionFall(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
+		void ProcessActionRise(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
+		void ProcessActionRight(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
+		void ProcessActionLeft(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
 
-		static void ProcessActionSpray(c_ParticleSystemObject& particle_system_object);
-		static void ProcessActionSpiral(c_ParticleSystemObject& particle_system_object);
+		void ProcessActionSpray(c_ParticleSystemObject& particle_system_object);
+		void ProcessActionSpiral(c_ParticleSystemObject& particle_system_object);
 
-		static void ProcessActionFire(c_ParticleSystemObject& particle_system_object);
-		static void ProcessActionSmoke(c_ParticleSystemObject& particle_system_object);
-		static void ProcessActionSpark(c_ParticleSystemObject& particle_system_object);
-		static void ProcessActionWave(c_ParticleSystemObject& particle_system_object);
+		void ProcessActionFire(c_ParticleSystemObject& particle_system_object); // Update Type: Constant (REWORK)
+		void ProcessActionSmoke(c_ParticleSystemObject& particle_system_object); // Update Type: Once ()
+		void ProcessActionSpark(c_ParticleSystemObject& particle_system_object);
+		void ProcessActionWave(c_ParticleSystemObject& particle_system_object);
+
+		void ProcessActionCustom(c_ParticleSystemObject& particle_system_object);
 
 
 	// GETTER FUNCTION(s)

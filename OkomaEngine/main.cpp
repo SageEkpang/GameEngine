@@ -63,7 +63,7 @@ int main()
 	//CollisionManifold t_ColMani = CollisionManifold();
 	//CollisionResolution* t_CollisionResolution = new CollisionResolution();
 
-	ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(500, 400), 1, 10000, false, PARTICLE_SPAWN_AREA_TRIANGLE, PARTICLE_ACTION_BURST_OUT);
+	ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(500, 400), 1, 1000, false, PARTICLE_SPAWN_AREA_NONE, PARTICLE_ACTION_SMOKE);
 	
 
 	// SetTargetFPS(60);
