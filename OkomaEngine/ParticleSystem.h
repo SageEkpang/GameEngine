@@ -24,9 +24,7 @@ enum ParticleSpawnArea
 {
 	PARTICLE_SPAWN_AREA_NONE,
 	PARTICLE_SPAWN_AREA_CIRCLE,
-	PARTICLE_SPAWN_AREA_HALF_CIRCLE,
 	PARTICLE_SPAWN_AREA_RECTANGLE,
-	PARTICLE_SPAWN_AREA_TRIANGLE,
 	PARTICLE_SPAWN_AREA_CAPSULE,
 	PARTICLE_SPAWN_AREA_DONUT,
 	PARTICLE_SPAWN_AREA_EDGE,
@@ -57,6 +55,12 @@ enum ParticleAction
 	PARTICLE_ACTION_WAVE,
 
 	PARTICLE_ACTION_CUSTOM
+};
+
+enum ParticleType
+{
+	PARTICLE_TYPE_EMISSIVE,
+	PARTICLE_TYPE_AREA
 };
 
 struct c_ParticleSystemObject
@@ -114,35 +118,40 @@ class ParticleSystem
 private:
 
 	// CUSTOM DATA TYPE
-	void (*m_ParticleActionFunctionPtr)();
-	void (*m_ParticleSpawnAreaFunctionPtr)();
+	void (*m_ParticleActionFunctionPtr)() = nullptr; // USED
+	void (*m_ParticleSpawnAreaFunctionPtr)() = nullptr; // USED 
 
 	// TRANSFORM VARIABLE(s)
-	OKTransform2<float> m_Transform;
+	OKTransform2<float> m_Transform; // USED
 
 	// PARTICLE VARIABLE(s)
-	std::vector<c_ParticleSystemObject> m_Particles;
-	std::vector<c_ParticleSystemObject> m_SimulateParticles; // NOTE: This is to push simulating particles from the loaded map
+	std::vector<c_ParticleSystemObject> m_Particles; // USED
+	std::vector<c_ParticleSystemObject> m_SimulatingParticles; // NOTE: This is to push simulating particles from the loaded map
+	unsigned int m_ParticleIndexIncrement;
 
 	bool m_IsExecuted = false;
 
-	ParticleSpawnArea m_ParticleSpawnArea;
-	ParticleAction m_ParticleAction;
+	ParticleSpawnArea m_ParticleSpawnArea; // USED
+	ParticleAction m_ParticleAction; // USED
+	ParticleType m_ParticleType;
 
 
 	// BASE VARIABLE(s)
 	unsigned int m_MaxParticleCount;
+	bool m_SpawnAllAtOnce = false;
+	float m_StartDelay = 0.0f;
 
 	// NOTE: For NOT Looping
-	float m_ParticleTimer;
-	float m_Duration;
-	bool m_IsLooping;
-	bool m_SimulateGravity; // NOTE: Have it where particles simulate gravity
-	float m_SimulationSpeed; // NOTE: Play back speed of the particle simulation
+	float m_ParticleTimer; // USED
+	float m_ParticleSimulationDuration; // USED
+	bool m_IsLooping; // USED
+	bool m_SimulateGravity; // NOTE: Have it where particles simulate gravity // USED
+	float m_SimulationSpeed; // NOTE: Play back speed of the particle simulation // USED
 
 	// EMISSION VARIABLE(s)
-	unsigned int m_EmissionRateOverTime; // NOTE: How many particles should be spawned per second
-	unsigned int m_EmissionRateOverDistance; // NOTE: How many particles that should be spawned per distance unit
+	float m_EmissionTimer = 0.0f; // USED
+	unsigned int m_EmissionRateOverTime; // NOTE: How many particles should be spawned per second // USED
+	// unsigned int m_EmissionRateOverDistance; // NOTE: How many particles that should be spawned per distance unit // DO NOT NEED, Remove this later
 
 private: // SPAWN AREA VARIABLE(s)
 
@@ -159,7 +168,8 @@ private: // SPAWN AREA VARIABLE(s)
 public:
 
 	// CLASS FUNCTION(s)
-	ParticleSystem(OKVector2<float> position, float mass, unsigned int maxParticleCount, bool isLooping = true, ParticleSpawnArea particleSpawnArea = PARTICLE_SPAWN_AREA_NONE, ParticleAction particleAction = PARTICLE_ACTION_NONE, float simulationSpeed = 1.f, bool simulateGravity = false);
+	ParticleSystem() = default;
+	ParticleSystem(OKVector2<float> position, float mass, unsigned int maxParticleCount, bool isLooping = true, ParticleType particleType = PARTICLE_TYPE_EMISSIVE, ParticleSpawnArea particleSpawnArea = PARTICLE_SPAWN_AREA_NONE, ParticleAction particleAction = PARTICLE_ACTION_NONE, float simulationSpeed = 1.f, bool simulateGravity = false);
 	~ParticleSystem();
 
 
@@ -185,13 +195,11 @@ public:
 		// NOTE: PARTICLE SPAWN AREA FUNCTION(s)
 		void ProcessSpawnAreaNone(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
 		void ProcessSpawnAreaCircle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
-		void ProcessSpawnAreaHalfCircle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
 		void ProcessSpawnAreaRectangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
-		void ProcessSpawnAreaTriangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); 
 		void ProcessSpawnAreaCapsule(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
 		void ProcessSpawnAreaDonut(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
 		void ProcessSpawnAreaEdge(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
-		void ProcessSpawnAreaCustom(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
+		void ProcessSpawnAreaCustom(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
 
 		// NOTE: PARTICLE ACTION FUNCTION(s)
 		void ProcessActionNone(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
@@ -209,15 +217,15 @@ public:
 		void ProcessActionRight(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
 		void ProcessActionLeft(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
 
-		void ProcessActionSpray(c_ParticleSystemObject& particle_system_object);
-		void ProcessActionSpiral(c_ParticleSystemObject& particle_system_object);
+		void ProcessActionSpray(c_ParticleSystemObject& particle_system_object); // TODO
+		void ProcessActionSpiral(c_ParticleSystemObject& particle_system_object); // TODO
 
 		void ProcessActionFire(c_ParticleSystemObject& particle_system_object); // Update Type: Constant (REWORK)
-		void ProcessActionSmoke(c_ParticleSystemObject& particle_system_object); // Update Type: Once ()
-		void ProcessActionSpark(c_ParticleSystemObject& particle_system_object);
-		void ProcessActionWave(c_ParticleSystemObject& particle_system_object);
+		void ProcessActionSmoke(c_ParticleSystemObject& particle_system_object); // Update Type: Once (REWORK)
+		void ProcessActionSpark(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
+		void ProcessActionWave(c_ParticleSystemObject& particle_system_object); // TODO
 
-		void ProcessActionCustom(c_ParticleSystemObject& particle_system_object);
+		void ProcessActionCustom(c_ParticleSystemObject& particle_system_object); // Update Type: Constant (Done)
 
 
 	// GETTER FUNCTION(s)
@@ -228,8 +236,11 @@ public:
 		inline float GetRotation() const { return m_Transform.rotation; }
 
 		inline unsigned int GetMaxParticleCount() const { return m_MaxParticleCount; }
-
-		inline float GetDuration() const { return m_Duration; }
+		
+		/// <summary> Getter function for the Particle Simulation Duration 
+		/// ,NOTE: Does not apply when Looping is TRUE 
+		/// </summary>
+		inline float GetParticleSimulationDuration() const { return m_ParticleSimulationDuration; }
 
 		inline bool GetLooping() const { return m_IsLooping; }
 		//inline float GetStartDelay() const { return m_Particles[0].startDelay; }
@@ -268,7 +279,7 @@ public:
 		inline void SetSimulateGravity(bool simulateGravity) { m_SimulateGravity = simulateGravity; }
 		inline void SetSimulationSpeed(float simulateSpeed) { m_SimulationSpeed = simulateSpeed; }
 		inline void SetEmissionRateOverTime(unsigned int emissionRateOverTime) { m_EmissionRateOverTime = emissionRateOverTime; }
-		inline void SetEmissionRateOverDistance(unsigned int emissionRateOverDistance) { m_EmissionRateOverDistance = emissionRateOverDistance; }
+		// inline void SetEmissionRateOverDistance(unsigned int emissionRateOverDistance) { m_EmissionRateOverDistance = emissionRateOverDistance; }
 
 		//void SetDuration(float duration) 
 		//{

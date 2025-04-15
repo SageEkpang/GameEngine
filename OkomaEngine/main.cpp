@@ -63,7 +63,7 @@ int main()
 	//CollisionManifold t_ColMani = CollisionManifold();
 	//CollisionResolution* t_CollisionResolution = new CollisionResolution();
 
-	ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(500, 400), 1, 1000, false, PARTICLE_SPAWN_AREA_NONE, PARTICLE_ACTION_SMOKE);
+	ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(500, 400), 1, 1000, false, PARTICLE_TYPE_EMISSIVE, PARTICLE_SPAWN_AREA_NONE, PARTICLE_ACTION_BURST_OUT);
 	
 
 	// SetTargetFPS(60);
@@ -81,7 +81,7 @@ int main()
 
 		m_ParticleSystem->Update(GetFrameTime());
 		m_ParticleSystem->Draw();
-		DrawCircleV(Vector2{ 500, 400 }, 10, GREEN);
+		// DrawCircleV(Vector2{ 500, 400 }, 10, GREEN);
 
 
 		//if (IsKeyDown(KEY_A))

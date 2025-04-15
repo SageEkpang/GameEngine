@@ -1,61 +1,69 @@
 #include "ParticleSystem.h"
 
-ParticleSystem::ParticleSystem(OKVector2<float> position, float mass, unsigned int maxParticleCount, bool isLooping, ParticleSpawnArea particleSpawnArea, ParticleAction particleAction, float simulationSpeed, bool simulateGravity)
+ParticleSystem::ParticleSystem(OKVector2<float> position, float mass, unsigned int maxParticleCount, bool isLooping, ParticleType particleType, ParticleSpawnArea particleSpawnArea, ParticleAction particleAction, float simulationSpeed, bool simulateGravity)
 {
 	// NOTE: Init Timer to NULL for random function
 	srand(time(NULL));
+
+	// NOTE: Particle Timer and Incremet Variables
 	m_ParticleTimer = 0.0f;
+	m_ParticleIndexIncrement = 0u;
 
 	// NOTE: Set Transform
 	OKTransform2<float> transform = OKTransform2<float>(position, OKVector2<float>(1.f, 1.f), 0);
 	m_Transform = transform;
 
 	// NOTE: Init Particle System Variables
-	
-	// NOTE: Fill Vector and reserve the set size for the particles
 	m_MaxParticleCount = maxParticleCount;
-	m_Particles.reserve(m_MaxParticleCount);
 
 	m_ParticleSpawnArea = particleSpawnArea;
 	m_ParticleAction = particleAction;
-	// m_SimulateParticles.reserve(m_MaxParticleCount);
+	m_ParticleType = particleType;
+
+	// NOTE: Fill Vector and reserve the set size for the particles
+	m_Particles.reserve(m_MaxParticleCount);
+	m_SimulatingParticles.reserve(m_MaxParticleCount);
 
 	// NOTE: Fill Simulation Variables
 	m_IsLooping = isLooping;
 	m_SimulateGravity = simulateGravity;
 	m_SimulationSpeed = simulationSpeed;
 
-	m_Duration = 10.f;
+	m_ParticleSimulationDuration = 10.f;
 
+	m_EmissionTimer = 0.f;
 	m_EmissionRateOverTime = 5u;
-	m_EmissionRateOverDistance = 0u;
+	//m_EmissionRateOverDistance = 0u;
 
 	// NOTE: Set Defauls for Particles
 	c_ParticleSystemObject particle_system_objects = c_ParticleSystemObject(m_Transform, mass);
+	m_SimulateGravity = true;
 	particle_system_objects.particle.SimulateGravity(m_SimulateGravity);
 
-	particle_system_objects.startDelay = 0.0f;
-	particle_system_objects.startLifeTime = 1.0f;
+	// TODO: Change these to pointers
+	{
+		particle_system_objects.startDelay = 0.0f;
+		particle_system_objects.startLifeTime = 5.0f;
 
-	particle_system_objects.startSpeed = 1.0f;
-	particle_system_objects.startSize = OKVector2<float>(1.0f);
-	particle_system_objects.gravity = OKVector2<float>(0.f, 0.0f);
+		particle_system_objects.startSpeed = 1.0f;
+		particle_system_objects.startSize = OKVector2<float>(1.0f);
+		particle_system_objects.gravity = OKVector2<float>(0.0f, 0.0f);
 
-	particle_system_objects.startingVelocityOverLifeTime = OKVector2<float>(1.0f, 1.0f);
-	particle_system_objects.endingVelocityOverLifeTime = OKVector2<float>(1.0f, 1.0f);
+		particle_system_objects.startingVelocityOverLifeTime = OKVector2<float>(1.0f, 1.0f);
+		particle_system_objects.endingVelocityOverLifeTime = OKVector2<float>(1.0f, 1.0f);
 
-	particle_system_objects.startingForceOverLifeTime = OKVector2<float>(1.0f, 1.0f);
-	particle_system_objects.endingForceOverLifeTime = OKVector2<float>(1.0f, 1.0f);
+		particle_system_objects.startingForceOverLifeTime = OKVector2<float>(1.0f, 1.0f);
+		particle_system_objects.endingForceOverLifeTime = OKVector2<float>(1.0f, 1.0f);
 
-	particle_system_objects.startingSizeOverLifeTime = OKVector2<float>(1.0f, 1.0f);
-	particle_system_objects.endingSizeOverLifeTime = OKVector2<float>(1.0f, 1.0f);
+		particle_system_objects.startingSizeOverLifeTime = OKVector2<float>(1.0f, 1.0f);
+		particle_system_objects.endingSizeOverLifeTime = OKVector2<float>(1.0f, 1.0f);
 
-	particle_system_objects.startingSizeBySpeed = OKVector2<float>(1.0f, 1.0f);
-	particle_system_objects.endingSizeBySpeed = OKVector2<float>(1.0f, 1.0f);
+		particle_system_objects.startingSizeBySpeed = OKVector2<float>(1.0f, 1.0f);
+		particle_system_objects.endingSizeBySpeed = OKVector2<float>(1.0f, 1.0f);
+
+	}
 
 	for (unsigned int i = 0; i < m_MaxParticleCount; ++i) { m_Particles.push_back(particle_system_objects); }
-
-
 
 }
 
@@ -64,63 +72,117 @@ ParticleSystem::~ParticleSystem()
 	m_ParticleActionFunctionPtr = nullptr;
 	m_ParticleSpawnAreaFunctionPtr = nullptr;
 	if (!m_Particles.empty()) { m_Particles.clear(); }
+	if (!m_SimulatingParticles.empty()) { m_SimulatingParticles.clear(); }
 }
 
 void ParticleSystem::Update(const float deltaTime)
 {
-	(*const_cast<float*>(&deltaTime)) *= 0.1f;
+	const float SimulationSpeedDelta = deltaTime * m_SimulationSpeed;
 
 	// NOTE: Check if the Particles should be Looping through everything
-	if (m_IsLooping == false)
+	if (m_IsLooping == true)
 	{
-		// NOTE: Execute this Once and only once
-		if (m_IsExecuted == false)
+		// NOTE: Instead of just running it once like this, push the particles to the simulating particle vector
+		if (m_SimulatingParticles.size() < m_MaxParticleCount)
 		{
-			for (auto& v : m_Particles)
+			// NOTE: Push particle into the simulating Vector
+			// NOTE: Number of particles pushes is equal to the EmissionRateOverTimer
+			m_EmissionTimer += SimulationSpeedDelta;
+			if (m_EmissionTimer >= (float)(1.f / m_EmissionRateOverTime))
 			{
-				CheckParticleSpawnArea(m_Transform, m_ParticleSpawnArea, v);
-				CheckParticleAction(m_ParticleAction, v);
-			}
+				if (m_ParticleType == PARTICLE_TYPE_EMISSIVE)
+				{
+					// NOTE: Push particles to the simuatling vector
+					m_SimulatingParticles.push_back(m_Particles[m_ParticleIndexIncrement]);
+					CheckParticleSpawnArea(m_Transform, m_ParticleSpawnArea, m_SimulatingParticles[m_ParticleIndexIncrement]);
+					CheckParticleAction(m_ParticleAction, m_SimulatingParticles[m_ParticleIndexIncrement]);
+					++m_ParticleIndexIncrement;
 
-			m_IsExecuted = true;
-		}
+				}
+				else if (m_ParticleType == PARTICLE_TYPE_AREA)
+				{
+					for (int i = 0; i < m_EmissionRateOverTime; ++i)
+					{
+						m_SimulatingParticles.push_back(m_Particles[m_ParticleIndexIncrement]);
+						CheckParticleSpawnArea(m_Transform, m_ParticleSpawnArea, m_SimulatingParticles[m_ParticleIndexIncrement]);
+						CheckParticleAction(m_ParticleAction, m_SimulatingParticles[m_ParticleIndexIncrement]);
+						++m_ParticleIndexIncrement;
+					}
+				}
 
-		// NOTE: Update Particle Constantly and based on a Timer
-		m_ParticleTimer += deltaTime;
-		if (m_Duration >= m_ParticleTimer / 60.f)
-		{
-			for (auto& v : m_Particles) 
-			{ 
-				v.particle.Update(deltaTime);
+				// NOTE: Reset the Particle Index Increment to 0, when equals the max particle count
+				if (m_ParticleIndexIncrement >= m_MaxParticleCount) 
+				{ 
+					m_ParticleIndexIncrement = 0; 
+				}
+
+				// NOTE: Reset Emitter Timer
+				m_EmissionTimer = 0;
 			}
 		}
 	}
-	//else if (m_IsLooping == true)
-	//{
-	//	// NOTE: Loop the Particles
-	//	m_IsExecuted = true;
-	//	while (m_IsExecuted)
-	//	{
-	//		// NOTE: Set the Spawn Point of the Particle (Spawn Area) and Process the Desired Action (Particle Action)
-	//		// NOTE: Based On Timer that will be created
-	//		for (auto v : m_Particles)
-	//		{
-	//			m_ParticleAreaMap[m_ParticleSpawnArea](m_Transform, v);
-	//			m_ParticleActionMap[m_ParticleAction](v);
-	//		}
+	else if (m_IsLooping == false)
+	{
+		// NOTE: Instead of just running it once like this, push the particles to the simulating particle vector
+		// NOTE: Update Particle Constantly and based on a Timer
+		m_ParticleTimer += SimulationSpeedDelta;
+		if ((m_ParticleSimulationDuration >= m_ParticleTimer) && (m_SimulatingParticles.size() < m_MaxParticleCount))
+		{
+			// NOTE: Push particle into the simulating Vector
+			// NOTE: Number of particles pushes is equal to the EmissionRateOverTimer
+			m_EmissionTimer += SimulationSpeedDelta;
+			if (m_EmissionTimer >= (float)(1.f / m_EmissionRateOverTime))
+			{
+				if (m_ParticleType == PARTICLE_TYPE_EMISSIVE)
+				{
+					// NOTE: Push particles to the simuatling vector
+					m_SimulatingParticles.push_back(m_Particles[m_ParticleIndexIncrement]);
+					CheckParticleSpawnArea(m_Transform, m_ParticleSpawnArea, m_SimulatingParticles[m_ParticleIndexIncrement]);
+					CheckParticleAction(m_ParticleAction, m_SimulatingParticles[m_ParticleIndexIncrement]);
+					++m_ParticleIndexIncrement;
 
-	//		// NOTE: Update Particles Constantly
-	//		for (auto v : m_Particles) { v.particle.Update(deltaTime); }
-	//	}
-	//}
+				}
+				else if (m_ParticleType == PARTICLE_TYPE_AREA)
+				{
+					for (int i = 0; i < m_EmissionRateOverTime; ++i)
+					{
+						m_SimulatingParticles.push_back(m_Particles[m_ParticleIndexIncrement]);
+						CheckParticleSpawnArea(m_Transform, m_ParticleSpawnArea, m_SimulatingParticles[m_ParticleIndexIncrement]);
+						CheckParticleAction(m_ParticleAction, m_SimulatingParticles[m_ParticleIndexIncrement]);
+						++m_ParticleIndexIncrement;
+					}
+				}
+
+				// NOTE: Reset the Particle Index Increment to 0, when equals the max particle count
+				if (m_ParticleIndexIncrement >= m_MaxParticleCount)
+				{
+					m_ParticleIndexIncrement = 0;
+				}
+
+				// NOTE: Reset Emitter Timer
+				m_EmissionTimer = 0;
+			}
+		}
+	}
+
+	// Update Simulating Particles
+	if (!m_SimulatingParticles.empty())
+	{
+		for (auto& v : m_SimulatingParticles)
+		{
+			v.particle.Update(SimulationSpeedDelta);
+		}
+	}
 }
 
 void ParticleSystem::Draw()
 {
-	for (auto& v : m_Particles)
+	if (!m_SimulatingParticles.empty())
 	{
-		DrawRectangleV(v.particle.GetPosition().ConvertToVec2(), OKVector2<float>(10.f, 10.f).ConvertToVec2(), RED);
-		// DrawCircleV(v.particle.GetPosition().ConvertToVec2(), 10, RED);
+		for (auto& v : m_SimulatingParticles)
+		{
+			DrawRectangleV(v.particle.GetPosition().ConvertToVec2(), OKVector2<float>(10.f, 10.f).ConvertToVec2(), RED);
+		}
 	}
 }
 
@@ -172,9 +234,7 @@ void ParticleSystem::CheckParticleSpawnArea(OKTransform2<float> transform, Parti
 	{
 		case PARTICLE_SPAWN_AREA_NONE: ProcessSpawnAreaNone(transform, particle_system_object); break;
 		case PARTICLE_SPAWN_AREA_CIRCLE: ProcessSpawnAreaCircle(transform, particle_system_object); break;
-		case PARTICLE_SPAWN_AREA_HALF_CIRCLE: ProcessSpawnAreaCircle(transform, particle_system_object); break;
 		case PARTICLE_SPAWN_AREA_RECTANGLE: ProcessSpawnAreaRectangle(transform, particle_system_object); break;
-		case PARTICLE_SPAWN_AREA_TRIANGLE: ProcessSpawnAreaTriangle(transform, particle_system_object); break;
 		case PARTICLE_SPAWN_AREA_CAPSULE: ProcessSpawnAreaCapsule(transform, particle_system_object); break;
 		
 		case PARTICLE_SPAWN_AREA_DONUT: ProcessSpawnAreaDonut(transform, particle_system_object); break;
@@ -210,28 +270,6 @@ void ParticleSystem::ProcessSpawnAreaCircle(OKTransform2<float> transform, c_Par
 	particle_system_object.particle.SetPosition(PositionX, PositionY);
 }
 
-// CHECK THIS: Fix this Function
-void ParticleSystem::ProcessSpawnAreaHalfCircle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
-{
-	const OKVector2<float> CentrePosition = transform.position;
-
-	float radius = 100;
-	
-	// NOTE: X Position of the New Area	
-	int MaxX = 100;
-	int MinX = 1;
-	int RangeX = MaxX - MinX + 1;
-	int NumX = rand() % RangeX + MinX;
-
-	float RandXRange = CentrePosition.x + NumX;
-
-	// NOTE: Y Position of the New Area
-	int theta = rand() % 360; // 360 (degrees)
-	float PositionY = CentrePosition.y + radius * sin(theta); // TODO: Replace the sin wave with the dot product
-
-	particle_system_object.particle.SetPosition(RandXRange, PositionY);
-}
-
 void ParticleSystem::ProcessSpawnAreaRectangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
 {
 	OKVector2<float> CentrePosition = transform.position;
@@ -255,40 +293,40 @@ void ParticleSystem::ProcessSpawnAreaRectangle(OKTransform2<float> transform, c_
 	particle_system_object.particle.SetPosition(PositionX, PositionY);
 }
 
-void ParticleSystem::ProcessSpawnAreaTriangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
-{
-	OKVector2<float> CentrePosition = transform.position;
-
-	// NOTE: Triangle Height
-	// 180 Angles of a Triangle
-	// Height
-	// + Half Height
-	// 
-	float TriangleHeight = 100.f;
-
-	// NOTE: Work out the base of the Triangle
-	int MaxX = TriangleHeight;
-	int MinX = 0;
-	int RangeX = MaxX - MinX + 1;
-	int NumX = rand() % RangeX + MinX;
-	float RandXRange = CentrePosition.x + NumX;
-	float RandCopy = CentrePosition.x + NumX;
-
-	// NOTE: Work out the Height of the triangle
-
-	int MaxY = TriangleHeight * 3;
-	int MinY = 0;
-	int RangeY = MaxY - MinY + 1;
-	int NumY = rand() % RangeY + MinY;
-
-	float Line_Start_X = MaxX + CentrePosition.x;
-	float Line_End_X = MinX + CentrePosition.x;
-	float ClampRanged = Clamp(RandXRange, Line_End_X, Line_Start_X);
-	float LerpValue = remap(ClampRanged, Line_Start_X, Line_End_X);
-	float LerpY = lerp(CentrePosition.y, TriangleHeight + NumY, LerpValue);
-
-	particle_system_object.particle.SetPosition(RandCopy, LerpY);
-}
+//void ParticleSystem::ProcessSpawnAreaTriangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
+//{
+//	OKVector2<float> CentrePosition = transform.position;
+//
+//	// NOTE: Triangle Height
+//	// 180 Angles of a Triangle
+//	// Height
+//	// + Half Height
+//	// 
+//	float TriangleHeight = 100.f;
+//
+//	// NOTE: Work out the base of the Triangle
+//	int MaxX = TriangleHeight;
+//	int MinX = 0;
+//	int RangeX = MaxX - MinX + 1;
+//	int NumX = rand() % RangeX + MinX;
+//	float RandXRange = CentrePosition.x + NumX;
+//	float RandCopy = CentrePosition.x + NumX;
+//
+//	// NOTE: Work out the Height of the triangle
+//
+//	int MaxY = TriangleHeight * 3;
+//	int MinY = 0;
+//	int RangeY = MaxY - MinY + 1;
+//	int NumY = rand() % RangeY + MinY;
+//
+//	float Line_Start_X = MaxX + CentrePosition.x;
+//	float Line_End_X = MinX + CentrePosition.x;
+//	float ClampRanged = Clamp(RandXRange, Line_End_X, Line_Start_X);
+//	float LerpValue = remap(ClampRanged, Line_Start_X, Line_End_X);
+//	float LerpY = lerp(CentrePosition.y, TriangleHeight + NumY, LerpValue);
+//
+//	particle_system_object.particle.SetPosition(RandCopy, LerpY);
+//}
 
 void ParticleSystem::ProcessSpawnAreaCapsule(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
 {
@@ -359,15 +397,15 @@ void ParticleSystem::ProcessActionNone(c_ParticleSystemObject& particle_system_o
 
 void ParticleSystem::ProcessActionBurstOut(c_ParticleSystemObject& particle_system_object)
 {
-	int MaxX = 360;
-	int MinX = -360;
+	float MaxX = 360.0f;
+	float MinX = -360.0f;
 	int RangeX = MaxX - MinX + 1;
-	int NumX = rand() % RangeX + MinX;
+	float NumX = rand() % RangeX + MinX;
 
-	int MaxY = 360;
-	int MinY = -360;
+	float MaxY = 360;
+	float MinY = -360;
 	int RangeY = MaxY - MinY + 1;
-	int NumY = rand() % RangeY + MinY;
+	float NumY = rand() % RangeY + MinY;
 
 	particle_system_object.particle.AddImpulse(NumX, NumY);
 }
@@ -479,8 +517,17 @@ void ParticleSystem::ProcessActionLeft(c_ParticleSystemObject& particle_system_o
 	particle_system_object.particle.AddImpulse(-1, 0);
 }
 
+// TODO:
 void ParticleSystem::ProcessActionSpray(c_ParticleSystemObject& particle_system_object)
 {
+	// Add some functionality to spray it in a certain direction dependant on the dot product angle 
+
+
+
+
+
+
+
 	particle_system_object.particle.AddImpulse(-1, 0);
 }
 
@@ -549,9 +596,12 @@ void ParticleSystem::ProcessActionSpark(c_ParticleSystemObject& particle_system_
 	particle_system_object.particle.AddImpulse(NumX, NumY);
 }
 
+// TODO: Fix This	
 void ParticleSystem::ProcessActionWave(c_ParticleSystemObject& particle_system_object)
 {
 
+	particle_system_object.particle.SetPosition(particle_system_object.particle.GetPosition().x, particle_system_object.particle.GetPosition().y);
+	//particle_system_object.particle.AddImpulse(0, NumY);
 }
 
 void ParticleSystem::ProcessActionCustom(c_ParticleSystemObject& particle_system_object)
