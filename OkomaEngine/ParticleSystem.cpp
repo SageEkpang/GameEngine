@@ -38,7 +38,7 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, float mass, unsigned i
 	c_ParticleSystemObject particle_system_objects = c_ParticleSystemObject(m_Transform, mass);
 
 	m_StartDelay = 0.0f;
-	m_StartLifeTime = 5.0f;
+	m_StartLifeTime = 2.0f;
 	m_StartSpeed = 1.0f;
 	m_StartSize = OKVector2<float>(10.0f, 10.0f);
 	m_Gravity = OKVector2<float>(0.0f, 1.0f);
@@ -50,7 +50,7 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, float mass, unsigned i
 	m_EndingForceOverLifeTime = OKVector2<float>(1.0f, 1.0f);
 
 	m_StartingSizeOverLifeTime = OKVector2<float>(5.0f, 5.0f);
-	m_EndingSizeOverLifeTime = OKVector2<float>(20.0f, 20.0f);
+	m_EndingSizeOverLifeTime = OKVector2<float>(100.0f, 100.0f);
 
 	m_StartingSizeBySpeed = OKVector2<float>(1.0f, 1.0f);
 	m_EndingSizeBySpeed = OKVector2<float>(1.0f, 1.0f);
@@ -71,7 +71,6 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, float mass, unsigned i
 
 		particle_system_objects.startingVelocityOverLifeTime = &m_StartingVelocityOverLifeTime;
 		particle_system_objects.endingVelocityOverLifeTime = &m_EndingVelocityOverLifeTime;
-		particle_system_objects.currentVelocityOverLifeTime = OKVector2<float>();
 
 		particle_system_objects.startingForceOverLifeTime = &m_StartingForceOverLifeTime;
 		particle_system_objects.endingForceOverLifeTime = &m_EndingForceOverLifeTime;
@@ -195,10 +194,14 @@ void ParticleSystem::Update(const float deltaTime)
 	{
 		for (auto& v : m_SimulatingParticles)
 		{
+			CheckParticleSize(v, SimulationSpeedDelta);
 			v.particle.Update(SimulationSpeedDelta);
-			CheckParticleSize(v);
 		}
 	}
+	
+	static float i;
+	i += SimulationSpeedDelta;
+	DrawText(TextFormat("Time: %f", i), 10, 10, 30, RED);
 }
 
 void ParticleSystem::Draw()
@@ -207,9 +210,11 @@ void ParticleSystem::Draw()
 	{
 		for (auto& v : m_SimulatingParticles)
 		{
+			DrawRectangleV(v.particle.GetPosition().ConvertToVec2(), Vector2{100, 100}, GREEN);
 			DrawRectangleV(v.particle.GetPosition().ConvertToVec2(), v.particle.GetScale().ConvertToVec2(), RED);
 		}
 	}
+
 }
 
 void ParticleSystem::CreateParticleAction(void(*particle_action_lamda)())
@@ -272,16 +277,16 @@ void ParticleSystem::CheckParticleSpawnArea(OKTransform2<float> transform, Parti
 	}
 }
 
-void ParticleSystem::CheckParticleSize(c_ParticleSystemObject& particle_system_object)
+void ParticleSystem::CheckParticleSize(c_ParticleSystemObject& particle_system_object, float deltaTime)
 {
 	if (particle_system_object.startingSizeOverLifeTime == particle_system_object.endingSizeOverLifeTime) { return; }
 
-	particle_system_object.currentSizeOverLifeTime += ;
+	// NOTE: Calculate the sizing of the particle
+	particle_system_object.currentSizeOverLifeTimer += (1.f / *particle_system_object.startLifeTime / *particle_system_object.startLifeTime) / 1000;
 
-	// Todo: liftime / delta time to get the addition variable
-
-	const float tempLerpX = lerp(particle_system_object.startingSizeOverLifeTime->x, particle_system_object.endingSizeOverLifeTime->x, 0.5);
-	const float tempLerpY = lerp(particle_system_object.startingSizeOverLifeTime->y, particle_system_object.endingSizeOverLifeTime->y, 0.5);
+	// NOTE: Resize the Particle based on time
+	const float tempLerpX = lerp(particle_system_object.startingSizeOverLifeTime->x, particle_system_object.endingSizeOverLifeTime->x, particle_system_object.currentSizeOverLifeTimer);
+	const float tempLerpY = lerp(particle_system_object.startingSizeOverLifeTime->y, particle_system_object.endingSizeOverLifeTime->y, particle_system_object.currentSizeOverLifeTimer);
 
 	particle_system_object.particle.SetScale(tempLerpX, tempLerpY);
 }

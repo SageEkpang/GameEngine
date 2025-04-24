@@ -77,15 +77,15 @@ struct c_ParticleSystemObject
 
 	OKVector2<float>* startingVelocityOverLifeTime;
 	OKVector2<float>* endingVelocityOverLifeTime;
-	OKVector2<float> currentVelocityOverLifeTime; // NOTE: Used for Calculation above
+	float currentVelocityOverLifeTimer; // NOTE: Used for Calculation above
 
 	OKVector2<float>* startingForceOverLifeTime;
 	OKVector2<float>* endingForceOverLifeTime;
-	OKVector2<float> currentForceOverLifeTime;
+	float currentForceOverLifeTimer;
 
 	OKVector2<float>* startingSizeOverLifeTime;
 	OKVector2<float>* endingSizeOverLifeTime;
-	OKVector2<float> currentSizeOverLifeTime;
+	float currentSizeOverLifeTimer;
 
 	OKVector2<float>* startingSizeBySpeed;
 	OKVector2<float>* endingSizeBySpeed;
@@ -105,15 +105,15 @@ struct c_ParticleSystemObject
 
 		startingVelocityOverLifeTime = nullptr;
 		endingVelocityOverLifeTime = nullptr;
-		currentVelocityOverLifeTime = OKVector2<float>(1.0f, 1.0f);
+		currentVelocityOverLifeTimer = 0.0f;
 
 		startingForceOverLifeTime = nullptr;
 		endingForceOverLifeTime = nullptr;
-		currentForceOverLifeTime = OKVector2<float>(1.0f, 1.0f);
+		currentForceOverLifeTimer = 0.0f;
 
 		startingSizeOverLifeTime = nullptr;
 		endingSizeOverLifeTime = nullptr;
-		currentSizeOverLifeTime = OKVector2<float>(1.0f, 1.0f);
+		currentSizeOverLifeTimer = 0.0f;
 
 		startingSizeBySpeed = nullptr;
 		endingSizeBySpeed = nullptr;
@@ -218,7 +218,7 @@ public:
 		// NOTE: PARTICLE CHECKING FUNCTION(s) (See what the particle can do)
 		void CheckParticleAction(ParticleAction particle_action, c_ParticleSystemObject& particle_system_object);
 		void CheckParticleSpawnArea(OKTransform2<float> transform, ParticleSpawnArea particle_spawn_area, c_ParticleSystemObject& particle_system_object);
-		void CheckParticleSize(c_ParticleSystemObject& particle_system_object);
+		void CheckParticleSize(c_ParticleSystemObject& particle_system_object, float deltaTime);
 
 
 		// NOTE: PARTICLE SPAWN AREA FUNCTION(s)
