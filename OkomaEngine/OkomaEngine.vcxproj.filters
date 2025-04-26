@@ -125,6 +125,9 @@
     <ClCompile Include="ParticleSystem.cpp">
       <Filter>Components\Source</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleSystemObject.cpp">
+      <Filter>Components\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OKVector2.h">
@@ -191,6 +194,9 @@
       <Filter>GameObjects\Header</Filter>
     </ClInclude>
     <ClInclude Include="ParticleSystem.h">
+      <Filter>Components\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystemObject.h">
       <Filter>Components\Header</Filter>
     </ClInclude>
   </ItemGroup>

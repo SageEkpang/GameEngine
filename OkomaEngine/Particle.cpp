@@ -1,6 +1,6 @@
 #include "Particle.h"
 
-Particle::Particle(OKTransform2<float> transform, float mass)
+Particle::Particle(OKTransform2<float>* transform, float mass)
 {
     m_Transform = transform;
     m_Mass = mass;
@@ -69,12 +69,12 @@ void Particle::CalculateAcceleration(const float deltaTime)
     m_Acceleration += m_NetForce;
 
     // NOTE: Work out Velocity Calculation
-    OKVector2<float> t_Position = m_Transform.position;
+    OKVector2<float> t_Position = m_Transform->position;
     m_Velocity += m_Acceleration * deltaTime;
 
     // NOTE: Augment Position by Velocity
     t_Position += m_Velocity * deltaTime;
-    m_Transform.position = t_Position;
+    m_Transform->position = t_Position;
 }
 
 OKVector2<float> Particle::ApplyGravity()

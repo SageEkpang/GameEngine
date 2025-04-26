@@ -2,12 +2,15 @@
 #define PARTICLE_SYSTEM_H
 
 #include "Particle.h"
+#include "ParticleSystemObject.h"
+
 #include <memory>
 #include <vector>
 #include <utility>
 #include <map>
 #include <cmath>
 #include <random>
+#include <map>
 // NOTE: In the collab project, rendering will have to be included here as well
 
 // NOTE: Variables to Manipulate for Each Area
@@ -63,77 +66,34 @@ enum ParticleType
 	PARTICLE_TYPE_AREA
 };
 
-struct c_ParticleSystemObject
-{
-	Particle particle;
-
-	// NOTE: Both
-	float* startDelay; // NOTE: In Seconds
-	float* startLifeTime;
-	float* startSpeed;
-	float theta;
-	OKVector2<float>* startSize;
-	OKVector2<float>* gravity;
-
-	OKVector2<float>* startingVelocityOverLifeTime;
-	OKVector2<float>* endingVelocityOverLifeTime;
-	float currentVelocityOverLifeTimer; // NOTE: Used for Calculation above
-
-	OKVector2<float>* startingForceOverLifeTime;
-	OKVector2<float>* endingForceOverLifeTime;
-	float currentForceOverLifeTimer;
-
-	OKVector2<float>* startingSizeOverLifeTime;
-	OKVector2<float>* endingSizeOverLifeTime;
-	float currentSizeOverLifeTimer;
-
-	OKVector2<float>* startingSizeBySpeed;
-	OKVector2<float>* endingSizeBySpeed;
-	OKVector2<float> currentSizeBySpeed;
-
-	c_ParticleSystemObject() = default;
-	c_ParticleSystemObject(OKTransform2<float> transform, float mass)
-	{
-		particle = Particle(transform, mass);
-		startDelay = nullptr;
-		startLifeTime = nullptr;
-		startSpeed = nullptr;
-		theta = 0.f;
-
-		startSize = nullptr;
-		gravity = nullptr;
-
-		startingVelocityOverLifeTime = nullptr;
-		endingVelocityOverLifeTime = nullptr;
-		currentVelocityOverLifeTimer = 0.0f;
-
-		startingForceOverLifeTime = nullptr;
-		endingForceOverLifeTime = nullptr;
-		currentForceOverLifeTimer = 0.0f;
-
-		startingSizeOverLifeTime = nullptr;
-		endingSizeOverLifeTime = nullptr;
-		currentSizeOverLifeTimer = 0.0f;
-
-		startingSizeBySpeed = nullptr;
-		endingSizeBySpeed = nullptr;
-		currentSizeBySpeed = OKVector2<float>(1.0f, 1.0f);
-	}
-};
+constexpr int SPAWN_ARRAY_AMOUNT = 100;
+constexpr int ACTION_ARRAY_AMOUNT = 100;
 
 class ParticleSystem
 {
 private:
 
+	// NOTE: PTR TYPEDEF FOR FUNCTION(s)
+
+	typedef void (ParticleSystem::* CheckParticleActionFunctionPtr)(ParticleAction, c_ParticleSystemObject&);
+	std::map<ParticleAction, CheckParticleActionFunctionPtr> m_ParticleActionMap;
+
+	typedef void (ParticleSystem::* CheckParticleSpawnFunctionPtr)(OKTransform2<float>, ParticleSpawnArea, c_ParticleSystemObject&);
+	std::map<ParticleSpawnArea, CheckParticleSpawnFunctionPtr> m_ParticleSpawnMap;
+
 	// CUSTOM DATA TYPE
-	void (*m_ParticleActionFunctionPtr)() = nullptr; // USED
-	void (*m_ParticleSpawnAreaFunctionPtr)() = nullptr; // USED
+	void (*m_CustomParticleActionFunctionPtr)() = nullptr; // USED
+	void (*m_CustomParticleSpawnAreaFunctionPtr)() = nullptr; // USED
 
-	// void (ParticleSystem::* thing)(ParticleAction, c_ParticleSystemObject&);
 
-	void (*m_ParticleSpeedFunctionPtr)() = nullptr;
-	void (*m_ParticleSizeOverTime)() = nullptr;
-	void (*m_ParticleSizeSpeedOverTime)() = nullptr;
+	void (ParticleSystem::* m_ParticleSpeedFunctionPtr)() = nullptr;
+
+	void (ParticleSystem::* m_ParticleSizeOverTime)() = nullptr;
+	void (ParticleSystem::* m_ParticleSizeSpeedOverTime)() = nullptr;
+
+
+	void (ParticleSystem::* m_CheckParticleActionFunctionPtr)(ParticleAction, c_ParticleSystemObject&) = nullptr;
+	void (ParticleSystem::* m_CheckParticleSpawnFunctionPtr)(OKTransform2<float>, ParticleSpawnArea, c_ParticleSystemObject&) = nullptr;
 
 	// TRANSFORM VARIABLE(s)
 	OKTransform2<float> m_Transform; // USED
@@ -186,6 +146,8 @@ private:
 
 private: // SPAWN AREA VARIABLE(s)
 
+	#pragma region PRIVATE SPAWN AREA VARIABLE(s)
+
 	OKVector2<float> m_RectangleScale{ 5.f, 5.f};
 	float m_CircleRadius{ 1.0f };
 	float m_TriangleScale{ 5.f };
@@ -195,6 +157,8 @@ private: // SPAWN AREA VARIABLE(s)
 
 	float m_CapsuleHeight{ 40.0f };
 	float m_CapsuleWidth{ 20.0f };
+
+	#pragma endregion
 
 public:
 
@@ -216,10 +180,12 @@ public:
 	// HELPER FUNCTION(s)
 
 		// NOTE: PARTICLE CHECKING FUNCTION(s) (See what the particle can do)
+
 		void CheckParticleAction(ParticleAction particle_action, c_ParticleSystemObject& particle_system_object);
 		void CheckParticleSpawnArea(OKTransform2<float> transform, ParticleSpawnArea particle_spawn_area, c_ParticleSystemObject& particle_system_object);
 		void CheckParticleSize(c_ParticleSystemObject& particle_system_object, float deltaTime);
-
+		
+		void ResetParticle(c_ParticleSystemObject& particle_system_object);
 
 		// NOTE: PARTICLE SPAWN AREA FUNCTION(s)
 		void CreateParticleSpawnArea(void (*particle_spawn_area_lambda)()); // Done

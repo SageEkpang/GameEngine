@@ -147,6 +147,7 @@
     <ClCompile Include="OKVector2.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
+    <ClCompile Include="ParticleSystemObject.cpp" />
     <ClCompile Include="PhysicsObject.cpp" />
     <ClCompile Include="Rigidbody.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="OKVector2.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleSystem.h" />
+    <ClInclude Include="ParticleSystemObject.h" />
     <ClInclude Include="PhysicsObject.h" />
     <ClInclude Include="Rigidbody.h" />
     <ClInclude Include="Scene.h" />

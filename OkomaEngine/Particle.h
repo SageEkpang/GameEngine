@@ -25,7 +25,7 @@ private: // PRIVATE VARIABLE(s)
 protected: // PROTECTED VARIABLE(s)
 
     // TRANSFORM VARIABLE(s)
-    OKTransform2<float> m_Transform;
+    OKTransform2<float>* m_Transform;
 
     // FORCE VARIABLE(s)
     OKVector2<float> m_NetForce{};
@@ -60,7 +60,7 @@ public: // PUBLIC FUNCTION(s)
 
     // CLASS FUNCTION(s)
     Particle() = default;
-    Particle(OKTransform2<float> transform, float mass);
+    Particle(OKTransform2<float>* transform, float mass);
     virtual ~Particle();
 
     // BASE FUNCTION(s)
@@ -89,10 +89,10 @@ public: // PUBLIC FUNCTION(s)
     // GETTER FUNCTION(s)
 
     // TRANSFORM GETTER(s)
-    inline OKTransform2<float>& GetTransform() { return m_Transform; }
-    inline OKVector2<float> GetPosition() { return m_Transform.position; }
-    inline OKVector2<float> GetScale() { return m_Transform.scale; }
-    inline float GetRotation() { return m_Transform.rotation; }
+    inline OKTransform2<float>* GetTransform() { return m_Transform; }
+    inline OKVector2<float> GetPosition() { return m_Transform->position; }
+    inline OKVector2<float> GetScale() { return m_Transform->scale; }
+    inline float GetRotation() { return m_Transform->rotation; }
 
     // PHYSICS GETTER(s)
     inline const float GetMass() { return m_Mass; }
@@ -109,15 +109,15 @@ public: // PUBLIC FUNCTION(s)
     // SETTER FUNCTION(s)
 
     // TRANSFORM SETTER(s)
-    inline void SetTransform(OKTransform2<float> transform) { m_Transform = transform; }
+    inline void SetTransform(OKTransform2<float>* transform) { m_Transform = transform; }
 
-    inline void SetPosition(OKVector2<float> position) { m_Transform.position = position; }
-    inline void SetPosition(float x, float y) { m_Transform.position = OKVector2<float>(x, y); }
+    inline void SetPosition(OKVector2<float> position) { m_Transform->position = position; }
+    inline void SetPosition(float x, float y) { m_Transform->position = OKVector2<float>(x, y); }
 
-    inline void SetScale(OKVector2<float> scale) { m_Transform.scale = scale; }
-    inline void SetScale(float width, float height) { m_Transform.scale = OKVector2<float>(width, height); }
+    inline void SetScale(OKVector2<float> scale) { m_Transform->scale = scale; }
+    inline void SetScale(float width, float height) { m_Transform->scale = OKVector2<float>(width, height); }
 
-    inline void SetRotation(float rotation) { m_Transform.rotation = rotation; }
+    inline void SetRotation(float rotation) { m_Transform->rotation = rotation; }
 
     // PHYSICS SETTER(s)
     inline void SimulateGravity(bool simulateGravity) { m_SimulateGravity = simulateGravity; }

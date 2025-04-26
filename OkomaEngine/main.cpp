@@ -63,7 +63,7 @@ int main()
 	//CollisionManifold t_ColMani = CollisionManifold();
 	//CollisionResolution* t_CollisionResolution = new CollisionResolution();
 
-	int ParticleAmount = 1;
+	int ParticleAmount = 10;
 	ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(500, 400), 1, ParticleAmount, false, PARTICLE_TYPE_EMISSIVE, PARTICLE_SPAWN_AREA_NONE, PARTICLE_ACTION_NONE);
 	
 

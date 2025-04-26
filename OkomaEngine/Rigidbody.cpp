@@ -1,7 +1,7 @@
 #include "Rigidbody.h"
 
 Rigidbody::Rigidbody(OKTransform2<float>* transform, float mass, RigidbodyMovementType rigidbodyMovementType, bool IsCapsule, bool lockZRot)
-    : Particle(*transform, mass)
+    : Particle(transform, mass)
 {
     m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_RECTANGLE;
 
@@ -13,7 +13,7 @@ Rigidbody::Rigidbody(OKTransform2<float>* transform, float mass, RigidbodyMoveme
 }
 
 Rigidbody::Rigidbody(OKTransform2<float>* transform, float mass, float radius, RigidbodyMovementType rigidbodyMovementType)
-    : Particle(*transform, mass)
+    : Particle(transform, mass)
 {
     m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_CIRCLE;
     m_RigidbodyMovementType = rigidbodyMovementType;
@@ -63,26 +63,26 @@ void Rigidbody::Draw()
     {
         case RigidbodyShapeType::RIGIDBODY_RECTANGLE:
         {
-            DrawRectangleV(m_Transform.position.ConvertToVec2(), m_Transform.scale.ConvertToVec2(), RED);
+            DrawRectangleV(m_Transform->position.ConvertToVec2(), m_Transform->scale.ConvertToVec2(), RED);
         }
         break;
 
         case RigidbodyShapeType::RIGIDBODY_ORIENTED_RECTANGLE:
         {
-            Rectangle t_Rec = Rectangle{ m_Transform.position.x, m_Transform.position.y, m_Transform.scale.x, m_Transform.scale.y };
-            DrawRectanglePro(t_Rec, Vector2{ m_Transform.scale.x / 2, m_Transform.scale.y / 2 }, m_Transform.rotation, RED);
+            Rectangle t_Rec = Rectangle{ m_Transform->position.x, m_Transform->position.y, m_Transform->scale.x, m_Transform->scale.y };
+            DrawRectanglePro(t_Rec, Vector2{ m_Transform->scale.x / 2, m_Transform->scale.y / 2 }, m_Transform->rotation, RED);
         }
         break;
 
         case RigidbodyShapeType::RIGIDBODY_CIRCLE: 
         {
-            DrawCircleV(m_Transform.position.ConvertToVec2(), m_Radius, RED); 
+            DrawCircleV(m_Transform->position.ConvertToVec2(), m_Radius, RED); 
         }
         break;
 
         case RigidbodyShapeType::RIGIDBODY_CAPSULE:
         {
-            Rectangle t_SmoothRec = Rectangle{ m_Transform.position.x - (m_Transform.scale.x / 2), m_Transform.position.y - (m_Transform.scale.y / 2), m_Transform.scale.x, m_Transform.scale.y };
+            Rectangle t_SmoothRec = Rectangle{ m_Transform->position.x - (m_Transform->scale.x / 2), m_Transform->position.y - (m_Transform->scale.y / 2), m_Transform->scale.x, m_Transform->scale.y };
             DrawRectangleRounded(t_SmoothRec, 10, 10, RED);
             
         }

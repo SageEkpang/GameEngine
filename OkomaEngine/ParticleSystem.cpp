@@ -34,6 +34,33 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, float mass, unsigned i
 	m_EmissionTimer = 0.f;
 	m_EmissionRateOverTime = 5u;
 
+
+	#pragma region Particle System Pointer Functions
+
+
+
+	// m_CheckParticleActionFunctionPtr = CheckParticleAction;
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+	#pragma endregion
+
+
+
+	#pragma region Particle System Object Inits
+
 	// NOTE: Set Defauls for Particles
 	c_ParticleSystemObject particle_system_objects = c_ParticleSystemObject(m_Transform, mass);
 
@@ -84,12 +111,18 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, float mass, unsigned i
 	}
 
 	for (unsigned int i = 0; i < m_MaxParticleCount; ++i) { m_Particles.push_back(particle_system_objects); }
+
+	#pragma endregion
 }
 
 ParticleSystem::~ParticleSystem()
 {
-	m_ParticleActionFunctionPtr = nullptr;
-	m_ParticleSpawnAreaFunctionPtr = nullptr;
+	m_CustomParticleActionFunctionPtr = nullptr;
+	m_CustomParticleSpawnAreaFunctionPtr = nullptr;
+
+	m_ParticleSpeedFunctionPtr = nullptr;
+	m_ParticleSizeOverTime = nullptr;
+	m_ParticleSizeSpeedOverTime = nullptr;
 
 	if (!m_Particles.empty()) { m_Particles.clear(); }
 	if (!m_SimulatingParticles.empty()) { m_SimulatingParticles.clear(); }
@@ -158,7 +191,7 @@ void ParticleSystem::Update(const float deltaTime)
 					// NOTE: Push particles to the simuatling vector
 					m_SimulatingParticles.push_back(m_Particles[m_ParticleIndexIncrement]);
 					CheckParticleSpawnArea(m_Transform, m_ParticleSpawnArea, m_SimulatingParticles[m_ParticleIndexIncrement]);
-					CheckParticleAction(m_ParticleAction, m_SimulatingParticles[m_ParticleIndexIncrement]);
+					// CheckParticleAction(m_ParticleAction, m_SimulatingParticles[m_ParticleIndexIncrement]);
 					++m_ParticleIndexIncrement;
 
 				}
@@ -194,7 +227,9 @@ void ParticleSystem::Update(const float deltaTime)
 	{
 		for (auto& v : m_SimulatingParticles)
 		{
-			CheckParticleSize(v, SimulationSpeedDelta);
+			// NOTE: Process the Particle Sizing, Velocity and Force Values (has to be here to properly update at the same time as the other particles)
+			// CheckParticleSize(v, SimulationSpeedDelta);
+
 			v.particle.Update(SimulationSpeedDelta);
 		}
 	}
@@ -210,52 +245,50 @@ void ParticleSystem::Draw()
 	{
 		for (auto& v : m_SimulatingParticles)
 		{
-			DrawRectangleV(v.particle.GetPosition().ConvertToVec2(), Vector2{100, 100}, GREEN);
-			DrawRectangleV(v.particle.GetPosition().ConvertToVec2(), v.particle.GetScale().ConvertToVec2(), RED);
+			DrawRectangleV(v.transform.position.ConvertToVec2(), v.transform.scale.ConvertToVec2(), RED);
 		}
 	}
-
 }
 
 void ParticleSystem::CreateParticleAction(void(*particle_action_lamda)())
 {
-	m_ParticleActionFunctionPtr = particle_action_lamda;
+	m_CustomParticleActionFunctionPtr = particle_action_lamda;
 }
 
 void ParticleSystem::CreateParticleSpawnArea(void(*particle_spawn_area_lambda)())
 {
-	m_ParticleSpawnAreaFunctionPtr = particle_spawn_area_lambda;
+	m_CustomParticleSpawnAreaFunctionPtr = particle_spawn_area_lambda;
 }
 
 void ParticleSystem::CheckParticleAction(ParticleAction particle_action, c_ParticleSystemObject& particle_system_object)
 {
 	switch (particle_action)
 	{
-		case PARTICLE_ACTION_NONE: ProcessActionNone(particle_system_object); break;
+		case PARTICLE_ACTION_NONE: return ProcessActionNone(particle_system_object);
 
-		case PARTICLE_ACTION_BURST_OUT: ProcessActionBurstOut(particle_system_object); break;
-		case PARTICLE_ACTION_BURST_IN: ProcessActionBurstIn(particle_system_object); break;
+		case PARTICLE_ACTION_BURST_OUT: return ProcessActionBurstOut(particle_system_object);
+		case PARTICLE_ACTION_BURST_IN: return ProcessActionBurstIn(particle_system_object);
 
-		case PARTICLE_ACTION_SCREEN: ProcessActionScreen(particle_system_object); break;
-		case PARTICLE_ACTION_SCREEN_OUT: ProcessActionScreenOut(particle_system_object); break;
-		case PARTICLE_ACTION_SCREEN_IN: ProcessActionScreenIn(particle_system_object); break;
+		case PARTICLE_ACTION_SCREEN: return ProcessActionScreen(particle_system_object);
+		case PARTICLE_ACTION_SCREEN_OUT: return ProcessActionScreenOut(particle_system_object);
+		case PARTICLE_ACTION_SCREEN_IN: return ProcessActionScreenIn(particle_system_object);
 
-		case PARTICLE_ACTION_FALL: ProcessActionFall(particle_system_object); break;
-		case PARTICLE_ACTION_RISE: ProcessActionRise(particle_system_object); break;
-		case PARTICLE_ACTION_RIGHT: ProcessActionRight(particle_system_object); break;
-		case PARTICLE_ACTION_LEFT: ProcessActionLeft(particle_system_object); break;
+		case PARTICLE_ACTION_FALL: return ProcessActionFall(particle_system_object);
+		case PARTICLE_ACTION_RISE: return ProcessActionRise(particle_system_object);
+		case PARTICLE_ACTION_RIGHT: return ProcessActionRight(particle_system_object);
+		case PARTICLE_ACTION_LEFT: return ProcessActionLeft(particle_system_object);
 
-		case PARTICLE_ACTION_SPRAY: ProcessActionSpray(particle_system_object); break;
-		case PARTICLE_ACTION_SPIRAL: ProcessActionSpiral(particle_system_object); break;
+		case PARTICLE_ACTION_SPRAY: return ProcessActionSpray(particle_system_object);
+		case PARTICLE_ACTION_SPIRAL: return ProcessActionSpiral(particle_system_object);
 
-		case PARTICLE_ACTION_FIRE: ProcessActionFire(particle_system_object); break;
-		case PARTICLE_ACTION_SMOKE: ProcessActionSmoke(particle_system_object); break;
-		case PARTICLE_ACTION_SPARK: ProcessActionSpark(particle_system_object); break;
-		case PARTICLE_ACTION_WAVE: ProcessActionWave(particle_system_object); break;
+		case PARTICLE_ACTION_FIRE: return ProcessActionFire(particle_system_object);
+		case PARTICLE_ACTION_SMOKE: return ProcessActionSmoke(particle_system_object);
+		case PARTICLE_ACTION_SPARK: return ProcessActionSpark(particle_system_object);
+		case PARTICLE_ACTION_WAVE: return ProcessActionWave(particle_system_object);
 
-		case PARTICLE_ACTION_CUSTOM: ProcessActionCustom(particle_system_object); break;
+		case PARTICLE_ACTION_CUSTOM: return ProcessActionCustom(particle_system_object);
 
-		default: ProcessActionNone(particle_system_object); break;
+		default: return ProcessActionNone(particle_system_object);
 	}
 }
 
@@ -263,17 +296,17 @@ void ParticleSystem::CheckParticleSpawnArea(OKTransform2<float> transform, Parti
 {
 	switch (particle_spawn_area)
 	{
-		case PARTICLE_SPAWN_AREA_NONE: ProcessSpawnAreaNone(transform, particle_system_object); break;
-		case PARTICLE_SPAWN_AREA_CIRCLE: ProcessSpawnAreaCircle(transform, particle_system_object); break;
-		case PARTICLE_SPAWN_AREA_RECTANGLE: ProcessSpawnAreaRectangle(transform, particle_system_object); break;
-		case PARTICLE_SPAWN_AREA_CAPSULE: ProcessSpawnAreaCapsule(transform, particle_system_object); break;
+		case PARTICLE_SPAWN_AREA_NONE: return ProcessSpawnAreaNone(transform, particle_system_object);
+		case PARTICLE_SPAWN_AREA_CIRCLE: return ProcessSpawnAreaCircle(transform, particle_system_object);
+		case PARTICLE_SPAWN_AREA_RECTANGLE: return ProcessSpawnAreaRectangle(transform, particle_system_object);
+		case PARTICLE_SPAWN_AREA_CAPSULE: return ProcessSpawnAreaCapsule(transform, particle_system_object);
 		
-		case PARTICLE_SPAWN_AREA_DONUT: ProcessSpawnAreaDonut(transform, particle_system_object); break;
-		case PARTICLE_SPAWN_AREA_EDGE: ProcessSpawnAreaEdge(transform, particle_system_object); break;
+		case PARTICLE_SPAWN_AREA_DONUT: return ProcessSpawnAreaDonut(transform, particle_system_object);
+		case PARTICLE_SPAWN_AREA_EDGE: return ProcessSpawnAreaEdge(transform, particle_system_object);
 
-		case PARTICLE_SPAWN_AREA_CUSTOM: ProcessSpawnAreaCustom(transform, particle_system_object); break;
+		case PARTICLE_SPAWN_AREA_CUSTOM: return ProcessSpawnAreaCustom(transform, particle_system_object);
 
-		default: ProcessSpawnAreaNone(transform, particle_system_object); break;
+		default: return ProcessSpawnAreaNone(transform, particle_system_object);
 	}
 }
 
@@ -288,13 +321,13 @@ void ParticleSystem::CheckParticleSize(c_ParticleSystemObject& particle_system_o
 	const float tempLerpX = lerp(particle_system_object.startingSizeOverLifeTime->x, particle_system_object.endingSizeOverLifeTime->x, particle_system_object.currentSizeOverLifeTimer);
 	const float tempLerpY = lerp(particle_system_object.startingSizeOverLifeTime->y, particle_system_object.endingSizeOverLifeTime->y, particle_system_object.currentSizeOverLifeTimer);
 
-	particle_system_object.particle.SetScale(tempLerpX, tempLerpY);
+	particle_system_object.transform.scale = OKVector2<float>(tempLerpX, tempLerpY);
 }
 
 // NOTE: Spawn Area Functions
 void ParticleSystem::ProcessSpawnAreaNone(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
 {
-	particle_system_object.particle.SetPosition(transform.position);
+	particle_system_object.transform.position = transform.position;
 }
 
 void ParticleSystem::ProcessSpawnAreaCircle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
@@ -312,7 +345,7 @@ void ParticleSystem::ProcessSpawnAreaCircle(OKTransform2<float> transform, c_Par
 	float PositionX = CentrePosition.x + radius * cos(theta);
 	float PositionY = CentrePosition.y + radius * sin(theta);
 
-	particle_system_object.particle.SetPosition(PositionX, PositionY);
+	particle_system_object.transform.position = OKVector2<float>(PositionX, PositionY);
 }
 
 void ParticleSystem::ProcessSpawnAreaRectangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
@@ -335,7 +368,7 @@ void ParticleSystem::ProcessSpawnAreaRectangle(OKTransform2<float> transform, c_
 	float PositionX = CentrePosition.x + NumX;
 	float PositionY = CentrePosition.y + NumY;
 
-	particle_system_object.particle.SetPosition(PositionX, PositionY);
+	particle_system_object.transform.position = OKVector2<float>(PositionX, PositionY);
 }
 
 void ParticleSystem::ProcessSpawnAreaCapsule(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
@@ -373,7 +406,7 @@ void ParticleSystem::ProcessSpawnAreaDonut(OKTransform2<float> transform, c_Part
 	float PositionX = CentrePosition.x + radius * cos(theta);
 	float PositionY = CentrePosition.y + radius * sin(theta);
 
-	particle_system_object.particle.SetPosition(PositionX, PositionY);
+	particle_system_object.transform.position = OKVector2<float>(PositionX, PositionY);
 }
 
 void ParticleSystem::ProcessSpawnAreaEdge(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
@@ -389,13 +422,13 @@ void ParticleSystem::ProcessSpawnAreaEdge(OKTransform2<float> transform, c_Parti
 
 	float RandXRange = CentrePosition.x + NumX;
 
-	particle_system_object.particle.SetPosition(RandXRange, CentrePosition.y);
+	particle_system_object.transform.position = OKVector2<float>(RandXRange, CentrePosition.y);
 }
 
 void ParticleSystem::ProcessSpawnAreaCustom(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
 {
-	if (m_ParticleSpawnAreaFunctionPtr != nullptr) { m_ParticleSpawnAreaFunctionPtr(); }
-	else { particle_system_object.particle.SetPosition(transform.position); }
+	if (m_CustomParticleSpawnAreaFunctionPtr != nullptr) { m_CustomParticleSpawnAreaFunctionPtr(); }
+	else { particle_system_object.transform.position = transform.position; }
 }
 
 // NOTE: Action Functions
@@ -446,15 +479,15 @@ void ParticleSystem::ProcessActionScreen(c_ParticleSystemObject& particle_system
 
 	if (theta > 360) { theta = 0; }
 
-	float PositionX = particle_system_object.particle.GetPosition().x + cos(theta * NumX);
-	float PositionY = particle_system_object.particle.GetPosition().y + sin(theta * NumY);
+	float PositionX = particle_system_object.transform.position.x + cos(theta * NumX);
+	float PositionY = particle_system_object.transform.position.y + sin(theta * NumY);
 
 	particle_system_object.particle.SetPosition(PositionX, PositionY);
 }
 
 void ParticleSystem::ProcessActionScreenOut(c_ParticleSystemObject& particle_system_object)
 {
-	OKVector2<float> DistanceParticle = m_Transform.position - particle_system_object.particle.GetPosition();
+	OKVector2<float> DistanceParticle = m_Transform.position - particle_system_object.transform.position;
 
 	int MaxX = 10;
 	int MinX = 1;
@@ -471,10 +504,10 @@ void ParticleSystem::ProcessActionScreenOut(c_ParticleSystemObject& particle_sys
 
 	if (theta > 360) { theta = 0; }
 
-	float PositionX = particle_system_object.particle.GetPosition().x + cos(theta * NumX);
-	float PositionY = particle_system_object.particle.GetPosition().y + sin(theta * NumY);
+	float PositionX = particle_system_object.transform.position.x + cos(theta * NumX);
+	float PositionY = particle_system_object.transform.position.y + sin(theta * NumY);
 
-	particle_system_object.particle.SetPosition(PositionX, PositionY);
+	particle_system_object.transform.position = OKVector2<float>(PositionX, PositionY);
 	particle_system_object.particle.AddImpulse(-DistanceParticle.x, -DistanceParticle.y);
 
 	// Pulsing
@@ -483,7 +516,7 @@ void ParticleSystem::ProcessActionScreenOut(c_ParticleSystemObject& particle_sys
 
 void ParticleSystem::ProcessActionScreenIn(c_ParticleSystemObject& particle_system_object)
 {
-	OKVector2<float> DistanceParticle = m_Transform.position - particle_system_object.particle.GetPosition();
+	OKVector2<float> DistanceParticle = m_Transform.position - particle_system_object.transform.position;
 
 	int MaxX = 10;
 	int MinX = 1;
@@ -500,10 +533,10 @@ void ParticleSystem::ProcessActionScreenIn(c_ParticleSystemObject& particle_syst
 
 	if (theta > 360) { theta = 0; }
 
-	float PositionX = particle_system_object.particle.GetPosition().x + cos(theta * NumX);
-	float PositionY = particle_system_object.particle.GetPosition().y + sin(theta * NumY);
+	float PositionX = particle_system_object.transform.position.x + cos(theta * NumX);
+	float PositionY = particle_system_object.transform.position.y + sin(theta * NumY);
 
-	particle_system_object.particle.SetPosition(PositionX, PositionY);
+	particle_system_object.transform.position = OKVector2<float>(PositionX, PositionY);
 	particle_system_object.particle.AddImpulse(DistanceParticle.x * 2, DistanceParticle.y * 2);
 }
 
@@ -563,14 +596,14 @@ void ParticleSystem::ProcessActionFire(c_ParticleSystemObject& particle_system_o
 	float RangeY = MaxY - MinY + 1;
 	float NumY = rand() % RangeX + MinX;
 
-	float PositionX = particle_system_object.particle.GetPosition().x + cos(theta);
+	float PositionX = particle_system_object.transform.position.x + cos(theta);
 	particle_system_object.particle.AddImpulse(0, -NumY);
-	particle_system_object.particle.SetPosition(PositionX, particle_system_object.particle.GetPosition().y);
+	particle_system_object.transform.position = OKVector2<float>(PositionX, particle_system_object.particle.GetPosition().y);
 }
 
 void ParticleSystem::ProcessActionSmoke(c_ParticleSystemObject& particle_system_object)
 {
-	OKVector2<float> DistanceParticle = m_Transform.position - particle_system_object.particle.GetPosition();
+	OKVector2<float> DistanceParticle = m_Transform.position - particle_system_object.transform.position;
 
 	int MaxX = 100;
 	int MinX = -100;
@@ -585,8 +618,8 @@ void ParticleSystem::ProcessActionSmoke(c_ParticleSystemObject& particle_system_
 	float DistanceProjectionX = DistanceParticle.x * 10;
 	float DistanceProjectionY = DistanceParticle.y * 10;
 
-	float PositionX = lerp(particle_system_object.particle.GetPosition().x, DistanceProjectionX, 0.5);
-	float PositionY = lerp(particle_system_object.particle.GetPosition().y, DistanceProjectionY, 0.5);
+	float PositionX = lerp(particle_system_object.transform.position.x, DistanceProjectionX, 0.5);
+	float PositionY = lerp(particle_system_object.transform.position.y, DistanceProjectionY, 0.5);
 
 	particle_system_object.particle.AddImpulse(NumX, NumY);
 }
@@ -610,13 +643,13 @@ void ParticleSystem::ProcessActionSpark(c_ParticleSystemObject& particle_system_
 void ParticleSystem::ProcessActionWave(c_ParticleSystemObject& particle_system_object)
 {
 
-	particle_system_object.particle.SetPosition(particle_system_object.particle.GetPosition().x, particle_system_object.particle.GetPosition().y);
+	// particle_system_object.particle.SetPosition(particle_system_object.particle.GetPosition().x, particle_system_object.particle.GetPosition().y);
 	//particle_system_object.particle.AddImpulse(0, NumY);
 }
 
 void ParticleSystem::ProcessActionCustom(c_ParticleSystemObject& particle_system_object)
 {
-	if (m_ParticleActionFunctionPtr != nullptr) { m_ParticleActionFunctionPtr(); }
+	if (m_CustomParticleActionFunctionPtr != nullptr) { m_CustomParticleActionFunctionPtr(); }
 }
 
 
