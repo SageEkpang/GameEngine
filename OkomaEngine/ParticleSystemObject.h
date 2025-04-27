@@ -29,9 +29,9 @@ struct c_ParticleSystemObject
 	OKVector2<float>* endingSizeOverLifeTime;
 	float currentSizeOverLifeTimer;
 
-	OKVector2<float>* startingSizeBySpeed;
-	OKVector2<float>* endingSizeBySpeed;
-	OKVector2<float> currentSizeBySpeed;
+	OKVector2<float>* startingSizeByVelocity;
+	OKVector2<float>* endingSizeByVelocity;
+	float currentSizeByVelocity;
 
 	c_ParticleSystemObject() = default;
 	c_ParticleSystemObject(OKTransform2<float> transform, float mass)
@@ -59,9 +59,9 @@ struct c_ParticleSystemObject
 		endingSizeOverLifeTime = nullptr;
 		currentSizeOverLifeTimer = 0.0f;
 
-		startingSizeBySpeed = nullptr;
-		endingSizeBySpeed = nullptr;
-		currentSizeBySpeed = OKVector2<float>(1.0f, 1.0f);
+		startingSizeByVelocity = nullptr;
+		endingSizeByVelocity = nullptr;
+		currentSizeByVelocity = 0.0f;
 	}
 };
 

@@ -70,10 +70,8 @@ enum ParticleResize
 {
 	PARTICLE_RESIZE_NONE,
 	PARTICLE_RESIZE_OVER_LIFETIME,
-	PARTICLE_RESIZE_VELOCITY,
-	PARTICLE_RESIZE_CUSTOM
+	PARTICLE_RESIZE_VELOCITY
 };
-
 
 class ParticleSystem
 {
@@ -91,9 +89,8 @@ private:
 	std::map<ParticleResize, CheckParticleResizeFunctionPtr> m_ParticleResizeMap;
 
 	// CUSTOM DATA TYPE
-	void (*m_CustomParticleActionFunctionPtr)() = nullptr; // USED
-	void (*m_CustomParticleSpawnAreaFunctionPtr)() = nullptr; // USED
-	void (*m_CustomParticleResizeFunctionPtr)() = nullptr;
+	void (*m_CustomParticleActionFunctionPtr)() = nullptr;
+	void (*m_CustomParticleSpawnAreaFunctionPtr)() = nullptr;
 
 	void (ParticleSystem::* m_CheckParticleActionFunctionPtr)(c_ParticleSystemObject&) = nullptr;
 	void (ParticleSystem::* m_CheckParticleSpawnFunctionPtr)(OKTransform2<float>, c_ParticleSystemObject&) = nullptr;
@@ -134,8 +131,8 @@ private:
 	OKVector2<float> m_StartingSizeOverLifeTime;
 	OKVector2<float> m_EndingSizeOverLifeTime;
 
-	OKVector2<float> m_StartingSizeBySpeed;
-	OKVector2<float> m_EndingSizeBySpeed;
+	OKVector2<float> m_StartingSizeByVelocity;
+	OKVector2<float> m_EndingSizeByVelocity;
 
 	// NOTE: For NOT Looping
 	float m_ParticleTimer; // USED
@@ -185,10 +182,10 @@ public:
 	// HELPER FUNCTION(s)
 
 		// NOTE: PARTICLE CHECKING FUNCTION(s) (See what the particle can do)		
-		void ResetParticle(c_ParticleSystemObject& particle_system_object);
+		// void ResetParticle(c_ParticleSystemObject& particle_system_object);
 
 		// NOTE: PARTICLE SPAWN AREA FUNCTION(s)
-		void CreateParticleSpawnArea(void (*particle_spawn_area_lambda)()); // Done
+		void CreateParticleSpawnArea(void (*particle_spawn_area_lambda)());
 		void ProcessSpawnAreaNone(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
 		void ProcessSpawnAreaCircle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
 		void ProcessSpawnAreaRectangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object); // Done
@@ -199,11 +196,9 @@ public:
 
 
 		// NOTE: PARTICLE RESIZE FUNCTION(s)
-		void CreateParticleResize(void (*particle_resize_lamda)());
 		void ProcessResizeNone(c_ParticleSystemObject& particle_system_object, float deltaTime);
 		void ProcessResizeOverLifeTime(c_ParticleSystemObject& particle_system_object, float deltaTime);
 		void ProcessResizeVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime);
-		void ProcessResizeCustom(c_ParticleSystemObject& particle_system_object, float deltaTime);
 
 
 		// NOTE: PARTICLE ACTION FUNCTION(s)
@@ -268,8 +263,8 @@ public:
 		inline OKVector2<float> GetStartingForceOverLifeTime() const { return m_StartingForceOverLifeTime; }
 		inline OKVector2<float> GetEndingForceOverLifeTime() const { return m_EndingForceOverLifeTime; }
 
-		inline OKVector2<float> GetStartingSizeBySpeed() const { return m_StartingSizeBySpeed; }
-		inline OKVector2<float> GetEndingSizeBySpeed() const { return m_EndingSizeBySpeed; }
+		inline OKVector2<float> GetStartingSizeBySpeed() const { return m_StartingSizeByVelocity; }
+		inline OKVector2<float> GetEndingSizeBySpeed() const { return m_EndingSizeByVelocity; }
 
 
 	// SETTER FUNCTION(s)
@@ -303,13 +298,13 @@ public:
 		inline void SetStartingForceOverLifeTime(OKVector2<float> startingForceOverLifeTime) { m_StartingForceOverLifeTime = startingForceOverLifeTime; }
 		inline void SetEndingForceOverLifeTime(OKVector2<float> endingForceOverLifeTime) { m_EndingForceOverLifeTime = endingForceOverLifeTime; }
 
-		void AssignResizeOverLifeTime(OKVector2<float> starting_velocity_over_lifetime, OKVector2<float> ending_velocity_over_lifetime);
+		void AssignResizeOverLifeTime(OKVector2<float> starting_resize_over_lifetime, OKVector2<float> ending_resize_over_lifetime);
 		inline void SetStartingSizeOverLifeTime(OKVector2<float> startingSizeOverLifeTime) { m_StartingSizeOverLifeTime = startingSizeOverLifeTime; }
 		inline void SetEndingSizeOverLifeTime(OKVector2<float> endingSizeOverLifeTime) { m_EndingForceOverLifeTime = endingSizeOverLifeTime; }
 
-		void AssignResizeBySpeedOverLifeTime(OKVector2<float> starting_size_by_speed, OKVector2<float> ending_size_by_speed);
-		inline void SetStartingSizeBySpeed(OKVector2<float> startingSizeBySpeed) { m_StartingSizeBySpeed = startingSizeBySpeed; } // TODO: Change these function names
-		inline void SetEndingSizeBySpeed(OKVector2<float> endingSizeBySpeed) { m_EndingSizeBySpeed = endingSizeBySpeed; } // TODO: Change these function names
+		void AssignResizeByVelocityOverLifeTime(OKVector2<float> starting_resize_velocity_over_lifetime, OKVector2<float> ending_resize_velocity_over_lifetime);
+		inline void SetStartingSizeBySpeed(OKVector2<float> startingSizeByVelocity) { m_StartingSizeByVelocity = startingSizeByVelocity; }
+		inline void SetEndingSizeBySpeed(OKVector2<float> endingSizeByVelocity) { m_EndingSizeByVelocity = endingSizeByVelocity; }
 };
 
 #endif
