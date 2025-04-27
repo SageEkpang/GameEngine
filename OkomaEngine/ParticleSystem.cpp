@@ -93,7 +93,7 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, float mass, unsigned i
 	c_ParticleSystemObject particle_system_objects = c_ParticleSystemObject(m_Transform, mass);
 
 	m_StartDelay = 0.0f;
-	m_StartLifeTime = 2.0f;
+	m_StartLifeTime = 5.0f;
 	m_StartSpeed = 1.0f;
 	m_StartSize = OKVector2<float>(10.0f, 10.0f);
 	m_Gravity = OKVector2<float>(0.0f, 1.0f);
@@ -118,6 +118,7 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, float mass, unsigned i
 	{
 		particle_system_objects.startDelay = &m_StartDelay;
 		particle_system_objects.startLifeTime = &m_StartLifeTime;
+		particle_system_objects.currentLifeTime = m_StartLifeTime;
 
 		particle_system_objects.startSpeed = &m_StartSpeed;
 		particle_system_objects.startSize = &m_StartSize;
@@ -247,22 +248,30 @@ void ParticleSystem::Update(const float deltaTime)
 		}
 	}
 
-	// TODO: Check if particles need to be removed from the simulating particle vector
-
 	// Update Simulating Particles
 	if (!m_SimulatingParticles.empty())
 	{
-		for (auto& v : m_SimulatingParticles)
+		for (int i = 0; i < m_SimulatingParticles.size(); ++i)
 		{
+			// NOTE: Check the particle life time and update the "life time" within the particle
+			CheckParticleLifeTime(m_SimulatingParticles[i], SimulationSpeedDelta);	
 
-
-			// NOTE: Process the Particle Sizing, Velocity and Force Values (has to be here to properly update at the same time as the other particles)
-			(this->*m_CheckParticleResizingFunctionPtr)(v, SimulationSpeedDelta);
-
-			v.particle.Update(SimulationSpeedDelta);
+			// NOTE: Process updated particle informaiton
+			if (m_SimulatingParticles[i].currentLifeTime <= 0.0f)
+			{
+				m_SimulatingParticles.erase(m_SimulatingParticles.begin() + i); // TODO: Check that this erases the right index from the element
+	
+				// continue;
+			}
+			else
+			{
+				// NOTE: Process the Particle Sizing, Velocity and Force Values (has to be here to properly update at the same time as the other particles)
+				(this->*m_CheckParticleResizingFunctionPtr)(m_SimulatingParticles[i], SimulationSpeedDelta);
+				m_SimulatingParticles[i].particle.Update(SimulationSpeedDelta);
+			}
 		}
 	}
-	
+
 	static float i;
 	i += SimulationSpeedDelta;
 	DrawText(TextFormat("Time: %f", i), 10, 10, 30, RED);
@@ -282,6 +291,14 @@ void ParticleSystem::Draw()
 void ParticleSystem::CreateParticleAction(void(*particle_action_lamda)())
 {
 	m_CustomParticleActionFunctionPtr = particle_action_lamda;
+}
+
+void ParticleSystem::CheckParticleLifeTime(c_ParticleSystemObject& particle_system_object, float deltaTime)
+{
+	// particle_system_object.currentLifeTime -= (1.f / *particle_system_object.startLifeTime / *particle_system_object.startLifeTime) / 1000;
+	particle_system_object.currentLifeTime -= deltaTime;
+	int i = 0;
+
 }
 
 void ParticleSystem::CreateParticleSpawnArea(void(*particle_spawn_area_lambda)())

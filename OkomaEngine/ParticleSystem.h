@@ -11,6 +11,7 @@
 #include <cmath>
 #include <random>
 #include <map>
+
 // NOTE: In the collab project, rendering will have to be included here as well
 
 // NOTE: Variables to Manipulate for Each Area
@@ -183,6 +184,8 @@ public:
 
 		// NOTE: PARTICLE CHECKING FUNCTION(s) (See what the particle can do)		
 		// void ResetParticle(c_ParticleSystemObject& particle_system_object);
+
+		void CheckParticleLifeTime(c_ParticleSystemObject& particle_system_object, float deltaTime);
 
 		// NOTE: PARTICLE SPAWN AREA FUNCTION(s)
 		void CreateParticleSpawnArea(void (*particle_spawn_area_lambda)());

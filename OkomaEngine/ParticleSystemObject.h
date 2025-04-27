@@ -11,6 +11,7 @@ struct c_ParticleSystemObject
 	// NOTE: Both
 	float* startDelay; // NOTE: In Seconds
 	float* startLifeTime;
+	float currentLifeTime;
 	float* startSpeed;
 	float theta;
 
@@ -41,6 +42,7 @@ struct c_ParticleSystemObject
 
 		startDelay = nullptr;
 		startLifeTime = nullptr;
+		currentLifeTime = 0.0f;
 		startSpeed = nullptr;
 		theta = 0.f;
 
