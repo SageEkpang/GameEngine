@@ -25,7 +25,7 @@ private: // PRIVATE VARIABLE(s)
 protected: // PROTECTED VARIABLE(s)
 
     // TRANSFORM VARIABLE(s)
-    OKTransform2<float>* m_Transform;
+    OKTransform2<float>* m_Transform = nullptr;
 
     // FORCE VARIABLE(s)
     OKVector2<float> m_NetForce{};
