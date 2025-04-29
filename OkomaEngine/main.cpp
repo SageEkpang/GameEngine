@@ -1,25 +1,25 @@
 #include "HeaderManager.h"
 #include "WindowConstants.h"
-//#include "Timer.h"
-//#include "TimeStepConstants.h"
+#include "Timer.h"
+#include "TimeStepConstants.h"
 
-//#include "PhysicsObject.h"
-//#include "TriggerArea.h"
-//#include "ColliderManager.h"
-//#include "CollisionResolution.h"
-// #include "ParticleSystem.h"
+#include "PhysicsObject.h"
+#include "TriggerArea.h"
+#include "ColliderManager.h"
+#include "CollisionResolution.h"
+ #include "ParticleSystem.h"
 
-// std::vector<PhysicsObject*> m_PhysicsObjects;
+ std::vector<PhysicsObject*> m_PhysicsObjects;
 
 int main()
 {
 	// Game Utility (namespace) over Game Manager (class)
 	InitWindow(1000, 800, "OkomaEngine");
-	// InitAudioDevice();
+	InitAudioDevice();
 
-	//Timer* timer = new Timer();
-	//float m_Accumulator = 0;
-	//float m_SimpleCounter = 0;
+	Timer* timer = new Timer();
+	float m_Accumulator = 0;
+	float m_SimpleCounter = 0;
 
 	// PLAYER 
 	//OKTransform2<float> TransformFirst(OKVector2<float>(100, 200), OKVector2<float>(40, 80), 0);
@@ -63,10 +63,9 @@ int main()
 	//CollisionManifold t_ColMani = CollisionManifold();
 	//CollisionResolution* t_CollisionResolution = new CollisionResolution();
 
-	// int ParticleAmount = 1000;
-	// ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(500, 400), 1, ParticleAmount, false, PARTICLE_TYPE_EMISSIVE, PARTICLE_SPAWN_AREA_RECTANGLE, PARTICLE_ACTION_BURST_OUT);
-	
-
+	int ParticleAmount = 1000;
+	ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(500, 400), 1, ParticleAmount, false, PARTICLE_TYPE_EMISSIVE, PARTICLE_SPAWN_AREA_NONE, PARTICLE_ACTION_BURST_OUT);
+			
 	// SetTargetFPS(60);
 	while (!WindowShouldClose())
 	{
@@ -76,12 +75,12 @@ int main()
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
 
-		//m_Accumulator += timer->GetDeltaTime();
-		//m_SimpleCounter += timer->GetDeltaTime();
+		m_Accumulator += timer->GetDeltaTime();
+		m_SimpleCounter += timer->GetDeltaTime();
 
 
-		 // m_ParticleSystem->Update(GetFrameTime());
-		// m_ParticleSystem->Draw();
+		m_ParticleSystem->Update(GetFrameTime());
+		m_ParticleSystem->Draw();
 		// DrawCircleV(Vector2{ 500, 400 }, 10, GREEN);
 
 
@@ -127,19 +126,19 @@ int main()
 		//	v->Draw();
 		//}
 
-		//if (m_Accumulator >= FPS_60)
-		//{
-		//	m_Accumulator -= FPS_60;
-		//}
+		if (m_Accumulator >= FPS_60)
+		{
+			m_Accumulator -= FPS_60;
+		}
 
-		// timer->Tick();
+		timer->Tick();
 
 		EndDrawing();
 	}
 
-	// delete m_ParticleSystem;
+	delete m_ParticleSystem;
 	
-	// CloseAudioDevice();
+	CloseAudioDevice();
 	CloseWindow();
 
 	return 0;

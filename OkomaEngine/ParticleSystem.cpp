@@ -77,16 +77,41 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, float mass, unsigned i
 
 
 		// NOTE: PARTICLE RESIZING VARIABLE(s)
-
 		m_ParticleResizeMap[PARTICLE_RESIZE_NONE] = &ParticleSystem::ProcessResizeNone;
 		m_ParticleResizeMap[PARTICLE_RESIZE_OVER_LIFETIME] = &ParticleSystem::ProcessResizeOverLifeTime;
 		m_ParticleResizeMap[PARTICLE_RESIZE_VELOCITY] = &ParticleSystem::ProcessResizeVelocity;
 
-		m_CheckParticleResizingFunctionPtr = m_ParticleResizeMap[PARTICLE_RESIZE_OVER_LIFETIME];
+		m_CheckParticleResizingFunctionPtr = m_ParticleResizeMap[PARTICLE_RESIZE_NONE];
+
+
+		// NOTE: PARTICLE PHYSICS FORCE OVER TIME
+		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_NONE] = &ParticleSystem::ProcessPhysicsOverTimeNone;
+		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_FORCE_OVER_LIFETIME] = &ParticleSystem::ProcessPhysicsOverTimeForce;
+		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_VELOCITY_OVER_LIFETIME] = &ParticleSystem::ProcessPhysicsOverTimeVelocity;
+
+		m_CheckPatriclePhysicsOverTimeFunctionPtr = m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_NONE];
 
 	#pragma endregion
 
 	#pragma region Particle System Object Inits
+
+	m_StartDelay = 0.0f;
+	m_StartLifeTime = 5.0f;
+	m_StartSpeed = 1.0f;
+	m_StartSize = OKVector2<float>(5.0f, 5.0f);
+	m_Gravity = OKVector2<float>(0.0f, 0.0f);
+
+	m_StartingVelocityOverLifeTime = OKVector2<float>(1.0f, 1.0f);
+	m_EndingVelocityOverLifeTime = OKVector2<float>(1.0f, 1.0f);
+
+	m_StartingForceOverLifeTime = OKVector2<float>(1.0f, 1.0f);
+	m_EndingForceOverLifeTime = OKVector2<float>(1.0f, 1.0f);
+
+	m_StartingSizeOverLifeTime = m_StartSize;
+	m_EndingSizeOverLifeTime = m_StartSize;
+
+	m_StartingSizeByVelocity = m_StartSize;
+	m_EndingSizeByVelocity = m_StartSize;
 
 	// NOTE: Set Defauls for Particles
 	for (unsigned int i = 0; i < m_MaxParticleCount; ++i) 
@@ -94,26 +119,9 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, float mass, unsigned i
 		OKTransform2<float>* transform = new OKTransform2<float>(position, OKVector2<float>(1.f, 1.f), 0);
 		c_ParticleSystemObject* particle_system_objects = new c_ParticleSystemObject(transform, mass);
 
-		m_StartDelay = 0.0f;
-		m_StartLifeTime = 1.0f;
-		m_StartSpeed = 1.0f;
-		m_StartSize = OKVector2<float>(10.0f, 10.0f);
-		m_Gravity = OKVector2<float>(0.0f, 10.0f);
+		particle_system_objects->SimulateGravity(m_SimulateGravity);
+		particle_system_objects->SetGravity(m_Gravity);
 
-		m_StartingVelocityOverLifeTime = OKVector2<float>(1.0f, 1.0f);
-		m_EndingVelocityOverLifeTime = OKVector2<float>(1.0f, 1.0f);
-
-		m_StartingForceOverLifeTime = OKVector2<float>(1.0f, 1.0f);
-		m_EndingForceOverLifeTime = OKVector2<float>(1.0f, 1.0f);
-
-		m_StartingSizeOverLifeTime = OKVector2<float>(1.0f, 1.0f);
-		m_EndingSizeOverLifeTime = OKVector2<float>(5.0f, 5.0f);
-
-		m_StartingSizeByVelocity = OKVector2<float>(1.0f, 1.0f);
-		m_EndingSizeByVelocity = OKVector2<float>(1.0f, 1.0f);
-
-		m_SimulateGravity = simulateGravity;
-		particle_system_objects->SimulateGravity(true);
 		particle_system_objects->SetScale(m_StartSize.x, m_StartSize.y);
 		particle_system_objects->SetRotation(0.0f);
 
@@ -123,7 +131,6 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, float mass, unsigned i
 
 		particle_system_objects->m_StartSpeed = &m_StartSpeed;
 		particle_system_objects->m_StartSize = &m_StartSize;
-		particle_system_objects->SetGravity(m_Gravity);
 
 		particle_system_objects->m_StartingVelocityOverLifeTime = &m_StartingVelocityOverLifeTime;
 		particle_system_objects->m_EndingVelocityOverLifeTime = &m_EndingVelocityOverLifeTime;
@@ -151,6 +158,7 @@ ParticleSystem::~ParticleSystem()
 	m_CheckParticleActionFunctionPtr = nullptr;
 	m_CheckParticleSpawnFunctionPtr = nullptr;
 	m_CheckParticleResizingFunctionPtr = nullptr;
+	m_CheckPatriclePhysicsOverTimeFunctionPtr = nullptr;
 
 	if (!m_Particles.empty()) { m_Particles.clear(); }
 	if (!m_SimulatingParticles.empty()) { m_SimulatingParticles.clear(); }
@@ -261,7 +269,7 @@ void ParticleSystem::Update(const float deltaTime)
 	}
 
 	// NOTE: Update Simulating Particles
-	//NOTE: Delete the particles that need to be deleted
+	// NOTE: Delete the particles that need to be deleted
 	if (!m_SimulatingParticles.empty())
 	{
 		for (auto itr = m_SimulatingParticles.begin(); itr != m_SimulatingParticles.end();)
@@ -276,9 +284,10 @@ void ParticleSystem::Update(const float deltaTime)
 			}
 			else
 			{
-				// NOTE: Iterate through vector if 
+				// NOTE: Iterate through vector
 				// NOTE: Process the Particle Sizing, Velocity and Force Values (has to be here to properly update at the same time as the other particles)
 				(this->*m_CheckParticleResizingFunctionPtr)(*itr, SimulationSpeedDelta);
+				(this->*m_CheckPatriclePhysicsOverTimeFunctionPtr)(*itr, SimulationSpeedDelta);
 				(*itr).Update(SimulationSpeedDelta);
 				++itr;
 			}
@@ -402,11 +411,8 @@ void ParticleSystem::ProcessSpawnAreaRectangle(OKTransform2<float> transform, c_
 {
 	OKVector2<float> CentrePosition = transform.position;
 
-	// int ExtentX = m_RectangleScale.x;
-	// int ExtentY = m_RectangleScale.y;
-
-	int ExtentX = 100;
-	int ExtentY = 100;
+	const int ExtentX = m_RectangleScale.x;
+	const int ExtentY = m_RectangleScale.y;
 
 	int MaxX = ExtentX;
 	int MinX = -ExtentX;
@@ -528,6 +534,25 @@ void ParticleSystem::ProcessResizeVelocity(c_ParticleSystemObject& particle_syst
 	particle_system_object.SetScale(tempLerpX, tempLerpY);
 }
 
+void ParticleSystem::ProcessPhysicsOverTimeNone(c_ParticleSystemObject& particle_system_object, float deltaTime)
+{
+	// NOTE: No Functionality
+}
+
+void ParticleSystem::ProcessPhysicsOverTimeForce(c_ParticleSystemObject& particle_system_object, float deltaTime)
+{
+
+
+
+}
+
+void ParticleSystem::ProcessPhysicsOverTimeVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime)
+{
+
+
+
+}
+
 
 // NOTE: Action Functions
 
@@ -548,7 +573,7 @@ void ParticleSystem::ProcessActionBurstOut(c_ParticleSystemObject& particle_syst
 	int RangeY = MaxY - MinY + 1;
 	float NumY = rand() % RangeY + MinY;
 
-	particle_system_object.AddImpulse(NumX, NumY);
+	particle_system_object.AddImpulse(NumX * m_StartSpeed, NumY * m_StartSpeed);
 }
 
 void ParticleSystem::ProcessActionBurstIn(c_ParticleSystemObject& particle_system_object)
@@ -573,7 +598,7 @@ void ParticleSystem::ProcessActionScreen(c_ParticleSystemObject& particle_system
 	int NumY = rand() % RangeY + MinY;
 
 	static float theta; // 360 (degrees)
-	theta += GetFrameTime();
+	theta += GetFrameTime(); // TODO: SIMUATLION SPEED HERE
 
 	if (theta > 360) { theta = 0; }
 
@@ -606,7 +631,7 @@ void ParticleSystem::ProcessActionScreenOut(c_ParticleSystemObject& particle_sys
 	float PositionY = particle_system_object.GetPosition().y + sin(theta * NumY);
 
 	particle_system_object.SetPosition(PositionX, PositionY);
-	particle_system_object.AddImpulse(-DistanceParticle.x, -DistanceParticle.y);
+	particle_system_object.AddImpulse(-DistanceParticle.x * m_StartSpeed, -DistanceParticle.y * m_StartSpeed);
 
 	// Pulsing
 	// particle_system_object.particle.AddImpulse(DistanceParticle);
@@ -635,27 +660,27 @@ void ParticleSystem::ProcessActionScreenIn(c_ParticleSystemObject& particle_syst
 	float PositionY = particle_system_object.GetPosition().y + sin(theta * NumY);
 
 	particle_system_object.SetPosition(PositionX, PositionY);
-	particle_system_object.AddImpulse(DistanceParticle.x * 2, DistanceParticle.y * 2);
+	particle_system_object.AddImpulse(DistanceParticle.x * m_StartSpeed, DistanceParticle.y * m_StartSpeed);
 }
 
 void ParticleSystem::ProcessActionFall(c_ParticleSystemObject& particle_system_object)
 {
-	particle_system_object.AddImpulse(0, 1);
+	particle_system_object.AddImpulse(0, 1 * m_StartSpeed);
 }
 
 void ParticleSystem::ProcessActionRise(c_ParticleSystemObject& particle_system_object)
 {
-	particle_system_object.AddImpulse(0, -1);
+	particle_system_object.AddImpulse(0, -1 * m_StartSpeed);
 }
 
 void ParticleSystem::ProcessActionRight(c_ParticleSystemObject& particle_system_object)
 {
-	particle_system_object.AddImpulse(1, 0);
+	particle_system_object.AddImpulse(1 * m_StartSpeed, 0);
 }
 
 void ParticleSystem::ProcessActionLeft(c_ParticleSystemObject& particle_system_object)
 {
-	particle_system_object.AddImpulse(-1, 0);
+	particle_system_object.AddImpulse(-1 * m_StartSpeed, 0);
 }
 
 // TODO:
@@ -669,7 +694,7 @@ void ParticleSystem::ProcessActionSpray(c_ParticleSystemObject& particle_system_
 
 
 
-	particle_system_object.AddImpulse(-1, 0);
+	particle_system_object.AddImpulse(-1 * m_StartSpeed, 0);
 }
 
 void ParticleSystem::ProcessActionSpiral(c_ParticleSystemObject& particle_system_object)
@@ -695,7 +720,7 @@ void ParticleSystem::ProcessActionFire(c_ParticleSystemObject& particle_system_o
 	float NumY = rand() % RangeX + MinX;
 
 	float PositionX = particle_system_object.GetPosition().x + cos(theta);
-	particle_system_object.AddImpulse(0, -NumY);
+	particle_system_object.AddImpulse(0 * m_StartSpeed, -NumY * m_StartSpeed);
 	particle_system_object.SetPosition(PositionX, particle_system_object.GetPosition().y);
 }
 
@@ -719,7 +744,7 @@ void ParticleSystem::ProcessActionSmoke(c_ParticleSystemObject& particle_system_
 	float PositionX = lerp(particle_system_object.GetPosition().x, DistanceProjectionX, 0.5);
 	float PositionY = lerp(particle_system_object.GetPosition().y, DistanceProjectionY, 0.5);
 
-	particle_system_object.AddImpulse(NumX, NumY);
+	particle_system_object.AddImpulse(NumX * m_StartSpeed, NumY * m_StartSpeed);
 }
 
 void ParticleSystem::ProcessActionSpark(c_ParticleSystemObject& particle_system_object)
@@ -734,7 +759,7 @@ void ParticleSystem::ProcessActionSpark(c_ParticleSystemObject& particle_system_
 	int RangeY = MaxY - MinY + 1;
 	int NumY = rand() % RangeY + MinY;
 
-	particle_system_object.AddImpulse(NumX, NumY);
+	particle_system_object.AddImpulse(NumX * m_StartSpeed, NumY * m_StartSpeed);
 }
 
 // TODO: Fix This	
@@ -752,14 +777,18 @@ void ParticleSystem::ProcessActionCustom(c_ParticleSystemObject& particle_system
 
 void ParticleSystem::AssignVelocityOverLifeTime(OKVector2<float> starting_velocity_over_lifetime, OKVector2<float> ending_velocity_over_lifetime)
 {
+	m_StartingVelocityOverLifeTime = starting_velocity_over_lifetime;
+	m_EndingVelocityOverLifeTime = ending_velocity_over_lifetime;
 
-
+	m_CheckPatriclePhysicsOverTimeFunctionPtr = m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_VELOCITY_OVER_LIFETIME];
 }
 
 void ParticleSystem::AssignForceOverLifeTime(OKVector2<float> starting_force_over_lifetime, OKVector2<float> ending_force_over_lifetime)
 {
+	m_StartingForceOverLifeTime = starting_force_over_lifetime;
+	m_EndingForceOverLifeTime = ending_force_over_lifetime;
 
-
+	m_CheckPatriclePhysicsOverTimeFunctionPtr = m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_FORCE_OVER_LIFETIME];
 }
 
 void ParticleSystem::AssignResizeOverLifeTime(OKVector2<float> starting_resize_over_lifetime, OKVector2<float> ending_resize_over_lifetime)
@@ -777,6 +806,3 @@ void ParticleSystem::AssignResizeByVelocityOverLifeTime(OKVector2<float> startin
 
 	m_CheckParticleResizingFunctionPtr = m_ParticleResizeMap[PARTICLE_RESIZE_VELOCITY];
 }
-
-
-

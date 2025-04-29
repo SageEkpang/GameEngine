@@ -74,6 +74,13 @@ enum ParticleResize
 	PARTICLE_RESIZE_VELOCITY
 };
 
+enum ParticlePhysicsOverLifeTime
+{
+	PARTICLE_PHYSICS_NONE,
+	PARTICLE_PHYSICS_FORCE_OVER_LIFETIME,
+	PARTICLE_PHYSICS_VELOCITY_OVER_LIFETIME
+};
+
 class ParticleSystem
 {
 private:
@@ -89,6 +96,9 @@ private:
 	typedef void (ParticleSystem::* CheckParticleResizeFunctionPtr)(c_ParticleSystemObject&, float);
 	std::map<ParticleResize, CheckParticleResizeFunctionPtr> m_ParticleResizeMap;
 
+	typedef void (ParticleSystem::* CheckParticlePhysicsFunctionPtr)(c_ParticleSystemObject&, float);
+	std::map< ParticlePhysicsOverLifeTime, CheckParticlePhysicsFunctionPtr> m_ParticlePhysicsOverTimeMap;
+
 	// CUSTOM DATA TYPE
 	void (*m_CustomParticleActionFunctionPtr)() = nullptr;
 	void (*m_CustomParticleSpawnAreaFunctionPtr)() = nullptr;
@@ -96,22 +106,22 @@ private:
 	void (ParticleSystem::* m_CheckParticleActionFunctionPtr)(c_ParticleSystemObject&) = nullptr;
 	void (ParticleSystem::* m_CheckParticleSpawnFunctionPtr)(OKTransform2<float>, c_ParticleSystemObject&) = nullptr;
 	void (ParticleSystem::* m_CheckParticleResizingFunctionPtr)(c_ParticleSystemObject&, float) = nullptr;
+	void (ParticleSystem::* m_CheckPatriclePhysicsOverTimeFunctionPtr)(c_ParticleSystemObject&, float) = nullptr;
 
 
 	// TRANSFORM VARIABLE(s)
-	OKTransform2<float> m_Transform; // USED
+	OKTransform2<float> m_Transform;
 
 	// PARTICLE VARIABLE(s)
-	// May be able to convert to a single variable
-	std::vector<c_ParticleSystemObject*> m_Particles; // USED
-	std::vector<c_ParticleSystemObject> m_SimulatingParticles; // NOTE: This is to push simulating particles from the loaded map
+	std::vector<c_ParticleSystemObject*> m_Particles;
+	std::vector<c_ParticleSystemObject> m_SimulatingParticles;
 	unsigned int m_ParticleIndexIncrement;
 
 	bool m_IsExecuted = false;
 
-	ParticleSpawnArea m_ParticleSpawnArea; // USED
-	ParticleAction m_ParticleAction; // USED
-	ParticleType m_ParticleType; // USED
+	ParticleSpawnArea m_ParticleSpawnArea;
+	ParticleAction m_ParticleAction;
+	ParticleType m_ParticleType;
 
 
 	// BASE VARIABLE(s)
@@ -137,16 +147,17 @@ private:
 	OKVector2<float> m_EndingSizeByVelocity;
 
 	// NOTE: For NOT Looping
-	float m_ParticleTimer; // USED
-	float m_ParticleSimulationDuration; // USED
-	bool m_IsLooping; // USED
+	float m_ParticleTimer;
+	float m_ParticleSimulationDuration;
+	bool m_IsLooping;
+
 	OKVector2<float> m_Gravity;
-	bool m_SimulateGravity; // NOTE: Have it where particles simulate gravity // USED
-	float m_SimulationSpeed; // NOTE: Play back speed of the particle simulation // USED
+	bool m_SimulateGravity;
+	float m_SimulationSpeed;
 
 	// EMISSION VARIABLE(s)
-	float m_EmissionTimer = 0.0f; // USED
-	unsigned int m_EmissionRateOverTime; // NOTE: How many particles should be spawned per second // USED
+	float m_EmissionTimer = 0.0f;
+	unsigned int m_EmissionRateOverTime;
 
 private: // SPAWN AREA VARIABLE(s)
 
@@ -162,7 +173,6 @@ private: // SPAWN AREA VARIABLE(s)
 	float m_CapsuleWidth = 0.0f;
 
 	#pragma endregion
-
 
 private: // PRIVATE FUNCTION(s)
 
@@ -189,6 +199,11 @@ private: // PRIVATE FUNCTION(s)
 	void ProcessResizeNone(c_ParticleSystemObject& particle_system_object, float deltaTime);
 	void ProcessResizeOverLifeTime(c_ParticleSystemObject& particle_system_object, float deltaTime);
 	void ProcessResizeVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime);
+
+	// NOTE: PARTICLE PHYSICS OVER TIME FUNCTION(s)
+	void ProcessPhysicsOverTimeNone(c_ParticleSystemObject& particle_system_object, float deltaTime);
+	void ProcessPhysicsOverTimeForce(c_ParticleSystemObject& particle_system_object, float deltaTime);
+	void ProcessPhysicsOverTimeVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime);
 
 	// NOTE: PARTICLE ACTION FUNCTION(s)
 	void ProcessActionNone(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
@@ -255,6 +270,7 @@ public:
 		// NOTE: ASSIGN PARTICLE RESIZE
 		void AssignVelocityOverLifeTime(OKVector2<float> starting_velocity_over_lifetime, OKVector2<float> ending_velocity_over_lifetime);
 		void AssignForceOverLifeTime(OKVector2<float> starting_force_over_lifetime, OKVector2<float> ending_force_over_lifetime);
+
 		void AssignResizeOverLifeTime(OKVector2<float> starting_resize_over_lifetime, OKVector2<float> ending_resize_over_lifetime);
 		void AssignResizeByVelocityOverLifeTime(OKVector2<float> starting_resize_velocity_over_lifetime, OKVector2<float> ending_resize_velocity_over_lifetime);
 

@@ -5,9 +5,6 @@
 
 class c_ParticleSystemObject : public Particle
 {
-private:
-
-
 public:
 
 	// NOTE: Both
@@ -45,16 +42,9 @@ public:
 	void Update(const float deltaTime) override;
 	void Draw() override;
 
+	// GETTER FUNCTION(s) : NOTE NEEDED 
 
-
-	// GETTER FUNCTION(s)
-
-
-
-
-	// SETTER FUNCTION(s)
-
-
+	// SETTER FUNCTION(s) : NOT NEEDED
 
 };
 
