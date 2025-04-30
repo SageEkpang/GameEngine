@@ -64,8 +64,10 @@ int main()
 	//CollisionResolution* t_CollisionResolution = new CollisionResolution();
 
 	int ParticleAmount = 1000;
-	ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(500, 400), ParticleAmount, PARTICLE_TYPE_EMISSIVE, PARTICLE_SPAWN_AREA_NONE, PARTICLE_ACTION_BURST_OUT);
-			
+	ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(500, 400), ParticleAmount);
+	m_ParticleSystem->SetStartLifeTime(0.2f);
+	m_ParticleSystem->AssignParticleAction(ParticleAction::PARTICLE_ACTION_BURST_OUT);
+
 	// SetTargetFPS(60);
 	while (!WindowShouldClose())
 	{

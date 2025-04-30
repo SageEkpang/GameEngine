@@ -51,10 +51,10 @@ enum ParticleAction
 	PARTICLE_ACTION_CUSTOM
 };
 
-enum ParticleType
+enum ParticleEmitterType
 {
-	PARTICLE_TYPE_EMISSIVE,
-	PARTICLE_TYPE_AREA
+	PARTICLE_EMITTER_TYPE_SINGLE,
+	PARTICLE_EMITTER_TYPE_MULTIPLE
 };
 
 enum ParticleResize
@@ -111,7 +111,7 @@ private:
 
 	ParticleSpawnArea m_ParticleSpawnArea;
 	ParticleAction m_ParticleAction;
-	ParticleType m_ParticleType;
+	ParticleEmitterType m_ParticleEmitterType;
 
 
 	// BASE VARIABLE(s)
@@ -169,7 +169,7 @@ private: // PRIVATE FUNCTION(s)
 	#pragma region PRIVATE PROCESS FUNCTIONS
 
 	// LOCAL MATHS FUNCTION(s)
-	float lerp(float a, float b, float f) { return (a * (1.0 - f)) + (b * f); }
+	float lerp(float a, float b, float f) { return (a * (1.0f - f)) + (b * f); }
 	float remap(float value, float sourceMin, float sourceMax, float destMin = 0, float destMax = 1) { return destMin + ((value - sourceMin) / (sourceMax - sourceMin)) * (destMax - destMin); }
 
 
@@ -227,7 +227,7 @@ public:
 
 	// CLASS FUNCTION(s)
 	ParticleSystem() = default;
-	ParticleSystem(OKVector2<float> position, unsigned int maxParticleCount, ParticleType particleType = PARTICLE_TYPE_EMISSIVE, ParticleSpawnArea particleSpawnArea = PARTICLE_SPAWN_AREA_NONE, ParticleAction particleAction = PARTICLE_ACTION_NONE, float mass = 1.f, bool isLooping = true, float simulationSpeed = 1.f, bool simulateGravity = false);
+	ParticleSystem(OKVector2<float> position, unsigned int maxParticleCount, ParticleEmitterType particleEmitterType = PARTICLE_EMITTER_TYPE_SINGLE, ParticleSpawnArea particleSpawnArea = PARTICLE_SPAWN_AREA_NONE, ParticleAction particleAction = PARTICLE_ACTION_NONE, float mass = 1.f, bool isLooping = false, float simulationSpeed = 1.f, bool simulateGravity = false);
 	~ParticleSystem();
 
 
@@ -237,20 +237,23 @@ public:
 
 	// HELPER FUNCTION(s)
 
+		// NOTE: Process the Particles
+		void ProcessParticleToSimulatingParticles();
+
 		// NOTE: PARTICLE CREATION FUNCTION(s)
 		void CreateParticleSpawnArea(void (*particle_spawn_area_lambda)());
 		void CreateParticleAction(void (*particle_action_lamda)());
 
 
 		// NOTE: ASSIGN SPAWN AREA
-		void AssignSpawnAreaNone();
-		void AssignSpawnAreaCircle(float radius);
-		void AssignSpawnAreaRectangle(float width, float height);
-		void AssignSpawnAreaRectangle(OKVector2<float> scale);
-		void AssignSpawnAreaCapsule(float width, float height);
-		void AssignSpawnAreaCapsule(OKVector2<float> scale);
-		void AssignSpawnAreaDonut(float outer_circle_radius, float inner_circle_radius);
-		void AssignSpawnAreaCustom();
+		void AssignParticleSpawnAreaNone();
+		void AssignParticleSpawnAreaCircle(float radius);
+		void AssignParticleSpawnAreaRectangle(float width, float height);
+		void AssignParticleSpawnAreaRectangle(OKVector2<float> scale);
+		void AssignParticleSpawnAreaCapsule(float width, float height);
+		void AssignParticleSpawnAreaCapsule(OKVector2<float> scale);
+		void AssignParticleSpawnAreaDonut(float outer_circle_radius, float inner_circle_radius);
+		void AssignParticleSpawnAreaCustom();
 
 
 		// NOTE: ASSIGN PARTICLE ACTION
@@ -266,7 +269,7 @@ public:
 
 
 		// NOTE: ASSIGN PARTICLE TYPE
-		void AssignParticleType(ParticleType particle_type);
+		void AssignParticleEmitterType(ParticleEmitterType particle_emitter_type);
 
 
 	// GETTER FUNCTION(s)

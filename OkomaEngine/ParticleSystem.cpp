@@ -1,9 +1,9 @@
 #include "ParticleSystem.h"
 
-ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxParticleCount, ParticleType particleType, ParticleSpawnArea particleSpawnArea, ParticleAction particleAction, float mass, bool isLooping, float simulationSpeed, bool simulateGravity)
+ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxParticleCount, ParticleEmitterType particleEmitterType, ParticleSpawnArea particleSpawnArea, ParticleAction particleAction, float mass, bool isLooping, float simulationSpeed, bool simulateGravity)
 {
 	// NOTE: Init Timer to NULL for random function
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 
 	// NOTE: Set Transform
 	m_Transform = OKTransform2<float>(position, OKVector2<float>(1.f, 1.f), 0);
@@ -19,7 +19,7 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxPartic
 	m_SimulationSpeed = simulationSpeed;
 	m_ParticleSpawnArea = particleSpawnArea;
 	m_ParticleAction = particleAction;
-	m_ParticleType = particleType;
+	m_ParticleEmitterType = particleEmitterType;
 
 	// NOTE: Particle Timer and Incremet Variables
 	m_ParticleTimer = 0.0f;
@@ -176,41 +176,7 @@ void ParticleSystem::Update(const float deltaTime)
 			m_EmissionTimer += SimulationSpeedDelta;
 			if (m_EmissionTimer >= (float)(1.f / m_EmissionRateOverTime))
 			{
-				if (m_ParticleType == PARTICLE_TYPE_EMISSIVE)
-				{
-					// NOTE: Push particles to the simuatling vector
-					m_SimulatingParticles.push_back(*m_Particles[m_ParticleIndexIncrement]);
-
-					// NOTE: Get the last particle that was inserted in the list and update that, assuming that is the particle that needs to be updated
-					std::vector<c_ParticleSystemObject>::iterator itr = m_SimulatingParticles.end() - 1;
-					(this->*m_CheckParticleSpawnFunctionPtr)(m_Transform, *itr);
-					(this->*m_CheckParticleActionFunctionPtr)(*itr);
-					++m_ParticleIndexIncrement;
-
-				}
-				else if (m_ParticleType == PARTICLE_TYPE_AREA)
-				{
-					for (unsigned int i = 0; i < m_EmissionRateOverTime; ++i)
-					{
-						// NOTE: Push particles to the simuatling vector
-						m_SimulatingParticles.push_back(*m_Particles[m_ParticleIndexIncrement]);
-
-						// NOTE: Get the last particle that was inserted in the list and update that, assuming that is the particle that needs to be updated
-						std::vector<c_ParticleSystemObject>::iterator itr = m_SimulatingParticles.end() - 1;
-						(this->*m_CheckParticleSpawnFunctionPtr)(m_Transform, *itr);
-						(this->*m_CheckParticleActionFunctionPtr)(*itr);
-						++m_ParticleIndexIncrement;
-					}
-				}
-
-				// NOTE: Reset the Particle Index Increment to 0, when equals the max particle count
-				if (m_ParticleIndexIncrement >= m_MaxParticleCount) 
-				{ 
-					m_ParticleIndexIncrement = 0; 
-				}
-
-				// NOTE: Reset Emitter Timer
-				m_EmissionTimer = 0;
+				ProcessParticleToSimulatingParticles();
 			}
 		}
 	}
@@ -227,46 +193,16 @@ void ParticleSystem::Update(const float deltaTime)
 			m_EmissionTimer += SimulationSpeedDelta;
 			if (m_EmissionTimer >= (float)(1.f / m_EmissionRateOverTime))
 			{
-				if (m_ParticleType == PARTICLE_TYPE_EMISSIVE)
-				{
-					// NOTE: Push particles to the simuatling vector
-					m_SimulatingParticles.push_back(*m_Particles[m_ParticleIndexIncrement]);
-
-					// NOTE: Get the last particle that was inserted in the list and update that, assuming that is the particle that needs to be updated
-					std::vector<c_ParticleSystemObject>::iterator itr = m_SimulatingParticles.end() - 1;
-					(this->*m_CheckParticleSpawnFunctionPtr)(m_Transform, *itr);
-					(this->*m_CheckParticleActionFunctionPtr)(*itr);
-					++m_ParticleIndexIncrement;
-				}
-				else if (m_ParticleType == PARTICLE_TYPE_AREA)
-				{
-					for (unsigned int i = 0; i < m_EmissionRateOverTime; ++i)
-					{
-						// NOTE: Push particles to the simuatling vector
-						m_SimulatingParticles.push_back(*m_Particles[m_ParticleIndexIncrement]);
-
-						// NOTE: Get the last particle that was inserted in the list and update that, assuming that is the particle that needs to be updated
-						std::vector<c_ParticleSystemObject>::iterator itr = m_SimulatingParticles.end() - 1;
-						(this->*m_CheckParticleSpawnFunctionPtr)(m_Transform, *itr);
-						(this->*m_CheckParticleActionFunctionPtr)(*itr);
-						++m_ParticleIndexIncrement;
-					}
-				}
-
-				// NOTE: Reset the Particle Index Increment to 0, when equals the max particle count
-				if (m_ParticleIndexIncrement > m_MaxParticleCount - 1)
-				{
-					m_ParticleIndexIncrement = 0;
-				}
-
-				// NOTE: Reset Emitter Timer
-				m_EmissionTimer = 0;
+				ProcessParticleToSimulatingParticles();
 			}
 		}
 	}
 
 	// NOTE: Update Simulating Particles
-	// NOTE: Delete the particles that need to be deleted after lifetime 
+	// NOTE: Delete the particles that need to be deleted after lifetime
+
+	#pragma region Updating_and_Deleting_Particles
+
 	if (!m_SimulatingParticles.empty())
 	{
 		for (auto itr = m_SimulatingParticles.begin(); itr != m_SimulatingParticles.end();)
@@ -290,6 +226,9 @@ void ParticleSystem::Update(const float deltaTime)
 			}
 		}
 	}
+
+	#pragma endregion
+
 }
 
 void ParticleSystem::Draw()
@@ -303,57 +242,89 @@ void ParticleSystem::Draw()
 	}
 }
 
+void ParticleSystem::ProcessParticleToSimulatingParticles()
+{
+	unsigned int tempParticleAmount = 0;
+	if (m_ParticleEmitterType == PARTICLE_EMITTER_TYPE_SINGLE) { tempParticleAmount = 1; }
+	if (m_ParticleEmitterType == PARTICLE_EMITTER_TYPE_MULTIPLE) { tempParticleAmount = m_EmissionRateOverTime; }
+
+	// NOTE: Loop through the amount of particles you want
+	for (unsigned int i = 0; i < tempParticleAmount; ++i)
+	{
+		// NOTE: Push particles to the simuatling vector
+		m_SimulatingParticles.push_back(*m_Particles[m_ParticleIndexIncrement]);
+
+		// NOTE: Get the last particle that was inserted in the list and update that, assuming that is the particle that needs to be updated
+		std::vector<c_ParticleSystemObject>::iterator itr = m_SimulatingParticles.end() - 1;
+
+		// NOTE: Set Variables for the Particle
+		(*itr).m_CurrentLifeTime = m_StartLifeTime;
+		(*itr).SimulateGravity(m_SimulateGravity);
+		(*itr).SetGravity(m_Gravity);
+
+		(this->*m_CheckParticleSpawnFunctionPtr)(m_Transform, *itr);
+		(this->*m_CheckParticleActionFunctionPtr)(*itr);
+		++m_ParticleIndexIncrement;
+	}
+
+	// NOTE: Reset the Particle Index Increment to 0, when equals the max particle count
+	if (m_ParticleIndexIncrement > m_MaxParticleCount - 1) { m_ParticleIndexIncrement = 0; }
+
+	// NOTE: Reset Emitter Timer
+	m_EmissionTimer = 0;
+}
+
 void ParticleSystem::CreateParticleAction(void(*particle_action_lamda)())
 {
 	m_CustomParticleActionFunctionPtr = particle_action_lamda;
 }
 
-void ParticleSystem::AssignSpawnAreaNone()
+void ParticleSystem::AssignParticleSpawnAreaNone()
 {
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_NONE];
 }
 
-void ParticleSystem::AssignSpawnAreaCircle(float radius)
+void ParticleSystem::AssignParticleSpawnAreaCircle(float radius)
 {
 	m_CircleRadius = radius;
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CIRCLE];
 }
 
-void ParticleSystem::AssignSpawnAreaRectangle(float width, float height)
+void ParticleSystem::AssignParticleSpawnAreaRectangle(float width, float height)
 {
 	m_RectangleScale.x = width;
 	m_RectangleScale.y = height;
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_RECTANGLE];
 }
 
-void ParticleSystem::AssignSpawnAreaRectangle(OKVector2<float> scale)
+void ParticleSystem::AssignParticleSpawnAreaRectangle(OKVector2<float> scale)
 {
 	m_RectangleScale = scale;
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_RECTANGLE];
 }
 
-void ParticleSystem::AssignSpawnAreaCapsule(float width, float height)
+void ParticleSystem::AssignParticleSpawnAreaCapsule(float width, float height)
 {
 	m_CapsuleWidth = width;
 	m_CapsuleHeight = height;
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CAPSULE];
 }
 
-void ParticleSystem::AssignSpawnAreaCapsule(OKVector2<float> scale)
+void ParticleSystem::AssignParticleSpawnAreaCapsule(OKVector2<float> scale)
 {
 	m_CapsuleWidth = scale.x;
 	m_CapsuleHeight = scale.y;
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CAPSULE];
 }
 
-void ParticleSystem::AssignSpawnAreaDonut(float outer_circle_radius, float inner_circle_radius)
+void ParticleSystem::AssignParticleSpawnAreaDonut(float outer_circle_radius, float inner_circle_radius)
 {
 	m_OuterDonutScale = outer_circle_radius;
 	m_InnerDonutScale = inner_circle_radius;
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_DONUT];
 }
 
-void ParticleSystem::AssignSpawnAreaCustom()
+void ParticleSystem::AssignParticleSpawnAreaCustom()
 {
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CUSTOM];
 }
@@ -364,9 +335,9 @@ void ParticleSystem::AssignParticleAction(ParticleAction particle_action)
 }
 
 
-void ParticleSystem::AssignParticleType(ParticleType particle_type)
+void ParticleSystem::AssignParticleEmitterType(ParticleEmitterType particle_emitter_type)
 {
-	m_ParticleType = particle_type;
+	m_ParticleEmitterType = particle_emitter_type;
 }
 
 

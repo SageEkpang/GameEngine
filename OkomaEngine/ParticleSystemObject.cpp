@@ -5,7 +5,7 @@ c_ParticleSystemObject::c_ParticleSystemObject(OKTransform2<float> *transform, f
 {
 	m_StartDelay = nullptr;
 	m_StartLifeTime = nullptr;
-	m_CurrentLifeTime = 0.0f;
+	m_CurrentLifeTime = 0.f;
 	m_StartSpeed = nullptr;
 	m_Theta = 0.f;
 
