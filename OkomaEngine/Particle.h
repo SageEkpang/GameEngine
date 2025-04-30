@@ -32,7 +32,7 @@ protected: // PROTECTED VARIABLE(s)
     OKVector2<float> m_Acceleration{};
     OKVector2<float> m_Velocity{};
 
-    float m_Mass{ 0 };
+    float m_Mass{ 0.f };
     float m_CrossSectionalArea{ 1.0 }; // NOTE: width x height
 
     // FORCES CONSTANT(s)
@@ -95,15 +95,16 @@ public: // PUBLIC FUNCTION(s)
     inline float GetRotation() { return m_Transform->rotation; }
 
     // PHYSICS GETTER(s)
-    inline const float GetMass() { return m_Mass; }
-    inline const float GetInverseMass() { return -m_Mass; }
-    inline OKVector2<float> GetVelocity() { return m_Velocity; }
+    inline float GetMass() const { return m_Mass; }
+    inline float GetInverseMass() const { return -m_Mass; }
+    inline OKVector2<float> GetForce() const { return m_NetForce; }
+    inline OKVector2<float> GetVelocity() const { return m_Velocity; }
     inline OKVector2<float> GetDirection() { return m_Velocity.normalise(); }
-    inline const OKVector2<float> GetAcceleration() { return m_Acceleration; }
-    inline const OKVector2<float> GetGravity() { return m_Gravity; }
-    inline const OKVector2<float> GetDrag() { return m_Drag; }
-    inline const OKVector2<float> GetLift() { return m_Lift; }
-    inline const OKVector2<float> GetFriction() { return m_Friction; }
+    inline OKVector2<float> GetAcceleration() const { return m_Acceleration; }
+    inline OKVector2<float> GetGravity() const { return m_Gravity; }
+    inline OKVector2<float> GetDrag() { return m_Drag; }
+    inline OKVector2<float> GetLift() { return m_Lift; }
+    inline OKVector2<float> GetFriction() { return m_Friction; }
 
 
     // SETTER FUNCTION(s)
@@ -126,6 +127,7 @@ public: // PUBLIC FUNCTION(s)
     inline void SimulateFriction(bool simulateFriction) { m_SimulateFriction = simulateFriction; }
 
     inline void SetMass(float mass) { m_Mass = mass; }
+    inline void SetForce(OKVector2<float> force) { m_NetForce = force; }
     inline void SetVelocity(OKVector2<float> velocity) { m_Velocity = velocity; }
     inline void SetDirection(OKVector2<float> direction) { m_Velocity = direction; }
     inline void SetAcceleration(OKVector2<float> acceleration) { m_Acceleration = acceleration; }

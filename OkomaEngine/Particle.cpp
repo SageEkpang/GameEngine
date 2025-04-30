@@ -91,7 +91,7 @@ OKVector2<float> Particle::ApplyDrag()
     // Calculate drag using the fluid density, velocity squared, drag coefficient and cross sectional area
     float t_DensityOfFluid = 0.1; // Density of Air 
     OKVector2<float> t_CalculateDrag = t_DensityOfFluid * m_Velocity.pow(2) * m_Drag * m_CrossSectionalArea;
-    float t_Drag = t_CalculateDrag.magnitude() * 0.5;
+    float t_Drag = t_CalculateDrag.magnitude() * 0.5f;
 
     // NOTE: Intergrate Drag
     pm_CalculatedDrag = m_Velocity * -1;

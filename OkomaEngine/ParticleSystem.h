@@ -14,16 +14,6 @@
 
 // NOTE: In the collab project, rendering will have to be included here as well
 
-// NOTE: Variables to Manipulate for Each Area
-/*
-	- Rectangle = Scale
-	- Circle = Radius
-	- Triangle = Scale
-	- Donut = Inner Side and Outer Side
-	- Capsule = Height and Width
-	- None = Assumes just use the base position
-*/
-
 enum ParticleSpawnArea
 {
 	PARTICLE_SPAWN_AREA_NONE,
@@ -164,7 +154,7 @@ private: // SPAWN AREA VARIABLE(s)
 	#pragma region PRIVATE SPAWN AREA VARIABLE(s)
 
 	float m_CircleRadius = 0.0f;
-	OKVector2<float> m_RectangleScale{ 1.f, 1.f};
+	OKVector2<float> m_RectangleScale{ 0.f, 0.f};
 
 	float m_InnerDonutScale = 0.0f;
 	float m_OuterDonutScale = 0.0f;
@@ -201,9 +191,9 @@ private: // PRIVATE FUNCTION(s)
 	void ProcessResizeVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime);
 
 	// NOTE: PARTICLE PHYSICS OVER TIME FUNCTION(s)
-	void ProcessPhysicsOverTimeNone(c_ParticleSystemObject& particle_system_object, float deltaTime);
-	void ProcessPhysicsOverTimeForce(c_ParticleSystemObject& particle_system_object, float deltaTime);
-	void ProcessPhysicsOverTimeVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime);
+	void ProcessPhysicsOverLifeTimeNone(c_ParticleSystemObject& particle_system_object, float deltaTime);
+	void ProcessPhysicsOverLifeTimeForce(c_ParticleSystemObject& particle_system_object, float deltaTime);
+	void ProcessPhysicsOverLifeTimeVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime);
 
 	// NOTE: PARTICLE ACTION FUNCTION(s)
 	void ProcessActionNone(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
@@ -237,7 +227,7 @@ public:
 
 	// CLASS FUNCTION(s)
 	ParticleSystem() = default;
-	ParticleSystem(OKVector2<float> position, float mass, unsigned int maxParticleCount, bool isLooping = true, ParticleType particleType = PARTICLE_TYPE_EMISSIVE, ParticleSpawnArea particleSpawnArea = PARTICLE_SPAWN_AREA_NONE, ParticleAction particleAction = PARTICLE_ACTION_NONE, float simulationSpeed = 1.f, bool simulateGravity = false);
+	ParticleSystem(OKVector2<float> position, unsigned int maxParticleCount, ParticleType particleType = PARTICLE_TYPE_EMISSIVE, ParticleSpawnArea particleSpawnArea = PARTICLE_SPAWN_AREA_NONE, ParticleAction particleAction = PARTICLE_ACTION_NONE, float mass = 1.f, bool isLooping = true, float simulationSpeed = 1.f, bool simulateGravity = false);
 	~ParticleSystem();
 
 
@@ -281,6 +271,8 @@ public:
 
 	// GETTER FUNCTION(s)
 
+	#pragma region Getter Functions
+
 		inline OKTransform2<float> GetTransform() const { return m_Transform; }
 		inline OKVector2<float> GetPosition() const { return m_Transform.position; }
 		inline OKVector2<float> GetScale() const { return m_Transform.scale; }
@@ -315,8 +307,12 @@ public:
 		inline OKVector2<float> GetStartingSizeBySpeed() const { return m_StartingSizeByVelocity; }
 		inline OKVector2<float> GetEndingSizeBySpeed() const { return m_EndingSizeByVelocity; }
 
+	#pragma endregion
+
 
 	// SETTER FUNCTION(s)
+
+	#pragma region Setter Functions
 
 		// BASE FUNCTION(s)
 		inline void SetTransform(OKTransform2<float> transform) { m_Transform = transform; }
@@ -354,6 +350,9 @@ public:
 		
 		inline void SetStartingSizeBySpeed(OKVector2<float> startingSizeByVelocity) { m_StartingSizeByVelocity = startingSizeByVelocity; }
 		inline void SetEndingSizeBySpeed(OKVector2<float> endingSizeByVelocity) { m_EndingSizeByVelocity = endingSizeByVelocity; }
+
+	#pragma endregion
+
 };
 
 #endif

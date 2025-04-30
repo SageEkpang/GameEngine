@@ -1,37 +1,33 @@
 #include "ParticleSystem.h"
 
-ParticleSystem::ParticleSystem(OKVector2<float> position, float mass, unsigned int maxParticleCount, bool isLooping, ParticleType particleType, ParticleSpawnArea particleSpawnArea, ParticleAction particleAction, float simulationSpeed, bool simulateGravity)
+ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxParticleCount, ParticleType particleType, ParticleSpawnArea particleSpawnArea, ParticleAction particleAction, float mass, bool isLooping, float simulationSpeed, bool simulateGravity)
 {
 	// NOTE: Init Timer to NULL for random function
 	srand(time(NULL));
 
-	// NOTE: Particle Timer and Incremet Variables
-	m_ParticleTimer = 0.0f;
-	m_ParticleIndexIncrement = 0u;
-
 	// NOTE: Set Transform
 	m_Transform = OKTransform2<float>(position, OKVector2<float>(1.f, 1.f), 0);
 
-	// NOTE: Init Particle System Variables
+	// NOTE: Fill Vector and reserve the set size for the particles
 	m_MaxParticleCount = maxParticleCount;
+	m_Particles.reserve(m_MaxParticleCount);
+	m_SimulatingParticles.reserve(m_MaxParticleCount);
 
+	// NOTE: Fill Simulation & Particle Variables
+	m_IsLooping = isLooping;
+	m_SimulateGravity = simulateGravity;
+	m_SimulationSpeed = simulationSpeed;
 	m_ParticleSpawnArea = particleSpawnArea;
 	m_ParticleAction = particleAction;
 	m_ParticleType = particleType;
 
-	// NOTE: Fill Vector and reserve the set size for the particles
-	m_Particles.reserve(m_MaxParticleCount);
-	m_SimulatingParticles.reserve(m_MaxParticleCount);
-
-	// NOTE: Fill Simulation Variables
-	m_IsLooping = isLooping;
-	m_SimulateGravity = simulateGravity;
-	m_SimulationSpeed = simulationSpeed;
-
-	m_ParticleSimulationDuration = 10.f;
+	// NOTE: Particle Timer and Incremet Variables
+	m_ParticleTimer = 0.0f;
+	m_ParticleIndexIncrement = 0u;
+	m_ParticleSimulationDuration = 5.f;
 
 	m_EmissionTimer = 0.f;
-	m_EmissionRateOverTime = 100u;
+	m_EmissionRateOverTime = 10u;
 
 	#pragma region Particle System Pointer Functions
 
@@ -77,6 +73,7 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, float mass, unsigned i
 
 
 		// NOTE: PARTICLE RESIZING VARIABLE(s)
+		// m_ParticleResizeMap[PARTICLE_RESIZE_NONE] = nullptr; // TODO: Can change this to a nullptr reference instead of a function pointer, can remove the 
 		m_ParticleResizeMap[PARTICLE_RESIZE_NONE] = &ParticleSystem::ProcessResizeNone;
 		m_ParticleResizeMap[PARTICLE_RESIZE_OVER_LIFETIME] = &ParticleSystem::ProcessResizeOverLifeTime;
 		m_ParticleResizeMap[PARTICLE_RESIZE_VELOCITY] = &ParticleSystem::ProcessResizeVelocity;
@@ -85,9 +82,9 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, float mass, unsigned i
 
 
 		// NOTE: PARTICLE PHYSICS FORCE OVER TIME
-		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_NONE] = &ParticleSystem::ProcessPhysicsOverTimeNone;
-		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_FORCE_OVER_LIFETIME] = &ParticleSystem::ProcessPhysicsOverTimeForce;
-		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_VELOCITY_OVER_LIFETIME] = &ParticleSystem::ProcessPhysicsOverTimeVelocity;
+		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_NONE] = &ParticleSystem::ProcessPhysicsOverLifeTimeNone;
+		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_FORCE_OVER_LIFETIME] = &ParticleSystem::ProcessPhysicsOverLifeTimeForce;
+		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_VELOCITY_OVER_LIFETIME] = &ParticleSystem::ProcessPhysicsOverLifeTimeVelocity;
 
 		m_CheckPatriclePhysicsOverTimeFunctionPtr = m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_NONE];
 
@@ -193,7 +190,7 @@ void ParticleSystem::Update(const float deltaTime)
 				}
 				else if (m_ParticleType == PARTICLE_TYPE_AREA)
 				{
-					for (int i = 0; i < m_EmissionRateOverTime; ++i)
+					for (unsigned int i = 0; i < m_EmissionRateOverTime; ++i)
 					{
 						// NOTE: Push particles to the simuatling vector
 						m_SimulatingParticles.push_back(*m_Particles[m_ParticleIndexIncrement]);
@@ -243,7 +240,7 @@ void ParticleSystem::Update(const float deltaTime)
 				}
 				else if (m_ParticleType == PARTICLE_TYPE_AREA)
 				{
-					for (int i = 0; i < m_EmissionRateOverTime; ++i)
+					for (unsigned int i = 0; i < m_EmissionRateOverTime; ++i)
 					{
 						// NOTE: Push particles to the simuatling vector
 						m_SimulatingParticles.push_back(*m_Particles[m_ParticleIndexIncrement]);
@@ -269,7 +266,7 @@ void ParticleSystem::Update(const float deltaTime)
 	}
 
 	// NOTE: Update Simulating Particles
-	// NOTE: Delete the particles that need to be deleted
+	// NOTE: Delete the particles that need to be deleted after lifetime 
 	if (!m_SimulatingParticles.empty())
 	{
 		for (auto itr = m_SimulatingParticles.begin(); itr != m_SimulatingParticles.end();)
@@ -399,7 +396,7 @@ void ParticleSystem::ProcessSpawnAreaCircle(OKTransform2<float> transform, c_Par
 	int Min = 1;
 	int Range = MaxRadius - Min + 1;
 	int TotalNumber = rand() % MaxRadius + Min;
-	int radius = TotalNumber;
+	float radius = TotalNumber;
 
 	float PositionX = CentrePosition.x + radius * cos(theta);
 	float PositionY = CentrePosition.y + radius * sin(theta);
@@ -534,23 +531,41 @@ void ParticleSystem::ProcessResizeVelocity(c_ParticleSystemObject& particle_syst
 	particle_system_object.SetScale(tempLerpX, tempLerpY);
 }
 
-void ParticleSystem::ProcessPhysicsOverTimeNone(c_ParticleSystemObject& particle_system_object, float deltaTime)
+void ParticleSystem::ProcessPhysicsOverLifeTimeNone(c_ParticleSystemObject& particle_system_object, float deltaTime)
 {
 	// NOTE: No Functionality
 }
 
-void ParticleSystem::ProcessPhysicsOverTimeForce(c_ParticleSystemObject& particle_system_object, float deltaTime)
+void ParticleSystem::ProcessPhysicsOverLifeTimeForce(c_ParticleSystemObject& particle_system_object, float deltaTime)
 {
+	// NOTE: Check if the force over life time is the same, if it is, skip it
+	if (particle_system_object.m_StartingForceOverLifeTime == particle_system_object.m_EndingForceOverLifeTime) { return; }
 
+	// NOTE: Calculating the force over time particle
+	particle_system_object.m_CurrentForceOverLifeTimer += (1.f / *particle_system_object.m_StartLifeTime / *particle_system_object.m_StartLifeTime) / 1000;
 
-
+	// NOTE: Force over time lerping
+	const float tempLerpX = lerp(particle_system_object.m_StartingForceOverLifeTime->x, particle_system_object.m_EndingForceOverLifeTime->x, particle_system_object.m_CurrentForceOverLifeTimer);
+	const float tempLerpY = lerp(particle_system_object.m_StartingForceOverLifeTime->y, particle_system_object.m_EndingForceOverLifeTime->y, particle_system_object.m_CurrentForceOverLifeTimer);
+	
+	// NOTE: Assign the force over time of the current particle
+	particle_system_object.SetForce(OKVector2<float>(tempLerpX, tempLerpY));
 }
 
-void ParticleSystem::ProcessPhysicsOverTimeVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime)
+void ParticleSystem::ProcessPhysicsOverLifeTimeVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime)
 {
+	// NOTE: Check if the velocity over life time is the same
+	if (particle_system_object.m_StartingVelocityOverLifeTime == particle_system_object.m_EndingVelocityOverLifeTime) { return; }
 
+	// NOTE: Calculating the velocity over time particle
+	particle_system_object.m_CurrentVelocityOverLifeTimer += (1.f / *particle_system_object.m_StartLifeTime / *particle_system_object.m_StartLifeTime) / 1000;
 
+	// NOTE: Force over time lerping
+	const float tempLerpX = lerp(particle_system_object.m_StartingVelocityOverLifeTime->x, particle_system_object.m_EndingVelocityOverLifeTime->x, particle_system_object.m_CurrentVelocityOverLifeTimer);
+	const float tempLerpY = lerp(particle_system_object.m_StartingVelocityOverLifeTime->y, particle_system_object.m_EndingVelocityOverLifeTime->y, particle_system_object.m_CurrentVelocityOverLifeTimer);
 
+	// NOTE: Assign the force over time of the current particle
+	particle_system_object.SetVelocity(OKVector2<float>(tempLerpX, tempLerpY));
 }
 
 
