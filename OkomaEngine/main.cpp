@@ -21,52 +21,15 @@ int main()
 	float m_Accumulator = 0;
 	float m_SimpleCounter = 0;
 
-	// PLAYER 
-	//OKTransform2<float> TransformFirst(OKVector2<float>(100, 200), OKVector2<float>(40, 80), 0);
-	//PhysicsObject* m_PhysicsFirst = new PhysicsObject("Phy1", TransformFirst, 10, RIGIDBODY_DYNAMIC, true);
-	//m_PhysicsObjects.push_back(m_PhysicsFirst);
-	//
-
-	//// CIRLCE PHYSICS OBJECTS
-	//OKTransform2<float> Circ_One = OKTransform2<float>(OKVector2<float>(600, 200), OKVector2<float>(40, 80), 0); // 30, 60
-	//PhysicsObject* Circ_One_Object = new PhysicsObject("Phy1", Circ_One, 10, 20, RIGIDBODY_DYNAMIC);
-	//m_PhysicsObjects.push_back(Circ_One_Object);
-
-	//OKTransform2<float> AltFirst = OKTransform2<float>(OKVector2<float>(650, 200), OKVector2<float>(40, 80), 0); // 30, 60
-	//PhysicsObject* m_AltObjFirst = new PhysicsObject("Phy1", AltFirst, 10, 20, RIGIDBODY_DYNAMIC);
-	//m_PhysicsObjects.push_back(m_AltObjFirst);
-	//
-	//OKTransform2<float> TransformSecond = OKTransform2<float>(OKVector2<float>(80, 400), OKVector2<float>(80, 50), 0);
-	//PhysicsObject* m_PhysicsSecond = new PhysicsObject("Phy2", TransformSecond, 0, RIGIDBODY_STATIC, false, false);
-	//m_PhysicsObjects.push_back(m_PhysicsSecond);
-	//
-	//OKTransform2<float> TransformThird = OKTransform2<float>(OKVector2<float>(300, 400), OKVector2<float>(300, 40), 0); // 300, 40
-	//PhysicsObject* m_PhysicsThird = new PhysicsObject("Phy3", TransformThird, 0, RIGIDBODY_STATIC);
-	//m_PhysicsObjects.push_back(m_PhysicsThird);
-	//
-	//// FLOOR
-	//OKTransform2<float> TransformFour = OKTransform2<float>(OKVector2<float>(0, 700), OKVector2<float>(1000, 40), 0); // 300, 40
-	//PhysicsObject* m_PhysicsFour = new PhysicsObject("Phy4", TransformFour, 0, RIGIDBODY_STATIC);
-	//m_PhysicsObjects.push_back(m_PhysicsFour);
-	
-
-	//OKTransform2<float>* TriggerTransformFirst = new OKTransform2<float>(OKVector2<float>(380, 250), OKVector2<float>(150, 150), 0); // 30, 60
-	//TriggerArea* m_TriggerAreaFirst = new TriggerArea("Trigger First", TriggerTransformFirst);
-
-	//OKTransform2<float>* TriggerTransformSecond = new OKTransform2<float>(OKVector2<float>(850, 600), OKVector2<float>(150, 150), 0); // 30, 60
-	//TriggerArea* m_TriggerAreaSecond = new TriggerArea("Trigger Second", TriggerTransformSecond, 60.f);
-
-	//OKTransform2<float>* TriggerTransformThird = new OKTransform2<float>(OKVector2<float>(30, 600), OKVector2<float>(40, 80), 0); // 30, 60
-	//TriggerArea* m_TriggerAreaThird = new TriggerArea("Trigger Third", TriggerTransformThird, true, false);
-
-	//ColliderManager* t_ColliderManager = new ColliderManager();
-	//CollisionManifold t_ColMani = CollisionManifold();
-	//CollisionResolution* t_CollisionResolution = new CollisionResolution();
-
 	int ParticleAmount = 1000;
-	ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(500, 400), ParticleAmount);
-	m_ParticleSystem->SetStartLifeTime(0.2f);
-	m_ParticleSystem->AssignParticleAction(ParticleAction::PARTICLE_ACTION_BURST_OUT);
+	ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(500, 400), ParticleAmount, PARTICLE_EMITTER_TYPE_SINGLE, PARTICLE_SPAWN_AREA_NONE, PARTICLE_ACTION_BURST_OUT, 1, true);
+	
+	m_ParticleSystem->SetSimulateGravity(true);
+	m_ParticleSystem->SetGravity(OKVector2<float>(0, 3000));
+
+	m_ParticleSystem->AssignResizeOverLifeTime(OKVector2<float>(1.f, 1.f), OKVector2<float>(5.f, 5.f));
+	m_ParticleSystem->AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_MULTIPLE);
+	m_ParticleSystem->AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
 
 	// SetTargetFPS(60);
 	while (!WindowShouldClose())
@@ -83,7 +46,6 @@ int main()
 
 		m_ParticleSystem->Update(GetFrameTime());
 		m_ParticleSystem->Draw();
-		// DrawCircleV(Vector2{ 500, 400 }, 10, GREEN);
 
 
 		//if (IsKeyDown(KEY_A))

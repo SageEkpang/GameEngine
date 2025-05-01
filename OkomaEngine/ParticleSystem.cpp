@@ -27,7 +27,7 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxPartic
 	m_ParticleSimulationDuration = 5.f;
 
 	m_EmissionTimer = 0.f;
-	m_EmissionRateOverTime = 10u;
+	m_EmissionRateOverTime = 100u;
 
 	#pragma region Particle System Pointer Functions
 
@@ -93,10 +93,10 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxPartic
 	#pragma region Particle System Object Inits
 
 	m_StartDelay = 0.0f;
-	m_StartLifeTime = 5.0f;
+	m_StartLifeTime = 1.0f;
 	m_StartSpeed = 1.0f;
 	m_StartSize = OKVector2<float>(5.0f, 5.0f);
-	m_Gravity = OKVector2<float>(0.0f, 0.0f);
+	m_Gravity = OKVector2<float>(0.0f, 750.0f);
 
 	m_StartingVelocityOverLifeTime = OKVector2<float>(1.0f, 1.0f);
 	m_EndingVelocityOverLifeTime = OKVector2<float>(1.0f, 1.0f);
