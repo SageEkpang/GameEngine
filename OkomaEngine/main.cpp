@@ -21,17 +21,23 @@ int main()
 	float m_Accumulator = 0;
 	float m_SimpleCounter = 0;
 
-	int ParticleAmount = 1000;
+	int ParticleAmount = 10000;
 	ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(500, 400), ParticleAmount);
 	
 	m_ParticleSystem->SetLooping(true);
-	m_ParticleSystem->SetEmissionRateOverTime(100u);
-	m_ParticleSystem->SetStartSpeed(1.0);
+	m_ParticleSystem->SetEmissionRateOverTime(1000u);
+	m_ParticleSystem->SetStartSpeed(0.5);
 	m_ParticleSystem->SetStartLifeTime(1.0f);
 
-	m_ParticleSystem->AssignForceOverLifeTime(OKVector2<float>(0.f, 0.f), OKVector2<float>(0.f, -100.f));
+	 //m_ParticleSystem->SetSimulateGravity(true);
+	 //m_ParticleSystem->SetGravity(OKVector2<float>(0, 550));
+
+	m_ParticleSystem->AssignVelocityOverLifeTime(OKVector2<float>(0.f, -100.f), OKVector2<float>(0.f, -200.f));
 	m_ParticleSystem->AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
 	m_ParticleSystem->AssignParticleAction(PARTICLE_ACTION_BURST_OUT);
+	// m_ParticleSystem->AssignParticleSpawnAreaCircle(10.0f);
+	m_ParticleSystem->AssignParticleSpawnAreaDonut(100, 90);
+	m_ParticleSystem->AssignResizeOverLifeTime(OKVector2<float>(5.f, 5.f), OKVector2<float>(1.f, 1.f));
 
 	// SetTargetFPS(60);
 	while (!WindowShouldClose())
@@ -44,6 +50,15 @@ int main()
 
 		m_Accumulator += timer->GetDeltaTime();
 		m_SimpleCounter += timer->GetDeltaTime();
+
+
+		if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+		{
+			OKVector2<float> MovementDelta = OKVector2<float>(GetMouseX(), GetMouseY());
+			m_ParticleSystem->SetPosition(MovementDelta);
+		}
+		
+
 
 
 		m_ParticleSystem->Update(GetFrameTime());

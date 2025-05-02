@@ -86,7 +86,7 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxPartic
 		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_FORCE_OVER_LIFETIME] = &ParticleSystem::ProcessPhysicsOverLifeTimeForce;
 		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_VELOCITY_OVER_LIFETIME] = &ParticleSystem::ProcessPhysicsOverLifeTimeVelocity;
 
-		m_CheckPatriclePhysicsOverTimeFunctionPtr = m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_NONE];
+		m_CheckParticlePhysicsOverTimeFunctionPtr = m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_NONE];
 
 	#pragma endregion
 
@@ -155,7 +155,7 @@ ParticleSystem::~ParticleSystem()
 	m_CheckParticleActionFunctionPtr = nullptr;
 	m_CheckParticleSpawnFunctionPtr = nullptr;
 	m_CheckParticleResizingFunctionPtr = nullptr;
-	m_CheckPatriclePhysicsOverTimeFunctionPtr = nullptr;
+	m_CheckParticlePhysicsOverTimeFunctionPtr = nullptr;
 
 	if (!m_Particles.empty()) { m_Particles.clear(); }
 	if (!m_SimulatingParticles.empty()) { m_SimulatingParticles.clear(); }
@@ -220,7 +220,7 @@ void ParticleSystem::Update(const float deltaTime)
 				// NOTE: Iterate through vector
 				// NOTE: Process the Particle Sizing, Velocity and Force Values (has to be here to properly update at the same time as the other particles)
 				(this->*m_CheckParticleResizingFunctionPtr)(*itr, SimulationSpeedDelta);
-				(this->*m_CheckPatriclePhysicsOverTimeFunctionPtr)(*itr, SimulationSpeedDelta);
+				(this->*m_CheckParticlePhysicsOverTimeFunctionPtr)(*itr, SimulationSpeedDelta);
 				(*itr).Update(SimulationSpeedDelta);
 				++itr;
 			}
@@ -426,8 +426,8 @@ void ParticleSystem::ProcessSpawnAreaDonut(OKTransform2<float> transform, c_Part
 
 	int theta = rand() % 360; // 360 (degrees)
 
-	int sec_radius = 90;
-	int MaxRadius = 100 - sec_radius;
+	int sec_radius = m_InnerDonutScale;
+	int MaxRadius = m_OuterDonutScale - sec_radius;
 	int Min = 1;
 
 	int Range = MaxRadius - Min + 1;
@@ -769,7 +769,7 @@ void ParticleSystem::AssignVelocityOverLifeTime(OKVector2<float> starting_veloci
 	m_StartingVelocityOverLifeTime = starting_velocity_over_lifetime;
 	m_EndingVelocityOverLifeTime = ending_velocity_over_lifetime;
 
-	m_CheckPatriclePhysicsOverTimeFunctionPtr = m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_VELOCITY_OVER_LIFETIME];
+	m_CheckParticlePhysicsOverTimeFunctionPtr = m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_VELOCITY_OVER_LIFETIME];
 }
 
 void ParticleSystem::AssignForceOverLifeTime(OKVector2<float> starting_force_over_lifetime, OKVector2<float> ending_force_over_lifetime)
@@ -777,7 +777,7 @@ void ParticleSystem::AssignForceOverLifeTime(OKVector2<float> starting_force_ove
 	m_StartingForceOverLifeTime = starting_force_over_lifetime;
 	m_EndingForceOverLifeTime = ending_force_over_lifetime;
 
-	m_CheckPatriclePhysicsOverTimeFunctionPtr = m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_FORCE_OVER_LIFETIME];
+	m_CheckParticlePhysicsOverTimeFunctionPtr = m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_FORCE_OVER_LIFETIME];
 }
 
 void ParticleSystem::AssignResizeOverLifeTime(OKVector2<float> starting_resize_over_lifetime, OKVector2<float> ending_resize_over_lifetime)

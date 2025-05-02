@@ -51,7 +51,7 @@ public: // MATH FUNCTION(s)
 
     OKVector2 negate()
     {
-        return OKVector2(-this->x, -this->y);
+        return OKVector2(1.f / this->x, 1.f / this->y);
     }
 
     OKVector2 pow(T value)
@@ -123,7 +123,6 @@ public: // OPERATOR OVERLOAD FUNCTION(s)
 
         return (s_CheckX && s_CheckY);
     }
-
 
     OKVector2 operator +(const OKVector2& value)
     {

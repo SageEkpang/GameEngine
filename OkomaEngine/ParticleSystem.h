@@ -3,6 +3,7 @@
 
 #include "Particle.h"
 #include "ParticleSystemObject.h"
+#include "OKVector3.h"
 
 #include <memory>
 #include <vector>
@@ -71,6 +72,13 @@ enum ParticlePhysicsOverLifeTime
 	PARTICLE_PHYSICS_VELOCITY_OVER_LIFETIME
 };
 
+enum ParticleColourOverLifeTime
+{
+	PARTICLE_COLOUR_NONE,
+	PARTICLE_COLOUR_OVER_LIFE_TIME,
+	PARTICLE_COLOUR_VELOCITY_OVER_LIFE_TIME
+};
+
 class ParticleSystem
 {
 private:
@@ -87,7 +95,10 @@ private:
 	std::map<ParticleResize, CheckParticleResizeFunctionPtr> m_ParticleResizeMap;
 
 	typedef void (ParticleSystem::* CheckParticlePhysicsFunctionPtr)(c_ParticleSystemObject&, float);
-	std::map< ParticlePhysicsOverLifeTime, CheckParticlePhysicsFunctionPtr> m_ParticlePhysicsOverTimeMap;
+	std::map<ParticlePhysicsOverLifeTime, CheckParticlePhysicsFunctionPtr> m_ParticlePhysicsOverTimeMap;
+
+	typedef void (ParticleSystem::* CheckParticleColourFunctionPtr)(c_ParticleSystemObject&, float);
+	std::map<ParticleColourOverLifeTime, CheckParticleColourFunctionPtr> m_ParticleColourOverTimerMap;
 
 	// CUSTOM DATA TYPE
 	void (*m_CustomParticleActionFunctionPtr)() = nullptr;
@@ -96,8 +107,8 @@ private:
 	void (ParticleSystem::* m_CheckParticleActionFunctionPtr)(c_ParticleSystemObject&) = nullptr;
 	void (ParticleSystem::* m_CheckParticleSpawnFunctionPtr)(OKTransform2<float>, c_ParticleSystemObject&) = nullptr;
 	void (ParticleSystem::* m_CheckParticleResizingFunctionPtr)(c_ParticleSystemObject&, float) = nullptr;
-	void (ParticleSystem::* m_CheckPatriclePhysicsOverTimeFunctionPtr)(c_ParticleSystemObject&, float) = nullptr;
-
+	void (ParticleSystem::* m_CheckParticlePhysicsOverTimeFunctionPtr)(c_ParticleSystemObject&, float) = nullptr;
+	void (ParticleSystem::* m_CheckParticleColourOverTimerFunctionPtr)(c_ParticleSystemObject&, float);
 
 	// TRANSFORM VARIABLE(s)
 	OKTransform2<float> m_Transform;
