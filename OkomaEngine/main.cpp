@@ -22,14 +22,16 @@ int main()
 	float m_SimpleCounter = 0;
 
 	int ParticleAmount = 1000;
-	ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(500, 400), ParticleAmount, PARTICLE_EMITTER_TYPE_SINGLE, PARTICLE_SPAWN_AREA_NONE, PARTICLE_ACTION_BURST_OUT, 1, true);
+	ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(500, 400), ParticleAmount);
 	
-	m_ParticleSystem->SetSimulateGravity(true);
-	m_ParticleSystem->SetGravity(OKVector2<float>(0, 3000));
+	m_ParticleSystem->SetLooping(true);
+	m_ParticleSystem->SetEmissionRateOverTime(100u);
+	m_ParticleSystem->SetStartSpeed(1.0);
+	m_ParticleSystem->SetStartLifeTime(1.0f);
 
-	m_ParticleSystem->AssignResizeOverLifeTime(OKVector2<float>(1.f, 1.f), OKVector2<float>(5.f, 5.f));
-	m_ParticleSystem->AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_MULTIPLE);
+	m_ParticleSystem->AssignForceOverLifeTime(OKVector2<float>(0.f, 0.f), OKVector2<float>(0.f, -100.f));
 	m_ParticleSystem->AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
+	m_ParticleSystem->AssignParticleAction(PARTICLE_ACTION_BURST_OUT);
 
 	// SetTargetFPS(60);
 	while (!WindowShouldClose())
@@ -38,7 +40,7 @@ int main()
 
 		// DRAW
 		BeginDrawing();
-		ClearBackground(RAYWHITE);
+		ClearBackground(BLACK);
 
 		m_Accumulator += timer->GetDeltaTime();
 		m_SimpleCounter += timer->GetDeltaTime();

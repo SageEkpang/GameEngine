@@ -27,7 +27,7 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxPartic
 	m_ParticleSimulationDuration = 5.f;
 
 	m_EmissionTimer = 0.f;
-	m_EmissionRateOverTime = 100u;
+	m_EmissionRateOverTime = 1u;
 
 	#pragma region Particle System Pointer Functions
 
@@ -124,7 +124,7 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxPartic
 
 		particle_system_objects->m_StartDelay = &m_StartDelay;
 		particle_system_objects->m_StartLifeTime = &m_StartLifeTime;
-		particle_system_objects->m_CurrentLifeTime = m_StartLifeTime;
+		particle_system_objects->m_CurrentLifeTime = 0;
 
 		particle_system_objects->m_StartSpeed = &m_StartSpeed;
 		particle_system_objects->m_StartSize = &m_StartSize;
@@ -210,7 +210,7 @@ void ParticleSystem::Update(const float deltaTime)
 			// NOTE: Check the particle life time and update the "life time" within the particle
 			CheckParticleLifeTime(*itr, SimulationSpeedDelta);
 
-			if ((*itr).m_CurrentLifeTime < 0.0f)
+			if ((*itr).m_CurrentLifeTime <= 0.0f)
 			{
 				// NOTE: Remove element at array index depending on if it reaches the lifetime 
 				itr = m_SimulatingParticles.erase(itr);
@@ -228,6 +228,10 @@ void ParticleSystem::Update(const float deltaTime)
 	}
 
 	#pragma endregion
+
+	static float SimpleCounter;
+	SimpleCounter += SimulationSpeedDelta;
+	DrawText(TextFormat("Timer: %f", SimpleCounter), 10, 10, 40, GREEN);
 
 }
 
@@ -471,7 +475,8 @@ void ParticleSystem::ProcessResizeOverLifeTime(c_ParticleSystemObject& particle_
 	if (particle_system_object.m_StartingSizeOverLifeTime == particle_system_object.m_EndingSizeOverLifeTime) { return; }
 
 	// NOTE: Calculate the sizing of the particle
-	particle_system_object.m_CurrentSizeOverLifeTimer += (1.f / *particle_system_object.m_StartLifeTime / *particle_system_object.m_StartLifeTime) / 1000;
+	// NOTE: Might need to divide some things my the startlife time 
+	particle_system_object.m_CurrentSizeOverLifeTimer += *particle_system_object.m_StartLifeTime / (*particle_system_object.m_StartLifeTime * *particle_system_object.m_StartLifeTime) * deltaTime;
 
 	// NOTE: Resize the Particle based on time
 	const float tempLerpX = lerp(particle_system_object.m_StartingSizeOverLifeTime->x, particle_system_object.m_EndingSizeOverLifeTime->x, particle_system_object.m_CurrentSizeOverLifeTimer);
@@ -481,6 +486,7 @@ void ParticleSystem::ProcessResizeOverLifeTime(c_ParticleSystemObject& particle_
 	particle_system_object.SetScale(tempLerpX, tempLerpY);
 }
 
+// TODO: Fix this
 void ParticleSystem::ProcessResizeVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime)
 {
 	// NOTE: Check if you sizes are the same, meaning this code does not have to be ran
@@ -513,7 +519,7 @@ void ParticleSystem::ProcessPhysicsOverLifeTimeForce(c_ParticleSystemObject& par
 	if (particle_system_object.m_StartingForceOverLifeTime == particle_system_object.m_EndingForceOverLifeTime) { return; }
 
 	// NOTE: Calculating the force over time particle
-	particle_system_object.m_CurrentForceOverLifeTimer += (1.f / *particle_system_object.m_StartLifeTime / *particle_system_object.m_StartLifeTime) / 1000;
+	particle_system_object.m_CurrentForceOverLifeTimer += *particle_system_object.m_StartLifeTime / (*particle_system_object.m_StartLifeTime * *particle_system_object.m_StartLifeTime) * deltaTime;
 
 	// NOTE: Force over time lerping
 	const float tempLerpX = lerp(particle_system_object.m_StartingForceOverLifeTime->x, particle_system_object.m_EndingForceOverLifeTime->x, particle_system_object.m_CurrentForceOverLifeTimer);
@@ -523,13 +529,14 @@ void ParticleSystem::ProcessPhysicsOverLifeTimeForce(c_ParticleSystemObject& par
 	particle_system_object.SetForce(OKVector2<float>(tempLerpX, tempLerpY));
 }
 
+// NOTE: Need to set as a negate force to the current velocity
 void ParticleSystem::ProcessPhysicsOverLifeTimeVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime)
 {
 	// NOTE: Check if the velocity over life time is the same
 	if (particle_system_object.m_StartingVelocityOverLifeTime == particle_system_object.m_EndingVelocityOverLifeTime) { return; }
 
 	// NOTE: Calculating the velocity over time particle
-	particle_system_object.m_CurrentVelocityOverLifeTimer += (1.f / *particle_system_object.m_StartLifeTime / *particle_system_object.m_StartLifeTime) / 1000;
+	particle_system_object.m_CurrentVelocityOverLifeTimer += *particle_system_object.m_StartLifeTime / (*particle_system_object.m_StartLifeTime * *particle_system_object.m_StartLifeTime) * deltaTime;
 
 	// NOTE: Force over time lerping
 	const float tempLerpX = lerp(particle_system_object.m_StartingVelocityOverLifeTime->x, particle_system_object.m_EndingVelocityOverLifeTime->x, particle_system_object.m_CurrentVelocityOverLifeTimer);
@@ -565,10 +572,6 @@ void ParticleSystem::ProcessActionBurstOut(c_ParticleSystemObject& particle_syst
 void ParticleSystem::ProcessActionBurstIn(c_ParticleSystemObject& particle_system_object)
 {
 	// SPEED = DISTANCE / TIME
-
-
-
-
 }
 
 void ParticleSystem::ProcessActionScreen(c_ParticleSystemObject& particle_system_object)

@@ -146,6 +146,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OKTransform2.cpp" />
     <ClCompile Include="OKVector2.cpp" />
+    <ClCompile Include="OKVector3.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="ParticleSystemObject.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="HeaderManager.h" />
     <ClInclude Include="OKTransform2.h" />
     <ClInclude Include="OKVector2.h" />
+    <ClInclude Include="OKVector3.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="ParticleSystemObject.h" />

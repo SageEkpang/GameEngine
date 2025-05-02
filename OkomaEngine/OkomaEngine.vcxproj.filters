@@ -128,6 +128,9 @@
     <ClCompile Include="ParticleSystemObject.cpp">
       <Filter>Components\Source</Filter>
     </ClCompile>
+    <ClCompile Include="OKVector3.cpp">
+      <Filter>Structs\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OKVector2.h">
@@ -198,6 +201,9 @@
     </ClInclude>
     <ClInclude Include="ParticleSystemObject.h">
       <Filter>Components\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="OKVector3.h">
+      <Filter>Structs\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
