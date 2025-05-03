@@ -118,12 +118,13 @@ private:
 	std::vector<c_ParticleSystemObject> m_SimulatingParticles;
 	unsigned int m_ParticleIndexIncrement;
 
-	bool m_IsExecuted = false;
+	// PARTICLE EXCUTE ONCE
+	// NOTE: This assumes to be used with the "NOT" looping
+	bool m_ExecuteOnce = false;
 
 	ParticleSpawnArea m_ParticleSpawnArea;
 	ParticleAction m_ParticleAction;
 	ParticleEmitterType m_ParticleEmitterType;
-
 
 	// BASE VARIABLE(s)
 	unsigned int m_MaxParticleCount;
@@ -135,17 +136,6 @@ private:
 	float m_StartSpeed;
 	OKVector2<float> m_StartSize;
 
-	OKVector2<float> m_StartingVelocityOverLifeTime;
-	OKVector2<float> m_EndingVelocityOverLifeTime;
-
-	OKVector2<float> m_StartingForceOverLifeTime;
-	OKVector2<float> m_EndingForceOverLifeTime;
-
-	OKVector2<float> m_StartingSizeOverLifeTime;
-	OKVector2<float> m_EndingSizeOverLifeTime;
-
-	OKVector2<float> m_StartingSizeByVelocity;
-	OKVector2<float> m_EndingSizeByVelocity;
 
 	// NOTE: For NOT Looping
 	float m_ParticleTimer;
@@ -160,6 +150,28 @@ private:
 	float m_EmissionTimer = 0.0f;
 	unsigned int m_EmissionRateOverTime;
 
+
+public: // PARTICLE OVERTIME VARIABLE(s)
+
+	#pragma region PARTICLE OVERTIME VARIABLE(s)
+
+	OKVector2<float> m_StartingVelocityOverLifeTime;
+	OKVector2<float> m_EndingVelocityOverLifeTime;
+
+	OKVector2<float> m_StartingForceOverLifeTime;
+	OKVector2<float> m_EndingForceOverLifeTime;
+
+	OKVector2<float> m_StartingSizeOverLifeTime;
+	OKVector2<float> m_EndingSizeOverLifeTime;
+
+	OKVector2<float> m_StartingSizeByVelocity;
+	OKVector2<float> m_EndingSizeByVelocity;
+
+	OKVector3<unsigned int> m_StartingColourOverLifeTime;
+	OKVector3<unsigned int> m_EndingColourOverLifeTime;
+
+	#pragma endregion
+
 private: // SPAWN AREA VARIABLE(s)
 
 	#pragma region PRIVATE SPAWN AREA VARIABLE(s)
@@ -172,6 +184,8 @@ private: // SPAWN AREA VARIABLE(s)
 
 	float m_CapsuleHeight = 0.0f;
 	float m_CapsuleWidth = 0.0f;
+
+	float m_EdgeLength = 0.0f;
 
 	#pragma endregion
 
@@ -205,6 +219,12 @@ private: // PRIVATE FUNCTION(s)
 	void ProcessPhysicsOverLifeTimeNone(c_ParticleSystemObject& particle_system_object, float deltaTime);
 	void ProcessPhysicsOverLifeTimeForce(c_ParticleSystemObject& particle_system_object, float deltaTime);
 	void ProcessPhysicsOverLifeTimeVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime);
+
+	// NOTE: PARTICLE COLOUR OVER TIME FUNCTION(s) 
+	void ProcessColourNone(c_ParticleSystemObject& particle_system_object, float deltaTime);
+	void ProcessColourOverLifeTime(c_ParticleSystemObject& particle_system_object, float deltaTime);
+	void ProcessColourOverVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime);
+
 
 	// NOTE: PARTICLE ACTION FUNCTION(s)
 	void ProcessActionNone(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
@@ -270,13 +290,17 @@ public:
 		// NOTE: ASSIGN PARTICLE ACTION
 		void AssignParticleAction(ParticleAction particle_action);
 
-
-		// NOTE: ASSIGN PARTICLE RESIZE
+		// NOTE: ASSIGN PARTICLE PHYSICS OVER LIFE TIME
 		void AssignVelocityOverLifeTime(OKVector2<float> starting_velocity_over_lifetime, OKVector2<float> ending_velocity_over_lifetime);
 		void AssignForceOverLifeTime(OKVector2<float> starting_force_over_lifetime, OKVector2<float> ending_force_over_lifetime);
-
+		
+		// NOTE: ASSIGN PARTICLE RESIZE
 		void AssignResizeOverLifeTime(OKVector2<float> starting_resize_over_lifetime, OKVector2<float> ending_resize_over_lifetime);
 		void AssignResizeByVelocityOverLifeTime(OKVector2<float> starting_resize_velocity_over_lifetime, OKVector2<float> ending_resize_velocity_over_lifetime);
+
+		// NOTE: ASSIGN PARTICLE COLOUR
+		void AssignColourOverLifeTime(OKVector3<unsigned int> starting_colour_over_lifetime, OKVector3<unsigned int> ending_colour_over_lifetime);
+		void AssignColourVelocityOverLifeTime(OKVector3<unsigned int> starting_colour_over_lifetime, OKVector3<unsigned int> ending_colour_over_lifetime);
 
 
 		// NOTE: ASSIGN PARTICLE TYPE
@@ -294,6 +318,8 @@ public:
 
 		inline unsigned int GetMaxParticleCount() const { return m_MaxParticleCount; }
 		
+		inline bool GetExecuteOnce() const { return m_ExecuteOnce; }
+
 		/// <summary> Getter function for the Particle Simulation Duration, 
 		/// NOTE: Does not apply when Looping is TRUE 
 		/// </summary>
@@ -336,7 +362,9 @@ public:
 			
 		// PARTICLE SYSTEM FUNCTION(s)
 		inline void SetMaxParticleCount(unsigned int maxParticleCount) { m_MaxParticleCount = maxParticleCount; }
+		inline void SetExecuteOnce(bool executeOnce) { m_ExecuteOnce = executeOnce; }
 		inline void SetLooping(bool looping) { m_IsLooping = looping; }
+
 		inline void SetSimulateGravity(bool simulateGravity) { m_SimulateGravity = simulateGravity; }
 		inline void SetSimulationSpeed(float simulateSpeed) { m_SimulationSpeed = simulateSpeed; }
 		inline void SetEmissionRateOverTime(unsigned int emissionRateOverTime) { m_EmissionRateOverTime = emissionRateOverTime; }

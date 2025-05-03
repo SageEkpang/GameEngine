@@ -2,6 +2,7 @@
 #define PARTICLE_SYSTEM_OBJECT_H
 
 #include "Particle.h"
+#include "OKVector3.h"
 
 class c_ParticleSystemObject : public Particle
 {
@@ -13,6 +14,8 @@ public:
 	float m_CurrentLifeTime;
 	float* m_StartSpeed;
 	float m_Theta;
+
+	OKVector3<unsigned int> m_Colour;
 
 	OKVector2<float>* m_StartSize;
 
@@ -31,6 +34,10 @@ public:
 	OKVector2<float>* m_StartingSizeByVelocity;
 	OKVector2<float>* m_EndingSizeByVelocity;
 	float m_CurrentSizeByVelocity;
+
+	OKVector3<unsigned int>* m_StartingColourOverLifeTime;
+	OKVector3<unsigned int>* m_EndingColourOverLifeTime;
+	float m_CurrentColourOverLifeTimer;
 
 	// CLASS FUNCTION(s)
 	c_ParticleSystemObject() = default;

@@ -8,6 +8,7 @@ c_ParticleSystemObject::c_ParticleSystemObject(OKTransform2<float> *transform, f
 	m_CurrentLifeTime = 0.f;
 	m_StartSpeed = nullptr;
 	m_Theta = 0.f;
+	m_Colour = OKVector3<unsigned int>(255, 255, 255);
 
 	m_StartSize = nullptr;
 
@@ -26,6 +27,10 @@ c_ParticleSystemObject::c_ParticleSystemObject(OKTransform2<float> *transform, f
 	m_StartingSizeByVelocity = nullptr;
 	m_EndingSizeByVelocity = nullptr;
 	m_CurrentSizeByVelocity = 0.0f;
+
+	m_StartingColourOverLifeTime = nullptr;
+	m_EndingColourOverLifeTime = nullptr;
+	m_CurrentColourOverLifeTimer = 0.0f;
 }
 
 c_ParticleSystemObject::~c_ParticleSystemObject()
@@ -47,6 +52,9 @@ c_ParticleSystemObject::~c_ParticleSystemObject()
 
 	m_StartingSizeByVelocity = nullptr;
 	m_EndingSizeByVelocity = nullptr;
+
+	m_StartingColourOverLifeTime = nullptr;
+	m_EndingColourOverLifeTime = nullptr;
 }
 
 void c_ParticleSystemObject::Update(float deltaTime)

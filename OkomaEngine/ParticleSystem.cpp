@@ -88,6 +88,14 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxPartic
 
 		m_CheckParticlePhysicsOverTimeFunctionPtr = m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_NONE];
 
+
+		// NOTE: PARTICLE COLOUR OVER TIME VARIABLE(s)
+		m_ParticleColourOverTimerMap[PARTICLE_COLOUR_NONE] = &ParticleSystem::ProcessColourNone;
+		m_ParticleColourOverTimerMap[PARTICLE_COLOUR_OVER_LIFE_TIME] = &ParticleSystem::ProcessColourOverLifeTime;
+		m_ParticleColourOverTimerMap[PARTICLE_COLOUR_VELOCITY_OVER_LIFE_TIME] = &ParticleSystem::ProcessColourOverVelocity;
+
+		m_CheckParticleColourOverTimerFunctionPtr = m_ParticleColourOverTimerMap[PARTICLE_COLOUR_NONE];
+
 	#pragma endregion
 
 	#pragma region Particle System Object Inits
@@ -103,6 +111,9 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxPartic
 
 	m_StartingForceOverLifeTime = OKVector2<float>(1.0f, 1.0f);
 	m_EndingForceOverLifeTime = OKVector2<float>(1.0f, 1.0f);
+
+	m_StartingColourOverLifeTime = OKVector3<unsigned int>(255, 255, 255);
+	m_StartingColourOverLifeTime = OKVector3<unsigned int>(255, 255, 255);
 
 	m_StartingSizeOverLifeTime = m_StartSize;
 	m_EndingSizeOverLifeTime = m_StartSize;
@@ -141,6 +152,9 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxPartic
 		particle_system_objects->m_StartingSizeByVelocity = &m_StartingSizeByVelocity;
 		particle_system_objects->m_EndingSizeByVelocity = &m_EndingSizeByVelocity;
 
+		particle_system_objects->m_StartingColourOverLifeTime = &m_StartingColourOverLifeTime;
+		particle_system_objects->m_EndingColourOverLifeTime = &m_EndingColourOverLifeTime;
+
 		m_Particles.push_back(particle_system_objects);
 	}
 
@@ -156,6 +170,7 @@ ParticleSystem::~ParticleSystem()
 	m_CheckParticleSpawnFunctionPtr = nullptr;
 	m_CheckParticleResizingFunctionPtr = nullptr;
 	m_CheckParticlePhysicsOverTimeFunctionPtr = nullptr;
+	m_CheckParticleColourOverTimerFunctionPtr = nullptr;
 
 	if (!m_Particles.empty()) { m_Particles.clear(); }
 	if (!m_SimulatingParticles.empty()) { m_SimulatingParticles.clear(); }
@@ -198,6 +213,11 @@ void ParticleSystem::Update(const float deltaTime)
 		}
 	}
 
+	if (m_ExecuteOnce == true && !m_SimulatingParticles.empty())
+	{
+		m_ParticleTimer = m_ParticleSimulationDuration;
+	}
+
 	// NOTE: Update Simulating Particles
 	// NOTE: Delete the particles that need to be deleted after lifetime
 
@@ -221,6 +241,7 @@ void ParticleSystem::Update(const float deltaTime)
 				// NOTE: Process the Particle Sizing, Velocity and Force Values (has to be here to properly update at the same time as the other particles)
 				(this->*m_CheckParticleResizingFunctionPtr)(*itr, SimulationSpeedDelta);
 				(this->*m_CheckParticlePhysicsOverTimeFunctionPtr)(*itr, SimulationSpeedDelta);
+				(this->*m_CheckParticleColourOverTimerFunctionPtr)(*itr, SimulationSpeedDelta);
 				(*itr).Update(SimulationSpeedDelta);
 				++itr;
 			}
@@ -241,7 +262,8 @@ void ParticleSystem::Draw()
 	{
 		for (auto& v : m_SimulatingParticles)
 		{
-			DrawRectangleV(v.GetTransform()->position.ConvertToVec2(), v.GetTransform()->scale.ConvertToVec2(), RED);
+			Color tempColour = {v.m_Colour.x, v.m_Colour.y, v.m_Colour.z, 255.f};
+			DrawRectangleV(v.GetTransform()->position.ConvertToVec2(), v.GetTransform()->scale.ConvertToVec2(), tempColour);
 		}
 	}
 }
@@ -546,6 +568,34 @@ void ParticleSystem::ProcessPhysicsOverLifeTimeVelocity(c_ParticleSystemObject& 
 	particle_system_object.SetVelocity(OKVector2<float>(tempLerpX, tempLerpY));
 }
 
+void ParticleSystem::ProcessColourNone(c_ParticleSystemObject& particle_system_object, float deltaTime)
+{
+	// NOTE: Do nothing
+}
+
+void ParticleSystem::ProcessColourOverLifeTime(c_ParticleSystemObject& particle_system_object, float deltaTime)
+{
+	// NOTE: Check if the colour over life time is the same, if it is, skip it
+	if (particle_system_object.m_StartingColourOverLifeTime == particle_system_object.m_EndingColourOverLifeTime) { return; }
+	
+	// NOTE: Calculating the colour over life time for particle
+	particle_system_object.m_CurrentColourOverLifeTimer += *particle_system_object.m_StartLifeTime / (*particle_system_object.m_StartLifeTime * *particle_system_object.m_StartLifeTime) * deltaTime;
+	
+	// NOTE: Force over time lerping
+	const float tempLerpX = lerp(particle_system_object.m_StartingColourOverLifeTime->x, particle_system_object.m_EndingColourOverLifeTime->x, particle_system_object.m_CurrentColourOverLifeTimer);
+	const float tempLerpY = lerp(particle_system_object.m_StartingColourOverLifeTime->y, particle_system_object.m_EndingColourOverLifeTime->y, particle_system_object.m_CurrentColourOverLifeTimer);
+	const float tempLerpZ = lerp(particle_system_object.m_StartingColourOverLifeTime->z, particle_system_object.m_EndingColourOverLifeTime->z, particle_system_object.m_CurrentColourOverLifeTimer);
+
+	// NOTE: Set Particle Colour
+	particle_system_object.m_Colour = OKVector3<unsigned int>(tempLerpX, tempLerpY, tempLerpZ);
+}
+
+void ParticleSystem::ProcessColourOverVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime)
+{
+	// TODO: 
+
+}
+
 
 // NOTE: Action Functions
 
@@ -794,4 +844,20 @@ void ParticleSystem::AssignResizeByVelocityOverLifeTime(OKVector2<float> startin
 	m_EndingSizeByVelocity = ending_resize_velocity_over_lifetime;
 
 	m_CheckParticleResizingFunctionPtr = m_ParticleResizeMap[PARTICLE_RESIZE_VELOCITY];
+}
+
+void ParticleSystem::AssignColourOverLifeTime(OKVector3<unsigned int> starting_colour_over_lifetime, OKVector3<unsigned int> ending_colour_over_lifetime)
+{
+	m_StartingColourOverLifeTime = starting_colour_over_lifetime;
+	m_EndingColourOverLifeTime = ending_colour_over_lifetime;
+
+	m_CheckParticleColourOverTimerFunctionPtr = m_ParticleColourOverTimerMap[PARTICLE_COLOUR_OVER_LIFE_TIME];
+}
+
+void ParticleSystem::AssignColourVelocityOverLifeTime(OKVector3<unsigned int> starting_colour_over_lifetime, OKVector3<unsigned int> ending_colour_over_lifetime)
+{
+	m_StartingColourOverLifeTime = starting_colour_over_lifetime;
+	m_EndingColourOverLifeTime = ending_colour_over_lifetime;
+
+	m_CheckParticleColourOverTimerFunctionPtr = m_ParticleColourOverTimerMap[PARTICLE_COLOUR_VELOCITY_OVER_LIFE_TIME];
 }
