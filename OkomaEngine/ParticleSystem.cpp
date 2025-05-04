@@ -213,6 +213,7 @@ void ParticleSystem::Update(const float deltaTime)
 		}
 	}
 
+	// NOTE: Executes the Particle Effect Once only when there is a particle in there (Best Used for Multiple Particles)
 	if (m_ExecuteOnce == true && !m_SimulatingParticles.empty())
 	{
 		m_ParticleTimer = m_ParticleSimulationDuration;
@@ -348,6 +349,12 @@ void ParticleSystem::AssignParticleSpawnAreaDonut(float outer_circle_radius, flo
 	m_OuterDonutScale = outer_circle_radius;
 	m_InnerDonutScale = inner_circle_radius;
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_DONUT];
+}
+
+void ParticleSystem::AssignParticleSpawnAreaEdge(float m_edge_length)
+{
+	m_EdgeLength = m_edge_length;
+	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_EDGE];
 }
 
 void ParticleSystem::AssignParticleSpawnAreaCustom()
@@ -595,7 +602,6 @@ void ParticleSystem::ProcessColourOverVelocity(c_ParticleSystemObject& particle_
 	// TODO: 
 
 }
-
 
 // NOTE: Action Functions
 

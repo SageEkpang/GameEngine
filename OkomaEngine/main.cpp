@@ -26,7 +26,7 @@ int main()
 	
 	m_ParticleSystem->AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_MULTIPLE);
 	m_ParticleSystem->AssignParticleAction(PARTICLE_ACTION_BURST_OUT);
-	m_ParticleSystem->AssignParticleSpawnAreaCircle(30.f);
+	m_ParticleSystem->AssignParticleSpawnAreaCircle(50.f);
 
 	m_ParticleSystem->SetLooping(false);
 	m_ParticleSystem->SetExecuteOnce(true);
@@ -34,7 +34,7 @@ int main()
 
 	m_ParticleSystem->SetDuration(0.5f);
 	m_ParticleSystem->SetStartSpeed(1.0);
-	m_ParticleSystem->SetStartLifeTime(1.0f);
+	m_ParticleSystem->SetStartLifeTime(0.5f);
 
 	//m_ParticleSystem->SetSimulateGravity(true);
 	//m_ParticleSystem->SetGravity(OKVector2<float>(0, 550));

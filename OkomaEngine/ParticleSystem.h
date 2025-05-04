@@ -284,6 +284,7 @@ public:
 		void AssignParticleSpawnAreaCapsule(float width, float height);
 		void AssignParticleSpawnAreaCapsule(OKVector2<float> scale);
 		void AssignParticleSpawnAreaDonut(float outer_circle_radius, float inner_circle_radius);
+		void AssignParticleSpawnAreaEdge(float m_edge_length);
 		void AssignParticleSpawnAreaCustom();
 
 
