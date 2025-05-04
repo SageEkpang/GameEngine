@@ -23,15 +23,30 @@ Collider::Collider(OKTransform2<float>* transform, bool IsCapsule, bool lockZRot
 }
 
 // CIRCLE
-Collider::Collider(OKTransform2<float>* transform, float radius)
+Collider::Collider(OKTransform2<float>* transform, float radius, bool isPoint)
 {
     // NOTE: Set the Collider Type in the Constructor
     m_ColliderType = ColliderType::COLLIDER_CIRCLE;
+    if (isPoint == true)
+    {
+        m_ColliderType = ColliderType::COLLIDER_POINT;
+    }
 
     // NOTE: Set Member Variable Types
     // strcpy_s(m_Tag, strlen(tag), tag);
     m_Transform = transform;
     m_Radius = radius;
+}
+
+Collider::Collider(OKTransform2<float>* transform, OKVector2<float> start_position, OKVector2<float> end_position)
+{
+    // NOTE: Set the Collider Typein the Constructor
+    m_ColliderType = ColliderType::COLLIDER_LINE;
+
+    // NOTE: Set Member Variable Types
+    m_Transform = transform;
+    m_LineStartPosition = start_position;
+    m_LineEndPosition = end_position;
 }
 
 Collider::~Collider()
@@ -54,6 +69,12 @@ void Collider::Draw()
         }
         break;
 
+        case ColliderType::COLLIDER_POINT:
+        {
+            DrawCircleV(m_Transform->position.ConvertToVec2(), 1.f, GREEN);
+        }
+        break;
+
         case ColliderType::COLLIDER_CIRCLE:
         {
             DrawCircleLines(m_Transform->position.ConvertToVec2().x, m_Transform->position.ConvertToVec2().y, m_Radius, GREEN);
@@ -72,6 +93,12 @@ void Collider::Draw()
             Rectangle t_SmoothRec = Rectangle{ m_Transform->position.x - (m_Transform->scale.x / 2), m_Transform->position.y - (m_Transform->scale.y / 2), m_Transform->scale.x, m_Transform->scale.y };
             DrawRectangleRoundedLines(t_SmoothRec, 10, 10, GREEN);
 
+        }
+        break;
+
+        case ColliderType::COLLIDER_LINE:
+        {
+            DrawLineV(m_LineStartPosition.ConvertToVec2(), m_LineEndPosition.ConvertToVec2(), GREEN);
         }
         break;
 

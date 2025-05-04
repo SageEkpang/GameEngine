@@ -21,27 +21,40 @@ int main()
 	float m_Accumulator = 0;
 	float m_SimpleCounter = 0;
 
-	int ParticleAmount = 10000;
-	ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(500, 400), ParticleAmount);
+	// FIRE
+
+	//int ParticleAmount = 10000;
+	//ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(500, 400), ParticleAmount);
+	//{
+	//	m_ParticleSystem->AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
+	//	m_ParticleSystem->AssignParticleAction(PARTICLE_ACTION_BURST_OUT);
+	//	m_ParticleSystem->AssignParticleSpawnAreaCircle(40.f);
+	//	m_ParticleSystem->SetLooping(true);
+	//	m_ParticleSystem->SetEmissionRateOverTime(500u);
+	//	m_ParticleSystem->SetDuration(0.5f);
+	//	m_ParticleSystem->SetStartSpeed(5.0);
+	//	m_ParticleSystem->SetStartLifeTime(1.0f);
+	//	m_ParticleSystem->AssignVelocityOverLifeTime(OKVector2<float>(0.f, -100.f), OKVector2<float>(0.f, -400.f));
+	//	m_ParticleSystem->AssignColourOverLifeTime(OKVector3<unsigned int>(255, 255, 0), OKVector3<unsigned int>(255, 0, 0));
+	//	m_ParticleSystem->AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(1.f, 1.f));
+	//}
 	
-	m_ParticleSystem->AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
-	m_ParticleSystem->AssignParticleAction(PARTICLE_ACTION_BURST_OUT);
-	m_ParticleSystem->AssignParticleSpawnAreaCircle(80.f);
+	// SMOKE
 
-	m_ParticleSystem->SetLooping(true);
-	m_ParticleSystem->SetEmissionRateOverTime(500u);
+	//int ParticleAmountTwo = 50;
+	//ParticleSystem* m_ParticleSystemTwo = new ParticleSystem(OKVector2<float>(500, 400), ParticleAmountTwo);
+	//{
+	//	m_ParticleSystemTwo->AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
+	//	m_ParticleSystemTwo->AssignParticleSpawnAreaCircle(40.f);
+	//	m_ParticleSystemTwo->SetLooping(true);
+	//	m_ParticleSystemTwo->SetEmissionRateOverTime(5u);
+	//	m_ParticleSystemTwo->SetDuration(0.5f);
+	//	m_ParticleSystemTwo->SetStartLifeTime(6.0f);
+	//	m_ParticleSystemTwo->AssignVelocityOverLifeTime(OKVector2<float>(0.f, -50.f), OKVector2<float>(0.f, -100.f));
+	//	m_ParticleSystemTwo->AssignColourOverLifeTime(OKVector3<unsigned int>(200, 200, 200), OKVector3<unsigned int>(50, 50, 50));
+	//	m_ParticleSystemTwo->AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(5.f, 5.f));
+	//}
 
-	m_ParticleSystem->SetDuration(0.5f);
-	m_ParticleSystem->SetStartSpeed(5.0);
-	m_ParticleSystem->SetStartLifeTime(1.0f);
-
-	//m_ParticleSystem->SetSimulateGravity(true);
-	//m_ParticleSystem->SetGravity(OKVector2<float>(0, 550));
-
-	m_ParticleSystem->AssignVelocityOverLifeTime(OKVector2<float>(0.f, -100.f), OKVector2<float>(0.f, -400.f));
-
-	m_ParticleSystem->AssignColourOverLifeTime(OKVector3<unsigned int>(255, 255, 0), OKVector3<unsigned int>(255, 0, 0));
-	m_ParticleSystem->AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(1.f, 1.f));
 
 	// SetTargetFPS(60);
 	while (!WindowShouldClose())
@@ -56,60 +69,13 @@ int main()
 		m_SimpleCounter += timer->GetDeltaTime();
 
 
-		if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-		{
-			OKVector2<float> MovementDelta = OKVector2<float>(GetMouseX(), GetMouseY());
-			m_ParticleSystem->SetPosition(MovementDelta);
-		}
-		
 
 
 
-		m_ParticleSystem->Update(GetFrameTime());
-		m_ParticleSystem->Draw();
 
 
-		//if (IsKeyDown(KEY_A))
-		//{
-		//	m_PhysicsObjects[0]->GetRigidbody()->AddImpulse(-800 * timer->GetDeltaTime(), 0);
-		//}
 
-		//if (IsKeyDown(KEY_D))
-		//{
-		//	m_PhysicsObjects[0]->GetRigidbody()->AddImpulse(800 * timer->GetDeltaTime(), 0);
-		//}
 
-		//if (IsKeyPressed(KEY_SPACE))
-		//{
-		//	m_PhysicsObjects[0]->GetRigidbody()->AddImpulse(0, -1000);
-		//}
-
-		//for (int i = 0; i < m_PhysicsObjects.size(); ++i)
-		//{
-		//	for (int j = 0; j < m_PhysicsObjects.size(); ++j)
-		//	{
-		//		if (i == j) { continue; }
-
-		//		t_ColMani = t_ColliderManager->CheckCollisions(m_PhysicsObjects[i]->GetCollider(), m_PhysicsObjects[j]->GetCollider());
-		//		// DrawText(TextFormat("col: %d", t_ColMani.m_HasCollision), 10, 10, 40, PINK);
-		//		
-		//		if (t_ColMani.m_HasCollision == true)
-		//		{
-		//			// NOTE: Coef is Bounce Level to the collision detection
-		//			t_CollisionResolution->ResolveCollision(m_PhysicsObjects[i]->GetRigidbody(), m_PhysicsObjects[j]->GetRigidbody(), 0.9f, t_ColMani.m_PenetrationDepth, t_ColMani.m_CollisionNormal, GetFrameTime());
-		//		}
-		//	}
-		//}
-
-		//for (auto& v : m_PhysicsObjects)
-		//{
-		//	v->Update(timer->GetDeltaTime());
-		//}
-
-		//for (auto& v : m_PhysicsObjects)
-		//{
-		//	v->Draw();
-		//}
 
 		if (m_Accumulator >= FPS_60)
 		{
@@ -121,7 +87,7 @@ int main()
 		EndDrawing();
 	}
 
-	delete m_ParticleSystem;
+	// delete m_ParticleSystem;
 	
 	CloseAudioDevice();
 	CloseWindow();

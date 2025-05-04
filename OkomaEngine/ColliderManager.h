@@ -13,14 +13,27 @@ enum Collider_Type_Collisions
     CIRCLE_TO_CIRCLE,
     CIRCLE_TO_RECTANGLE,
 
-    CAPSULE_TO_CIRCLE,
-    CAPSULE_TO_RECTANGLE,
     CAPSULE_TO_CAPSULE,
+    CAPSULE_TO_RECTANGLE,
+    CAPSULE_TO_CIRCLE,
 
     ORIENTED_TO_ORIENTED,
     ORIENTED_TO_RECTANGLE,
     ORIENTED_TO_CIRCLE,
-    ORIENTED_TO_CAPSULE
+    ORIENTED_TO_CAPSULE,
+
+    LINE_TO_LINE,
+    LINE_TO_CIRCLE,
+    LINE_TO_RECTANGLE,
+    LINE_TO_CAPSULE,
+    LINE_TO_ORIENTED,
+
+    POINT_TO_POINT,
+    POINT_TO_LINE,
+    POINT_TO_CIRCLE,
+    POINT_TO_RECTANGLE,
+    POINT_TO_CAPSULE,
+    POINT_TO_ORIENTED
 };
 
 struct Interval2D
@@ -83,6 +96,21 @@ public:
 
     CollisionManifold OrientedRectangleToCircle(Collider* OrRectA, Collider* circB);
     CollisionManifold OrientedRectangleToCapsule(Collider* OrRectA, Collider* capsuleB);
+
+    // POINT
+    CollisionManifold PointToPoint(Collider* pointA, Collider* pointB);
+    CollisionManifold PointToLine(Collider* pointA, Collider* lineB);
+    CollisionManifold PointToCircle(Collider* pointA, Collider* circleB);
+    CollisionManifold PointToRectangle(Collider* pointA, Collider* rectB);
+    CollisionManifold PointToCapsule(Collider* pointA, Collider* capsuleB);
+    CollisionManifold PointToOrientedRectangle(Collider* pointA, Collider* OrRectB);
+
+    // LINE
+    CollisionManifold LineToLine(Collider* lineA, Collider* lineB);
+    CollisionManifold LineToCircle(Collider* lineA, Collider* circB);
+    CollisionManifold LineToRectangle(Collider* lineA, Collider* rectB);
+    CollisionManifold LineToOrientedRectangle(Collider* lineA, Collider* OrRectB);
+    CollisionManifold LineToCapsule(Collider* lineA, Collider* capsuleB);
 
 };
 

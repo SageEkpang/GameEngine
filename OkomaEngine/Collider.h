@@ -11,6 +11,7 @@
 
 enum ColliderType
 {
+    COLLIDER_POINT,
     COLLIDER_RECTANGLE,
     COLLIDER_CIRCLE,
     COLLIDER_CAPSULE,
@@ -24,7 +25,7 @@ class Collider : public Component
 protected: // PROTECTED VARIABLE(s)
 
     // BASE VARIABLE(s)
-    OKTransform2<float>* m_Transform;
+    OKTransform2<float>* m_Transform = nullptr;
     float m_Radius{};
 
     // LINE VARIABLE(s)
@@ -45,11 +46,11 @@ public: // PUBLIC FUNCTION(s)
 
     // CIRCLE
     /// @brief Circle Collider Constructor
-    Collider(OKTransform2<float>* transform, float radius);
+    Collider(OKTransform2<float>* transform, float radius, bool isPoint = false);
 
     // LINE
     // @brief Line Collider Constructor
-    Collider(OKVector2<float> start_position, OKVector2<float> end_position);
+    Collider(OKTransform2<float>* transform, OKVector2<float> start_position, OKVector2<float> end_position);
 
     // COMPLEX
     /// @brief Complex Collider Constructor 
@@ -75,11 +76,20 @@ public: // PUBLIC FUNCTION(s)
     inline ColliderType GetColliderType() const { return m_ColliderType; }
 
     inline float GetRadius() const { return m_Radius; }
+    inline OKVector2<float> GetLineStart() const { return m_LineStartPosition; }
+    inline OKVector2<float> GetLineEnd() const { return m_LineEndPosition; }
 
     // SETTER FUNCTION(s)
     inline void SetTransform(OKTransform2<float>* transform) { m_Transform = transform; }
+    inline void SetPosition(OKVector2<float> position) { m_Transform->position = position; }
+    inline void SetScale(OKVector2<float> scale) { m_Transform->scale = scale; }
+    inline void SetRotation(float rotation) { m_Transform->rotation = rotation; }
 
     inline void SetColliderType(ColliderType colliderType) { m_ColliderType = colliderType; }
+
+    inline void SetRadius(float radius) { m_Radius = radius; }
+    inline void SetLineStartPosition(OKVector2<float> lineStartPosition) { m_LineStartPosition = lineStartPosition; }
+    inline void SetLineEndPosition(OKVector2<float> lineEndPosition) { m_LineEndPosition = lineEndPosition; }
 
 
     // POLYGONE FUNCTION(s)
