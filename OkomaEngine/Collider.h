@@ -15,7 +15,8 @@ enum ColliderType
     COLLIDER_CIRCLE,
     COLLIDER_CAPSULE,
     COLLIDER_ORIENTED_RECTANGLE,
-    COLLIDER_COMPLEX
+    COLLIDER_COMPLEX,
+    COLLIDER_LINE
 };
 
 class Collider : public Component
@@ -25,6 +26,10 @@ protected: // PROTECTED VARIABLE(s)
     // BASE VARIABLE(s)
     OKTransform2<float>* m_Transform;
     float m_Radius{};
+
+    // LINE VARIABLE(s)
+    OKVector2<float> m_LineStartPosition;
+    OKVector2<float> m_LineEndPosition;
 
     // COLLIDER VARIABLE(s)
     ColliderType m_ColliderType;
@@ -41,6 +46,10 @@ public: // PUBLIC FUNCTION(s)
     // CIRCLE
     /// @brief Circle Collider Constructor
     Collider(OKTransform2<float>* transform, float radius);
+
+    // LINE
+    // @brief Line Collider Constructor
+    Collider(OKVector2<float> start_position, OKVector2<float> end_position);
 
     // COMPLEX
     /// @brief Complex Collider Constructor 
