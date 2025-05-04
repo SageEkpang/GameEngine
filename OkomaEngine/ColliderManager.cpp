@@ -643,37 +643,158 @@ CollisionManifold ColliderManager::OrientedRectangleToCapsule(Collider* OrRectA,
 
 CollisionManifold ColliderManager::PointToPoint(Collider* pointA, Collider* pointB)
 {
-	return CollisionManifold();
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	if (pointA->GetPosition() == pointB->GetPosition())
+	{
+		t_ColMani.m_HasCollision = true;
+		t_ColMani.m_CollisionNormal = pointA->GetTransform()->position - pointB->GetTransform()->position;
+		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+		t_ColMani.m_ContactPointAmount = 1;
+		t_ColMani.m_PenetrationDepth = OKVector2<float>(pointA->GetTransform()->position - pointB->GetTransform()->position).magnitude();
+		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+
+		return t_ColMani;
+	}
+
+	return t_ColMani;
 }
 
 CollisionManifold ColliderManager::PointToLine(Collider* pointA, Collider* lineB)
 {
-	return CollisionManifold();
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	// NOTE: Distance Point from Start of Line
+	float PointOneDistX = pointA->GetPosition().x - lineB->GetLineStart().x;
+	float PointOneDistY = pointA->GetPosition().y - lineB->GetLineStart().y;
+	float distanceOne = sqrt((PointOneDistX * PointOneDistX) + (PointOneDistY * PointOneDistY));
+
+	// NOTE: Distance Point from End of Line
+	float PointTwoDistX = pointA->GetPosition().x - lineB->GetLineEnd().x;
+	float PointTwoDistY = pointA->GetPosition().y - lineB->GetLineEnd().y;
+	float distanceTwo = sqrt((PointTwoDistX * PointTwoDistX) + (PointTwoDistY * PointTwoDistY));
+
+	// NOTE: Distance from Start to End
+	float distX = lineB->GetLineStart().x - lineB->GetLineEnd().x;
+	float distY = lineB->GetLineStart().y - lineB->GetLineEnd().y;
+	float LineLength = sqrt((distX * distX) + (distY * distY));
+
+	// NOTE: Accuracy of colliding line
+	float LineBuffer = 0.1;
+
+	// NOTE: Collision Check
+	if ((distanceOne + distanceTwo) >= LineLength - LineBuffer && distanceOne + distanceTwo <= LineLength + LineBuffer)
+	{
+		t_ColMani.m_HasCollision = true;
+		t_ColMani.m_CollisionNormal = pointA->GetTransform()->position - lineB->GetTransform()->position;
+		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+		t_ColMani.m_ContactPointAmount = 1;
+		t_ColMani.m_PenetrationDepth = OKVector2<float>(pointA->GetTransform()->position - lineB->GetTransform()->position).magnitude();
+		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+
+		return t_ColMani;
+	}
+
+	return t_ColMani;
 }
 
 CollisionManifold ColliderManager::PointToCircle(Collider* pointA, Collider* circleB)
 {
-	return CollisionManifold();
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	// NOTE: Work out Distance between colliders
+	float distX = pointA->GetPosition().x - circleB->GetPosition().x;
+	float distY = pointA->GetPosition().y - circleB->GetPosition().y;
+	float distance = sqrt(  (distX * distX) + (distY * distY));
+
+	if (distance <= circleB->GetRadius())
+	{
+		t_ColMani.m_HasCollision = true;
+		t_ColMani.m_CollisionNormal = pointA->GetTransform()->position - circleB->GetTransform()->position;
+		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+		t_ColMani.m_ContactPointAmount = 1;
+		t_ColMani.m_PenetrationDepth = OKVector2<float>(pointA->GetTransform()->position - circleB->GetTransform()->position).magnitude();
+		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+
+		return t_ColMani;
+	}
+
+	return t_ColMani;
 }
 
+// TODO: Change this when transferring to the project
 CollisionManifold ColliderManager::PointToRectangle(Collider* pointA, Collider* rectB)
 {
-	return CollisionManifold();
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	OKVector2<float> t_CentrePosition = rectB->GetPosition() - (rectB->GetScale() / 2);
+
+	if (pointA->GetPosition().x >= rectB->GetPosition().x &&
+		pointA->GetPosition().x <= rectB->GetPosition().x + rectB->GetScale().x &&
+		pointA->GetPosition().y >= rectB->GetPosition().y &&
+		pointA->GetPosition().y <= rectB->GetPosition().y + rectB->GetScale().y)
+	{
+		t_ColMani.m_HasCollision = true;
+		t_ColMani.m_CollisionNormal = pointA->GetTransform()->position - rectB->GetTransform()->position;
+		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+		t_ColMani.m_ContactPointAmount = 1;
+		t_ColMani.m_PenetrationDepth = OKVector2<float>(pointA->GetTransform()->position - rectB->GetTransform()->position).magnitude();
+		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+
+		return t_ColMani;
+	}
+
+	return t_ColMani;
 }
 
 CollisionManifold ColliderManager::PointToCapsule(Collider* pointA, Collider* capsuleB)
 {
+	CollisionManifold t_ColMani = CollisionManifold();
+
+
 	return CollisionManifold();
 }
 
 CollisionManifold ColliderManager::PointToOrientedRectangle(Collider* pointA, Collider* OrRectB)
 {
+	CollisionManifold t_ColMani = CollisionManifold();
+
 	return CollisionManifold();
 }
 
 CollisionManifold ColliderManager::LineToLine(Collider* lineA, Collider* lineB)
 {
-	return CollisionManifold();
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	const float x1 = lineA->GetLineStart().x;
+	const float y1 = lineA->GetLineStart().y;
+
+	const float x2 = lineA->GetLineEnd().x;
+	const float y2 = lineA->GetLineEnd().y;
+
+	const float x3 = lineB->GetLineStart().x;
+	const float y3 = lineB->GetLineStart().y;
+
+	const float x4 = lineB->GetLineEnd().x;
+	const float y4 = lineB->GetLineEnd().y;
+
+	// NOTE: Calculate Distance
+	float uA = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
+	float uB = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
+
+	if (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1) 
+	{
+		t_ColMani.m_HasCollision = true;
+		t_ColMani.m_CollisionNormal = lineA->GetTransform()->position - lineB->GetTransform()->position;
+		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+		t_ColMani.m_ContactPointAmount = 1;
+		t_ColMani.m_PenetrationDepth = OKVector2<float>(lineA->GetTransform()->position - lineB->GetTransform()->position).magnitude();
+		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+
+		return t_ColMani;
+	};
+
+	return t_ColMani;
 }
 
 CollisionManifold ColliderManager::LineToCircle(Collider* lineA, Collider* circB)
@@ -689,8 +810,14 @@ CollisionManifold ColliderManager::LineToCircle(Collider* lineA, Collider* circB
 	float closestX = lineA->GetLineStart().x + (dot * (lineA->GetLineEnd().x - lineA->GetLineStart().x));
 	float closestY = lineA->GetLineStart().y + (dot * (lineA->GetLineEnd().y - lineA->GetLineStart().y));
 
+	OKTransform2<float> tempPoint = OKTransform2<float>(circB->GetPosition(), OKVector2<float>(), 0.f);
+	Collider tempCollider = Collider(&tempPoint, 1.f, true);
+	CollisionManifold onSegment = PointToLine(&tempCollider, lineA);
 
-	// bool onSegment = 
+	if (!onSegment.m_HasCollision)
+	{
+		return t_ColMani;
+	}
 
 	distX = closestX - circB->GetPosition().x;
 	distY = closestY - circB->GetPosition().y;
@@ -699,10 +826,11 @@ CollisionManifold ColliderManager::LineToCircle(Collider* lineA, Collider* circB
 	if (distance <= circB->GetRadius())
 	{
 		t_ColMani.m_HasCollision = true;
-		t_ColMani.m_CollisionNormal = OKVector2<float>(closestX, closestY) - circB->GetTransform()->position;
-
-
-
+		t_ColMani.m_CollisionNormal = lineA->GetTransform()->position - circB->GetTransform()->position;
+		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+		t_ColMani.m_ContactPointAmount = 1;
+		t_ColMani.m_PenetrationDepth = OKVector2<float>(lineA->GetTransform()->position - circB->GetTransform()->position).magnitude();
+		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
 
 		return t_ColMani;
 	}
@@ -712,7 +840,34 @@ CollisionManifold ColliderManager::LineToCircle(Collider* lineA, Collider* circB
 
 CollisionManifold ColliderManager::LineToRectangle(Collider* lineA, Collider* rectB)
 {
-	return CollisionManifold();
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	Collider t_LineLeft = Collider(&OKTransform2<float>(), OKVector2<float>(), OKVector2<float>());
+	Collider t_LineRight = Collider(&OKTransform2<float>(), OKVector2<float>(), OKVector2<float>());
+	Collider t_LineTop = Collider(&OKTransform2<float>(), OKVector2<float>(), OKVector2<float>());
+	Collider t_LineBottom = Collider(&OKTransform2<float>(), OKVector2<float>(), OKVector2<float>());
+
+
+	CollisionManifold t_Left = LineToLine(lineA, &t_LineLeft);
+	CollisionManifold t_Right = LineToLine(lineA, &t_LineRight);
+	CollisionManifold t_Top = LineToLine(lineA, &t_LineTop);
+	CollisionManifold t_Bottom = LineToLine(lineA, &t_LineBottom);
+
+	if (t_Left.m_HasCollision == true ||
+		t_Right.m_HasCollision == true ||
+		t_Top.m_HasCollision == true ||
+		t_Bottom.m_HasCollision == true)
+	{
+
+
+
+
+
+
+		return t_ColMani;
+	}
+
+	return t_ColMani;
 }
 
 CollisionManifold ColliderManager::LineToOrientedRectangle(Collider* lineA, Collider* OrRectB)
