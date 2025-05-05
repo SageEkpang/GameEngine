@@ -680,7 +680,7 @@ CollisionManifold ColliderManager::PointToLine(Collider* pointA, Collider* lineB
 	float LineLength = sqrt((distX * distX) + (distY * distY));
 
 	// NOTE: Accuracy of colliding line
-	float LineBuffer = 0.1;
+	float LineBuffer = pointA->GetRadius();
 
 	// NOTE: Collision Check
 	if ((distanceOne + distanceTwo) >= LineLength - LineBuffer && distanceOne + distanceTwo <= LineLength + LineBuffer)
@@ -751,8 +751,29 @@ CollisionManifold ColliderManager::PointToCapsule(Collider* pointA, Collider* ca
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
+	OKVector2<float> tip_a = OKVector2<float>(capsuleB->GetPosition().x, capsuleB->GetPosition().y + (capsuleB->GetScale().y / 2) - (capsuleB->GetScale().x / 2));
+	OKVector2<float> base_a = OKVector2<float>(capsuleB->GetPosition().x, capsuleB->GetPosition().y - (capsuleB->GetScale().y / 2) + (capsuleB->GetScale().x / 2));
 
-	return CollisionManifold();
+	float t_DistanceX = tip_a.x - base_a.x;
+	float t_DistanceY = tip_a.y - base_a.y;
+	float len = sqrt((t_DistanceX * t_DistanceX) + (t_DistanceY * t_DistanceY));
+
+	float dot = ((pointA->GetPosition().x - tip_a.x) * (base_a.x - tip_a.x)) + ((pointA->GetPosition().y - tip_a.y) * (base_a.y - tip_a.y)) / pow(len, 2);
+
+	// NOTE: Closest Point
+	OKVector2<float> closest_point;
+	closest_point.x = tip_a.x + (dot * (base_a.x - tip_a.x));
+	closest_point.y = tip_a.y + (dot * (base_a.y - tip_a.y));
+
+	closest_point.x = Clamp(closest_point.x, base_a.x, tip_a.x);
+	closest_point.y = Clamp(closest_point.y, base_a.y, tip_a.y);
+
+
+	// NOTE: Create the circle based of the capsule components
+	OKTransform2<float> circle_transform = OKTransform2<float>(closest_point, OKVector2<float>(capsuleB->GetScale().x, capsuleB->GetScale().x), 0);
+	Collider circle_temp = Collider(&circle_transform, capsuleB->GetScale().x / 2);
+
+	return t_ColMani = PointToCircle(pointA, &circle_temp);
 }
 
 CollisionManifold ColliderManager::PointToOrientedRectangle(Collider* pointA, Collider* OrRectB)
@@ -801,17 +822,41 @@ CollisionManifold ColliderManager::LineToCircle(Collider* lineA, Collider* circB
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
+	// NOTE: Check if its already inside the circle
+	OKTransform2<float> PointOneTrans = OKTransform2<float>(OKVector2<float>(lineA->GetLineStart()), OKVector2<float>(1.f, 1.f), 0.f);
+	Collider PointOne = Collider(&PointOneTrans, 1.f, true);
+
+	OKTransform2<float> PointTwoTrans = OKTransform2<float>(OKVector2<float>(lineA->GetLineEnd()), OKVector2<float>(1.f, 1.f), 0.f);
+	Collider PointTwo = Collider(&PointTwoTrans, 1.f, true);
+
+	bool insideOne = PointToCircle(&PointOne, circB).m_HasCollision;
+	bool insideTwo = PointToCircle(&PointTwo, circB).m_HasCollision;
+
+	if (insideOne || insideTwo)
+	{
+		t_ColMani.m_HasCollision = true;
+		t_ColMani.m_CollisionNormal = lineA->GetTransform()->position - circB->GetTransform()->position;
+		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+		t_ColMani.m_ContactPointAmount = 1;
+		t_ColMani.m_PenetrationDepth = OKVector2<float>(lineA->GetTransform()->position - circB->GetTransform()->position).magnitude();
+		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+
+		return t_ColMani;
+	}
+
+
+	// NOTE: Get Length of Circle
 	float distX = lineA->GetLineStart().x - lineA->GetLineEnd().x;
 	float distY = lineA->GetLineStart().y - lineA->GetLineEnd().y;
 	float length = sqrt((distX * distX) + (distY * distY));
 
-	float dot = (((circB->GetPosition().x - lineA->GetLineStart().x) * (lineA->GetLineEnd().x - lineA->GetLineStart().x)) +  ((circB->GetPosition().y - lineA->GetLineStart().y) * (lineA->GetLineEnd().y - lineA->GetLineStart().y))) / (length * length);
+	float dot = ( ((circB->GetPosition().x - lineA->GetLineStart().x) * (lineA->GetLineEnd().x - lineA->GetLineStart().x)) +  ((circB->GetPosition().y - lineA->GetLineStart().y) * (lineA->GetLineEnd().y - lineA->GetLineStart().y))) / (length * length);
 
 	float closestX = lineA->GetLineStart().x + (dot * (lineA->GetLineEnd().x - lineA->GetLineStart().x));
 	float closestY = lineA->GetLineStart().y + (dot * (lineA->GetLineEnd().y - lineA->GetLineStart().y));
 
-	OKTransform2<float> tempPoint = OKTransform2<float>(circB->GetPosition(), OKVector2<float>(), 0.f);
-	Collider tempCollider = Collider(&tempPoint, 1.f, true);
+	OKTransform2<float> tempPoint = OKTransform2<float>(circB->GetPosition(), OKVector2<float>(1.f, 1.f), 0.f);
+	Collider tempCollider = Collider(&tempPoint, circB->GetRadius(), true);
 	CollisionManifold onSegment = PointToLine(&tempCollider, lineA);
 
 	if (!onSegment.m_HasCollision)
@@ -838,15 +883,32 @@ CollisionManifold ColliderManager::LineToCircle(Collider* lineA, Collider* circB
 	return t_ColMani;
 }
 
+// Change for the project (this assumes that the coordinate of the rectangle starts at the top left)
 CollisionManifold ColliderManager::LineToRectangle(Collider* lineA, Collider* rectB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
-	Collider t_LineLeft = Collider(&OKTransform2<float>(), OKVector2<float>(), OKVector2<float>());
-	Collider t_LineRight = Collider(&OKTransform2<float>(), OKVector2<float>(), OKVector2<float>());
-	Collider t_LineTop = Collider(&OKTransform2<float>(), OKVector2<float>(), OKVector2<float>());
-	Collider t_LineBottom = Collider(&OKTransform2<float>(), OKVector2<float>(), OKVector2<float>());
+	OKTransform2<float> tempTransform = OKTransform2<float>();
 
+	// NOTE: Left Line
+	OKVector2<float> tempLeftPosStart = OKVector2<float>(rectB->GetPosition().x, rectB->GetPosition().y);
+	OKVector2<float> tempLeftPosEnd = OKVector2<float>(rectB->GetPosition().x, rectB->GetPosition().y + rectB->GetScale().y);
+	Collider t_LineLeft = Collider(&tempTransform, tempLeftPosStart, tempLeftPosEnd);
+
+	// NOTE: Right Line
+	OKVector2<float> tempRightPosStart = OKVector2<float>(rectB->GetPosition().x + rectB->GetScale().x, rectB->GetPosition().y);
+	OKVector2<float> tempRightPosEnd = OKVector2<float>(rectB->GetPosition().x + rectB->GetScale().x, rectB->GetPosition().y + rectB->GetScale().y);
+	Collider t_LineRight = Collider(&tempTransform, tempRightPosStart, tempRightPosEnd);
+
+	// NOTE: Top Line
+	OKVector2<float> tempTopPosStart = OKVector2<float>(rectB->GetPosition().x, rectB->GetPosition().y);
+	OKVector2<float> tempTopPosEnd = OKVector2<float>(rectB->GetPosition().x + rectB->GetScale().x, rectB->GetPosition().y);
+	Collider t_LineTop = Collider(&tempTransform, tempTopPosStart, tempTopPosEnd);
+
+	// NOTE: Bottom Line
+	OKVector2<float> tempBottomPosStart = OKVector2<float>(rectB->GetPosition().x, rectB->GetPosition().y + rectB->GetScale().y);
+	OKVector2<float> tempBottomPosEnd = OKVector2<float>(rectB->GetPosition().x + rectB->GetScale().x, rectB->GetPosition().y + rectB->GetScale().y);
+	Collider t_LineBottom = Collider(&tempTransform, tempBottomPosStart, tempBottomPosEnd);
 
 	CollisionManifold t_Left = LineToLine(lineA, &t_LineLeft);
 	CollisionManifold t_Right = LineToLine(lineA, &t_LineRight);
@@ -858,11 +920,12 @@ CollisionManifold ColliderManager::LineToRectangle(Collider* lineA, Collider* re
 		t_Top.m_HasCollision == true ||
 		t_Bottom.m_HasCollision == true)
 	{
-
-
-
-
-
+		t_ColMani.m_HasCollision = true;
+		t_ColMani.m_CollisionNormal = lineA->GetTransform()->position - rectB->GetTransform()->position;
+		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+		t_ColMani.m_ContactPointAmount = 1;
+		t_ColMani.m_PenetrationDepth = OKVector2<float>(lineA->GetTransform()->position - rectB->GetTransform()->position).magnitude();
+		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
 
 		return t_ColMani;
 	}
@@ -877,5 +940,36 @@ CollisionManifold ColliderManager::LineToOrientedRectangle(Collider* lineA, Coll
 
 CollisionManifold ColliderManager::LineToCapsule(Collider* lineA, Collider* capsuleB)
 {
-	return CollisionManifold();
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	OKVector2<float> tip_a = OKVector2<float>(capsuleB->GetPosition().x, capsuleB->GetPosition().y + (capsuleB->GetScale().y / 2) - (capsuleB->GetScale().x / 2));
+	OKVector2<float> base_a = OKVector2<float>(capsuleB->GetPosition().x, capsuleB->GetPosition().y - (capsuleB->GetScale().y / 2) + (capsuleB->GetScale().x / 2));
+
+	float t_DistanceX = tip_a.x - base_a.x;
+	float t_DistanceY = tip_a.y - base_a.y;
+	float len = sqrt((t_DistanceX * t_DistanceX) + (t_DistanceY * t_DistanceY));
+
+	float dot = ((lineA->GetLineEnd().x - tip_a.x) * (base_a.x - tip_a.x)) + ((lineA->GetLineEnd().y - tip_a.y) * (base_a.y - tip_a.y)) / pow(len, 2);
+
+	// NOTE: Closest Point
+	OKVector2<float> closest_point;
+	closest_point.x = tip_a.x + (dot * (base_a.x - tip_a.x));
+
+	// NOTE: New calculation with the line start and end in mind
+
+	float LineYCalculation = ((lineA->GetLineStart().y - capsuleB->GetPosition().y) * 0.5f) - ((lineA->GetLineEnd().y - capsuleB->GetPosition().y) * 0.5f);
+	 
+
+	closest_point.y = tip_a.y + (dot * (base_a.y - tip_a.y)) + (lineA->GetLineStart().y -  capsuleB->GetPosition().y) * 0.5f;
+
+	closest_point.x = Clamp(closest_point.x, base_a.x, tip_a.x);
+	closest_point.y = Clamp(closest_point.y, base_a.y, tip_a.y);
+
+	DrawCircle(closest_point.x, closest_point.y, 10.f, RED);
+
+	// NOTE: Create the circle based of the capsule components
+	OKTransform2<float> circle_transform = OKTransform2<float>(closest_point, OKVector2<float>(capsuleB->GetScale().x, capsuleB->GetScale().x), 0);
+	Collider circle_temp = Collider(&circle_transform, capsuleB->GetScale().x / 2.f);
+
+	return t_ColMani = LineToCircle(lineA, &circle_temp);
 }

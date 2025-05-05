@@ -56,6 +56,33 @@ int main()
 	}
 
 
+	// Point
+	OKTransform2<float> tempTransform = OKTransform2<float>();
+	Collider* m_Point = new Collider(&tempTransform, 1.f, true);
+
+	// Line
+	OKTransform2<float> tempLineTransform = OKTransform2<float>();
+	Collider* m_Line = new Collider(&tempLineTransform, OKVector2<float>(0.f, 500.f), OKVector2<float>(100.f, 500.f));
+
+	// Circle
+	OKTransform2<float> tempCircleTransform = OKTransform2<float>(OKVector2<float>(500, 500), OKVector2<float>(0.f, 0.f), 0.f);
+	Collider* m_Circle = new Collider(&tempCircleTransform, 100.f);
+
+	// Rectangle
+	OKTransform2<float> tempRectangleTransform = OKTransform2<float>(OKVector2<float>(500, 500), OKVector2<float>(50.f, 50.f), 0.f);
+	Collider* m_Rectangle = new Collider(&tempRectangleTransform);
+
+	// Line 2
+	//OKTransform2<float> tempLineTransformTwo = OKTransform2<float>();
+	//Collider* m_LineTwo = new Collider(&tempLineTransformTwo, OKVector2<float>(10.f, 500.f), OKVector2<float>(500.f, 500.f));
+
+	// Capsule
+	OKTransform2<float> tempCapsuleTransform = OKTransform2<float>(OKVector2<float>(500, 500), OKVector2<float>(50.f, 100.f), 0.f);
+	Collider* m_Capsule = new Collider(&tempCapsuleTransform, true);
+
+
+	ColliderManager colMani;
+
 	// SetTargetFPS(60);
 	while (!WindowShouldClose())
 	{
@@ -69,11 +96,42 @@ int main()
 		m_SimpleCounter += timer->GetDeltaTime();
 
 
-		m_ParticleSystemTwo->Update(GetFrameTime());
-		m_ParticleSystemTwo->Draw();
+		//m_ParticleSystemTwo->Update(GetFrameTime());
+		//m_ParticleSystemTwo->Draw();
 
-		m_ParticleSystem->Update(GetFrameTime());
-		m_ParticleSystem->Draw();
+		//m_ParticleSystem->Update(GetFrameTime());
+		//m_ParticleSystem->Draw();
+
+		OKVector2<float> tempMouse = OKVector2<float>(GetMouseX(), GetMouseY());
+
+		if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+		{
+			m_Line->SetLineStartPosition(tempMouse);
+		}
+
+		if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
+		{
+
+			m_Line->SetLineEndPosition(tempMouse);
+		}
+
+
+		// m_Point->Draw();
+		m_Line->Draw();
+		// m_LineTwo->Draw();
+		// m_Circle->Draw();
+		// m_Rectangle->Draw();
+		m_Capsule->Draw();
+
+		if (colMani.CheckCollisions(m_Line, m_Capsule).m_HasCollision)
+		{
+			DrawText("Has Collided", 30, 30, 40, GREEN);
+		}
+
+
+
+
+
 
 
 		if (m_Accumulator >= FPS_60)

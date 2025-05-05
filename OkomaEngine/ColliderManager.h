@@ -22,18 +22,19 @@ enum Collider_Type_Collisions
     ORIENTED_TO_CIRCLE,
     ORIENTED_TO_CAPSULE,
 
-    LINE_TO_LINE,
-    LINE_TO_CIRCLE,
-    LINE_TO_RECTANGLE,
-    LINE_TO_CAPSULE,
-    LINE_TO_ORIENTED,
+    POINT_TO_POINT, // Working
+    POINT_TO_LINE, // Working
+    POINT_TO_CIRCLE, // Working
+    POINT_TO_RECTANGLE, // Working
+    POINT_TO_CAPSULE, // Working
+    POINT_TO_ORIENTED, // DO LATER (Maybe)
 
-    POINT_TO_POINT,
-    POINT_TO_LINE,
-    POINT_TO_CIRCLE,
-    POINT_TO_RECTANGLE,
-    POINT_TO_CAPSULE,
-    POINT_TO_ORIENTED
+    LINE_TO_LINE, // Working
+    LINE_TO_CIRCLE, // Working
+    LINE_TO_RECTANGLE, // Working
+    LINE_TO_CAPSULE, // Do Later
+    LINE_TO_ORIENTED // Do Later
+
 };
 
 struct Interval2D
