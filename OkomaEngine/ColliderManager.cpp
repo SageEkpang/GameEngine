@@ -505,6 +505,9 @@ CollisionManifold ColliderManager::CapsuleToCapsule(Collider* capsuleA, Collider
 	closest_point_B.x = Clamp(closest_point_B.x, base_b.x, tip_b.x);
 	closest_point_B.y = Clamp(closest_point_B.y, base_b.y, tip_b.y);
 
+	DrawCircleV(closest_point_A.ConvertToVec2(), 10.f, RED);
+	DrawCircleV(closest_point_B.ConvertToVec2(), 10.f, PURPLE);
+
 	// NOTE: Circle Construction (A)
 	OKTransform2<float> circle_transform_A = OKTransform2<float>(closest_point_A, OKVector2<float>(0, 0), 0);
 	Collider circle_temp_A = Collider(&circle_transform_A, capsuleA->GetScale().x / 2);
@@ -942,34 +945,83 @@ CollisionManifold ColliderManager::LineToCapsule(Collider* lineA, Collider* caps
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
-	OKVector2<float> tip_a = OKVector2<float>(capsuleB->GetPosition().x, capsuleB->GetPosition().y + (capsuleB->GetScale().y / 2) - (capsuleB->GetScale().x / 2));
-	OKVector2<float> base_a = OKVector2<float>(capsuleB->GetPosition().x, capsuleB->GetPosition().y - (capsuleB->GetScale().y / 2) + (capsuleB->GetScale().x / 2));
+	//OKVector2<float> tip_a = OKVector2<float>(capsuleB->GetPosition().x, capsuleB->GetPosition().y + (capsuleB->GetScale().y / 2) - (capsuleB->GetScale().x / 2));
+	//OKVector2<float> base_a = OKVector2<float>(capsuleB->GetPosition().x, capsuleB->GetPosition().y - (capsuleB->GetScale().y / 2) + (capsuleB->GetScale().x / 2));
 
-	float t_DistanceX = tip_a.x - base_a.x;
-	float t_DistanceY = tip_a.y - base_a.y;
-	float len = sqrt((t_DistanceX * t_DistanceX) + (t_DistanceY * t_DistanceY));
+	//float t_DistanceX = tip_a.x - base_a.x;
+	//float t_DistanceY = tip_a.y - base_a.y;
+	//float len = sqrt((t_DistanceX * t_DistanceX) + (t_DistanceY * t_DistanceY));
 
-	float dot = ((lineA->GetLineEnd().x - tip_a.x) * (base_a.x - tip_a.x)) + ((lineA->GetLineEnd().y - tip_a.y) * (base_a.y - tip_a.y)) / pow(len, 2);
+	//float dot = ((lineA->GetLineEnd().x - tip_a.x) * (base_a.x - tip_a.x)) + ((lineA->GetLineEnd().y - tip_a.y) * (base_a.y - tip_a.y)) / pow(len, 2);
+	//
+	//// NOTE: Closest Point
+	//OKVector2<float> closest_point;
+	//
+	//// NOTE: Calculating the Y Position
+	//// NOTE: New calculation with the line start and end in mind
+	//float LineYCalculation = ((lineA->GetLineStart().y - (capsuleB->GetPosition().y - capsuleB->GetScale().y / 2)) * 0.5f) - ((lineA->GetLineEnd().y - (capsuleB->GetPosition().y - capsuleB->GetScale().y / 2)) * 0.5f);
+	//closest_point.y = tip_a.y + (dot * (base_a.y - tip_a.y)) + LineYCalculation;
 
-	// NOTE: Closest Point
-	OKVector2<float> closest_point;
-	closest_point.x = tip_a.x + (dot * (base_a.x - tip_a.x));
+	//// NOTE: Calculating the Position
+	//closest_point.x = tip_a.x + (dot * (base_a.x - tip_a.x));
+	//closest_point.x = Clamp(closest_point.x, base_a.x, tip_a.x);
+	//closest_point.y = Clamp(closest_point.y, base_a.y, tip_a.y);
 
-	// NOTE: New calculation with the line start and end in mind
+	//DrawCircle(closest_point.x, closest_point.y, capsuleB->GetScale().x / 2, RED);
 
-	float LineYCalculation = ((lineA->GetLineStart().y - capsuleB->GetPosition().y) * 0.5f) - ((lineA->GetLineEnd().y - capsuleB->GetPosition().y) * 0.5f);
-	 
+	//// NOTE: Create the circle based of the capsule components
+	//OKTransform2<float> circle_transform = OKTransform2<float>(closest_point, OKVector2<float>(capsuleB->GetScale().x, capsuleB->GetScale().x), 0);
+	//Collider circle_temp = Collider(&circle_transform, capsuleB->GetScale().x / 2.f);
 
-	closest_point.y = tip_a.y + (dot * (base_a.y - tip_a.y)) + (lineA->GetLineStart().y -  capsuleB->GetPosition().y) * 0.5f;
+	//return t_ColMani = LineToCircle(lineA, &circle_temp);
 
-	closest_point.x = Clamp(closest_point.x, base_a.x, tip_a.x);
-	closest_point.y = Clamp(closest_point.y, base_a.y, tip_a.y);
+	// Capsule (A)
+	// NOTE: Capsule Position and Variable(s)
+	OKVector2<float> tip_a = OKVector2<float>(lineA->GetLineStart().x, lineA->GetLineStart().y);
+	OKVector2<float> base_a = OKVector2<float>(lineA->GetLineEnd().x, lineA->GetLineEnd().y);
+	float t_DistanceXA = tip_a.x - base_a.x;
+	float t_DistanceYA = tip_a.y - base_a.y;
+	float lenA = sqrt((t_DistanceXA * t_DistanceXA) + (t_DistanceYA * t_DistanceYA));
+	float dotA = ((capsuleB->GetPosition().x - tip_a.x) * (base_a.x - tip_a.x)) + ((capsuleB->GetPosition().y - tip_a.y) * (base_a.y - tip_a.y)) / pow(lenA, 2);
 
-	DrawCircle(closest_point.x, closest_point.y, 10.f, RED);
+	// Capsule (B)
+	OKVector2<float> tip_b = OKVector2<float>(capsuleB->GetPosition().x, capsuleB->GetPosition().y + (capsuleB->GetScale().y / 2) - (capsuleB->GetScale().x / 2));
+	OKVector2<float> base_b = OKVector2<float>(capsuleB->GetPosition().x, capsuleB->GetPosition().y - (capsuleB->GetScale().y / 2) + (capsuleB->GetScale().x / 2));
+	float t_DistanceXB = tip_b.x - base_b.x;
+	float t_DistanceYB = tip_b.y - base_b.y;
+	float lenB = sqrt((t_DistanceXB * t_DistanceXB) + (t_DistanceYB * t_DistanceYB));
 
-	// NOTE: Create the circle based of the capsule components
-	OKTransform2<float> circle_transform = OKTransform2<float>(closest_point, OKVector2<float>(capsuleB->GetScale().x, capsuleB->GetScale().x), 0);
-	Collider circle_temp = Collider(&circle_transform, capsuleB->GetScale().x / 2.f);
+	OKVector2<float> MiddlePosition;
+	MiddlePosition.x = (lineA->GetLineStart().x + lineA->GetLineEnd().x) / 2.f;
+	MiddlePosition.y = (lineA->GetLineStart().y + lineA->GetLineEnd().y) / 2.f;
 
-	return t_ColMani = LineToCircle(lineA, &circle_temp);
+	float dotB = ((MiddlePosition.x - tip_b.x) * (base_b.x - tip_b.x)) + ((MiddlePosition.y - tip_b.y) * (base_b.y - tip_b.y)) / pow(lenB, 2);
+
+	// NOTE: Closest Point (A)
+	OKVector2<float> closest_point_A;
+	closest_point_A.x = tip_a.x + (dotA * (base_a.x - tip_a.x)) / 2;
+	closest_point_A.y = tip_a.y + (dotA * (base_a.y - tip_a.y)) / 2;
+	closest_point_A.x = Clamp(closest_point_A.x, base_a.x, tip_a.x);
+	closest_point_A.y = Clamp(closest_point_A.y, base_a.y, tip_a.y);
+
+	// NOTE: Closest Point (B)
+	OKVector2<float> closest_point_B;
+	closest_point_B.x = tip_b.x + (dotB * (base_b.x - tip_b.x)) / 2;
+	closest_point_B.y = tip_b.y + (dotB * (base_b.y - tip_b.y)) / 2;
+	closest_point_B.x = Clamp(closest_point_B.x, base_b.x, tip_b.x);
+	closest_point_B.y = Clamp(closest_point_B.y, base_b.y, tip_b.y);
+
+	DrawCircleV(closest_point_A.ConvertToVec2(), 10.f, RED);
+	DrawCircleV(closest_point_B.ConvertToVec2(), 10.f, PURPLE);
+
+	// NOTE: Circle Construction (A)
+	OKTransform2<float> point_transform_A = OKTransform2<float>(closest_point_A, OKVector2<float>(0, 0), 0);
+	Collider point_temp_A = Collider(&point_transform_A, 1.f, true);
+
+	// NOTE: Circle Construction (B)
+	OKTransform2<float> circle_transform_B = OKTransform2<float>(closest_point_B, OKVector2<float>(0, 0), 0);
+	Collider circle_temp_B = Collider(&circle_transform_B, capsuleB->GetScale().x / 2);
+
+	t_ColMani = PointToCircle(&point_temp_A, &circle_temp_B);
+	return t_ColMani;
 }

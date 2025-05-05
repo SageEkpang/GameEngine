@@ -80,6 +80,8 @@ int main()
 	OKTransform2<float> tempCapsuleTransform = OKTransform2<float>(OKVector2<float>(500, 500), OKVector2<float>(50.f, 100.f), 0.f);
 	Collider* m_Capsule = new Collider(&tempCapsuleTransform, true);
 
+	OKTransform2<float> tempCapsuleTransformTwo = OKTransform2<float>(OKVector2<float>(0, 0), OKVector2<float>(1.f, 100.f), 0.f);
+	Collider* m_CapsuleTwo = new Collider(&tempCapsuleTransformTwo, true);
 
 	ColliderManager colMani;
 
@@ -107,6 +109,7 @@ int main()
 		if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 		{
 			m_Line->SetLineStartPosition(tempMouse);
+			// m_CapsuleTwo->SetPosition(tempMouse);
 		}
 
 		if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
@@ -122,6 +125,7 @@ int main()
 		// m_Circle->Draw();
 		// m_Rectangle->Draw();
 		m_Capsule->Draw();
+		//  m_CapsuleTwo->Draw();
 
 		if (colMani.CheckCollisions(m_Line, m_Capsule).m_HasCollision)
 		{
