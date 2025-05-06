@@ -98,11 +98,11 @@ int main()
 		m_SimpleCounter += timer->GetDeltaTime();
 
 
-		//m_ParticleSystemTwo->Update(GetFrameTime());
-		//m_ParticleSystemTwo->Draw();
+		m_ParticleSystemTwo->Update(GetFrameTime());
+		m_ParticleSystemTwo->Draw();
 
-		//m_ParticleSystem->Update(GetFrameTime());
-		//m_ParticleSystem->Draw();
+		m_ParticleSystem->Update(GetFrameTime());
+		m_ParticleSystem->Draw();
 
 		OKVector2<float> tempMouse = OKVector2<float>(GetMouseX(), GetMouseY());
 
