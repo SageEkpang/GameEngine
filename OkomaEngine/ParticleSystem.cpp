@@ -500,12 +500,13 @@ void ParticleSystem::ProcessSpawnAreaCustom(OKTransform2<float> transform, c_Par
 }
 
 // NOTE: This may or may not work
-void ParticleSystem::ProcessSpawnAreaSpray(OKTransform2<float> transform, c_ParticleSystemObject& particle_sysatem_object)
+void ParticleSystem::ProcessSpawnAreaSpray(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
 {
 	m_SprayAngle; // Used
 
 	OKVector2<float> CentrePosition = transform.position;
 
+	// NOTE: Get the Direction you want the Spray to go in
 	const float t_spray_length = m_SprayLength;
 	OKVector2<float> Direction = OKVector2<float>((m_SprayDirection.normalise().x * m_SprayLength), (m_SprayDirection.normalise().y * m_SprayLength));
 
@@ -516,27 +517,29 @@ void ParticleSystem::ProcessSpawnAreaSpray(OKTransform2<float> transform, c_Part
 	int MaxY = Direction.y + CentrePosition.y;
 	int MinY = CentrePosition.y;
 
-	// NOTE: Remapping the spray line to a range of 0.f - 1.f for linear interp
-	int NewRangeX = remap(MinX, MaxX, MaxX);
-	int NewRangeY = remap(MinY, MaxY, MaxY);
-
 	// NOTE: Randomise the Lerp Range
-	int RandXMax = 1.f;
-	int RandXMin = -1.f;
+	int RandXMax = MaxX;
+	int RandXMin = MinX;
 	int RandomisingRangeX = RandXMax - RandXMin + 1;
 	int NumX = rand() % RandomisingRangeX + RandXMin;
 
-	int RandYMax = 1.f;
-	int RandYMin = -1.f;
+	int RandYMax = MaxY;
+	int RandYMin = MinY;
 	int RandomisingRangeY = RandYMax - RandYMin + 1;
 	int NumY = rand() % RandomisingRangeY + RandYMin;
 
+	// NOTE: Remapping the spray line to a range of 0.f - 1.f for linear interp
+	float NewRangeX = remap(NumX, MinX, MaxX);
+	float NewRangeY = remap(NumY, MinY, MaxY);
+
+	float thing = remap(NewRangeX, 0, 1, MinX, MaxX);
+
 	// NOTE: Random Lerp Range between the values
-	float LerpXRange = lerp(0.0f, t_spray_length, NumX);
-	float LerpYRange = lerp(0.0f, t_spray_length, NumY);
+	float LerpXRange = lerp(CentrePosition.x, t_spray_length + CentrePosition.x, NewRangeX);
+	float LerpYRange = lerp(CentrePosition.y, t_spray_length + CentrePosition.y, NewRangeY);
 
 	// NOTE: Setting Position
-	particle_sysatem_object.SetPosition(LerpXRange, LerpYRange);
+	particle_system_object.SetPosition(CentrePosition.x, LerpYRange);
 }
 
 // NOTE: Resizing Functions
@@ -562,7 +565,6 @@ void ParticleSystem::ProcessResizeOverLifeTime(c_ParticleSystemObject& particle_
 	particle_system_object.SetScale(tempLerpX, tempLerpY);
 }
 
-// TODO: Fix this
 void ParticleSystem::ProcessResizeVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime)
 {
 	// NOTE: Check if you sizes are the same, meaning this code does not have to be ran
@@ -570,11 +572,12 @@ void ParticleSystem::ProcessResizeVelocity(c_ParticleSystemObject& particle_syst
 
 	// NOTE: Calculate the sizing of the particle (Velocity resizing calculation)
 	particle_system_object.m_CurrentSizeByVelocity = particle_system_object.GetVelocity().magnitude();
-	const float MagStart = particle_system_object.m_StartingSizeByVelocity->magnitude();
-	const float MagEnd = particle_system_object.m_EndingSizeByVelocity->magnitude();
+
+	const float MagMax = m_MaxVelocityBySize;
+	const float MagMin = m_MinVelocityBySize;
 
 	// NOTE: Calculate the remapping range of Velocity via the Magnitude
-	const float tempRemapValue = remap(particle_system_object.m_CurrentSizeByVelocity, MagStart, MagEnd);
+	const float tempRemapValue = remap(particle_system_object.m_CurrentSizeByVelocity, MagMin, MagMax, 0, 1);
 	
 	// NOTE: Resize the particle based on time 
 	const float tempLerpX = lerp(particle_system_object.m_StartingSizeByVelocity->x, particle_system_object.m_EndingSizeOverLifeTime->x, tempRemapValue);
@@ -627,6 +630,7 @@ void ParticleSystem::ProcessColourNone(c_ParticleSystemObject& particle_system_o
 	// NOTE: Do nothing
 }
 
+// FIXME: just use a similar way of resize velocity function
 void ParticleSystem::ProcessColourOverLifeTime(c_ParticleSystemObject& particle_system_object, float deltaTime)
 {
 	// NOTE: Check if the colour over life time is the same, if it is, skip it
@@ -646,8 +650,24 @@ void ParticleSystem::ProcessColourOverLifeTime(c_ParticleSystemObject& particle_
 
 void ParticleSystem::ProcessColourOverVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime)
 {
-	// TODO: 
+	// NOTE: Check if you sizes are the same, meaning this code does not have to be ran
+	if (particle_system_object.m_StartingColourOverLifeTime == particle_system_object.m_EndingColourOverLifeTime) { return; }
 
+	// NOTE: Calculate the sizing of the particle (Velocity resizing calculation)
+	particle_system_object.m_CurrentSizeByVelocity = particle_system_object.GetVelocity().magnitude();
+
+	const float MagMax = m_MaxVelocityByColour;
+	const float MagMin = m_MaxVelocityByColour;
+
+	// NOTE: Calculate the remapping range of Velocity via the Magnitude
+	const float tempRemapValue = remap(particle_system_object.m_CurrentSizeByVelocity, MagMin, MagMax, 0, 1);
+
+	// NOTE: Resize the particle based on time 
+	const float tempLerpX = lerp(particle_system_object.m_StartingColourOverLifeTime->x, particle_system_object.m_EndingColourOverLifeTime->x, tempRemapValue);
+	const float tempLerpY = lerp(particle_system_object.m_StartingColourOverLifeTime->y, particle_system_object.m_EndingColourOverLifeTime->y, tempRemapValue);
+
+	// NOTE: Assign the resize to the scale of the current particle
+	particle_system_object.SetScale(tempLerpX, tempLerpY);
 }
 
 // NOTE: Action Functions
@@ -894,10 +914,13 @@ void ParticleSystem::AssignResizeOverLifeTime(OKVector2<float> starting_resize_o
 	m_CheckParticleResizingFunctionPtr = m_ParticleResizeMap[PARTICLE_RESIZE_OVER_LIFETIME];
 }
 
-void ParticleSystem::AssignResizeByVelocityOverLifeTime(OKVector2<float> starting_resize_velocity_over_lifetime, OKVector2<float> ending_resize_velocity_over_lifetime)
+void ParticleSystem::AssignResizeByVelocityOverLifeTime(OKVector2<float> starting_resize_velocity_over_lifetime, OKVector2<float> ending_resize_velocity_over_lifetime, float max_velocity_by_size, float min_velocity_by_size)
 {
 	m_StartingSizeByVelocity = starting_resize_velocity_over_lifetime;
 	m_EndingSizeByVelocity = ending_resize_velocity_over_lifetime;
+
+	m_MaxVelocityBySize = max_velocity_by_size;
+	m_MinVelocityBySize = min_velocity_by_size;
 
 	m_CheckParticleResizingFunctionPtr = m_ParticleResizeMap[PARTICLE_RESIZE_VELOCITY];
 }
@@ -910,10 +933,13 @@ void ParticleSystem::AssignColourOverLifeTime(OKVector3<unsigned int> starting_c
 	m_CheckParticleColourOverTimerFunctionPtr = m_ParticleColourOverTimerMap[PARTICLE_COLOUR_OVER_LIFE_TIME];
 }
 
-void ParticleSystem::AssignColourVelocityOverLifeTime(OKVector3<unsigned int> starting_colour_over_lifetime, OKVector3<unsigned int> ending_colour_over_lifetime)
+void ParticleSystem::AssignColourVelocityOverLifeTime(OKVector3<unsigned int> starting_colour_over_lifetime, OKVector3<unsigned int> ending_colour_over_lifetime, float max_velocity_by_colour, float min_velocity_by_colour)
 {
 	m_StartingColourOverLifeTime = starting_colour_over_lifetime;
 	m_EndingColourOverLifeTime = ending_colour_over_lifetime;
+
+	m_MaxVelocityByColour = max_velocity_by_colour;
+	m_MinVelocityByColour = min_velocity_by_colour;
 
 	m_CheckParticleColourOverTimerFunctionPtr = m_ParticleColourOverTimerMap[PARTICLE_COLOUR_VELOCITY_OVER_LIFE_TIME];
 }

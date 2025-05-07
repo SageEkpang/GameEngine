@@ -27,16 +27,17 @@ int main()
 	ParticleSystem* m_ParticleSystem = new ParticleSystem(OKVector2<float>(500, 400), ParticleAmount);
 	{
 		m_ParticleSystem->AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
-		m_ParticleSystem->AssignParticleAction(PARTICLE_ACTION_SPRAY);
-		m_ParticleSystem->AssignParticleSpawnAreaDonut(100.f, 50.f);
+		// m_ParticleSystem->AssignParticleAction(PARTICLE_ACTION_SPRAY);
+		m_ParticleSystem->AssignParticleSpawnAreaSpray(180.f, 200.f, OKVector2<float>(1.f, 1.f));
 		m_ParticleSystem->SetLooping(true);
 		m_ParticleSystem->SetEmissionRateOverTime(500u);
 		m_ParticleSystem->SetDuration(0.5f);
 		m_ParticleSystem->SetStartSpeed(1.0);
 		m_ParticleSystem->SetStartLifeTime(1.0f);
-		// m_ParticleSystem->AssignVelocityOverLifeTime(OKVector2<float>(0.f, -100.f), OKVector2<float>(0.f, -400.f));
-		m_ParticleSystem->AssignColourOverLifeTime(OKVector3<unsigned int>(255, 255, 0), OKVector3<unsigned int>(255, 0, 0));
-		m_ParticleSystem->AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(1.f, 1.f));
+		// m_ParticleSystem->AssignVelocityOverLifeTime(OKVector2<float>(0.f, -100.f), OKVector2<float>(0.f, -600.f));
+		// m_ParticleSystem->AssignColourOverLifeTime(OKVector3<unsigned int>(255, 255, 0), OKVector3<unsigned int>(255, 0, 0));
+		// m_ParticleSystem->AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(1.f, 1.f));
+		// m_ParticleSystem->AssignResizeByVelocityOverLifeTime(OKVector2<float>(1.f, 1.f), OKVector2<float>(1.f, 1.f), 200, 100);
 	}
 	
 	// SMOKE

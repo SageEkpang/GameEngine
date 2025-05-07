@@ -166,8 +166,14 @@ public: // PARTICLE OVERTIME VARIABLE(s)
 	OKVector2<float> m_StartingSizeByVelocity;
 	OKVector2<float> m_EndingSizeByVelocity;
 
+	float m_MaxVelocityBySize;
+	float m_MinVelocityBySize;
+
 	OKVector3<unsigned int> m_StartingColourOverLifeTime;
 	OKVector3<unsigned int> m_EndingColourOverLifeTime;
+
+	float m_MaxVelocityByColour;
+	float m_MinVelocityByColour;
 
 	#pragma endregion
 
@@ -200,7 +206,6 @@ private: // PRIVATE FUNCTION(s)
 	float lerp(float a, float b, float f) { return (a * (1.0f - f)) + (b * f); }
 	float remap(float value, float sourceMin, float sourceMax, float destMin = 0, float destMax = 1) { return destMin + ((value - sourceMin) / (sourceMax - sourceMin)) * (destMax - destMin); }
 
-
 	// NOTE: PARTICLE CHECKING FUNCTION(s) (See what the particle can do)		
 	void CheckParticleLifeTime(c_ParticleSystemObject& particle_system_object, float deltaTime);
 
@@ -212,7 +217,7 @@ private: // PRIVATE FUNCTION(s)
 	void ProcessSpawnAreaDonut(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
 	void ProcessSpawnAreaEdge(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
 	void ProcessSpawnAreaCustom(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
-	void ProcessSpawnAreaSpray(OKTransform2<float> transform, c_ParticleSystemObject& particle_sysatem_object);
+	void ProcessSpawnAreaSpray(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
 
 	// NOTE: PARTICLE RESIZE FUNCTION(s)
 	void ProcessResizeNone(c_ParticleSystemObject& particle_system_object, float deltaTime);
@@ -300,11 +305,11 @@ public:
 		
 		// NOTE: ASSIGN PARTICLE RESIZE
 		void AssignResizeOverLifeTime(OKVector2<float> starting_resize_over_lifetime, OKVector2<float> ending_resize_over_lifetime);
-		void AssignResizeByVelocityOverLifeTime(OKVector2<float> starting_resize_velocity_over_lifetime, OKVector2<float> ending_resize_velocity_over_lifetime);
+		void AssignResizeByVelocityOverLifeTime(OKVector2<float> starting_resize_velocity_over_lifetime, OKVector2<float> ending_resize_velocity_over_lifetime, float max_velocity_by_size, float min_velocity_by_size);
 
 		// NOTE: ASSIGN PARTICLE COLOUR
 		void AssignColourOverLifeTime(OKVector3<unsigned int> starting_colour_over_lifetime, OKVector3<unsigned int> ending_colour_over_lifetime);
-		void AssignColourVelocityOverLifeTime(OKVector3<unsigned int> starting_colour_over_lifetime, OKVector3<unsigned int> ending_colour_over_lifetime);
+		void AssignColourVelocityOverLifeTime(OKVector3<unsigned int> starting_colour_over_lifetime, OKVector3<unsigned int> ending_colour_over_lifetime, float max_velocity_by_colour, float min_velocity_by_colour);
 
 
 		// NOTE: ASSIGN PARTICLE TYPE
