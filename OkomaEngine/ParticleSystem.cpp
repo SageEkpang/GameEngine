@@ -40,6 +40,7 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxPartic
 		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_DONUT] = &ParticleSystem::ProcessSpawnAreaDonut;
 		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_EDGE] = &ParticleSystem::ProcessSpawnAreaEdge;
 		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CUSTOM] = &ParticleSystem::ProcessSpawnAreaCustom;
+		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_SPRAY] = &ParticleSystem::ProcessSpawnAreaSpray;
 
 		m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[m_ParticleSpawnArea];
 
@@ -60,12 +61,10 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxPartic
 		m_ParticleActionMap[PARTICLE_ACTION_LEFT] = &ParticleSystem::ProcessActionLeft;
 
 		m_ParticleActionMap[PARTICLE_ACTION_SPRAY] = &ParticleSystem::ProcessActionSpray;
-		m_ParticleActionMap[PARTICLE_ACTION_SPIRAL] = &ParticleSystem::ProcessActionSpiral;
 
 		m_ParticleActionMap[PARTICLE_ACTION_FIRE] = &ParticleSystem::ProcessActionFire;
 		m_ParticleActionMap[PARTICLE_ACTION_SMOKE] = &ParticleSystem::ProcessActionSmoke;
 		m_ParticleActionMap[PARTICLE_ACTION_SPARK] = &ParticleSystem::ProcessActionSpark;
-		m_ParticleActionMap[PARTICLE_ACTION_WAVE] = &ParticleSystem::ProcessActionWave;
 
 		m_ParticleActionMap[PARTICLE_ACTION_CUSTOM] = &ParticleSystem::ProcessActionCustom;
 
@@ -357,6 +356,15 @@ void ParticleSystem::AssignParticleSpawnAreaEdge(float m_edge_length)
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_EDGE];
 }
 
+void ParticleSystem::AssignParticleSpawnAreaSpray(float spray_angle, float spray_length, OKVector2<float> spray_direction)
+{
+	m_SprayAngle = spray_angle;
+	m_SprayLength = spray_length;
+	m_SprayDirection = spray_direction;
+
+	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_SPRAY];
+}
+
 void ParticleSystem::AssignParticleSpawnAreaCustom()
 {
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CUSTOM];
@@ -491,6 +499,45 @@ void ParticleSystem::ProcessSpawnAreaCustom(OKTransform2<float> transform, c_Par
 	else { particle_system_object.SetPosition(transform.position); }
 }
 
+// NOTE: This may or may not work
+void ParticleSystem::ProcessSpawnAreaSpray(OKTransform2<float> transform, c_ParticleSystemObject& particle_sysatem_object)
+{
+	m_SprayAngle; // Used
+
+	OKVector2<float> CentrePosition = transform.position;
+
+	const float t_spray_length = m_SprayLength;
+	OKVector2<float> Direction = OKVector2<float>((m_SprayDirection.normalise().x * m_SprayLength), (m_SprayDirection.normalise().y * m_SprayLength));
+
+	// NOTE: Working out the Maxmium and Minimum range of the spray line
+	int MaxX = Direction.x + CentrePosition.x;
+	int MinX = CentrePosition.x;
+
+	int MaxY = Direction.y + CentrePosition.y;
+	int MinY = CentrePosition.y;
+
+	// NOTE: Remapping the spray line to a range of 0.f - 1.f for linear interp
+	int NewRangeX = remap(MinX, MaxX, MaxX);
+	int NewRangeY = remap(MinY, MaxY, MaxY);
+
+	// NOTE: Randomise the Lerp Range
+	int RandXMax = 1.f;
+	int RandXMin = -1.f;
+	int RandomisingRangeX = RandXMax - RandXMin + 1;
+	int NumX = rand() % RandomisingRangeX + RandXMin;
+
+	int RandYMax = 1.f;
+	int RandYMin = -1.f;
+	int RandomisingRangeY = RandYMax - RandYMin + 1;
+	int NumY = rand() % RandomisingRangeY + RandYMin;
+
+	// NOTE: Random Lerp Range between the values
+	float LerpXRange = lerp(0.0f, t_spray_length, NumX);
+	float LerpYRange = lerp(0.0f, t_spray_length, NumY);
+
+	// NOTE: Setting Position
+	particle_sysatem_object.SetPosition(LerpXRange, LerpYRange);
+}
 
 // NOTE: Resizing Functions
 void ParticleSystem::ProcessResizeNone(c_ParticleSystemObject& particle_system_object, float deltaTime)
@@ -731,20 +778,31 @@ void ParticleSystem::ProcessActionLeft(c_ParticleSystemObject& particle_system_o
 // TODO:
 void ParticleSystem::ProcessActionSpray(c_ParticleSystemObject& particle_system_object)
 {
-	// Add some functionality to spray it in a certain direction dependant on the dot product angle 
+	// NOTE: Calculating position from the origin
 
+	const OKVector2<float> centre_position = m_Transform.position;
+	OKVector2<float> CalulatedPosition = particle_system_object.GetPosition() - centre_position;
+	OKVector2<float> Direction = CalulatedPosition;
 
+	// NOTE: Assumes that it is using the None Spawn Function
+	if (particle_system_object.GetPosition() == centre_position)
+	{
+		int RangeX = (45) - (-45) + 1;
+		float NumX = rand() % RangeX + -45;
 
+		int RangeY = (45) - (-45) + 1;
+		float NumY = rand() % RangeY + -45;
 
+		OKVector2<float> NewDirction = OKVector2<float>(Direction.x + NumX, Direction.y + NumY);
+		
+		// NOTE: Calculated a projected position to the origin (this would be more so to do with point)
+		particle_system_object.AddImpulse(NewDirction.x * m_StartSpeed, NewDirction.y * m_StartSpeed);
 
+		return;
+	}
 
-
-	particle_system_object.AddImpulse(-1 * m_StartSpeed, 0);
-}
-
-void ParticleSystem::ProcessActionSpiral(c_ParticleSystemObject& particle_system_object)
-{
-
+	// NOTE: Assign impulse
+	particle_system_object.AddImpulse(Direction.x * m_StartSpeed, Direction.y * m_StartSpeed);
 }
 
 void ParticleSystem::ProcessActionFire(c_ParticleSystemObject& particle_system_object)
@@ -805,14 +863,6 @@ void ParticleSystem::ProcessActionSpark(c_ParticleSystemObject& particle_system_
 	int NumY = rand() % RangeY + MinY;
 
 	particle_system_object.AddImpulse(NumX * m_StartSpeed, NumY * m_StartSpeed);
-}
-
-// TODO: Fix This	
-void ParticleSystem::ProcessActionWave(c_ParticleSystemObject& particle_system_object)
-{
-
-	// particle_system_object.particle.SetPosition(particle_system_object.particle.GetPosition().x, particle_system_object.particle.GetPosition().y);
-	// particle_system_object.particle.AddImpulse(0, NumY);
 }
 
 void ParticleSystem::ProcessActionCustom(c_ParticleSystemObject& particle_system_object)

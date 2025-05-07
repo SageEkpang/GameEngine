@@ -21,6 +21,7 @@ enum ParticleSpawnArea
 	PARTICLE_SPAWN_AREA_CIRCLE,
 	PARTICLE_SPAWN_AREA_RECTANGLE,
 	PARTICLE_SPAWN_AREA_CAPSULE,
+	PARTICLE_SPAWN_AREA_SPRAY,
 	PARTICLE_SPAWN_AREA_DONUT,
 	PARTICLE_SPAWN_AREA_EDGE,
 	PARTICLE_SPAWN_AREA_CUSTOM
@@ -42,12 +43,10 @@ enum ParticleAction
 	PARTICLE_ACTION_LEFT,
 
 	PARTICLE_ACTION_SPRAY,
-	PARTICLE_ACTION_SPIRAL, // NOTE: This one may be a bit long to code :-)
 
 	PARTICLE_ACTION_FIRE,
 	PARTICLE_ACTION_SMOKE,
 	PARTICLE_ACTION_SPARK,
-	PARTICLE_ACTION_WAVE,
 
 	PARTICLE_ACTION_CUSTOM
 };
@@ -187,6 +186,10 @@ private: // SPAWN AREA VARIABLE(s)
 
 	float m_EdgeLength = 0.0f;
 
+	float m_SprayAngle = 0.0f;
+	float m_SprayLength = 0.0f;
+	OKVector2<float> m_SprayDirection{0.f, -1.0f};
+
 	#pragma endregion
 
 private: // PRIVATE FUNCTION(s)
@@ -209,6 +212,7 @@ private: // PRIVATE FUNCTION(s)
 	void ProcessSpawnAreaDonut(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
 	void ProcessSpawnAreaEdge(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
 	void ProcessSpawnAreaCustom(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
+	void ProcessSpawnAreaSpray(OKTransform2<float> transform, c_ParticleSystemObject& particle_sysatem_object);
 
 	// NOTE: PARTICLE RESIZE FUNCTION(s)
 	void ProcessResizeNone(c_ParticleSystemObject& particle_system_object, float deltaTime);
@@ -243,12 +247,10 @@ private: // PRIVATE FUNCTION(s)
 	void ProcessActionLeft(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
 
 	void ProcessActionSpray(c_ParticleSystemObject& particle_system_object); // TODO
-	void ProcessActionSpiral(c_ParticleSystemObject& particle_system_object); // TODO
 
 	void ProcessActionFire(c_ParticleSystemObject& particle_system_object); // Update Type: Constant (REWORK)
 	void ProcessActionSmoke(c_ParticleSystemObject& particle_system_object); // Update Type: Once (REWORK)
 	void ProcessActionSpark(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
-	void ProcessActionWave(c_ParticleSystemObject& particle_system_object); // TODO
 
 	void ProcessActionCustom(c_ParticleSystemObject& particle_system_object); // Update Type: Constant (Done)
 
@@ -285,6 +287,7 @@ public:
 		void AssignParticleSpawnAreaCapsule(OKVector2<float> scale);
 		void AssignParticleSpawnAreaDonut(float outer_circle_radius, float inner_circle_radius);
 		void AssignParticleSpawnAreaEdge(float m_edge_length);
+		void AssignParticleSpawnAreaSpray(float spray_angle, float spray_length, OKVector2<float> spray_direction);
 		void AssignParticleSpawnAreaCustom();
 
 
