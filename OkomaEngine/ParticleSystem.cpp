@@ -7,6 +7,7 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxPartic
 
 	// NOTE: Set Transform
 	m_Transform = OKTransform2<float>(position, OKVector2<float>(1.f, 1.f), 0);
+	m_EmitterPositionOffset = OKVector2<float>();
 
 	// NOTE: Fill Vector and reserve the set size for the particles
 	m_MaxParticleCount = maxParticleCount;
@@ -502,8 +503,6 @@ void ParticleSystem::ProcessSpawnAreaCustom(OKTransform2<float> transform, c_Par
 // NOTE: This may or may not work
 void ParticleSystem::ProcessSpawnAreaSpray(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
 {
-	m_SprayAngle; // Used
-
 	OKVector2<float> CentrePosition = transform.position;
 
 	// NOTE: Get the Direction you want the Spray to go in
@@ -608,7 +607,6 @@ void ParticleSystem::ProcessPhysicsOverLifeTimeForce(c_ParticleSystemObject& par
 	particle_system_object.SetForce(OKVector2<float>(tempLerpX, tempLerpY));
 }
 
-// NOTE: Need to set as a negate force to the current velocity
 void ParticleSystem::ProcessPhysicsOverLifeTimeVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime)
 {
 	// NOTE: Check if the velocity over life time is the same
@@ -665,9 +663,10 @@ void ParticleSystem::ProcessColourOverVelocity(c_ParticleSystemObject& particle_
 	// NOTE: Resize the particle based on time 
 	const float tempLerpX = lerp(particle_system_object.m_StartingColourOverLifeTime->x, particle_system_object.m_EndingColourOverLifeTime->x, tempRemapValue);
 	const float tempLerpY = lerp(particle_system_object.m_StartingColourOverLifeTime->y, particle_system_object.m_EndingColourOverLifeTime->y, tempRemapValue);
+	const float tempLerpZ = lerp(particle_system_object.m_StartingColourOverLifeTime->z, particle_system_object.m_EndingColourOverLifeTime->z, tempRemapValue);
 
 	// NOTE: Assign the resize to the scale of the current particle
-	particle_system_object.SetScale(tempLerpX, tempLerpY);
+	particle_system_object.m_Colour = OKVector3<unsigned int>(tempLerpX, tempLerpY, tempLerpZ);
 }
 
 // NOTE: Action Functions
@@ -795,12 +794,11 @@ void ParticleSystem::ProcessActionLeft(c_ParticleSystemObject& particle_system_o
 	particle_system_object.AddImpulse(-1 * m_StartSpeed, 0);
 }
 
-// TODO:
 void ParticleSystem::ProcessActionSpray(c_ParticleSystemObject& particle_system_object)
 {
 	// NOTE: Calculating position from the origin
 
-	const OKVector2<float> centre_position = m_Transform.position;
+	const OKVector2<float> centre_position = m_Transform.position + m_EmitterPositionOffset;
 	OKVector2<float> CalulatedPosition = particle_system_object.GetPosition() - centre_position;
 	OKVector2<float> Direction = CalulatedPosition;
 

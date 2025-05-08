@@ -111,6 +111,7 @@ private:
 
 	// TRANSFORM VARIABLE(s)
 	OKTransform2<float> m_Transform;
+	OKVector2<float> m_EmitterPositionOffset;
 
 	// PARTICLE VARIABLE(s)
 	std::vector<c_ParticleSystemObject*> m_Particles;
@@ -127,7 +128,6 @@ private:
 
 	// BASE VARIABLE(s)
 	unsigned int m_MaxParticleCount;
-	bool m_SpawnAllAtOnce = false;
 
 	// NOTE: Setting Variable(s)
 	float m_StartDelay;
@@ -365,6 +365,7 @@ public:
 
 		// BASE FUNCTION(s)
 		inline void SetTransform(OKTransform2<float> transform) { m_Transform = transform; }
+		inline void SetEmitterOffset(OKVector2<float> emitter_position_offset) { m_EmitterPositionOffset = emitter_position_offset; }
 		inline void SetPosition(OKVector2<float> position) { m_Transform.position = position; }
 		inline void SetScale(OKVector2<float> scale) { m_Transform.scale = scale; }
 		inline void SetRotation(float rotation) { m_Transform.rotation = rotation; }
@@ -373,7 +374,6 @@ public:
 		inline void SetMaxParticleCount(unsigned int maxParticleCount) { m_MaxParticleCount = maxParticleCount; }
 		inline void SetExecuteOnce(bool executeOnce) { m_ExecuteOnce = executeOnce; }
 		inline void SetLooping(bool looping) { m_IsLooping = looping; }
-
 		inline void SetSimulateGravity(bool simulateGravity) { m_SimulateGravity = simulateGravity; }
 		inline void SetSimulationSpeed(float simulateSpeed) { m_SimulationSpeed = simulateSpeed; }
 		inline void SetEmissionRateOverTime(unsigned int emissionRateOverTime) { m_EmissionRateOverTime = emissionRateOverTime; }
@@ -385,20 +385,16 @@ public:
 		inline void SetStartSize(OKVector2<float> startSize) { m_StartSize = startSize; }
 
 		inline void SetGravity(OKVector2<float> gravity) { m_Gravity = gravity; }
-
 		
 		inline void SetStartingVelocityOverLifeTime(OKVector2<float> startingVelocityOverLifeTime) { m_StartingVelocityOverLifeTime = startingVelocityOverLifeTime; }
 		inline void SetEndingVelocityOverLifeTime(OKVector2<float> endingVelocityOverLifeTime) { m_EndingVelocityOverLifeTime = endingVelocityOverLifeTime; }
-
 		
 		inline void SetStartingForceOverLifeTime(OKVector2<float> startingForceOverLifeTime) { m_StartingForceOverLifeTime = startingForceOverLifeTime; }
 		inline void SetEndingForceOverLifeTime(OKVector2<float> endingForceOverLifeTime) { m_EndingForceOverLifeTime = endingForceOverLifeTime; }
 
-		
 		inline void SetStartingSizeOverLifeTime(OKVector2<float> startingSizeOverLifeTime) { m_StartingSizeOverLifeTime = startingSizeOverLifeTime; }
 		inline void SetEndingSizeOverLifeTime(OKVector2<float> endingSizeOverLifeTime) { m_EndingForceOverLifeTime = endingSizeOverLifeTime; }
 
-		
 		inline void SetStartingSizeBySpeed(OKVector2<float> startingSizeByVelocity) { m_StartingSizeByVelocity = startingSizeByVelocity; }
 		inline void SetEndingSizeBySpeed(OKVector2<float> endingSizeByVelocity) { m_EndingSizeByVelocity = endingSizeByVelocity; }
 
