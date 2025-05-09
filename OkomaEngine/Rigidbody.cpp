@@ -1,5 +1,10 @@
 #include "Rigidbody.h"
 
+Rigidbody::Rigidbody()
+{
+
+}
+
 Rigidbody::Rigidbody(OKTransform2<float>* transform, float mass, RigidbodyMovementType rigidbodyMovementType, bool IsCapsule, bool lockZRot)
     : Particle(transform, mass)
 {

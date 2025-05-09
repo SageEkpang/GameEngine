@@ -1,5 +1,12 @@
 #include "Collider.h"
 
+Collider::Collider()
+{
+
+
+
+}
+
 // RECTANGLE / Capsule
 Collider::Collider(OKTransform2<float>* transform, bool IsCapsule, bool lockZRot)
 {

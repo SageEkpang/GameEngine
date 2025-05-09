@@ -78,6 +78,9 @@ public:
 
     // CLASS FUNCTION(s)
 
+
+    Rigidbody();
+
     // RECTANGLE
     /// @brief Rectangle Rigidbody Constructor
     Rigidbody(OKTransform2<float>* transform, float mass, RigidbodyMovementType rigidbodyMovementType, bool IsCapsule = false, bool lockZRot = true);

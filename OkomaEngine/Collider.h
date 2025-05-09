@@ -40,6 +40,8 @@ public: // PUBLIC FUNCTION(s)
 
     // CLASS FUNCTION(s)
 
+    Collider();
+
     // RECTANGLE
     /// @brief Rectangle Collider Constructor
     Collider(OKTransform2<float>* transform, bool IsCapsule = false, bool lockZRot = true); // REFACT: bool solveRotation
