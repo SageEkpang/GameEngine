@@ -93,7 +93,7 @@ int main()
 	m_PhysicsObjects.push_back(m_AltObjFirst);
 
 
-	OKTransform2<float> TransformFour = OKTransform2<float>(OKVector2<float>(300, 700), OKVector2<float>(50, 50), 0); // 300, 40
+	OKTransform2<float> TransformFour = OKTransform2<float>(OKVector2<float>(300, 700), OKVector2<float>(700, 50), 0); // 300, 40
 	PhysicsObject* m_PhysicsFour = new PhysicsObject("Phy4", TransformFour, 0, RIGIDBODY_STATIC);
 	m_PhysicsObjects.push_back(m_PhysicsFour);
 

@@ -357,28 +357,32 @@ CollisionManifold ColliderManager::CircleToCircle(Collider* circA, Collider* cir
 CollisionManifold ColliderManager::CircleToRectangle(Collider* circA, Collider* rectB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
-	OKVector2<float> RectCentre = rectB->GetPosition() + rectB->GetScale() / 2;
+
+	OKVector2<float> RectCentre = rectB->GetPosition() + (rectB->GetScale() / 2.f);
+	OKVector2<float> RectScale = rectB->GetScale();
+	OKVector2<float> TopLeftCorner = RectCentre - (RectScale / 2.f);
+
 	OKVector2<float> NearPoint = OKVector2<float>(0, 0);
 
-	if (circA->GetPosition().x < rectB->GetPosition().x)
+	if (circA->GetPosition().x < TopLeftCorner.x)
 	{
 		OKVector2<float> LeftSide = ProjectPointOntoLine(
-			rectB->GetPosition(),
+			TopLeftCorner,
 			circA->GetPosition(),
-			OKVector2<float>(rectB->GetPosition().x, rectB->GetPosition().y),
-			OKVector2<float>(rectB->GetPosition().x, rectB->GetPosition().y + rectB->GetScale().y),
+			OKVector2<float>(TopLeftCorner.x, TopLeftCorner.y),
+			OKVector2<float>(TopLeftCorner.x, TopLeftCorner.y + RectScale.y),
 			OKVector2<float>(0, 1)
 		);
 
 		NearPoint.y = LeftSide.y;
 	}
-	else if (circA->GetPosition().x > rectB->GetPosition().x)
+	else if (circA->GetPosition().x > TopLeftCorner.x)
 	{
 		OKVector2<float> RightSide = ProjectPointOntoLine(
-			rectB->GetPosition(),
+			TopLeftCorner,
 			circA->GetPosition(),
-			OKVector2<float>(rectB->GetPosition().x + rectB->GetScale().x, rectB->GetPosition().y),
-			OKVector2<float>(rectB->GetPosition().x + rectB->GetScale().x, rectB->GetPosition().y + rectB->GetScale().y),
+			OKVector2<float>(TopLeftCorner.x + RectScale.x, TopLeftCorner.y),
+			OKVector2<float>(TopLeftCorner.x + RectScale.x, TopLeftCorner.y + RectScale.y),
 			OKVector2<float>(0, 1)
 		);
 
@@ -388,10 +392,10 @@ CollisionManifold ColliderManager::CircleToRectangle(Collider* circA, Collider* 
 	if (circA->GetPosition().y < RectCentre.y)
 	{
 		OKVector2<float> TopSide = ProjectPointOntoLine(
-			rectB->GetPosition(),
+			TopLeftCorner,
 			circA->GetPosition(),
-			OKVector2<float>(rectB->GetPosition().x, rectB->GetPosition().y),
-			OKVector2<float>(rectB->GetPosition().x + rectB->GetScale().x, rectB->GetPosition().y),
+			OKVector2<float>(TopLeftCorner.x, TopLeftCorner.y),
+			OKVector2<float>(TopLeftCorner.x + RectScale.x, TopLeftCorner.y),
 			OKVector2<float>(1, 0)
 		);
 
@@ -400,10 +404,10 @@ CollisionManifold ColliderManager::CircleToRectangle(Collider* circA, Collider* 
 	else if (circA->GetPosition().y > RectCentre.y)
 	{
 		OKVector2<float> BottomSide = ProjectPointOntoLine(
-			rectB->GetPosition(),
+			TopLeftCorner,
 			circA->GetPosition(),
-			OKVector2<float>(rectB->GetPosition().x, rectB->GetPosition().y + rectB->GetScale().y),
-			OKVector2<float>(rectB->GetPosition().x + rectB->GetScale().x, rectB->GetPosition().y + rectB->GetScale().y),
+			OKVector2<float>(TopLeftCorner.x, TopLeftCorner.y + RectScale.y),
+			OKVector2<float>(TopLeftCorner.x + RectScale.x, TopLeftCorner.y + RectScale.y),
 			OKVector2<float>(1, 0)
 		);
 
