@@ -207,106 +207,111 @@ CollisionManifold ColliderManager::RectangleToRectangle(Collider* rectA, Collide
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
-	OKVector2<float> RectCentreB = rectB->GetPosition() + rectB->GetScale() / 2;
+	OKVector2<float> RectCentreA = rectA->GetPosition() + rectA->GetScale() / 2;// +(rectA->GetScale() * 0.5f); // Centre A
+	OKVector2<float> TopLeftCornerA = RectCentreA - rectA->GetScale() / 2;
+	OKVector2<float> RectScaleA = rectA->GetScale(); // rectA->GetScale(); // Full Extents
+	OKVector2<float> NearPointA = OKVector2<float>(0, 0);
+	
+	OKVector2<float> RectCentreB = rectB->GetPosition() + rectB->GetScale() / 2;// +(rectB->GetScale() * 0.5f); // Centre B
+	OKVector2<float> TopLeftCornerB = RectCentreB - rectB->GetScale() / 2;
+	OKVector2<float> RectScaleB = rectB->GetScale(); // rectB->GetScale(); // Half Extents
 	OKVector2<float> NearPointB = OKVector2<float>(0, 0);
 
-	if (rectA->GetPosition().x < rectB->GetPosition().x)
+	if (TopLeftCornerA.x < TopLeftCornerB.x)
 	{
 		OKVector2<float> LeftSide = ProjectPointOntoLine(
-			rectB->GetPosition(),
-			rectA->GetPosition(),
-			OKVector2<float>(rectB->GetPosition().x, rectB->GetPosition().y),
-			OKVector2<float>(rectB->GetPosition().x, rectB->GetPosition().y + rectB->GetScale().y),
+			TopLeftCornerB,
+			TopLeftCornerA,
+			OKVector2<float>(TopLeftCornerB.x, TopLeftCornerB.y),
+			OKVector2<float>(TopLeftCornerB.x, TopLeftCornerB.y + RectScaleB.y),
 			OKVector2<float>(0, 1)
 		);
 
 		NearPointB.y = LeftSide.y;
 	}
-	else if (rectA->GetPosition().x > rectB->GetPosition().x)
+	else if (TopLeftCornerA.x > TopLeftCornerB.x)
 	{
 		OKVector2<float> RightSide = ProjectPointOntoLine(
-			rectB->GetPosition(),
-			rectA->GetPosition(),
-			OKVector2<float>(rectB->GetPosition().x + rectB->GetScale().x, rectB->GetPosition().y),
-			OKVector2<float>(rectB->GetPosition().x + rectB->GetScale().x, rectB->GetPosition().y + rectB->GetScale().y),
+			TopLeftCornerB,
+			TopLeftCornerA,
+			OKVector2<float>(TopLeftCornerB.x + RectScaleB.x, TopLeftCornerB.y),
+			OKVector2<float>(TopLeftCornerB.x + RectScaleB.x, TopLeftCornerB.y + RectScaleB.y),
 			OKVector2<float>(0, 1)
 		);
 
 		NearPointB.y = RightSide.y;
 	}
 
-	if (rectA->GetPosition().y < RectCentreB.y)
+	if (TopLeftCornerA.y < RectCentreB.y)
 	{
 		OKVector2<float> TopSide = ProjectPointOntoLine(
-			rectB->GetPosition(),
-			rectA->GetPosition(),
-			OKVector2<float>(rectB->GetPosition().x, rectB->GetPosition().y),
-			OKVector2<float>(rectB->GetPosition().x + rectB->GetScale().x, rectB->GetPosition().y),
+			TopLeftCornerB,
+			TopLeftCornerA,
+			OKVector2<float>(TopLeftCornerB.x, TopLeftCornerB.y),
+			OKVector2<float>(TopLeftCornerB.x + RectScaleB.x, TopLeftCornerB.y),
 			OKVector2<float>(1, 0)
 		);
 
 		NearPointB.x = TopSide.x;
 	}
-	else if (rectA->GetPosition().y > RectCentreB.y)
+	else if (TopLeftCornerA.y > RectCentreB.y)
 	{
 		OKVector2<float> BottomSide = ProjectPointOntoLine(
-			rectB->GetPosition(),
-			rectA->GetPosition(),
-			OKVector2<float>(rectB->GetPosition().x, rectB->GetPosition().y + rectB->GetScale().y),
-			OKVector2<float>(rectB->GetPosition().x + rectB->GetScale().x, rectB->GetPosition().y + rectB->GetScale().y),
+			TopLeftCornerB,
+			TopLeftCornerA,
+			OKVector2<float>(TopLeftCornerB.x, TopLeftCornerB.y + RectScaleB.y),
+			OKVector2<float>(TopLeftCornerB.x + RectScaleB.x, TopLeftCornerB.y + RectScaleB.y),
 			OKVector2<float>(1, 0)
 		);
 
 		NearPointB.x = BottomSide.x;
 	}
 
-	OKVector2<float> RectCentreA = rectA->GetPosition() + rectA->GetScale() / 2;
-	OKVector2<float> NearPointA;
+	if (TopLeftCornerB.x < TopLeftCornerA.x)
 
-	if (rectB->GetPosition().x < rectA->GetPosition().x)
 	{
 		OKVector2<float> LeftSide = ProjectPointOntoLine(
-			rectA->GetPosition(),
-			rectB->GetPosition(),
-			OKVector2<float>(rectA->GetPosition().x, rectA->GetPosition().y),
-			OKVector2<float>(rectA->GetPosition().x, rectA->GetPosition().y + rectA->GetScale().y),
+			TopLeftCornerA,
+			TopLeftCornerB,
+			OKVector2<float>(TopLeftCornerA.x, TopLeftCornerA.y),
+			OKVector2<float>(TopLeftCornerA.x, TopLeftCornerA.y + RectScaleA.y),
 			OKVector2<float>(0, 1)
 		);
 
 		NearPointA.y = LeftSide.y;
 	}
-	else if (rectB->GetPosition().x > rectA->GetPosition().x)
+	else if (TopLeftCornerB.x > TopLeftCornerA.x)
 	{
 		OKVector2<float> RightSide = ProjectPointOntoLine(
-			rectA->GetPosition(),
-			rectB->GetPosition(),
-			OKVector2<float>(rectA->GetPosition().x + rectA->GetScale().x, rectA->GetPosition().y),
-			OKVector2<float>(rectA->GetPosition().x + rectA->GetScale().x, rectA->GetPosition().y + rectA->GetScale().y),
+			TopLeftCornerA,
+			TopLeftCornerB,
+			OKVector2<float>(TopLeftCornerA.x + RectScaleA.x, TopLeftCornerA.y),
+			OKVector2<float>(TopLeftCornerA.x + RectScaleA.x, TopLeftCornerA.y + RectScaleA.y),
 			OKVector2<float>(0, 1)
 		);
 
 		NearPointA.y = RightSide.y;
 	}
 
-	if (rectB->GetPosition().y < RectCentreA.y)
+	if (TopLeftCornerB.y < RectCentreA.y)
 	{
 		OKVector2<float> TopSide = ProjectPointOntoLine(
-			rectA->GetPosition(),
-			rectB->GetPosition(),
-			OKVector2<float>(rectA->GetPosition().x, rectA->GetPosition().y),
-			OKVector2<float>(rectA->GetPosition().x + rectA->GetScale().x, rectA->GetPosition().y),
+			TopLeftCornerA,
+			TopLeftCornerB,
+			OKVector2<float>(TopLeftCornerA.x, TopLeftCornerA.y),
+			OKVector2<float>(TopLeftCornerA.x + RectScaleA.x, TopLeftCornerA.y),
 			OKVector2<float>(1, 0)
 		);
 
 		NearPointA.x = TopSide.x;
 	}
-	else if (rectB->GetPosition().y > RectCentreA.y)
+	else if (TopLeftCornerB.y > RectCentreA.y)
 	{
 		OKVector2<float> BottomSide = ProjectPointOntoLine(
-			rectA->GetPosition(),
-			rectB->GetPosition(),
-			OKVector2<float>(rectA->GetPosition().x, rectA->GetPosition().y + rectA->GetScale().y),
-			OKVector2<float>(rectA->GetPosition().x + rectA->GetScale().x, rectA->GetPosition().y + rectA->GetScale().y),
+			TopLeftCornerA,
+			TopLeftCornerB,
+			OKVector2<float>(TopLeftCornerA.x, TopLeftCornerA.y + RectScaleA.y),
+			OKVector2<float>(TopLeftCornerA.x + RectScaleA.x, TopLeftCornerA.y + RectScaleA.y),
 			OKVector2<float>(1, 0)
 		);
 
@@ -314,6 +319,8 @@ CollisionManifold ColliderManager::RectangleToRectangle(Collider* rectA, Collide
 	}
 
 	// DrawCircleV(NearPointA.ConvertToVec2(), 3, BLUE);
+	DrawCircleV(NearPointB.ConvertToVec2(), 1.f, YELLOW);
+	DrawCircleV(NearPointA.ConvertToVec2(), 1.f, YELLOW);
 
 	// REFACTOR: Fix the size of the circle  
 	OKTransform2<float> circle_transform_A = OKTransform2<float>(NearPointA, OKVector2<float>(0, 0), 0);

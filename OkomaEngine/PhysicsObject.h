@@ -12,8 +12,8 @@ private:
 
 	std::string m_Tag;
 	OKTransform2<float> m_transform;
-	Collider m_Collider;
-	Rigidbody m_Rigidbody;
+	Collider* m_Collider;
+	Rigidbody* m_Rigidbody;
 
 public:
 
@@ -31,8 +31,8 @@ public:
 	// GETTER FUNCTION(s)
 	inline std::string GetTag() const { return m_Tag; }
 	inline OKTransform2<float> GetTransform() const { m_transform; }
-	inline Collider GetCollider() const { return m_Collider; }
-	inline Rigidbody GetRigidbody() const { return m_Rigidbody; }
+	inline Collider* GetCollider() const { return m_Collider; }
+	inline Rigidbody* GetRigidbody() const { return m_Rigidbody; }
 
 
 	// SETTER FUNCTION(s)
