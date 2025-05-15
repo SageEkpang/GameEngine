@@ -17,7 +17,7 @@ int main()
 	try
 	{
 		InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE_NAME);
-		SetWindowState(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_TOPMOST | FLAG_WINDOW_TRANSPARENT);
+		SetWindowState(FLAG_WINDOW_RESIZABLE);
 		if (!IsWindowReady()) { throw; }
 	}
 	catch (const std::bad_exception& e)
@@ -121,6 +121,13 @@ int main()
 	//CollisionManifold t_ColMani = CollisionManifold();
 	//CollisionResolution* t_CollisionResolution = new CollisionResolution();
 
+	Camera2D camera = { 0 };
+
+	// Move the origin to the center of the screen
+	camera.offset = Vector2{ SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f };
+	camera.zoom = 1.0f;
+
+	rlDisableBackfaceCulling();
 
 	// SetTargetFPS(60);
 	while (!WindowShouldClose())
@@ -129,73 +136,35 @@ int main()
 
 		// DRAW
 		BeginDrawing();
-		ClearBackground(BLACK);
+			ClearBackground(BLACK);
 
-		//m_Accumulator += timer->GetDeltaTime();
-		//m_SimpleCounter += timer->GetDeltaTime();
+			BeginMode2D(camera);
 
-		//if (IsKeyDown(KEY_A))
-		//{
-		//	m_PhysicsObjects[0]->GetRigidbody()->AddImpulse(-800 * timer->GetDeltaTime(), 0);
-		//}
+			rlPushMatrix();
+			rlScalef(1.0f, -1.0f, 1.0f);
 
-		//if (IsKeyDown(KEY_D))
-		//{
-		//	m_PhysicsObjects[0]->GetRigidbody()->AddImpulse(800 * timer->GetDeltaTime(), 0);
-		//}
-
-		//if (IsKeyPressed(KEY_SPACE))
-		//{
-		//	m_PhysicsObjects[0]->GetRigidbody()->AddImpulse(0, -100);
-		//}
+			// NOTE: Draw Here ------
 
 
-		// DrawCircle(10, 10, 10, RED);
 
-		//m_ParticleSystemTwo->Update(GetFrameTime());
-		//m_ParticleSystemTwo->Draw();
 
-		//m_ParticleSystem->Update(GetFrameTime());
-		//m_ParticleSystem->Draw();
 
-		//OKVector2<float> tempMouse = OKVector2<float>(GetMouseX(), GetMouseY());
 
-		//for (int i = 0; i < m_PhysicsObjects.size(); ++i)
-		//{
-		//	for (int j = 0; j < m_PhysicsObjects.size(); ++j)
-		//	{
-		//		if (i == j) { continue; }
 
-		//		t_ColMani = t_ColliderManager->CheckCollisions(m_PhysicsObjects[i]->GetCollider(), m_PhysicsObjects[j]->GetCollider());
-		//		 DrawText(TextFormat("col: %d", t_ColMani.m_HasCollision), 10, 10, 40, PINK);
 
-		//		if (t_ColMani.m_HasCollision == true)
-		//		{
-		//			 NOTE: Coef is Bounce Level to the collision detection
-		//			t_CollisionResolution->ResolveCollision(m_PhysicsObjects[i]->GetRigidbody(), m_PhysicsObjects[j]->GetRigidbody(), 0.9f, t_ColMani.m_PenetrationDepth, t_ColMani.m_CollisionNormal, GetFrameTime());
-		//		}
-		//	}
-		//}
+		
+			rlPopMatrix();
+			EndMode2D();
+		EndDrawing();
+	}
 
-		//for (auto& v : m_PhysicsObjects)
-		//{
-		//	v->Update(timer->GetDeltaTime());
-		//}
 
-		//for (auto& v : m_PhysicsObjects)
-		//{
-		//	v->Draw();
-		//}
-
-		//if (m_Accumulator >= FPS_60)
+	//if (m_Accumulator >= FPS_60)
 		//{
 		//	m_Accumulator -= FPS_60;
 		//}
 
 		//timer->Tick();
-
-		EndDrawing();
-	}
 
 	// delete m_ParticleSystem;
 	
