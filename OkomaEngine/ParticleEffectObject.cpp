@@ -1,13 +1,17 @@
-#include "ParticleSystemObject.h"
+#include "ParticleEffectObject.h"
 
-c_ParticleSystemObject::c_ParticleSystemObject(OKTransform2<float> *transform, float mass)
-	: Particle(transform, mass)
+ParticleEffectObject::ParticleEffectObject(OKVector2<float> position, float mass)
+	: PhysicsEntity(position, mass)
 {
 	m_StartDelay = nullptr;
 	m_StartLifeTime = nullptr;
 	m_CurrentLifeTime = 0.f;
 	m_StartSpeed = nullptr;
 	m_Theta = 0.f;
+
+	m_Scale = OKVector2<float>(1.f, 1.f);
+	m_Rotation = 0.f;
+
 	m_Colour = OKVector3<unsigned int>(255, 255, 255);
 
 	m_StartSize = nullptr;
@@ -33,7 +37,7 @@ c_ParticleSystemObject::c_ParticleSystemObject(OKTransform2<float> *transform, f
 	m_CurrentColourOverLifeTimer = 0.0f;
 }
 
-c_ParticleSystemObject::~c_ParticleSystemObject()
+ParticleEffectObject::~ParticleEffectObject()
 {
 	m_StartDelay = nullptr;
 	m_StartLifeTime = nullptr;
@@ -57,12 +61,12 @@ c_ParticleSystemObject::~c_ParticleSystemObject()
 	m_EndingColourOverLifeTime = nullptr;
 }
 
-void c_ParticleSystemObject::Update(float deltaTime)
+void ParticleEffectObject::Update(float deltaTime)
 {
-	Particle::Update(deltaTime);
+	PhysicsEntity::Update(deltaTime);
 }
 
-void c_ParticleSystemObject::Draw()
+void ParticleEffectObject::Draw()
 {
-	Particle::Draw();
+	PhysicsEntity::Draw();
 }

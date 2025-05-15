@@ -18,12 +18,6 @@
     <Filter Include="GameObjects">
       <UniqueIdentifier>{90d2fc5b-6c30-42b6-8999-9c37e5fa3b31}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Components\Header">
-      <UniqueIdentifier>{cc017b77-4b37-42c8-81ce-1f1168499e59}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Components\Source">
-      <UniqueIdentifier>{59e7815b-1a10-4d41-a649-873038bc8866}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Structs">
       <UniqueIdentifier>{cebdde52-8ce8-40ca-97ea-1167dcfcd83f}</UniqueIdentifier>
     </Filter>
@@ -66,6 +60,27 @@
     <Filter Include="GameObjects\Source">
       <UniqueIdentifier>{888d6dd3-8882-4574-bd5f-e69a333732d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="BaseClasses">
+      <UniqueIdentifier>{60d5fd12-cde9-492a-aa8c-21937aec8ae5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BaseClasses\Header">
+      <UniqueIdentifier>{220eab10-4a2b-4514-a3d5-28229af8b2c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BaseClasses\Source">
+      <UniqueIdentifier>{ede7aa2e-be0c-4c89-97ae-c182d1882e3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\ColliderComponents">
+      <UniqueIdentifier>{3928cb30-fa15-48ad-8571-032b802975f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\PhysicsComponents">
+      <UniqueIdentifier>{74035e43-c7ed-4c23-a0d7-0132cbd466e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\UIComponents">
+      <UniqueIdentifier>{d6baab02-727b-4faa-9461-8d52f37169a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\CameraComponents">
+      <UniqueIdentifier>{552adae7-e855-4495-950e-7c234bc033ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -80,32 +95,11 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Scenes\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Components\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>Components\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Helper\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Collider.cpp">
-      <Filter>Components\Source</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionManifold.cpp">
       <Filter>Structs\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Particle.cpp">
-      <Filter>Components\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Rigidbody.cpp">
-      <Filter>Components\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>Components\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Components\Source</Filter>
     </ClCompile>
     <ClCompile Include="ColliderManager.cpp">
       <Filter>Managers\Source</Filter>
@@ -122,14 +116,38 @@
     <ClCompile Include="TriggerArea.cpp">
       <Filter>GameObjects\Source</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleSystem.cpp">
-      <Filter>Components\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleSystemObject.cpp">
-      <Filter>Components\Source</Filter>
-    </ClCompile>
     <ClCompile Include="OKVector3.cpp">
       <Filter>Structs\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentEntity.cpp">
+      <Filter>BaseClasses\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsEntity.cpp">
+      <Filter>BaseClasses\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderEntity.cpp">
+      <Filter>BaseClasses\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Rigidbody.cpp">
+      <Filter>Components\PhysicsComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEffectComponent.cpp">
+      <Filter>Components\PhysicsComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>GameObjects\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RectangleComponent.cpp">
+      <Filter>Components\ColliderComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonComponent.cpp">
+      <Filter>Components\UIComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>Components\CameraComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEffectObject.cpp">
+      <Filter>GameObjects\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -151,35 +169,14 @@
     <ClInclude Include="Scene.h">
       <Filter>Scenes\Header</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Components\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>Components\Header</Filter>
-    </ClInclude>
     <ClInclude Include="HeaderManager.h">
       <Filter>Helper\Header</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Helper\Header</Filter>
     </ClInclude>
-    <ClInclude Include="Collider.h">
-      <Filter>Components\Header</Filter>
-    </ClInclude>
     <ClInclude Include="CollisionManifold.h">
       <Filter>Structs\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Particle.h">
-      <Filter>Components\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Rigidbody.h">
-      <Filter>Components\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>Components\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Components\Header</Filter>
     </ClInclude>
     <ClInclude Include="ColliderManager.h">
       <Filter>Managers\Header</Filter>
@@ -196,14 +193,38 @@
     <ClInclude Include="TriggerArea.h">
       <Filter>GameObjects\Header</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleSystem.h">
-      <Filter>Components\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleSystemObject.h">
-      <Filter>Components\Header</Filter>
-    </ClInclude>
     <ClInclude Include="OKVector3.h">
       <Filter>Structs\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentEntity.h">
+      <Filter>BaseClasses\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsEntity.h">
+      <Filter>BaseClasses\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderEntity.h">
+      <Filter>BaseClasses\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Rigidbody.h">
+      <Filter>Components\PhysicsComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEffectComponent.h">
+      <Filter>Components\PhysicsComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>GameObjects\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RectangleComponent.h">
+      <Filter>Components\ColliderComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonComponent.h">
+      <Filter>Components\UIComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraComponent.h">
+      <Filter>Components\CameraComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEffectObject.h">
+      <Filter>GameObjects\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

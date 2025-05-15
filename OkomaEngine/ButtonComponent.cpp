@@ -1,6 +1,6 @@
-#include "Button.h"
+#include "ButtonComponent.h"
 
-Button::Button()
+ButtonComponent::ButtonComponent()
 {
     // m_ID = "Button";
     m_MouseRec.x = 0.0f;
@@ -25,11 +25,11 @@ Button::Button()
     m_Active = false;
 }
 
-Button::~Button()
+ButtonComponent::~ButtonComponent()
 {
 }
 
-void Button::Update(float deltaTime)
+void ButtonComponent::Update(float deltaTime)
 {
     if (!m_Active) return;
 

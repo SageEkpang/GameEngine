@@ -21,13 +21,13 @@ void Entity::Update(const float deltaTime)
 
 }
 
-void Entity::addComponent(Component* component)
+void Entity::AddComponent(ComponentEntity* component)
 {
 
 
 }
 
-void Entity::removeComponent(Component* component)
+void Entity::RemoveComponent(ComponentEntity* component)
 {
 
 

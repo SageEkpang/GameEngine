@@ -1,10 +1,10 @@
-#ifndef PARTICLE_SYSTEM_OBJECT_H
-#define PARTICLE_SYSTEM_OBJECT_H
+#ifndef PARTICLE_EFFECT_OBJECT_H
+#define PARTICLE_EFFECT_OBJECT_H
 
-#include "Particle.h"
+#include "PhysicsEntity.h"
 #include "OKVector3.h"
 
-class c_ParticleSystemObject : public Particle
+class ParticleEffectObject : public PhysicsEntity
 {
 public:
 
@@ -14,6 +14,9 @@ public:
 	float m_CurrentLifeTime;
 	float* m_StartSpeed;
 	float m_Theta;
+
+	OKVector2<float> m_Scale;
+	float m_Rotation;
 
 	OKVector3<unsigned int> m_Colour;
 
@@ -40,9 +43,9 @@ public:
 	float m_CurrentColourOverLifeTimer;
 
 	// CLASS FUNCTION(s)
-	c_ParticleSystemObject() = default;
-	c_ParticleSystemObject(OKTransform2<float>* transform, float mass);
-	~c_ParticleSystemObject();
+	ParticleEffectObject() = default;
+	ParticleEffectObject(OKVector2<float> position, float mass);
+	~ParticleEffectObject();
 
 
 	// BASE FUNCTION(s)

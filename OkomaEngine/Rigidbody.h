@@ -5,21 +5,21 @@
 #include "HeaderManager.h"
 
 // NOTE: Parent Class
-#include "Particle.h"
+#include "PhysicsEntity.h"
 
 enum RigidbodyShapeType
 {
-    RIGIDBODY_RECTANGLE,
-    RIGIDBODY_CIRCLE,
-    RIGIDBODY_ORIENTED_RECTANGLE,
-    RIGIDBODY_CAPSULE,
-    RIGIDBODY_COMPLEX
+    RIGIDBODY_SHAPE_TYPE_RECTANGLE,
+    RIGIDBODY_SHAPE_TYPE_CIRCLE,
+    RIGIDBODY_SHAPE_TYPE_ORIENTED_RECTANGLE,
+    RIGIDBODY_SHAPE_TYPE_CAPSULE,
+    RIGIDBODY_SHAPE_TYPE_COMPLEX
 };
 
 enum RigidbodyMovementType
 {
-    RIGIDBODY_STATIC,
-    RIGIDBODY_DYNAMIC
+    RIGIDBODY_MOVEMENT_TYPE_STATIC,
+    RIGIDBODY_MOVEMENT_TYPE_DYNAMIC
 };
 
 struct Mat22
@@ -57,7 +57,8 @@ struct Mat22
     }
 };
 
-class Rigidbody : public Particle
+// TODO: Split these into different rigidbody classes
+class Rigidbody2DComponent : public PhysicsEntity
 {
 private:
 
@@ -65,6 +66,9 @@ private:
     float m_Radius{};
     float m_Height{};
     float m_CircularExpands{};
+
+    OKVector2<float> m_Scale;
+    float m_Rotation;
 
     float m_Orientation;
     float m_AngularVelocity;
@@ -78,19 +82,18 @@ public:
 
     // CLASS FUNCTION(s)
 
-
-    Rigidbody();
+    Rigidbody2DComponent();
 
     // RECTANGLE
     /// @brief Rectangle Rigidbody Constructor
-    Rigidbody(OKTransform2<float>* transform, float mass, RigidbodyMovementType rigidbodyMovementType, bool IsCapsule = false, bool lockZRot = true);
+    Rigidbody2DComponent(OKVector2<float> position, float mass, RigidbodyMovementType rigidbodyMovementType, bool IsCapsule = false, bool lockZRot = true);
 
     // CIRCLE
     /// @brief Circle Rigidbody Constructor
-    Rigidbody(OKTransform2<float>* transform, float mass, float radius, RigidbodyMovementType rigidbodyMovementType);
+    Rigidbody2DComponent(OKVector2<float> transform, float mass, float radius, RigidbodyMovementType rigidbodyMovementType);
 
     // DESTRUCTOR
-    ~Rigidbody() override;
+    ~Rigidbody2DComponent() override;
 
 
     // BASE FUNCTION(s)

@@ -10,13 +10,13 @@
 
 // NEEDED INCLUDE(s)
 #include "HeaderManager.h"
-#include "Component.h"
+#include "ComponentEntity.h"
 
 class Entity
 {
 private: // PRIVATE VARIABLE(s)
 	
-	std::vector<Component*> m_Components;
+	std::vector<ComponentEntity*> m_Components;
 
 public: // PUBLIC FUNCTION(s)
 
@@ -27,8 +27,8 @@ public: // PUBLIC FUNCTION(s)
 	// BASE FUNCTION(s)
 	void Update(const float deltaTime);
 
-	void addComponent(Component* component);
-	void removeComponent(Component* component);
+	void AddComponent(ComponentEntity* component);
+	void RemoveComponent(ComponentEntity* component);
 
 };
 

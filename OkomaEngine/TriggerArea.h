@@ -2,14 +2,14 @@
 #define TRIGGER_AREA_H
 
 // PARENT CLASS
-#include "Collider.h"
+#include "ColliderEntity.h"
 #include "ColliderManager.h"
 #include <set>
 #include <bitset>
 
-class PhysicsObject;
+class GameObject;
 
-class TriggerArea : public Collider
+class TriggerArea : public ColliderEntity
 {
 private:
 
@@ -19,7 +19,7 @@ private:
 	bool m_HasStayed = false;
 	bool m_HasExited = false;
 
-	std::set<PhysicsObject*> m_ObjectList;
+	std::set<GameObject*> m_ObjectList;
 	ColliderManager m_ColliderManifest;
 
 public:
@@ -42,14 +42,14 @@ public:
 	void Draw();
 
 	// TRIGGER RESPONSE FUNCTION(s)
-	void TriggerEntered(PhysicsObject* physicsObject, void (*func)() = nullptr);
-	void TriggerStayed(PhysicsObject* physicsObject, void (*func)() = nullptr);
-	void TriggerExited(PhysicsObject* physicsObject, void (*func)() = nullptr);
+	void TriggerEntered(GameObject* physicsObject, void (*func)() = nullptr);
+	void TriggerStayed(GameObject* physicsObject, void (*func)() = nullptr);
+	void TriggerExited(GameObject* physicsObject, void (*func)() = nullptr);
 
 
 	// GETTER FUNCTION(s)
 	inline std::string GetTag() const { return m_Tag; }
-	std::set<PhysicsObject*>& GetObjects() { return m_ObjectList; }
+	std::set<GameObject*>& GetObjects() { return m_ObjectList; }
 	inline bool GetActiveState() const { return m_IsActive; }
 	inline bool GetHasEntered() const { return m_HasEntered; }
 	inline bool GetHasStayed() const { return m_HasStayed; }

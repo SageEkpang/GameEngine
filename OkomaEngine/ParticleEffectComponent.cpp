@@ -1,6 +1,11 @@
-#include "ParticleSystem.h"
+#include "ParticleEffectComponent.h"
 
-ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxParticleCount, ParticleEmitterType particleEmitterType, ParticleSpawnArea particleSpawnArea, ParticleAction particleAction, float mass, bool isLooping, float simulationSpeed, bool simulateGravity)
+ParticleEffectComponent::ParticleEffectComponent()
+{
+
+}
+
+ParticleEffectComponent::ParticleEffectComponent(OKVector2<float> position, unsigned int maxParticleCount, ParticleEmitterType particleEmitterType, ParticleSpawnArea particleSpawnArea, ParticleAction particleAction, float mass, bool isLooping, float simulationSpeed, bool simulateGravity)
 {
 	// NOTE: Init Timer to NULL for random function
 	srand((unsigned int)time(NULL));
@@ -34,65 +39,65 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxPartic
 
 		// NOTE: PARTICLE SPAWN MAP INIT AND ASSIGNMENT
 
-		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_NONE] = &ParticleSystem::ProcessSpawnAreaNone;
-		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CIRCLE] = &ParticleSystem::ProcessSpawnAreaCircle;
-		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_RECTANGLE] = &ParticleSystem::ProcessSpawnAreaRectangle;
-		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CAPSULE] = &ParticleSystem::ProcessSpawnAreaCapsule;
-		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_DONUT] = &ParticleSystem::ProcessSpawnAreaDonut;
-		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_EDGE] = &ParticleSystem::ProcessSpawnAreaEdge;
-		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CUSTOM] = &ParticleSystem::ProcessSpawnAreaCustom;
-		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_SPRAY] = &ParticleSystem::ProcessSpawnAreaSpray;
+		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_NONE] = &ParticleEffectComponent::ProcessSpawnAreaNone;
+		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CIRCLE] = &ParticleEffectComponent::ProcessSpawnAreaCircle;
+		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_RECTANGLE] = &ParticleEffectComponent::ProcessSpawnAreaRectangle;
+		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CAPSULE] = &ParticleEffectComponent::ProcessSpawnAreaCapsule;
+		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_DONUT] = &ParticleEffectComponent::ProcessSpawnAreaDonut;
+		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_EDGE] = &ParticleEffectComponent::ProcessSpawnAreaEdge;
+		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CUSTOM] = &ParticleEffectComponent::ProcessSpawnAreaCustom;
+		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_SPRAY] = &ParticleEffectComponent::ProcessSpawnAreaSpray;
 
 		m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[m_ParticleSpawnArea];
 
 
 		// NOTE: PARTICLE ACTION MAP INIT AND ASSIGNMENT
 
-		m_ParticleActionMap[PARTICLE_ACTION_NONE] = &ParticleSystem::ProcessActionNone;
-		m_ParticleActionMap[PARTICLE_ACTION_BURST_OUT] = &ParticleSystem::ProcessActionBurstOut;
-		m_ParticleActionMap[PARTICLE_ACTION_BURST_IN] = &ParticleSystem::ProcessActionBurstIn;
+		m_ParticleActionMap[PARTICLE_ACTION_NONE] = &ParticleEffectComponent::ProcessActionNone;
+		m_ParticleActionMap[PARTICLE_ACTION_BURST_OUT] = &ParticleEffectComponent::ProcessActionBurstOut;
+		m_ParticleActionMap[PARTICLE_ACTION_BURST_IN] = &ParticleEffectComponent::ProcessActionBurstIn;
 
-		m_ParticleActionMap[PARTICLE_ACTION_SCREEN] = &ParticleSystem::ProcessActionScreen;
-		m_ParticleActionMap[PARTICLE_ACTION_SCREEN_OUT] = &ParticleSystem::ProcessActionScreenOut;
-		m_ParticleActionMap[PARTICLE_ACTION_SCREEN_IN] = &ParticleSystem::ProcessActionScreenIn;
+		m_ParticleActionMap[PARTICLE_ACTION_SCREEN] = &ParticleEffectComponent::ProcessActionScreen;
+		m_ParticleActionMap[PARTICLE_ACTION_SCREEN_OUT] = &ParticleEffectComponent::ProcessActionScreenOut;
+		m_ParticleActionMap[PARTICLE_ACTION_SCREEN_IN] = &ParticleEffectComponent::ProcessActionScreenIn;
 
-		m_ParticleActionMap[PARTICLE_ACTION_FALL] = &ParticleSystem::ProcessActionFall;
-		m_ParticleActionMap[PARTICLE_ACTION_RISE] = &ParticleSystem::ProcessActionRise;
-		m_ParticleActionMap[PARTICLE_ACTION_RIGHT] = &ParticleSystem::ProcessActionRight;
-		m_ParticleActionMap[PARTICLE_ACTION_LEFT] = &ParticleSystem::ProcessActionLeft;
+		m_ParticleActionMap[PARTICLE_ACTION_FALL] = &ParticleEffectComponent::ProcessActionFall;
+		m_ParticleActionMap[PARTICLE_ACTION_RISE] = &ParticleEffectComponent::ProcessActionRise;
+		m_ParticleActionMap[PARTICLE_ACTION_RIGHT] = &ParticleEffectComponent::ProcessActionRight;
+		m_ParticleActionMap[PARTICLE_ACTION_LEFT] = &ParticleEffectComponent::ProcessActionLeft;
 
-		m_ParticleActionMap[PARTICLE_ACTION_SPRAY] = &ParticleSystem::ProcessActionSpray;
+		m_ParticleActionMap[PARTICLE_ACTION_SPRAY] = &ParticleEffectComponent::ProcessActionSpray;
 
-		m_ParticleActionMap[PARTICLE_ACTION_FIRE] = &ParticleSystem::ProcessActionFire;
-		m_ParticleActionMap[PARTICLE_ACTION_SMOKE] = &ParticleSystem::ProcessActionSmoke;
-		m_ParticleActionMap[PARTICLE_ACTION_SPARK] = &ParticleSystem::ProcessActionSpark;
+		m_ParticleActionMap[PARTICLE_ACTION_FIRE] = &ParticleEffectComponent::ProcessActionFire;
+		m_ParticleActionMap[PARTICLE_ACTION_SMOKE] = &ParticleEffectComponent::ProcessActionSmoke;
+		m_ParticleActionMap[PARTICLE_ACTION_SPARK] = &ParticleEffectComponent::ProcessActionSpark;
 
-		m_ParticleActionMap[PARTICLE_ACTION_CUSTOM] = &ParticleSystem::ProcessActionCustom;
+		m_ParticleActionMap[PARTICLE_ACTION_CUSTOM] = &ParticleEffectComponent::ProcessActionCustom;
 
 		m_CheckParticleActionFunctionPtr = m_ParticleActionMap[m_ParticleAction];
 
 
 		// NOTE: PARTICLE RESIZING VARIABLE(s)
 		// m_ParticleResizeMap[PARTICLE_RESIZE_NONE] = nullptr; // TODO: Can change this to a nullptr reference instead of a function pointer, can remove the 
-		m_ParticleResizeMap[PARTICLE_RESIZE_NONE] = &ParticleSystem::ProcessResizeNone;
-		m_ParticleResizeMap[PARTICLE_RESIZE_OVER_LIFETIME] = &ParticleSystem::ProcessResizeOverLifeTime;
-		m_ParticleResizeMap[PARTICLE_RESIZE_VELOCITY] = &ParticleSystem::ProcessResizeVelocity;
+		m_ParticleResizeMap[PARTICLE_RESIZE_NONE] = &ParticleEffectComponent::ProcessResizeNone;
+		m_ParticleResizeMap[PARTICLE_RESIZE_OVER_LIFETIME] = &ParticleEffectComponent::ProcessResizeOverLifeTime;
+		m_ParticleResizeMap[PARTICLE_RESIZE_VELOCITY] = &ParticleEffectComponent::ProcessResizeVelocity;
 
 		m_CheckParticleResizingFunctionPtr = m_ParticleResizeMap[PARTICLE_RESIZE_NONE];
 
 
 		// NOTE: PARTICLE PHYSICS FORCE OVER TIME
-		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_NONE] = &ParticleSystem::ProcessPhysicsOverLifeTimeNone;
-		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_FORCE_OVER_LIFETIME] = &ParticleSystem::ProcessPhysicsOverLifeTimeForce;
-		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_VELOCITY_OVER_LIFETIME] = &ParticleSystem::ProcessPhysicsOverLifeTimeVelocity;
+		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_NONE] = &ParticleEffectComponent::ProcessPhysicsOverLifeTimeNone;
+		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_FORCE_OVER_LIFETIME] = &ParticleEffectComponent::ProcessPhysicsOverLifeTimeForce;
+		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_VELOCITY_OVER_LIFETIME] = &ParticleEffectComponent::ProcessPhysicsOverLifeTimeVelocity;
 
 		m_CheckParticlePhysicsOverTimeFunctionPtr = m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_NONE];
 
 
 		// NOTE: PARTICLE COLOUR OVER TIME VARIABLE(s)
-		m_ParticleColourOverTimerMap[PARTICLE_COLOUR_NONE] = &ParticleSystem::ProcessColourNone;
-		m_ParticleColourOverTimerMap[PARTICLE_COLOUR_OVER_LIFE_TIME] = &ParticleSystem::ProcessColourOverLifeTime;
-		m_ParticleColourOverTimerMap[PARTICLE_COLOUR_VELOCITY_OVER_LIFE_TIME] = &ParticleSystem::ProcessColourOverVelocity;
+		m_ParticleColourOverTimerMap[PARTICLE_COLOUR_NONE] = &ParticleEffectComponent::ProcessColourNone;
+		m_ParticleColourOverTimerMap[PARTICLE_COLOUR_OVER_LIFE_TIME] = &ParticleEffectComponent::ProcessColourOverLifeTime;
+		m_ParticleColourOverTimerMap[PARTICLE_COLOUR_VELOCITY_OVER_LIFE_TIME] = &ParticleEffectComponent::ProcessColourOverVelocity;
 
 		m_CheckParticleColourOverTimerFunctionPtr = m_ParticleColourOverTimerMap[PARTICLE_COLOUR_NONE];
 
@@ -125,13 +130,13 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxPartic
 	for (unsigned int i = 0; i < m_MaxParticleCount; ++i) 
 	{ 
 		OKTransform2<float>* transform = new OKTransform2<float>(position, OKVector2<float>(1.f, 1.f), 0);
-		c_ParticleSystemObject* particle_system_objects = new c_ParticleSystemObject(transform, mass);
+		ParticleEffectObject* particle_system_objects = new ParticleEffectObject(position, mass);
 
 		particle_system_objects->SimulateGravity(m_SimulateGravity);
 		particle_system_objects->SetGravity(m_Gravity);
 
-		particle_system_objects->SetScale(m_StartSize.x, m_StartSize.y);
-		particle_system_objects->SetRotation(0.0f);
+		particle_system_objects->m_Scale = (m_StartSize.x, m_StartSize.y);
+		particle_system_objects->m_Rotation = 0.f;
 
 		particle_system_objects->m_StartDelay = &m_StartDelay;
 		particle_system_objects->m_StartLifeTime = &m_StartLifeTime;
@@ -161,7 +166,7 @@ ParticleSystem::ParticleSystem(OKVector2<float> position, unsigned int maxPartic
 	#pragma endregion
 }
 
-ParticleSystem::~ParticleSystem()
+ParticleEffectComponent::~ParticleEffectComponent()
 {
 	m_CustomParticleActionFunctionPtr = nullptr;
 	m_CustomParticleSpawnAreaFunctionPtr = nullptr;
@@ -176,7 +181,7 @@ ParticleSystem::~ParticleSystem()
 	if (!m_SimulatingParticles.empty()) { m_SimulatingParticles.clear(); }
 }
 
-void ParticleSystem::Update(const float deltaTime)
+void ParticleEffectComponent::Update(const float deltaTime)
 {
 	const float SimulationSpeedDelta = deltaTime * m_SimulationSpeed;
 
@@ -257,19 +262,19 @@ void ParticleSystem::Update(const float deltaTime)
 
 }
 
-void ParticleSystem::Draw()
+void ParticleEffectComponent::Draw()
 {
 	if (!m_SimulatingParticles.empty())
 	{
 		for (auto& v : m_SimulatingParticles)
 		{
 			Color tempColour = {v.m_Colour.x, v.m_Colour.y, v.m_Colour.z, 255.f};
-			DrawRectangleV(v.GetTransform()->position.ConvertToVec2(), v.GetTransform()->scale.ConvertToVec2(), tempColour);
+			DrawRectangleV(v.GetPosition().ConvertToVec2(), v.m_Scale.ConvertToVec2(), tempColour);
 		}
 	}
 }
 
-void ParticleSystem::ProcessParticleToSimulatingParticles()
+void ParticleEffectComponent::ProcessParticleToSimulatingParticles()
 {
 	unsigned int tempParticleAmount = 0;
 	if (m_ParticleEmitterType == PARTICLE_EMITTER_TYPE_SINGLE) { tempParticleAmount = 1; }
@@ -282,7 +287,7 @@ void ParticleSystem::ProcessParticleToSimulatingParticles()
 		m_SimulatingParticles.push_back(*m_Particles[m_ParticleIndexIncrement]);
 
 		// NOTE: Get the last particle that was inserted in the list and update that, assuming that is the particle that needs to be updated
-		std::vector<c_ParticleSystemObject>::iterator itr = m_SimulatingParticles.end() - 1;
+		std::vector<ParticleEffectObject>::iterator itr = m_SimulatingParticles.end() - 1;
 
 		// NOTE: Set Variables for the Particle
 		(*itr).m_CurrentLifeTime = m_StartLifeTime;
@@ -301,63 +306,63 @@ void ParticleSystem::ProcessParticleToSimulatingParticles()
 	m_EmissionTimer = 0;
 }
 
-void ParticleSystem::CreateParticleAction(void(*particle_action_lamda)())
+void ParticleEffectComponent::CreateParticleAction(void(*particle_action_lamda)())
 {
 	m_CustomParticleActionFunctionPtr = particle_action_lamda;
 }
 
-void ParticleSystem::AssignParticleSpawnAreaNone()
+void ParticleEffectComponent::AssignParticleSpawnAreaNone()
 {
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_NONE];
 }
 
-void ParticleSystem::AssignParticleSpawnAreaCircle(float radius)
+void ParticleEffectComponent::AssignParticleSpawnAreaCircle(float radius)
 {
 	m_CircleRadius = radius;
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CIRCLE];
 }
 
-void ParticleSystem::AssignParticleSpawnAreaRectangle(float width, float height)
+void ParticleEffectComponent::AssignParticleSpawnAreaRectangle(float width, float height)
 {
 	m_RectangleScale.x = width;
 	m_RectangleScale.y = height;
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_RECTANGLE];
 }
 
-void ParticleSystem::AssignParticleSpawnAreaRectangle(OKVector2<float> scale)
+void ParticleEffectComponent::AssignParticleSpawnAreaRectangle(OKVector2<float> scale)
 {
 	m_RectangleScale = scale;
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_RECTANGLE];
 }
 
-void ParticleSystem::AssignParticleSpawnAreaCapsule(float width, float height)
+void ParticleEffectComponent::AssignParticleSpawnAreaCapsule(float width, float height)
 {
 	m_CapsuleWidth = width;
 	m_CapsuleHeight = height;
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CAPSULE];
 }
 
-void ParticleSystem::AssignParticleSpawnAreaCapsule(OKVector2<float> scale)
+void ParticleEffectComponent::AssignParticleSpawnAreaCapsule(OKVector2<float> scale)
 {
 	m_CapsuleWidth = scale.x;
 	m_CapsuleHeight = scale.y;
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CAPSULE];
 }
 
-void ParticleSystem::AssignParticleSpawnAreaDonut(float outer_circle_radius, float inner_circle_radius)
+void ParticleEffectComponent::AssignParticleSpawnAreaDonut(float outer_circle_radius, float inner_circle_radius)
 {
 	m_OuterDonutScale = outer_circle_radius;
 	m_InnerDonutScale = inner_circle_radius;
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_DONUT];
 }
 
-void ParticleSystem::AssignParticleSpawnAreaEdge(float m_edge_length)
+void ParticleEffectComponent::AssignParticleSpawnAreaEdge(float m_edge_length)
 {
 	m_EdgeLength = m_edge_length;
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_EDGE];
 }
 
-void ParticleSystem::AssignParticleSpawnAreaSpray(float spray_angle, float spray_length, OKVector2<float> spray_direction)
+void ParticleEffectComponent::AssignParticleSpawnAreaSpray(float spray_angle, float spray_length, OKVector2<float> spray_direction)
 {
 	m_SprayAngle = spray_angle;
 	m_SprayLength = spray_length;
@@ -366,40 +371,40 @@ void ParticleSystem::AssignParticleSpawnAreaSpray(float spray_angle, float spray
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_SPRAY];
 }
 
-void ParticleSystem::AssignParticleSpawnAreaCustom()
+void ParticleEffectComponent::AssignParticleSpawnAreaCustom()
 {
 	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CUSTOM];
 }
 
-void ParticleSystem::AssignParticleAction(ParticleAction particle_action)
+void ParticleEffectComponent::AssignParticleAction(ParticleAction particle_action)
 {
 	m_CheckParticleActionFunctionPtr = m_ParticleActionMap[particle_action];
 }
 
 
-void ParticleSystem::AssignParticleEmitterType(ParticleEmitterType particle_emitter_type)
+void ParticleEffectComponent::AssignParticleEmitterType(ParticleEmitterType particle_emitter_type)
 {
 	m_ParticleEmitterType = particle_emitter_type;
 }
 
 
-void ParticleSystem::CheckParticleLifeTime(c_ParticleSystemObject& particle_system_object, float deltaTime)
+void ParticleEffectComponent::CheckParticleLifeTime(ParticleEffectObject& particle_system_object, float deltaTime)
 {
 	particle_system_object.m_CurrentLifeTime -= deltaTime;
 }
 
-void ParticleSystem::CreateParticleSpawnArea(void(*particle_spawn_area_lambda)())
+void ParticleEffectComponent::CreateParticleSpawnArea(void(*particle_spawn_area_lambda)())
 {
 	m_CustomParticleSpawnAreaFunctionPtr = particle_spawn_area_lambda;
 }
 
 // NOTE: Spawn Area Functions
-void ParticleSystem::ProcessSpawnAreaNone(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessSpawnAreaNone(OKTransform2<float> transform, ParticleEffectObject& particle_system_object)
 {
 	particle_system_object.SetPosition(transform.position);
 }
 
-void ParticleSystem::ProcessSpawnAreaCircle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessSpawnAreaCircle(OKTransform2<float> transform, ParticleEffectObject& particle_system_object)
 {
 	OKVector2<float> CentrePosition = transform.position;
 
@@ -417,7 +422,7 @@ void ParticleSystem::ProcessSpawnAreaCircle(OKTransform2<float> transform, c_Par
 	particle_system_object.SetPosition(PositionX, PositionY);
 }
 
-void ParticleSystem::ProcessSpawnAreaRectangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessSpawnAreaRectangle(OKTransform2<float> transform, ParticleEffectObject& particle_system_object)
 {
 	OKVector2<float> CentrePosition = transform.position;
 
@@ -440,7 +445,7 @@ void ParticleSystem::ProcessSpawnAreaRectangle(OKTransform2<float> transform, c_
 	particle_system_object.SetPosition(PositionX, PositionY);
 }
 
-void ParticleSystem::ProcessSpawnAreaCapsule(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessSpawnAreaCapsule(OKTransform2<float> transform, ParticleEffectObject& particle_system_object)
 {
 	OKVector2<float> CentrePosition = transform.position;
 
@@ -458,7 +463,7 @@ void ParticleSystem::ProcessSpawnAreaCapsule(OKTransform2<float> transform, c_Pa
 	ProcessSpawnAreaCircle(temp_transform, particle_system_object);
 }
 
-void ParticleSystem::ProcessSpawnAreaDonut(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessSpawnAreaDonut(OKTransform2<float> transform, ParticleEffectObject& particle_system_object)
 {
 	OKVector2<float> CentrePosition = transform.position;
 
@@ -478,7 +483,7 @@ void ParticleSystem::ProcessSpawnAreaDonut(OKTransform2<float> transform, c_Part
 	particle_system_object.SetPosition(PositionX, PositionY);
 }
 
-void ParticleSystem::ProcessSpawnAreaEdge(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessSpawnAreaEdge(OKTransform2<float> transform, ParticleEffectObject& particle_system_object)
 {
 	OKVector2<float> CentrePosition = transform.position;
 
@@ -494,14 +499,14 @@ void ParticleSystem::ProcessSpawnAreaEdge(OKTransform2<float> transform, c_Parti
 	particle_system_object.SetPosition(RandXRange, CentrePosition.y);
 }
 
-void ParticleSystem::ProcessSpawnAreaCustom(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessSpawnAreaCustom(OKTransform2<float> transform, ParticleEffectObject& particle_system_object)
 {
 	if (m_CustomParticleSpawnAreaFunctionPtr != nullptr) { m_CustomParticleSpawnAreaFunctionPtr(); }
 	else { particle_system_object.SetPosition(transform.position); }
 }
 
 // NOTE: This may or may not work
-void ParticleSystem::ProcessSpawnAreaSpray(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessSpawnAreaSpray(OKTransform2<float> transform, ParticleEffectObject& particle_system_object)
 {
 	OKVector2<float> CentrePosition = transform.position;
 
@@ -542,12 +547,12 @@ void ParticleSystem::ProcessSpawnAreaSpray(OKTransform2<float> transform, c_Part
 }
 
 // NOTE: Resizing Functions
-void ParticleSystem::ProcessResizeNone(c_ParticleSystemObject& particle_system_object, float deltaTime)
+void ParticleEffectComponent::ProcessResizeNone(ParticleEffectObject& particle_system_object, float deltaTime)
 {
 	// NOTE: Do nothing
 }
 
-void ParticleSystem::ProcessResizeOverLifeTime(c_ParticleSystemObject& particle_system_object, float deltaTime)
+void ParticleEffectComponent::ProcessResizeOverLifeTime(ParticleEffectObject& particle_system_object, float deltaTime)
 {
 	// NOTE: Check if you sizes are the same, meaning this code does not have to be ran
 	if (particle_system_object.m_StartingSizeOverLifeTime == particle_system_object.m_EndingSizeOverLifeTime) { return; }
@@ -561,10 +566,10 @@ void ParticleSystem::ProcessResizeOverLifeTime(c_ParticleSystemObject& particle_
 	const float tempLerpY = lerp(particle_system_object.m_StartingSizeOverLifeTime->y, particle_system_object.m_EndingSizeOverLifeTime->y, particle_system_object.m_CurrentSizeOverLifeTimer);
 
 	// NOTE: Assign the resize to the scale of the current particle
-	particle_system_object.SetScale(tempLerpX, tempLerpY);
+	particle_system_object.m_Scale = OKVector2<float>(tempLerpX, tempLerpY);
 }
 
-void ParticleSystem::ProcessResizeVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime)
+void ParticleEffectComponent::ProcessResizeVelocity(ParticleEffectObject& particle_system_object, float deltaTime)
 {
 	// NOTE: Check if you sizes are the same, meaning this code does not have to be ran
 	if (particle_system_object.m_StartingSizeByVelocity == particle_system_object.m_EndingSizeByVelocity) { return; }
@@ -583,15 +588,15 @@ void ParticleSystem::ProcessResizeVelocity(c_ParticleSystemObject& particle_syst
 	const float tempLerpY = lerp(particle_system_object.m_StartingSizeByVelocity->y, particle_system_object.m_EndingSizeOverLifeTime->y, tempRemapValue);
 
 	// NOTE: Assign the resize to the scale of the current particle
-	particle_system_object.SetScale(tempLerpX, tempLerpY);
+	particle_system_object.m_Scale = OKVector2<float>(tempLerpX, tempLerpY);
 }
 
-void ParticleSystem::ProcessPhysicsOverLifeTimeNone(c_ParticleSystemObject& particle_system_object, float deltaTime)
+void ParticleEffectComponent::ProcessPhysicsOverLifeTimeNone(ParticleEffectObject& particle_system_object, float deltaTime)
 {
 	// NOTE: No Functionality
 }
 
-void ParticleSystem::ProcessPhysicsOverLifeTimeForce(c_ParticleSystemObject& particle_system_object, float deltaTime)
+void ParticleEffectComponent::ProcessPhysicsOverLifeTimeForce(ParticleEffectObject& particle_system_object, float deltaTime)
 {
 	// NOTE: Check if the force over life time is the same, if it is, skip it
 	if (particle_system_object.m_StartingForceOverLifeTime == particle_system_object.m_EndingForceOverLifeTime) { return; }
@@ -607,7 +612,7 @@ void ParticleSystem::ProcessPhysicsOverLifeTimeForce(c_ParticleSystemObject& par
 	particle_system_object.SetForce(OKVector2<float>(tempLerpX, tempLerpY));
 }
 
-void ParticleSystem::ProcessPhysicsOverLifeTimeVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime)
+void ParticleEffectComponent::ProcessPhysicsOverLifeTimeVelocity(ParticleEffectObject& particle_system_object, float deltaTime)
 {
 	// NOTE: Check if the velocity over life time is the same
 	if (particle_system_object.m_StartingVelocityOverLifeTime == particle_system_object.m_EndingVelocityOverLifeTime) { return; }
@@ -623,13 +628,13 @@ void ParticleSystem::ProcessPhysicsOverLifeTimeVelocity(c_ParticleSystemObject& 
 	particle_system_object.SetVelocity(OKVector2<float>(tempLerpX, tempLerpY));
 }
 
-void ParticleSystem::ProcessColourNone(c_ParticleSystemObject& particle_system_object, float deltaTime)
+void ParticleEffectComponent::ProcessColourNone(ParticleEffectObject& particle_system_object, float deltaTime)
 {
 	// NOTE: Do nothing
 }
 
 // FIXME: just use a similar way of resize velocity function
-void ParticleSystem::ProcessColourOverLifeTime(c_ParticleSystemObject& particle_system_object, float deltaTime)
+void ParticleEffectComponent::ProcessColourOverLifeTime(ParticleEffectObject& particle_system_object, float deltaTime)
 {
 	// NOTE: Check if the colour over life time is the same, if it is, skip it
 	if (particle_system_object.m_StartingColourOverLifeTime == particle_system_object.m_EndingColourOverLifeTime) { return; }
@@ -646,7 +651,7 @@ void ParticleSystem::ProcessColourOverLifeTime(c_ParticleSystemObject& particle_
 	particle_system_object.m_Colour = OKVector3<unsigned int>(tempLerpX, tempLerpY, tempLerpZ);
 }
 
-void ParticleSystem::ProcessColourOverVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime)
+void ParticleEffectComponent::ProcessColourOverVelocity(ParticleEffectObject& particle_system_object, float deltaTime)
 {
 	// NOTE: Check if you sizes are the same, meaning this code does not have to be ran
 	if (particle_system_object.m_StartingColourOverLifeTime == particle_system_object.m_EndingColourOverLifeTime) { return; }
@@ -671,12 +676,12 @@ void ParticleSystem::ProcessColourOverVelocity(c_ParticleSystemObject& particle_
 
 // NOTE: Action Functions
 
-void ParticleSystem::ProcessActionNone(c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessActionNone(ParticleEffectObject& particle_system_object)
 {
 	// NOTE: Does Nothing
 }
 
-void ParticleSystem::ProcessActionBurstOut(c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessActionBurstOut(ParticleEffectObject& particle_system_object)
 {
 	float MaxX = 360.0f;
 	float MinX = -360.0f;
@@ -688,15 +693,15 @@ void ParticleSystem::ProcessActionBurstOut(c_ParticleSystemObject& particle_syst
 	int RangeY = MaxY - MinY + 1;
 	float NumY = rand() % RangeY + MinY;
 
-	particle_system_object.AddImpulse(NumX * m_StartSpeed, NumY * m_StartSpeed);
+	particle_system_object.ApplyImpulse(NumX * m_StartSpeed, NumY * m_StartSpeed);
 }
 
-void ParticleSystem::ProcessActionBurstIn(c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessActionBurstIn(ParticleEffectObject& particle_system_object)
 {
 	// SPEED = DISTANCE / TIME
 }
 
-void ParticleSystem::ProcessActionScreen(c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessActionScreen(ParticleEffectObject& particle_system_object)
 {
 	int MaxX = 10;
 	int MinX = 1;
@@ -719,7 +724,7 @@ void ParticleSystem::ProcessActionScreen(c_ParticleSystemObject& particle_system
 	particle_system_object.SetPosition(PositionX, PositionY);
 }
 
-void ParticleSystem::ProcessActionScreenOut(c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessActionScreenOut(ParticleEffectObject& particle_system_object)
 {
 	OKVector2<float> DistanceParticle = m_Transform.position - particle_system_object.GetPosition();
 
@@ -742,13 +747,13 @@ void ParticleSystem::ProcessActionScreenOut(c_ParticleSystemObject& particle_sys
 	float PositionY = particle_system_object.GetPosition().y + sin(theta * NumY);
 
 	particle_system_object.SetPosition(PositionX, PositionY);
-	particle_system_object.AddImpulse(-DistanceParticle.x * m_StartSpeed, -DistanceParticle.y * m_StartSpeed);
+	particle_system_object.ApplyImpulse(-DistanceParticle.x * m_StartSpeed, -DistanceParticle.y * m_StartSpeed);
 
 	// Pulsing
-	// particle_system_object.particle.AddImpulse(DistanceParticle);
+	// particle_system_object.particle.ApplyImpulse(DistanceParticle);
 }
 
-void ParticleSystem::ProcessActionScreenIn(c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessActionScreenIn(ParticleEffectObject& particle_system_object)
 {
 	OKVector2<float> DistanceParticle = m_Transform.position - particle_system_object.GetPosition();
 
@@ -771,30 +776,30 @@ void ParticleSystem::ProcessActionScreenIn(c_ParticleSystemObject& particle_syst
 	float PositionY = particle_system_object.GetPosition().y + sin(theta * NumY);
 
 	particle_system_object.SetPosition(PositionX, PositionY);
-	particle_system_object.AddImpulse(DistanceParticle.x * m_StartSpeed, DistanceParticle.y * m_StartSpeed);
+	particle_system_object.ApplyImpulse(DistanceParticle.x * m_StartSpeed, DistanceParticle.y * m_StartSpeed);
 }
 
-void ParticleSystem::ProcessActionFall(c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessActionFall(ParticleEffectObject& particle_system_object)
 {
-	particle_system_object.AddImpulse(0, 1 * m_StartSpeed);
+	particle_system_object.ApplyImpulse(0, 1 * m_StartSpeed);
 }
 
-void ParticleSystem::ProcessActionRise(c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessActionRise(ParticleEffectObject& particle_system_object)
 {
-	particle_system_object.AddImpulse(0, -1 * m_StartSpeed);
+	particle_system_object.ApplyImpulse(0, -1 * m_StartSpeed);
 }
 
-void ParticleSystem::ProcessActionRight(c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessActionRight(ParticleEffectObject& particle_system_object)
 {
-	particle_system_object.AddImpulse(1 * m_StartSpeed, 0);
+	particle_system_object.ApplyImpulse(1 * m_StartSpeed, 0);
 }
 
-void ParticleSystem::ProcessActionLeft(c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessActionLeft(ParticleEffectObject& particle_system_object)
 {
-	particle_system_object.AddImpulse(-1 * m_StartSpeed, 0);
+	particle_system_object.ApplyImpulse(-1 * m_StartSpeed, 0);
 }
 
-void ParticleSystem::ProcessActionSpray(c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessActionSpray(ParticleEffectObject& particle_system_object)
 {
 	// NOTE: Calculating position from the origin
 
@@ -814,16 +819,16 @@ void ParticleSystem::ProcessActionSpray(c_ParticleSystemObject& particle_system_
 		OKVector2<float> NewDirction = OKVector2<float>(Direction.x + NumX, Direction.y + NumY);
 		
 		// NOTE: Calculated a projected position to the origin (this would be more so to do with point)
-		particle_system_object.AddImpulse(NewDirction.x * m_StartSpeed, NewDirction.y * m_StartSpeed);
+		particle_system_object.ApplyImpulse(NewDirction.x * m_StartSpeed, NewDirction.y * m_StartSpeed);
 
 		return;
 	}
 
 	// NOTE: Assign impulse
-	particle_system_object.AddImpulse(Direction.x * m_StartSpeed, Direction.y * m_StartSpeed);
+	particle_system_object.ApplyImpulse(Direction.x * m_StartSpeed, Direction.y * m_StartSpeed);
 }
 
-void ParticleSystem::ProcessActionFire(c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessActionFire(ParticleEffectObject& particle_system_object)
 {
 	int MaxX = 10;
 	int MinX = 1;
@@ -841,11 +846,11 @@ void ParticleSystem::ProcessActionFire(c_ParticleSystemObject& particle_system_o
 	float NumY = rand() % RangeX + MinX;
 
 	float PositionX = particle_system_object.GetPosition().x + cos(theta);
-	particle_system_object.AddImpulse(0 * m_StartSpeed, -NumY * m_StartSpeed);
+	particle_system_object.ApplyImpulse(0 * m_StartSpeed, -NumY * m_StartSpeed);
 	particle_system_object.SetPosition(PositionX, particle_system_object.GetPosition().y);
 }
 
-void ParticleSystem::ProcessActionSmoke(c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessActionSmoke(ParticleEffectObject& particle_system_object)
 {
 	OKVector2<float> DistanceParticle = m_Transform.position - particle_system_object.GetPosition();
 
@@ -865,10 +870,10 @@ void ParticleSystem::ProcessActionSmoke(c_ParticleSystemObject& particle_system_
 	float PositionX = lerp(particle_system_object.GetPosition().x, DistanceProjectionX, 0.5);
 	float PositionY = lerp(particle_system_object.GetPosition().y, DistanceProjectionY, 0.5);
 
-	particle_system_object.AddImpulse(NumX * m_StartSpeed, NumY * m_StartSpeed);
+	particle_system_object.ApplyImpulse(NumX * m_StartSpeed, NumY * m_StartSpeed);
 }
 
-void ParticleSystem::ProcessActionSpark(c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessActionSpark(ParticleEffectObject& particle_system_object)
 {
 	int MaxX = 360;
 	int MinX = -360;
@@ -880,15 +885,15 @@ void ParticleSystem::ProcessActionSpark(c_ParticleSystemObject& particle_system_
 	int RangeY = MaxY - MinY + 1;
 	int NumY = rand() % RangeY + MinY;
 
-	particle_system_object.AddImpulse(NumX * m_StartSpeed, NumY * m_StartSpeed);
+	particle_system_object.ApplyImpulse(NumX * m_StartSpeed, NumY * m_StartSpeed);
 }
 
-void ParticleSystem::ProcessActionCustom(c_ParticleSystemObject& particle_system_object)
+void ParticleEffectComponent::ProcessActionCustom(ParticleEffectObject& particle_system_object)
 {
 	if (m_CustomParticleActionFunctionPtr != nullptr) { m_CustomParticleActionFunctionPtr(); }
 }
 
-void ParticleSystem::AssignVelocityOverLifeTime(OKVector2<float> starting_velocity_over_lifetime, OKVector2<float> ending_velocity_over_lifetime)
+void ParticleEffectComponent::AssignVelocityOverLifeTime(OKVector2<float> starting_velocity_over_lifetime, OKVector2<float> ending_velocity_over_lifetime)
 {
 	m_StartingVelocityOverLifeTime = starting_velocity_over_lifetime;
 	m_EndingVelocityOverLifeTime = ending_velocity_over_lifetime;
@@ -896,7 +901,7 @@ void ParticleSystem::AssignVelocityOverLifeTime(OKVector2<float> starting_veloci
 	m_CheckParticlePhysicsOverTimeFunctionPtr = m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_VELOCITY_OVER_LIFETIME];
 }
 
-void ParticleSystem::AssignForceOverLifeTime(OKVector2<float> starting_force_over_lifetime, OKVector2<float> ending_force_over_lifetime)
+void ParticleEffectComponent::AssignForceOverLifeTime(OKVector2<float> starting_force_over_lifetime, OKVector2<float> ending_force_over_lifetime)
 {
 	m_StartingForceOverLifeTime = starting_force_over_lifetime;
 	m_EndingForceOverLifeTime = ending_force_over_lifetime;
@@ -904,7 +909,7 @@ void ParticleSystem::AssignForceOverLifeTime(OKVector2<float> starting_force_ove
 	m_CheckParticlePhysicsOverTimeFunctionPtr = m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_FORCE_OVER_LIFETIME];
 }
 
-void ParticleSystem::AssignResizeOverLifeTime(OKVector2<float> starting_resize_over_lifetime, OKVector2<float> ending_resize_over_lifetime)
+void ParticleEffectComponent::AssignResizeOverLifeTime(OKVector2<float> starting_resize_over_lifetime, OKVector2<float> ending_resize_over_lifetime)
 {
 	m_StartingSizeOverLifeTime = starting_resize_over_lifetime;
 	m_EndingSizeOverLifeTime = ending_resize_over_lifetime;
@@ -912,7 +917,7 @@ void ParticleSystem::AssignResizeOverLifeTime(OKVector2<float> starting_resize_o
 	m_CheckParticleResizingFunctionPtr = m_ParticleResizeMap[PARTICLE_RESIZE_OVER_LIFETIME];
 }
 
-void ParticleSystem::AssignResizeByVelocityOverLifeTime(OKVector2<float> starting_resize_velocity_over_lifetime, OKVector2<float> ending_resize_velocity_over_lifetime, float max_velocity_by_size, float min_velocity_by_size)
+void ParticleEffectComponent::AssignResizeByVelocityOverLifeTime(OKVector2<float> starting_resize_velocity_over_lifetime, OKVector2<float> ending_resize_velocity_over_lifetime, float max_velocity_by_size, float min_velocity_by_size)
 {
 	m_StartingSizeByVelocity = starting_resize_velocity_over_lifetime;
 	m_EndingSizeByVelocity = ending_resize_velocity_over_lifetime;
@@ -923,7 +928,7 @@ void ParticleSystem::AssignResizeByVelocityOverLifeTime(OKVector2<float> startin
 	m_CheckParticleResizingFunctionPtr = m_ParticleResizeMap[PARTICLE_RESIZE_VELOCITY];
 }
 
-void ParticleSystem::AssignColourOverLifeTime(OKVector3<unsigned int> starting_colour_over_lifetime, OKVector3<unsigned int> ending_colour_over_lifetime)
+void ParticleEffectComponent::AssignColourOverLifeTime(OKVector3<unsigned int> starting_colour_over_lifetime, OKVector3<unsigned int> ending_colour_over_lifetime)
 {
 	m_StartingColourOverLifeTime = starting_colour_over_lifetime;
 	m_EndingColourOverLifeTime = ending_colour_over_lifetime;
@@ -931,7 +936,7 @@ void ParticleSystem::AssignColourOverLifeTime(OKVector3<unsigned int> starting_c
 	m_CheckParticleColourOverTimerFunctionPtr = m_ParticleColourOverTimerMap[PARTICLE_COLOUR_OVER_LIFE_TIME];
 }
 
-void ParticleSystem::AssignColourVelocityOverLifeTime(OKVector3<unsigned int> starting_colour_over_lifetime, OKVector3<unsigned int> ending_colour_over_lifetime, float max_velocity_by_colour, float min_velocity_by_colour)
+void ParticleEffectComponent::AssignColourVelocityOverLifeTime(OKVector3<unsigned int> starting_colour_over_lifetime, OKVector3<unsigned int> ending_colour_over_lifetime, float max_velocity_by_colour, float min_velocity_by_colour)
 {
 	m_StartingColourOverLifeTime = starting_colour_over_lifetime;
 	m_EndingColourOverLifeTime = ending_colour_over_lifetime;
@@ -941,3 +946,5 @@ void ParticleSystem::AssignColourVelocityOverLifeTime(OKVector3<unsigned int> st
 
 	m_CheckParticleColourOverTimerFunctionPtr = m_ParticleColourOverTimerMap[PARTICLE_COLOUR_VELOCITY_OVER_LIFE_TIME];
 }
+
+

@@ -1,8 +1,8 @@
-#ifndef PARTICLE_SYSTEM_H
-#define PARTICLE_SYSTEM_H
+#ifndef PARTICLE_EFFECT_H
+#define PARTICLE_EFFECT_H
 
-#include "Particle.h"
-#include "ParticleSystemObject.h"
+#include "PhysicsEntity.h"
+#include "ParticleEffectObject.h"
 #include "OKVector3.h"
 
 #include <memory>
@@ -78,44 +78,44 @@ enum ParticleColourOverLifeTime
 	PARTICLE_COLOUR_VELOCITY_OVER_LIFE_TIME
 };
 
-class ParticleSystem
+class ParticleEffectComponent
 {
 private:
 
 	// NOTE: PTR TYPEDEF FOR FUNCTION(s)
 
-	typedef void (ParticleSystem::* CheckParticleActionFunctionPtr)(c_ParticleSystemObject&);
+	typedef void (ParticleEffectComponent::* CheckParticleActionFunctionPtr)(ParticleEffectObject&);
 	std::map<ParticleAction, CheckParticleActionFunctionPtr> m_ParticleActionMap;
 
-	typedef void (ParticleSystem::* CheckParticleSpawnFunctionPtr)(OKTransform2<float>, c_ParticleSystemObject&);
+	typedef void (ParticleEffectComponent::* CheckParticleSpawnFunctionPtr)(OKTransform2<float>, ParticleEffectObject&);
 	std::map<ParticleSpawnArea, CheckParticleSpawnFunctionPtr> m_ParticleSpawnMap;
 
-	typedef void (ParticleSystem::* CheckParticleResizeFunctionPtr)(c_ParticleSystemObject&, float);
+	typedef void (ParticleEffectComponent::* CheckParticleResizeFunctionPtr)(ParticleEffectObject&, float);
 	std::map<ParticleResize, CheckParticleResizeFunctionPtr> m_ParticleResizeMap;
 
-	typedef void (ParticleSystem::* CheckParticlePhysicsFunctionPtr)(c_ParticleSystemObject&, float);
+	typedef void (ParticleEffectComponent::* CheckParticlePhysicsFunctionPtr)(ParticleEffectObject&, float);
 	std::map<ParticlePhysicsOverLifeTime, CheckParticlePhysicsFunctionPtr> m_ParticlePhysicsOverTimeMap;
 
-	typedef void (ParticleSystem::* CheckParticleColourFunctionPtr)(c_ParticleSystemObject&, float);
+	typedef void (ParticleEffectComponent::* CheckParticleColourFunctionPtr)(ParticleEffectObject&, float);
 	std::map<ParticleColourOverLifeTime, CheckParticleColourFunctionPtr> m_ParticleColourOverTimerMap;
 
 	// CUSTOM DATA TYPE
 	void (*m_CustomParticleActionFunctionPtr)() = nullptr;
 	void (*m_CustomParticleSpawnAreaFunctionPtr)() = nullptr;
 
-	void (ParticleSystem::* m_CheckParticleActionFunctionPtr)(c_ParticleSystemObject&) = nullptr;
-	void (ParticleSystem::* m_CheckParticleSpawnFunctionPtr)(OKTransform2<float>, c_ParticleSystemObject&) = nullptr;
-	void (ParticleSystem::* m_CheckParticleResizingFunctionPtr)(c_ParticleSystemObject&, float) = nullptr;
-	void (ParticleSystem::* m_CheckParticlePhysicsOverTimeFunctionPtr)(c_ParticleSystemObject&, float) = nullptr;
-	void (ParticleSystem::* m_CheckParticleColourOverTimerFunctionPtr)(c_ParticleSystemObject&, float);
+	void (ParticleEffectComponent::* m_CheckParticleActionFunctionPtr)(ParticleEffectObject&) = nullptr;
+	void (ParticleEffectComponent::* m_CheckParticleSpawnFunctionPtr)(OKTransform2<float>, ParticleEffectObject&) = nullptr;
+	void (ParticleEffectComponent::* m_CheckParticleResizingFunctionPtr)(ParticleEffectObject&, float) = nullptr;
+	void (ParticleEffectComponent::* m_CheckParticlePhysicsOverTimeFunctionPtr)(ParticleEffectObject&, float) = nullptr;
+	void (ParticleEffectComponent::* m_CheckParticleColourOverTimerFunctionPtr)(ParticleEffectObject&, float);
 
 	// TRANSFORM VARIABLE(s)
 	OKTransform2<float> m_Transform;
 	OKVector2<float> m_EmitterPositionOffset;
 
 	// PARTICLE VARIABLE(s)
-	std::vector<c_ParticleSystemObject*> m_Particles;
-	std::vector<c_ParticleSystemObject> m_SimulatingParticles;
+	std::vector<ParticleEffectObject*> m_Particles;
+	std::vector<ParticleEffectObject> m_SimulatingParticles;
 	unsigned int m_ParticleIndexIncrement;
 
 	// PARTICLE EXCUTE ONCE
@@ -207,66 +207,66 @@ private: // PRIVATE FUNCTION(s)
 	float remap(float value, float sourceMin, float sourceMax, float destMin = 0, float destMax = 1) { return destMin + ((value - sourceMin) / (sourceMax - sourceMin)) * (destMax - destMin); }
 
 	// NOTE: PARTICLE CHECKING FUNCTION(s) (See what the particle can do)		
-	void CheckParticleLifeTime(c_ParticleSystemObject& particle_system_object, float deltaTime);
+	void CheckParticleLifeTime(ParticleEffectObject& particle_system_object, float deltaTime);
 
 	// NOTE: PARTICLE SPAWN AREA FUNCTION(s)
-	void ProcessSpawnAreaNone(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
-	void ProcessSpawnAreaCircle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
-	void ProcessSpawnAreaRectangle(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
-	void ProcessSpawnAreaCapsule(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
-	void ProcessSpawnAreaDonut(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
-	void ProcessSpawnAreaEdge(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
-	void ProcessSpawnAreaCustom(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
-	void ProcessSpawnAreaSpray(OKTransform2<float> transform, c_ParticleSystemObject& particle_system_object);
+	void ProcessSpawnAreaNone(OKTransform2<float> transform, ParticleEffectObject& particle_system_object);
+	void ProcessSpawnAreaCircle(OKTransform2<float> transform, ParticleEffectObject& particle_system_object);
+	void ProcessSpawnAreaRectangle(OKTransform2<float> transform, ParticleEffectObject& particle_system_object);
+	void ProcessSpawnAreaCapsule(OKTransform2<float> transform, ParticleEffectObject& particle_system_object);
+	void ProcessSpawnAreaDonut(OKTransform2<float> transform, ParticleEffectObject& particle_system_object);
+	void ProcessSpawnAreaEdge(OKTransform2<float> transform, ParticleEffectObject& particle_system_object);
+	void ProcessSpawnAreaCustom(OKTransform2<float> transform, ParticleEffectObject& particle_system_object);
+	void ProcessSpawnAreaSpray(OKTransform2<float> transform, ParticleEffectObject& particle_system_object);
 
 	// NOTE: PARTICLE RESIZE FUNCTION(s)
-	void ProcessResizeNone(c_ParticleSystemObject& particle_system_object, float deltaTime);
-	void ProcessResizeOverLifeTime(c_ParticleSystemObject& particle_system_object, float deltaTime);
-	void ProcessResizeVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime);
+	void ProcessResizeNone(ParticleEffectObject& particle_system_object, float deltaTime);
+	void ProcessResizeOverLifeTime(ParticleEffectObject& particle_system_object, float deltaTime);
+	void ProcessResizeVelocity(ParticleEffectObject& particle_system_object, float deltaTime);
 
 	// NOTE: PARTICLE PHYSICS OVER TIME FUNCTION(s)
-	void ProcessPhysicsOverLifeTimeNone(c_ParticleSystemObject& particle_system_object, float deltaTime);
-	void ProcessPhysicsOverLifeTimeForce(c_ParticleSystemObject& particle_system_object, float deltaTime);
-	void ProcessPhysicsOverLifeTimeVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime);
+	void ProcessPhysicsOverLifeTimeNone(ParticleEffectObject& particle_system_object, float deltaTime);
+	void ProcessPhysicsOverLifeTimeForce(ParticleEffectObject& particle_system_object, float deltaTime);
+	void ProcessPhysicsOverLifeTimeVelocity(ParticleEffectObject& particle_system_object, float deltaTime);
 
 	// NOTE: PARTICLE COLOUR OVER TIME FUNCTION(s) 
-	void ProcessColourNone(c_ParticleSystemObject& particle_system_object, float deltaTime);
-	void ProcessColourOverLifeTime(c_ParticleSystemObject& particle_system_object, float deltaTime);
-	void ProcessColourOverVelocity(c_ParticleSystemObject& particle_system_object, float deltaTime);
+	void ProcessColourNone(ParticleEffectObject& particle_system_object, float deltaTime);
+	void ProcessColourOverLifeTime(ParticleEffectObject& particle_system_object, float deltaTime);
+	void ProcessColourOverVelocity(ParticleEffectObject& particle_system_object, float deltaTime);
 
 
 	// NOTE: PARTICLE ACTION FUNCTION(s)
-	void ProcessActionNone(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
+	void ProcessActionNone(ParticleEffectObject& particle_system_object); // Update Type: Once (Done)
 
-	void ProcessActionBurstOut(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
-	void ProcessActionBurstIn(c_ParticleSystemObject& particle_system_object);
+	void ProcessActionBurstOut(ParticleEffectObject& particle_system_object); // Update Type: Once (Done)
+	void ProcessActionBurstIn(ParticleEffectObject& particle_system_object);
 
-	void ProcessActionScreen(c_ParticleSystemObject& particle_system_object); // Update Type: Constant (Done)
-	void ProcessActionScreenOut(c_ParticleSystemObject& particle_system_object); // Update Type: Constant (Done)
-	void ProcessActionScreenIn(c_ParticleSystemObject& particle_system_object); // Update Type: Constant (Done)
+	void ProcessActionScreen(ParticleEffectObject& particle_system_object); // Update Type: Constant (Done)
+	void ProcessActionScreenOut(ParticleEffectObject& particle_system_object); // Update Type: Constant (Done)
+	void ProcessActionScreenIn(ParticleEffectObject& particle_system_object); // Update Type: Constant (Done)
 
 	// NOTE: Reverse these values when it comes to the game engine project
-	void ProcessActionFall(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
-	void ProcessActionRise(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
-	void ProcessActionRight(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
-	void ProcessActionLeft(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
+	void ProcessActionFall(ParticleEffectObject& particle_system_object); // Update Type: Once (Done)
+	void ProcessActionRise(ParticleEffectObject& particle_system_object); // Update Type: Once (Done)
+	void ProcessActionRight(ParticleEffectObject& particle_system_object); // Update Type: Once (Done)
+	void ProcessActionLeft(ParticleEffectObject& particle_system_object); // Update Type: Once (Done)
 
-	void ProcessActionSpray(c_ParticleSystemObject& particle_system_object); // TODO
+	void ProcessActionSpray(ParticleEffectObject& particle_system_object); // TODO
 
-	void ProcessActionFire(c_ParticleSystemObject& particle_system_object); // Update Type: Constant (REWORK)
-	void ProcessActionSmoke(c_ParticleSystemObject& particle_system_object); // Update Type: Once (REWORK)
-	void ProcessActionSpark(c_ParticleSystemObject& particle_system_object); // Update Type: Once (Done)
+	void ProcessActionFire(ParticleEffectObject& particle_system_object); // Update Type: Constant (REWORK)
+	void ProcessActionSmoke(ParticleEffectObject& particle_system_object); // Update Type: Once (REWORK)
+	void ProcessActionSpark(ParticleEffectObject& particle_system_object); // Update Type: Once (Done)
 
-	void ProcessActionCustom(c_ParticleSystemObject& particle_system_object); // Update Type: Constant (Done)
+	void ProcessActionCustom(ParticleEffectObject& particle_system_object); // Update Type: Constant (Done)
 
 	#pragma endregion
 
 public:
 
 	// CLASS FUNCTION(s)
-	ParticleSystem() = default;
-	ParticleSystem(OKVector2<float> position, unsigned int maxParticleCount, ParticleEmitterType particleEmitterType = PARTICLE_EMITTER_TYPE_SINGLE, ParticleSpawnArea particleSpawnArea = PARTICLE_SPAWN_AREA_NONE, ParticleAction particleAction = PARTICLE_ACTION_NONE, float mass = 1.f, bool isLooping = false, float simulationSpeed = 1.f, bool simulateGravity = false);
-	~ParticleSystem();
+	ParticleEffectComponent();
+	ParticleEffectComponent(OKVector2<float> position, unsigned int maxParticleCount, ParticleEmitterType particleEmitterType = PARTICLE_EMITTER_TYPE_SINGLE, ParticleSpawnArea particleSpawnArea = PARTICLE_SPAWN_AREA_NONE, ParticleAction particleAction = PARTICLE_ACTION_NONE, float mass = 1.f, bool isLooping = false, float simulationSpeed = 1.f, bool simulateGravity = false);
+	~ParticleEffectComponent();
 
 
 	// BASE FUNCTION(s)

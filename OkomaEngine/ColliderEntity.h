@@ -7,8 +7,9 @@
 #include "OKTransform2.h"
 
 // PARENT INCLUDE(s)
-#include "Component.h"
+#include "ComponentEntity.h"
 
+// TODO: Prefix-fix with name of enum
 enum ColliderType
 {
     COLLIDER_POINT,
@@ -17,10 +18,10 @@ enum ColliderType
     COLLIDER_CAPSULE,
     COLLIDER_ORIENTED_RECTANGLE,
     COLLIDER_COMPLEX,
-    COLLIDER_LINE
+    COLLIDER_LINE,
 };
 
-class ColliderEntity : public Component
+class ColliderEntity : public ComponentEntity
 {
 protected: // PROTECTED VARIABLE(s)
 

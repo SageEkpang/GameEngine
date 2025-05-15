@@ -2,11 +2,11 @@
 #define BUTTON_COMPONENT_H
 
 // DIRECTORY INCLUDES
-#include "Component.h"
+#include "ComponentEntity.h"
 
 #include "OKVector2.h"
 
-class Button : public Component
+class ButtonComponent : public ComponentEntity
 {
 private:
 
@@ -38,10 +38,10 @@ public:
     // CLASS FUNCTION(s)
 
     /// @brief Default Constructor for Class
-    Button(); // TODO: Add UI Component reference here
+    ButtonComponent(); // TODO: Add UI Component reference here
 
     /// @brief Default Destructor for Class
-    ~Button();
+    ~ButtonComponent();
 
 
 

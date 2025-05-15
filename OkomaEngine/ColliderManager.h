@@ -1,11 +1,12 @@
 #ifndef COLLIDER_MANAGER_H
 #define COLLIDER_MANAGER_H
 
-#include "Collider.h"
+#include "ColliderEntity.h"
 #include "CollisionManifold.h"
 #include <utility>
 #include <map>
 
+// TODO: Pre-fix collision
 enum Collider_Type_Collisions
 {
     RECTANGLE_TO_RECTANGLE,
@@ -61,9 +62,9 @@ private:
 
 
     // SAT / OBB Testing
-    Interval2D GetOrientedRectangleInterval(Collider* orRectA, OKVector2<float>& axis);
-    Interval2D GetRectangleInterval(Collider* rectA, OKVector2<float>& axis);
-    bool OverlapOnAxis(Collider* rectA, Collider* orRectB, OKVector2<float> axis);
+    Interval2D GetOrientedRectangleInterval(ColliderEntity* orRectA, OKVector2<float>& axis);
+    Interval2D GetRectangleInterval(ColliderEntity* rectA, OKVector2<float>& axis);
+    bool OverlapOnAxis(ColliderEntity* rectA, ColliderEntity* orRectB, OKVector2<float> axis);
 
 public:
 
@@ -75,43 +76,43 @@ public:
     void Update(float deltaTime) {};
     void Draw() {};
 
-    CollisionManifold CheckCollisions(Collider* colliderA, Collider* colliderB);
+    CollisionManifold CheckCollisions(ColliderEntity* colliderA, ColliderEntity* colliderB);
 
     // COLLIDER FUNCTION(s)
 
     // RECTANGLE
-    CollisionManifold RectangleToRectangle(Collider* rectA, Collider* rectB);
+    CollisionManifold RectangleToRectangle(ColliderEntity* rectA, ColliderEntity* rectB);
 
     // CIRCLE
-    CollisionManifold CircleToCircle(Collider* circA, Collider* circB);
-    CollisionManifold CircleToRectangle(Collider* circA, Collider* rectB);
+    CollisionManifold CircleToCircle(ColliderEntity* circA, ColliderEntity* circB);
+    CollisionManifold CircleToRectangle(ColliderEntity* circA, ColliderEntity* rectB);
 
     // CAPSULE
-    CollisionManifold CapsuleToCircle(Collider* capsuleA, Collider* circB);
-    CollisionManifold CapsuleToRectangle(Collider* capsuleA, Collider* rectB);
-    CollisionManifold CapsuleToCapsule(Collider* capsuleA, Collider* capsuleB);
+    CollisionManifold CapsuleToCircle(ColliderEntity* capsuleA, ColliderEntity* circB);
+    CollisionManifold CapsuleToRectangle(ColliderEntity* capsuleA, ColliderEntity* rectB);
+    CollisionManifold CapsuleToCapsule(ColliderEntity* capsuleA, ColliderEntity* capsuleB);
 
     // ORIENTED RECTANGLE 
-    CollisionManifold OrientedRectangleToOrientedRectangle(Collider* OrRectA, Collider* OrRectB);
-    CollisionManifold OrientedRectangleToRectangle(Collider* OrRectA, Collider* rectB);
+    CollisionManifold OrientedRectangleToOrientedRectangle(ColliderEntity* OrRectA, ColliderEntity* OrRectB);
+    CollisionManifold OrientedRectangleToRectangle(ColliderEntity* OrRectA, ColliderEntity* rectB);
 
-    CollisionManifold OrientedRectangleToCircle(Collider* OrRectA, Collider* circB);
-    CollisionManifold OrientedRectangleToCapsule(Collider* OrRectA, Collider* capsuleB);
+    CollisionManifold OrientedRectangleToCircle(ColliderEntity* OrRectA, ColliderEntity* circB);
+    CollisionManifold OrientedRectangleToCapsule(ColliderEntity* OrRectA, ColliderEntity* capsuleB);
 
     // POINT
-    CollisionManifold PointToPoint(Collider* pointA, Collider* pointB);
-    CollisionManifold PointToLine(Collider* pointA, Collider* lineB);
-    CollisionManifold PointToCircle(Collider* pointA, Collider* circleB);
-    CollisionManifold PointToRectangle(Collider* pointA, Collider* rectB);
-    CollisionManifold PointToCapsule(Collider* pointA, Collider* capsuleB);
-    CollisionManifold PointToOrientedRectangle(Collider* pointA, Collider* OrRectB);
+    CollisionManifold PointToPoint(ColliderEntity* pointA, ColliderEntity* pointB);
+    CollisionManifold PointToLine(ColliderEntity* pointA, ColliderEntity* lineB);
+    CollisionManifold PointToCircle(ColliderEntity* pointA, ColliderEntity* circleB);
+    CollisionManifold PointToRectangle(ColliderEntity* pointA, ColliderEntity* rectB);
+    CollisionManifold PointToCapsule(ColliderEntity* pointA, ColliderEntity* capsuleB);
+    CollisionManifold PointToOrientedRectangle(ColliderEntity* pointA, ColliderEntity* OrRectB);
 
     // LINE
-    CollisionManifold LineToLine(Collider* lineA, Collider* lineB);
-    CollisionManifold LineToCircle(Collider* lineA, Collider* circB);
-    CollisionManifold LineToRectangle(Collider* lineA, Collider* rectB);
-    CollisionManifold LineToOrientedRectangle(Collider* lineA, Collider* OrRectB);
-    CollisionManifold LineToCapsule(Collider* lineA, Collider* capsuleB);
+    CollisionManifold LineToLine(ColliderEntity* lineA, ColliderEntity* lineB);
+    CollisionManifold LineToCircle(ColliderEntity* lineA, ColliderEntity* circB);
+    CollisionManifold LineToRectangle(ColliderEntity* lineA, ColliderEntity* rectB);
+    CollisionManifold LineToOrientedRectangle(ColliderEntity* lineA, ColliderEntity* OrRectB);
+    CollisionManifold LineToCapsule(ColliderEntity* lineA, ColliderEntity* capsuleB);
 
 };
 

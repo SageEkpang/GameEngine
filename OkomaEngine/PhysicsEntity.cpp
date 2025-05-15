@@ -5,9 +5,9 @@ PhysicsEntity::PhysicsEntity()
 
 }
 
-PhysicsEntity::PhysicsEntity(OKTransform2<float>* transform, float mass)
+PhysicsEntity::PhysicsEntity(OKVector2<float> position, float mass)
 {
-    m_Transform = transform;
+    m_Position = position;
     m_Mass = mass;
 }
 
@@ -22,8 +22,8 @@ void PhysicsEntity::Update(const float deltaTime)
 
     // NOTE: Apply Physics Forces to Particle
     if (m_SimulateGravity) { m_NetForce += ApplyGravity(); }
-    if (m_SimulateLift) { m_NetForce += ApplyLift(); }
     if (m_SimulateDrag) { m_NetForce += ApplyDrag(); }
+    if (m_SimulateLift) { m_NetForce += ApplyLift(); }
     if (m_SimulateFriction) { m_NetForce += ApplyFriction(); }
 
     // NOTE: Force Calculation
@@ -44,15 +44,15 @@ void PhysicsEntity::Draw()
     //if (m_DrawVelocity)
     //{
     //    Vector2 t_VecEnd = Vector2Multiply(m_Velocity.normalise().ConvertToVec2(), Vector2{ m_Velocity.magnitude(), m_Velocity.magnitude() });
-    //    t_VecEnd = Vector2Add(t_VecEnd, m_Transform->position.ConvertToVec2());
-    //    DrawLineV(m_Transform->position.ConvertToVec2(), t_VecEnd, GREEN);
+    //    t_VecEnd = Vector2Add(t_VecEnd, m_Position.ConvertToVec2());
+    //    DrawLineV(m_Position.ConvertToVec2(), t_VecEnd, GREEN);
     //}
 
-    //// Draw Gravity Force Line
+    // Draw Gravity Force Line
     //if (m_DrawGravity)
     //{
-    //    Vector2 t_GravityVec = Vector2Add(pm_CalculatedGravity.ConvertToVec2(), m_Transform->position.ConvertToVec2());
-    //    DrawLineV(m_Transform->position.ConvertToVec2(), t_GravityVec, PURPLE);
+    //    Vector2 t_GravityVec = Vector2Add(pm_CalculatedGravity.ConvertToVec2(), m_Position.ConvertToVec2());
+    //    DrawLineV(m_Position.ConvertToVec2(), t_GravityVec, PURPLE);
     //}
 
     //// Draw Drag Force Line
@@ -75,43 +75,58 @@ void PhysicsEntity::CalculateAcceleration(const float deltaTime)
     m_Acceleration += m_NetForce;
 
     // NOTE: Work out Velocity Calculation
-    OKVector2<float> t_Position = m_Transform->position;
+    OKVector2<float> t_Position = m_Position;
     m_Velocity += m_Acceleration * deltaTime;
 
     // NOTE: Augment Position by Velocity
     t_Position += m_Velocity * deltaTime;
-    m_Transform->position = t_Position;
+    m_Position = t_Position;
 }
 
 OKVector2<float> PhysicsEntity::ApplyGravity()
 {
     pm_CalculatedGravity = m_Gravity * m_Mass;
     pm_CalculatedGravity.negate();
+
     return pm_CalculatedGravity;
 }
 
 OKVector2<float> PhysicsEntity::ApplyDrag()
 {
-    if (m_Velocity == OKVector2<float>(0, 0)) { return OKVector2<float>(0, 0); }
+    // NOTE: Drag is apparently only a force to be applied left and right
+    if (m_Velocity.x == 0.f) { return OKVector2<float>(0.f, 0.f); }
+
+    OKVector2<float> t_CopyVelocity = m_Velocity;
 
     // Calculate drag using the fluid density, velocity squared, drag coefficient and cross sectional area
-    float t_DensityOfFluid = 0.1; // Density of Air 
-    OKVector2<float> t_CalculateDrag = t_DensityOfFluid * m_Velocity.pow(2) * m_Drag * m_CrossSectionalArea;
+    float t_DensityOfFluid = m_DragFluidDensity; // Density of Air 
+    OKVector2<float> t_CalculateDrag = t_DensityOfFluid * t_CopyVelocity.pow(2) * m_Drag * m_DragCrossSectionalArea;
     float t_Drag = t_CalculateDrag.magnitude() * 0.5f;
 
     // NOTE: Intergrate Drag
-    pm_CalculatedDrag = m_Velocity * -1;
+    pm_CalculatedDrag = t_CopyVelocity.negate();
     pm_CalculatedDrag = pm_CalculatedDrag.normalise() * t_Drag;
+    pm_CalculatedDrag = OKVector2<float>(pm_CalculatedDrag.x, t_CopyVelocity.y);
+
     return pm_CalculatedDrag;
 }
 
 OKVector2<float> PhysicsEntity::ApplyLift()
 {
-    // NOTE: Reverse of the Drag Equation
+    // NOTE: Lift is apparently only a force for up and down
+    if (m_Velocity.y == 0.f) { return OKVector2<float>(0.0f, 0.0f); }
 
+    OKVector2<float> t_CopyVelocity = m_Velocity;
 
+    float t_DensityOfFluid = m_LiftFluidDensity;
+    OKVector2<float> t_CalculateLift = t_DensityOfFluid * t_CopyVelocity.pow(2) * m_Lift * m_LiftCrossSectionalArea;
+    float t_Lift = t_CalculateLift.magnitude() * 0.5f;
 
-    return OKVector2<float>();
+    pm_CalculatedLift = t_CopyVelocity.negate();
+    pm_CalculatedLift = pm_CalculatedLift.normalise() * t_Lift;
+    pm_CalculatedLift = OKVector2<float>(t_CopyVelocity.x, pm_CalculatedLift.y);
+
+    return pm_CalculatedLift;
 }
 
 OKVector2<float> PhysicsEntity::ApplyFriction()
@@ -120,12 +135,16 @@ OKVector2<float> PhysicsEntity::ApplyFriction()
     // FORMULA: Dynamic Friction = Dynamic Friction Coefficient * Normal Reaction Between the 2 Surfaces
     // Ff = uKR
 
+    if (m_Velocity == OKVector2<float>(0.f, 0.f)) { return OKVector2<float>(0.f, 0.f); }
 
+    OKVector2<float> t_CopyVelocity = m_Velocity;
+    OKVector2<float> t_CalculatedFriction = t_CopyVelocity.pow(2) * m_Friction;
+    float t_Friction = t_CalculatedFriction.magnitude();
 
+    pm_CalculatedFriction = t_CopyVelocity;
+    pm_CalculatedFriction = pm_CalculatedFriction.normalise() * t_Friction;
 
-
-
-    return OKVector2<float>();
+    return pm_CalculatedFriction;
 }
 
 

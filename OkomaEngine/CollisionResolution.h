@@ -15,14 +15,14 @@ public:
 	~CollisionResolution();
 
 	// BASE FUNCTION(s)
-	void ResolveCollision(Rigidbody* rigidbodyA, Rigidbody* rigidbodyB, float CoefRest, float penetration, OKVector2<float> collisionNormal, float deltaTime);
-	void ResolveCollisionsWithRotation(Rigidbody* rigidbodyA, Rigidbody* rigidbodyB, float CoefRest, float penetration, OKVector2<float> collisionNormal, float deltaTime);
+	void ResolveCollision(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float CoefRest, float penetration, OKVector2<float> collisionNormal, float deltaTime);
+	// void ResolveCollisionsWithRotation(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float CoefRest, float penetration, OKVector2<float> collisionNormal, float deltaTime);
 
 private:
 
-	void ResolveVelocity(Rigidbody* rigidbodyA, Rigidbody* rigidbodyB, float CoefRest, float deltaTime, OKVector2<float> collisionNormal);
-	void ResolveInterpenetration(Rigidbody* rigidbodyA, Rigidbody* rigidbodyB, float penetration, OKVector2<float> collisionNormal);
-	OKVector2<float> CalculateSeperatingVelocity(Rigidbody* rigidbodyA, Rigidbody* rigidbodyB, OKVector2<float> contactNormal) const;
+	OKVector2<float> CalculateSeperatingVelocity(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, OKVector2<float> contactNormal);
+	void ResolveVelocity(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float CoefRest, float deltaTime, OKVector2<float> collisionNormal);
+	void ResolveInterpenetration(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float penetration, OKVector2<float> collisionNormal);
 
 };
 
