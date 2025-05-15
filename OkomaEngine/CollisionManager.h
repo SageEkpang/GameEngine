@@ -44,7 +44,7 @@ struct Interval2D
     OKVector2<float> min;
 };
 
-class ColliderManager
+class CollisionManager
 {
 private:
 
@@ -69,8 +69,8 @@ private:
 public:
 
     // CLASS FUNCTION(s)
-    ColliderManager();
-    ~ColliderManager() {};
+    CollisionManager();
+    ~CollisionManager() {};
 
     // BASE FUNCTION(s)
     void Update(float deltaTime) {};

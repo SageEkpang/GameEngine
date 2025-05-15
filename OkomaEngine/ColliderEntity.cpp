@@ -2,9 +2,8 @@
 
 ColliderEntity::ColliderEntity()
 {
-
-
-
+    m_HasCollided = false;
+    m_IsActivated = true;
 }
 
 // RECTANGLE / Capsule

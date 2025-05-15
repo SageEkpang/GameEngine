@@ -1,28 +1,16 @@
-#include "Rigidbody.h"
+#include "Rigidbody2DComponent.h"
 
 Rigidbody2DComponent::Rigidbody2DComponent()
 {
 
 }
 
-Rigidbody2DComponent::Rigidbody2DComponent(OKVector2<float> position, float mass, RigidbodyMovementType rigidbodyMovementType, bool IsCapsule, bool lockZRot)
+Rigidbody2DComponent::Rigidbody2DComponent(OKVector2<float> position, float mass, RigidbodyMovementType rigidbodyMovementType)
     : PhysicsEntity(position, mass)
 {
-    m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_SHAPE_TYPE_RECTANGLE;
-
     // if (transform->rotation != 0) { m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_ORIENTED_RECTANGLE; }
-    // if (IsCapsule == true) { m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_CAPSULE; }
-   //  if (lockZRot == true) { transform->rotation = 0; }
 
     m_RigidbodyMovementType = rigidbodyMovementType;
-}
-
-Rigidbody2DComponent::Rigidbody2DComponent(OKVector2<float> position, float mass, float radius, RigidbodyMovementType rigidbodyMovementType)
-    : PhysicsEntity(position, mass)
-{
-    m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_SHAPE_TYPE_CIRCLE;
-    m_RigidbodyMovementType = rigidbodyMovementType;
-    // m_Radius = radius;
 }
 
 Rigidbody2DComponent::~Rigidbody2DComponent()
@@ -65,41 +53,6 @@ void Rigidbody2DComponent::Update(const float deltaTime)
 
 void Rigidbody2DComponent::Draw()
 {
-    switch (m_RigidbodyShapeType)
-    {
-        case RigidbodyShapeType::RIGIDBODY_SHAPE_TYPE_RECTANGLE:
-        {
-            DrawRectangleV(GetPosition().ConvertToVec2(), m_Scale.ConvertToVec2(), RED);
-        }
-        break;
-
-        case RigidbodyShapeType::RIGIDBODY_SHAPE_TYPE_ORIENTED_RECTANGLE:
-        {
-            Rectangle t_Rec = Rectangle{ GetPosition().x, GetPosition().y, m_Scale.x, m_Scale.y };
-            DrawRectanglePro(t_Rec, Vector2{ m_Scale.x / 2, m_Scale.y / 2 }, m_Rotation, RED);
-        }
-        break;
-
-        case RigidbodyShapeType::RIGIDBODY_SHAPE_TYPE_CIRCLE:
-        {
-            DrawCircleV(GetPosition().ConvertToVec2(), m_Radius, RED);
-        }
-        break;
-
-        case RigidbodyShapeType::RIGIDBODY_SHAPE_TYPE_CAPSULE:
-        {
-            Rectangle t_SmoothRec = Rectangle{ GetPosition().x - (m_Scale.x / 2), GetPosition().y - (m_Scale.y / 2), m_Scale.x, m_Scale.y };
-            DrawRectangleRounded(t_SmoothRec, 10, 10, RED);
-        }
-        break;
-
-        case RigidbodyShapeType::RIGIDBODY_SHAPE_TYPE_COMPLEX:
-        {
-            // TO BE ADDED: Render for Complex Collision
-        }
-        break;
-    }
-
     PhysicsEntity::Draw(); // NOTE: Mainly holds the debugging information
 }
 
@@ -133,8 +86,6 @@ OKVector2<float> Rigidbody2DComponent::GetSupport(const OKVector2<float> directi
     //    }
     //}
     //return bestVertex;
-
-
 
     return OKVector2<float>();
 }

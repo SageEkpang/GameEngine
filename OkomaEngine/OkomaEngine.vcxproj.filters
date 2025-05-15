@@ -128,7 +128,7 @@
     <ClCompile Include="ColliderEntity.cpp">
       <Filter>BaseClasses\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Rigidbody.cpp">
+    <ClCompile Include="Rigidbody2DComponent.cpp">
       <Filter>Components\PhysicsComponents</Filter>
     </ClCompile>
     <ClCompile Include="ParticleEffectComponent.cpp">
@@ -205,7 +205,7 @@
     <ClInclude Include="ColliderEntity.h">
       <Filter>BaseClasses\Header</Filter>
     </ClInclude>
-    <ClInclude Include="Rigidbody.h">
+    <ClInclude Include="Rigidbody2DComponent.h">
       <Filter>Components\PhysicsComponents</Filter>
     </ClInclude>
     <ClInclude Include="ParticleEffectComponent.h">

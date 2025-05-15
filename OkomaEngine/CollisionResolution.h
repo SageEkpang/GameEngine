@@ -3,7 +3,7 @@
 
 #include "OKVector2.h"
 #include "OKTransform2.h"
-#include "Rigidbody.h"
+#include "Rigidbody2DComponent.h"
 #include "PhysicsObject.h"
 
 class CollisionResolution

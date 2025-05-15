@@ -27,6 +27,10 @@ protected: // PROTECTED VARIABLE(s)
 
     // BASE VARIABLE(s)
     OKTransform2<float>* m_Transform = nullptr;
+
+    bool m_HasCollided;
+    bool m_IsActivated;
+
     float m_Radius{};
 
     // LINE VARIABLE(s)
@@ -45,7 +49,7 @@ public: // PUBLIC FUNCTION(s)
 
     // RECTANGLE
     /// @brief Rectangle Collider Constructor
-    ColliderEntity(OKTransform2<float>* transform, bool IsCapsule = false, bool lockZRot = true); // REFACT: bool solveRotation
+    ColliderEntity(OKTransform2<float>* transform, bool IsCapsule = false, bool lockZRot = true);
 
     // CIRCLE
     /// @brief Circle Collider Constructor

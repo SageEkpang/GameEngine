@@ -1,6 +1,6 @@
-#include "ColliderManager.h"
+#include "CollisionManager.h"
 
-OKVector2<float> ColliderManager::ProjectPointOntoLine(OKVector2<float> point, OKVector2<float> positionReference, OKVector2<float> lineStart, OKVector2<float> lineEnd, OKVector2<float> offsetLine)
+OKVector2<float> CollisionManager::ProjectPointOntoLine(OKVector2<float> point, OKVector2<float> positionReference, OKVector2<float> lineStart, OKVector2<float> lineEnd, OKVector2<float> offsetLine)
 {
 	// NOTE: Capsule Position and Variable(s)
 
@@ -17,7 +17,7 @@ OKVector2<float> ColliderManager::ProjectPointOntoLine(OKVector2<float> point, O
 	return ClosestPoint;
 }
 
-bool ColliderManager::Multiply(float* out, const float* matA, int aRows, int aCols, const float* matB, int bRows, int bCols)
+bool CollisionManager::Multiply(float* out, const float* matA, int aRows, int aCols, const float* matB, int bRows, int bCols)
 {
 	if (aCols != bRows) { return false; }
 
@@ -39,7 +39,7 @@ bool ColliderManager::Multiply(float* out, const float* matA, int aRows, int aCo
 	return true;
 }
 
-Interval2D ColliderManager::GetOrientedRectangleInterval(ColliderEntity* orRectA, OKVector2<float>& axis)
+Interval2D CollisionManager::GetOrientedRectangleInterval(ColliderEntity* orRectA, OKVector2<float>& axis)
 {
 	OKTransform2<float> lRect = OKTransform2<float>(orRectA->GetPosition() - (orRectA->GetScale() / 2), orRectA->GetScale(), 0);
 	ColliderEntity rectangle_temp = ColliderEntity(&lRect);
@@ -79,7 +79,7 @@ Interval2D ColliderManager::GetOrientedRectangleInterval(ColliderEntity* orRectA
 	return res;
 }
 
-Interval2D ColliderManager::GetRectangleInterval(ColliderEntity* rectA, OKVector2<float>& axis)
+Interval2D CollisionManager::GetRectangleInterval(ColliderEntity* rectA, OKVector2<float>& axis)
 {
 	Interval2D result;
 
@@ -111,14 +111,14 @@ Interval2D ColliderManager::GetRectangleInterval(ColliderEntity* rectA, OKVector
 	return result;
 }
 
-bool ColliderManager::OverlapOnAxis(ColliderEntity* rectA, ColliderEntity* orRectB, OKVector2<float> axis)
+bool CollisionManager::OverlapOnAxis(ColliderEntity* rectA, ColliderEntity* orRectB, OKVector2<float> axis)
 {
 	Interval2D A = GetRectangleInterval(rectA, axis);
 	Interval2D B = GetOrientedRectangleInterval(orRectB, axis);
 	return ((B.min <= A.max) && (A.min <= B.max));
 }
 
-ColliderManager::ColliderManager()
+CollisionManager::CollisionManager()
 {
 	m_CollisionMapping[std::make_pair(COLLIDER_RECTANGLE, COLLIDER_RECTANGLE)] = RECTANGLE_TO_RECTANGLE;
 
@@ -148,7 +148,7 @@ ColliderManager::ColliderManager()
 	m_CollisionMapping[std::make_pair(COLLIDER_POINT, COLLIDER_ORIENTED_RECTANGLE)] = POINT_TO_ORIENTED;
 }
 
-CollisionManifold ColliderManager::CheckCollisions(ColliderEntity* colliderA, ColliderEntity* colliderB)
+CollisionManifold CollisionManager::CheckCollisions(ColliderEntity* colliderA, ColliderEntity* colliderB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 	auto collision_made_pair = std::make_pair(colliderA->GetColliderType(), colliderB->GetColliderType());
@@ -198,7 +198,7 @@ CollisionManifold ColliderManager::CheckCollisions(ColliderEntity* colliderA, Co
 	return t_ColMani;
 }
 
-CollisionManifold ColliderManager::RectangleToRectangle(ColliderEntity* rectA, ColliderEntity* rectB)
+CollisionManifold CollisionManager::RectangleToRectangle(ColliderEntity* rectA, ColliderEntity* rectB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -327,7 +327,7 @@ CollisionManifold ColliderManager::RectangleToRectangle(ColliderEntity* rectA, C
 	return t_ColMani = CircleToCircle(&circle_temp_A, &circle_temp_B);
 }
 
-CollisionManifold ColliderManager::CircleToCircle(ColliderEntity* circA, ColliderEntity* circB)
+CollisionManifold CollisionManager::CircleToCircle(ColliderEntity* circA, ColliderEntity* circB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -349,7 +349,7 @@ CollisionManifold ColliderManager::CircleToCircle(ColliderEntity* circA, Collide
 	return t_ColMani;
 }
 
-CollisionManifold ColliderManager::CircleToRectangle(ColliderEntity* circA, ColliderEntity* rectB)
+CollisionManifold CollisionManager::CircleToRectangle(ColliderEntity* circA, ColliderEntity* rectB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -415,7 +415,7 @@ CollisionManifold ColliderManager::CircleToRectangle(ColliderEntity* circA, Coll
 	return t_ColMani = CircleToCircle(circA, &circle_temp_A);
 }
 
-CollisionManifold ColliderManager::CapsuleToCircle(ColliderEntity* capsuleA, ColliderEntity* circB)
+CollisionManifold CollisionManager::CapsuleToCircle(ColliderEntity* capsuleA, ColliderEntity* circB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -446,7 +446,7 @@ CollisionManifold ColliderManager::CapsuleToCircle(ColliderEntity* capsuleA, Col
 	return t_ColMani;
 }
 
-CollisionManifold ColliderManager::CapsuleToRectangle(ColliderEntity* capsuleA, ColliderEntity* rectB)
+CollisionManifold CollisionManager::CapsuleToRectangle(ColliderEntity* capsuleA, ColliderEntity* rectB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -476,7 +476,7 @@ CollisionManifold ColliderManager::CapsuleToRectangle(ColliderEntity* capsuleA, 
 	return t_ColMani = CircleToRectangle(&circle_temp, rectB);
 }
 
-CollisionManifold ColliderManager::CapsuleToCapsule(ColliderEntity* capsuleA, ColliderEntity* capsuleB)
+CollisionManifold CollisionManager::CapsuleToCapsule(ColliderEntity* capsuleA, ColliderEntity* capsuleB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -526,7 +526,7 @@ CollisionManifold ColliderManager::CapsuleToCapsule(ColliderEntity* capsuleA, Co
 	return t_ColMani;
 }
 
-CollisionManifold ColliderManager::OrientedRectangleToOrientedRectangle(ColliderEntity* OrRectA, ColliderEntity* OrRectB)
+CollisionManifold CollisionManager::OrientedRectangleToOrientedRectangle(ColliderEntity* OrRectA, ColliderEntity* OrRectB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -538,7 +538,7 @@ CollisionManifold ColliderManager::OrientedRectangleToOrientedRectangle(Collider
 	return t_ColMani;
 }
 
-CollisionManifold ColliderManager::OrientedRectangleToRectangle(ColliderEntity* OrRectA, ColliderEntity* rectB) // rect2 = OrRectA
+CollisionManifold CollisionManager::OrientedRectangleToRectangle(ColliderEntity* OrRectA, ColliderEntity* rectB) // rect2 = OrRectA
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -578,7 +578,7 @@ CollisionManifold ColliderManager::OrientedRectangleToRectangle(ColliderEntity* 
 	return t_ColMani;
 }
 
-CollisionManifold ColliderManager::OrientedRectangleToCircle(ColliderEntity* OrRectA, ColliderEntity* circB)
+CollisionManifold CollisionManager::OrientedRectangleToCircle(ColliderEntity* OrRectA, ColliderEntity* circB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -601,7 +601,7 @@ CollisionManifold ColliderManager::OrientedRectangleToCircle(ColliderEntity* OrR
 	return t_ColMani = CircleToRectangle(&circle_temp, &rectangle_temp);
 }
 
-CollisionManifold ColliderManager::OrientedRectangleToCapsule(ColliderEntity* OrRectA, ColliderEntity* capsuleB)
+CollisionManifold CollisionManager::OrientedRectangleToCapsule(ColliderEntity* OrRectA, ColliderEntity* capsuleB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -650,7 +650,7 @@ CollisionManifold ColliderManager::OrientedRectangleToCapsule(ColliderEntity* Or
 	return t_ColMani = CircleToRectangle(&circle_temp_or, &rectangle_temp);
 }
 
-CollisionManifold ColliderManager::PointToPoint(ColliderEntity* pointA, ColliderEntity* pointB)
+CollisionManifold CollisionManager::PointToPoint(ColliderEntity* pointA, ColliderEntity* pointB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -669,7 +669,7 @@ CollisionManifold ColliderManager::PointToPoint(ColliderEntity* pointA, Collider
 	return t_ColMani;
 }
 
-CollisionManifold ColliderManager::PointToLine(ColliderEntity* pointA, ColliderEntity* lineB)
+CollisionManifold CollisionManager::PointToLine(ColliderEntity* pointA, ColliderEntity* lineB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -707,7 +707,7 @@ CollisionManifold ColliderManager::PointToLine(ColliderEntity* pointA, ColliderE
 	return t_ColMani;
 }
 
-CollisionManifold ColliderManager::PointToCircle(ColliderEntity* pointA, ColliderEntity* circleB)
+CollisionManifold CollisionManager::PointToCircle(ColliderEntity* pointA, ColliderEntity* circleB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -732,7 +732,7 @@ CollisionManifold ColliderManager::PointToCircle(ColliderEntity* pointA, Collide
 }
 
 // TODO: Change this when transferring to the project
-CollisionManifold ColliderManager::PointToRectangle(ColliderEntity* pointA, ColliderEntity* rectB)
+CollisionManifold CollisionManager::PointToRectangle(ColliderEntity* pointA, ColliderEntity* rectB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -756,7 +756,7 @@ CollisionManifold ColliderManager::PointToRectangle(ColliderEntity* pointA, Coll
 	return t_ColMani;
 }
 
-CollisionManifold ColliderManager::PointToCapsule(ColliderEntity* pointA, ColliderEntity* capsuleB)
+CollisionManifold CollisionManager::PointToCapsule(ColliderEntity* pointA, ColliderEntity* capsuleB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -785,14 +785,14 @@ CollisionManifold ColliderManager::PointToCapsule(ColliderEntity* pointA, Collid
 	return t_ColMani = PointToCircle(pointA, &circle_temp);
 }
 
-CollisionManifold ColliderManager::PointToOrientedRectangle(ColliderEntity* pointA, ColliderEntity* OrRectB)
+CollisionManifold CollisionManager::PointToOrientedRectangle(ColliderEntity* pointA, ColliderEntity* OrRectB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
 	return CollisionManifold();
 }
 
-CollisionManifold ColliderManager::LineToLine(ColliderEntity* lineA, ColliderEntity* lineB)
+CollisionManifold CollisionManager::LineToLine(ColliderEntity* lineA, ColliderEntity* lineB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -827,7 +827,7 @@ CollisionManifold ColliderManager::LineToLine(ColliderEntity* lineA, ColliderEnt
 	return t_ColMani;
 }
 
-CollisionManifold ColliderManager::LineToCircle(ColliderEntity* lineA, ColliderEntity* circB)
+CollisionManifold CollisionManager::LineToCircle(ColliderEntity* lineA, ColliderEntity* circB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -893,7 +893,7 @@ CollisionManifold ColliderManager::LineToCircle(ColliderEntity* lineA, ColliderE
 }
 
 // Change for the project (this assumes that the coordinate of the rectangle starts at the top left)
-CollisionManifold ColliderManager::LineToRectangle(ColliderEntity* lineA, ColliderEntity* rectB)
+CollisionManifold CollisionManager::LineToRectangle(ColliderEntity* lineA, ColliderEntity* rectB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -942,12 +942,12 @@ CollisionManifold ColliderManager::LineToRectangle(ColliderEntity* lineA, Collid
 	return t_ColMani;
 }
 
-CollisionManifold ColliderManager::LineToOrientedRectangle(ColliderEntity* lineA, ColliderEntity* OrRectB)
+CollisionManifold CollisionManager::LineToOrientedRectangle(ColliderEntity* lineA, ColliderEntity* OrRectB)
 {
 	return CollisionManifold();
 }
 
-CollisionManifold ColliderManager::LineToCapsule(ColliderEntity* lineA, ColliderEntity* capsuleB)
+CollisionManifold CollisionManager::LineToCapsule(ColliderEntity* lineA, ColliderEntity* capsuleB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 

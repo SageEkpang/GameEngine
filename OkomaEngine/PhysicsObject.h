@@ -2,7 +2,6 @@
 #define PHYSICS_OBJECT_H
 
 // NEEDED INCLUDE(s)
-#include "Rigidbody.h"
 #include <string>
 
 class PhysicsObject

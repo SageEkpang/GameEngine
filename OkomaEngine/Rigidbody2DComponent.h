@@ -7,15 +7,6 @@
 // NOTE: Parent Class
 #include "PhysicsEntity.h"
 
-enum RigidbodyShapeType
-{
-    RIGIDBODY_SHAPE_TYPE_RECTANGLE,
-    RIGIDBODY_SHAPE_TYPE_CIRCLE,
-    RIGIDBODY_SHAPE_TYPE_ORIENTED_RECTANGLE,
-    RIGIDBODY_SHAPE_TYPE_CAPSULE,
-    RIGIDBODY_SHAPE_TYPE_COMPLEX
-};
-
 enum RigidbodyMovementType
 {
     RIGIDBODY_MOVEMENT_TYPE_STATIC,
@@ -63,19 +54,19 @@ class Rigidbody2DComponent : public PhysicsEntity
 private:
 
     // RIGIDBODY SHAPE VARIABLE(s)
-    float m_Radius{};
-    float m_Height{};
-    float m_CircularExpands{};
 
-    OKVector2<float> m_Scale;
     float m_Rotation;
-
     float m_Orientation;
     float m_AngularVelocity;
     float m_Torque;
 
+    // TO ADD
+    // Collision Detection type
+    // Sleeping Mode
+    // Interpolate
+    // Constraints
+
     // RIGIDBODY VARIABLE(s)
-    RigidbodyShapeType m_RigidbodyShapeType;
     RigidbodyMovementType m_RigidbodyMovementType;
 
 public:
@@ -86,15 +77,10 @@ public:
 
     // RECTANGLE
     /// @brief Rectangle Rigidbody Constructor
-    Rigidbody2DComponent(OKVector2<float> position, float mass, RigidbodyMovementType rigidbodyMovementType, bool IsCapsule = false, bool lockZRot = true);
-
-    // CIRCLE
-    /// @brief Circle Rigidbody Constructor
-    Rigidbody2DComponent(OKVector2<float> transform, float mass, float radius, RigidbodyMovementType rigidbodyMovementType);
+    Rigidbody2DComponent(OKVector2<float> position, float mass = 1.f, RigidbodyMovementType rigidbodyMovementType = RigidbodyMovementType::RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
 
     // DESTRUCTOR
     ~Rigidbody2DComponent() override;
-
 
     // BASE FUNCTION(s)
     void Update(const float deltaTime) override;
@@ -102,12 +88,9 @@ public:
 
 
     // GETTER FUNCTION(s)
-    inline RigidbodyShapeType GetRigidbodyShapeType() const { return m_RigidbodyShapeType; }
     inline RigidbodyMovementType GetRigidbodyMovementType() const { return m_RigidbodyMovementType; }
 
-
     // SETTER FUNCTION(s)
-    inline void SetRigidbodyShapeType(RigidbodyShapeType rigidbodyShapeType) { m_RigidbodyShapeType = rigidbodyShapeType; }
     inline void SetRigidbodyMovementType(RigidbodyMovementType rigidbodyMovementType) { m_RigidbodyMovementType = rigidbodyMovementType; }
 
     // TODO: Move these to the OKVector2<float> struct when done

@@ -12,6 +12,8 @@
 #include "HeaderManager.h"
 #include "ComponentEntity.h"
 
+int constexpr MAX_COMPONENTS = 10;
+
 class Entity
 {
 private: // PRIVATE VARIABLE(s)
@@ -27,6 +29,7 @@ public: // PUBLIC FUNCTION(s)
 	// BASE FUNCTION(s)
 	void Update(const float deltaTime);
 
+	// HELPER FUNCTION(s)
 	void AddComponent(ComponentEntity* component);
 	void RemoveComponent(ComponentEntity* component);
 
