@@ -3,7 +3,7 @@
 
 // PARENT CLASS
 #include "ColliderEntity.h"
-#include "ColliderManager.h"
+#include "CollisionManager.h"
 #include <set>
 #include <bitset>
 
@@ -20,7 +20,7 @@ private:
 	bool m_HasExited = false;
 
 	std::set<GameObject*> m_ObjectList;
-	ColliderManager m_ColliderManifest;
+	CollisionManager m_ColliderManifest;
 
 public:
 
@@ -28,11 +28,11 @@ public:
 
 	// RECTANGLE
 	/// @brief Rectangle Collider Constructor
-	TriggerArea(std::string tag, OKTransform2<float>* transform, bool IsCapsule = false, bool lockZRot = true);
+	TriggerArea(std::string tag, OKTransform2<float>* transform, bool IsCapsule = false, bool lockZRot = true) { }
 
 	// CIRCLE
 	/// @brief Circle Collider Constructor
-	TriggerArea(std::string tag, OKTransform2<float>* transform, float radius);
+	TriggerArea(std::string tag, OKTransform2<float>* transform, float radius) { }
 
 
 	// DESTRUCTOR

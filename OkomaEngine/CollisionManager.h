@@ -69,8 +69,8 @@ private:
 public:
 
     // CLASS FUNCTION(s)
-    CollisionManager();
-    ~CollisionManager() {};
+    CollisionManager() { };
+    ~CollisionManager() { };
 
     // BASE FUNCTION(s)
     void Update(float deltaTime) {};

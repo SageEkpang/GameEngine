@@ -5,7 +5,7 @@
 
 #include "PhysicsObject.h"
 #include "TriggerArea.h"
-#include "ColliderManager.h"
+#include "CollisionManager.h"
 #include "CollisionResolution.h"
 #include "ParticleEffectComponent.h"
 
@@ -17,7 +17,7 @@ int main()
 	try
 	{
 		InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE_NAME);
-		// SetWindowState(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_TOPMOST);
+		SetWindowState(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_TOPMOST | FLAG_WINDOW_TRANSPARENT);
 		if (!IsWindowReady()) { throw; }
 	}
 	catch (const std::bad_exception& e)
@@ -150,7 +150,7 @@ int main()
 		//}
 
 
-
+		// DrawCircle(10, 10, 10, RED);
 
 		//m_ParticleSystemTwo->Update(GetFrameTime());
 		//m_ParticleSystemTwo->Draw();

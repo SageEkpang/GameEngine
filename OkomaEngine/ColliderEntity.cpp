@@ -6,64 +6,11 @@ ColliderEntity::ColliderEntity()
     m_IsActivated = true;
 }
 
-// RECTANGLE / Capsule
-ColliderEntity::ColliderEntity(OKTransform2<float>* transform, bool IsCapsule, bool lockZRot)
-{
-    // NOTE: Set the Collider Type in the Constructor
-    m_ColliderType = ColliderType::COLLIDER_RECTANGLE;
-
-    if (transform->rotation != 0)
-    { 
-        m_ColliderType = ColliderType::COLLIDER_ORIENTED_RECTANGLE; 
-    }
-
-    if (IsCapsule == true) { m_ColliderType = ColliderType::COLLIDER_CAPSULE; }
-    if (lockZRot == true) 
-    { 
-        transform->rotation = 0; 
-    }
-
-    // NOTE: Set Member Variable Types
-    // strcpy_s(m_Tag, strlen(tag), tag);
-    m_Transform = transform;
-}
-
-// CIRCLE
-ColliderEntity::ColliderEntity(OKTransform2<float>* transform, float radius, bool isPoint)
-{
-    // NOTE: Set the Collider Type in the Constructor
-    m_ColliderType = ColliderType::COLLIDER_CIRCLE;
-    if (isPoint == true)
-    {
-        m_ColliderType = ColliderType::COLLIDER_POINT;
-    }
-
-    // NOTE: Set Member Variable Types
-    // strcpy_s(m_Tag, strlen(tag), tag);
-    m_Transform = transform;
-    m_Radius = radius;
-}
-
-ColliderEntity::ColliderEntity(OKTransform2<float>* transform, OKVector2<float> start_position, OKVector2<float> end_position)
-{
-    // NOTE: Set the Collider Typein the Constructor
-    m_ColliderType = ColliderType::COLLIDER_LINE;
-
-    // NOTE: Set Member Variable Types
-    m_Transform = transform;
-    m_LineStartPosition = start_position;
-    m_LineEndPosition = end_position;
-}
-
 ColliderEntity::~ColliderEntity()
 {
 
 }
 
-void ColliderEntity::Update(const float deltaTime)
-{
-
-}
 
 void ColliderEntity::Draw()
 {
@@ -71,19 +18,19 @@ void ColliderEntity::Draw()
     {
         case ColliderType::COLLIDER_RECTANGLE: 
         {
-            DrawRectangleLines(m_Transform->position.ConvertToVec2().x, m_Transform->position.ConvertToVec2().y, m_Transform->scale.ConvertToVec2().x, m_Transform->scale.ConvertToVec2().y, GREEN);
+            //DrawRectangleLines(m_Transform->position.ConvertToVec2().x, m_Transform->position.ConvertToVec2().y, m_Transform->scale.ConvertToVec2().x, m_Transform->scale.ConvertToVec2().y, GREEN);
         }
         break;
 
         case ColliderType::COLLIDER_POINT:
         {
-            DrawCircleV(m_Transform->position.ConvertToVec2(), 1.f, GREEN);
+            //DrawCircleV(m_Transform->position.ConvertToVec2(), 1.f, GREEN);
         }
         break;
 
         case ColliderType::COLLIDER_CIRCLE:
         {
-            DrawCircleLines(m_Transform->position.ConvertToVec2().x, m_Transform->position.ConvertToVec2().y, m_Radius, GREEN);
+           // DrawCircleLines(m_Transform->position.ConvertToVec2().x, m_Transform->position.ConvertToVec2().y, m_Radius, GREEN);
         }
         break;
 
@@ -96,15 +43,15 @@ void ColliderEntity::Draw()
 
         case ColliderType::COLLIDER_CAPSULE:
         {
-            Rectangle t_SmoothRec = Rectangle{ m_Transform->position.x - (m_Transform->scale.x / 2), m_Transform->position.y - (m_Transform->scale.y / 2), m_Transform->scale.x, m_Transform->scale.y };
-            DrawRectangleRoundedLines(t_SmoothRec, 10, 10, GREEN);
+            /*Rectangle t_SmoothRec = Rectangle{ m_Transform->position.x - (m_Transform->scale.x / 2), m_Transform->position.y - (m_Transform->scale.y / 2), m_Transform->scale.x, m_Transform->scale.y };
+            DrawRectangleRoundedLines(t_SmoothRec, 10, 10, GREEN);*/
 
         }
         break;
 
         case ColliderType::COLLIDER_LINE:
         {
-            DrawLineV(m_LineStartPosition.ConvertToVec2(), m_LineEndPosition.ConvertToVec2(), GREEN);
+           // DrawLineV(m_LineStartPosition.ConvertToVec2(), m_LineEndPosition.ConvertToVec2(), GREEN);
         }
         break;
 

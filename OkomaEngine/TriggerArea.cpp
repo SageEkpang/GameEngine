@@ -1,30 +1,29 @@
 #include "TriggerArea.h"
-#include "PhysicsObject.h"
 
-TriggerArea::TriggerArea(std::string tag, OKTransform2<float>* transform, bool IsCapsule, bool lockZRot)
-	: ColliderEntity(transform, IsCapsule, lockZRot)
-{
-	m_ObjectList.clear();
-}
-
-TriggerArea::TriggerArea(std::string tag, OKTransform2<float>* transform, float radius)
-	: ColliderEntity(transform, radius)
-{
-	m_ObjectList.clear();
-}
+//TriggerArea::TriggerArea(std::string tag, OKTransform2<float>* transform, bool IsCapsule, bool lockZRot)
+//	: ColliderEntity(transform, IsCapsule, lockZRot)
+//{
+//	m_ObjectList.clear();
+//}
+//
+//TriggerArea::TriggerArea(std::string tag, OKTransform2<float>* transform, float radius)
+//	: ColliderEntity(transform, radius)
+//{
+//	m_ObjectList.clear();
+//}
 
 TriggerArea::~TriggerArea()
 {
-	if (!m_ObjectList.empty())
-	{
-		std::set<GameObject*>::iterator itr;
-		for (itr = m_ObjectList.begin(); itr != m_ObjectList.end(); ++itr)
-		{
-			delete *itr;
-		}
+	//if (!m_ObjectList.empty())
+	//{
+	//	std::set<GameObject*>::iterator itr;
+	//	for (itr = m_ObjectList.begin(); itr != m_ObjectList.end(); ++itr)
+	//	{
+	//		delete *itr;
+	//	}
 
-		m_ObjectList.clear();
-	}
+	//	m_ObjectList.clear();
+	//}
 }
 
 void TriggerArea::Draw()
