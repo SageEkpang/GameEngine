@@ -1,11 +1,11 @@
 #ifndef CAMERA_COMPONENT_H
 #define CAMERA_COMPONENT_H
 
-#include "Component.h"
+#include "ComponentEntity.h"
 
 #include "OKVector2.h"
 
-class OKCamera : public Component
+class OKCameraComponent : public ComponentEntity
 {
 private:
 
@@ -24,10 +24,10 @@ public:
     // CLASS FUNCTION(s)
 
     /// @brief Default Constructor for Class
-    OKCamera();
+    OKCameraComponent();
 
     /// @brief Default Destructor for Class
-    ~OKCamera();
+    ~OKCameraComponent();
 
 
 

@@ -1,22 +1,28 @@
-#include "Particle.h"
+#include "PhysicsEntity.h"
 
-Particle::Particle(OKTransform2<float>* transform, float mass)
+PhysicsEntity::PhysicsEntity()
+{
+
+}
+
+PhysicsEntity::PhysicsEntity(OKTransform2<float>* transform, float mass)
 {
     m_Transform = transform;
     m_Mass = mass;
 }
 
-Particle::~Particle()
+PhysicsEntity::~PhysicsEntity()
 {
 
 }
 
-void Particle::Update(const float deltaTime)
+void PhysicsEntity::Update(const float deltaTime)
 {
     if (m_Mass == 0) return;
 
     // NOTE: Apply Physics Forces to Particle
     if (m_SimulateGravity) { m_NetForce += ApplyGravity(); }
+    if (m_SimulateLift) { m_NetForce += ApplyLift(); }
     if (m_SimulateDrag) { m_NetForce += ApplyDrag(); }
     if (m_SimulateFriction) { m_NetForce += ApplyFriction(); }
 
@@ -27,7 +33,7 @@ void Particle::Update(const float deltaTime)
     m_Acceleration.zero();
 }
 
-void Particle::Draw()
+void PhysicsEntity::Draw()
 {
 
     // DrawCircleV(m_Transform->position.ConvertToVec2(), m_Transform->scale.ConvertToVec2().x, RED);
@@ -63,7 +69,7 @@ void Particle::Draw()
     //}
 }
 
-void Particle::CalculateAcceleration(const float deltaTime)
+void PhysicsEntity::CalculateAcceleration(const float deltaTime)
 {
     // NOTE: Add Force to Acceleration
     m_Acceleration += m_NetForce;
@@ -77,14 +83,14 @@ void Particle::CalculateAcceleration(const float deltaTime)
     m_Transform->position = t_Position;
 }
 
-OKVector2<float> Particle::ApplyGravity()
+OKVector2<float> PhysicsEntity::ApplyGravity()
 {
     pm_CalculatedGravity = m_Gravity * m_Mass;
     pm_CalculatedGravity.negate();
     return pm_CalculatedGravity;
 }
 
-OKVector2<float> Particle::ApplyDrag()
+OKVector2<float> PhysicsEntity::ApplyDrag()
 {
     if (m_Velocity == OKVector2<float>(0, 0)) { return OKVector2<float>(0, 0); }
 
@@ -99,13 +105,16 @@ OKVector2<float> Particle::ApplyDrag()
     return pm_CalculatedDrag;
 }
 
-OKVector2<float> Particle::ApplyLift()
+OKVector2<float> PhysicsEntity::ApplyLift()
 {
     // NOTE: Reverse of the Drag Equation
+
+
+
     return OKVector2<float>();
 }
 
-OKVector2<float> Particle::ApplyFriction()
+OKVector2<float> PhysicsEntity::ApplyFriction()
 {
     // NOTE: This would have to do with collision response
     // FORMULA: Dynamic Friction = Dynamic Friction Coefficient * Normal Reaction Between the 2 Surfaces
@@ -113,8 +122,10 @@ OKVector2<float> Particle::ApplyFriction()
 
 
 
+
+
+
     return OKVector2<float>();
 }
-
 
 

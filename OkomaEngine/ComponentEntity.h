@@ -5,7 +5,7 @@
 #include "HeaderManager.h"
 
 // NOTE: INTERFACE
-class Component
+class ComponentEntity
 {
 protected: // PROTECTED VARIABLE(s)
 
@@ -14,8 +14,8 @@ protected: // PROTECTED VARIABLE(s)
 public: // PUBLIC FUNCTION(s)
 
 	// CLASS FUNCTION(s)
-	Component() { };
-	virtual ~Component() { }
+	ComponentEntity() { };
+	virtual ~ComponentEntity() { }
 
 	// BASE FUNCTION(s)
 	virtual void Update(const float deltaTime) = 0;

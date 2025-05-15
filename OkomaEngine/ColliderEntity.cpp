@@ -1,6 +1,6 @@
-#include "Collider.h"
+#include "ColliderEntity.h"
 
-Collider::Collider()
+ColliderEntity::ColliderEntity()
 {
 
 
@@ -8,7 +8,7 @@ Collider::Collider()
 }
 
 // RECTANGLE / Capsule
-Collider::Collider(OKTransform2<float>* transform, bool IsCapsule, bool lockZRot)
+ColliderEntity::ColliderEntity(OKTransform2<float>* transform, bool IsCapsule, bool lockZRot)
 {
     // NOTE: Set the Collider Type in the Constructor
     m_ColliderType = ColliderType::COLLIDER_RECTANGLE;
@@ -30,7 +30,7 @@ Collider::Collider(OKTransform2<float>* transform, bool IsCapsule, bool lockZRot
 }
 
 // CIRCLE
-Collider::Collider(OKTransform2<float>* transform, float radius, bool isPoint)
+ColliderEntity::ColliderEntity(OKTransform2<float>* transform, float radius, bool isPoint)
 {
     // NOTE: Set the Collider Type in the Constructor
     m_ColliderType = ColliderType::COLLIDER_CIRCLE;
@@ -45,7 +45,7 @@ Collider::Collider(OKTransform2<float>* transform, float radius, bool isPoint)
     m_Radius = radius;
 }
 
-Collider::Collider(OKTransform2<float>* transform, OKVector2<float> start_position, OKVector2<float> end_position)
+ColliderEntity::ColliderEntity(OKTransform2<float>* transform, OKVector2<float> start_position, OKVector2<float> end_position)
 {
     // NOTE: Set the Collider Typein the Constructor
     m_ColliderType = ColliderType::COLLIDER_LINE;
@@ -56,17 +56,17 @@ Collider::Collider(OKTransform2<float>* transform, OKVector2<float> start_positi
     m_LineEndPosition = end_position;
 }
 
-Collider::~Collider()
+ColliderEntity::~ColliderEntity()
 {
 
 }
 
-void Collider::Update(const float deltaTime)
+void ColliderEntity::Update(const float deltaTime)
 {
 
 }
 
-void Collider::Draw()
+void ColliderEntity::Draw()
 {
     switch (m_ColliderType)
     {
@@ -118,7 +118,7 @@ void Collider::Draw()
 }
 
 // POLYGONE FUNCTION(s)
-float Collider::PolygonArea()
+float ColliderEntity::PolygonArea()
 {
     // NOTE: Init Area
     float t_Area = 0.0f;

@@ -7,15 +7,35 @@
 #include "TriggerArea.h"
 #include "ColliderManager.h"
 #include "CollisionResolution.h"
- #include "ParticleSystem.h"
+#include "ParticleSystem.h"
 
- std::vector<PhysicsObject*> m_PhysicsObjects;
+std::vector<PhysicsObject*> m_PhysicsObjects;
 
 int main()
 {
-	// Game Utility (namespace) over Game Manager (class)
-	InitWindow(1000, 800, "OkomaEngine");
-	InitAudioDevice();
+	// NOTE: Check the window has actually been inited
+	try
+	{
+		InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE_NAME);
+		// SetWindowState(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_TOPMOST);
+		if (!IsWindowReady()) { throw; }
+	}
+	catch (const std::bad_exception& e)
+	{
+		std::cerr << "Window Bad Exception: " << e.what() << std::endl;
+	}
+
+	// NOTE: Check the Audio has actually been inited
+	try
+	{
+		InitAudioDevice();
+		if (!IsAudioDeviceReady()) { throw; }
+	}
+	catch (const std::bad_exception& e)
+	{
+		std::cerr << "Audio Bad Exception: " << e.what() << std::endl;
+	}
+
 
 	Timer* timer = new Timer();
 	float m_Accumulator = 0;

@@ -1,6 +1,6 @@
-#include "Camera.h"
+#include "CameraComponent.h"
 
-OKCamera::OKCamera()
+OKCameraComponent::OKCameraComponent()
 {
     m_Camera = new Camera2D();
     m_Camera->offset = Vector2{ 0, 0 };
@@ -9,13 +9,13 @@ OKCamera::OKCamera()
     m_Camera->zoom = 1.0f;
 }
 
-OKCamera::~OKCamera()
+OKCameraComponent::~OKCameraComponent()
 {
     m_Camera = nullptr;
     delete m_Camera;
 }
 
-void OKCamera::Update(float deltaTime)
+void OKCameraComponent::Update(float deltaTime)
 {
     m_Camera->offset = Vector2{ m_Offset.x, m_Offset.y };
     m_Camera->target = Vector2{ m_Target.x, m_Target.y };

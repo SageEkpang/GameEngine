@@ -1,5 +1,5 @@
-#ifndef PARTICLE_H
-#define PARTICLE_H
+#ifndef PHYSICS_ENTITY_H
+#define PHYSICS_ENTITY_H
 
 // NOTE: Header File(s)
 #include "HeaderManager.h"
@@ -11,9 +11,9 @@
 #include "GravityConstants.h"
 
 // NOTE: PARENT CLASS
-#include "Component.h"
+#include "ComponentEntity.h"
 
-class Particle : public Component
+class PhysicsEntity : public ComponentEntity
 {
 private: // PRIVATE VARIABLE(s)
 
@@ -55,13 +55,19 @@ protected: // PROTECTED VARIABLE(s)
     bool m_DrawGravity = false;
     bool m_DrawFriction = false;
 
+private:
+
+
+
+
+
 
 public: // PUBLIC FUNCTION(s)
 
     // CLASS FUNCTION(s)
-    Particle() = default;
-    Particle(OKTransform2<float>* transform, float mass);
-    virtual ~Particle();
+    PhysicsEntity();
+    PhysicsEntity(OKTransform2<float>* transform, float mass);
+    virtual ~PhysicsEntity();
 
     // BASE FUNCTION(s)
     virtual void Update(const float deltaTime);

@@ -1,5 +1,5 @@
-#ifndef COLLIDER_H
-#define COLLIDER_H
+#ifndef COLLIDER_ENTITY_H
+#define COLLIDER_ENTITY_H
 
 // NEEDED INCLUDE(s)
 #include "HeaderManager.h"
@@ -20,7 +20,7 @@ enum ColliderType
     COLLIDER_LINE
 };
 
-class Collider : public Component
+class ColliderEntity : public Component
 {
 protected: // PROTECTED VARIABLE(s)
 
@@ -40,26 +40,26 @@ public: // PUBLIC FUNCTION(s)
 
     // CLASS FUNCTION(s)
 
-    Collider();
+    ColliderEntity();
 
     // RECTANGLE
     /// @brief Rectangle Collider Constructor
-    Collider(OKTransform2<float>* transform, bool IsCapsule = false, bool lockZRot = true); // REFACT: bool solveRotation
+    ColliderEntity(OKTransform2<float>* transform, bool IsCapsule = false, bool lockZRot = true); // REFACT: bool solveRotation
 
     // CIRCLE
     /// @brief Circle Collider Constructor
-    Collider(OKTransform2<float>* transform, float radius, bool isPoint = false);
+    ColliderEntity(OKTransform2<float>* transform, float radius, bool isPoint = false);
 
     // LINE
     // @brief Line Collider Constructor
-    Collider(OKTransform2<float>* transform, OKVector2<float> start_position, OKVector2<float> end_position);
+    ColliderEntity(OKTransform2<float>* transform, OKVector2<float> start_position, OKVector2<float> end_position);
 
     // COMPLEX
     /// @brief Complex Collider Constructor 
     // Collider(const char* tag, OKTransform2<float> transform);
 
     // DESTRUCTOR
-    ~Collider();
+    ~ColliderEntity();
 
 
     // BASE FUNCTION(s)
