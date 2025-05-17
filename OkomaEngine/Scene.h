@@ -3,6 +3,8 @@
 
 #include "HeaderManager.h"
 
+#include <iostream>
+
 class Scene
 {
 protected: // PROTECTED VARIABLE(s)
@@ -13,7 +15,7 @@ protected: // PROTECTED VARIABLE(s)
 public:
 
 	// CLASS FUNCTION(s)
-	Scene(char* name) { strcpy_s(m_Name, strlen(name), name); }
+	Scene(char* name) : m_Camera() { strcpy_s(m_Name, strlen(name), name); }
 	virtual ~Scene() { }
 
 

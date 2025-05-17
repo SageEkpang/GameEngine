@@ -31,65 +31,65 @@ ButtonComponent::~ButtonComponent()
 
 void ButtonComponent::Update(float deltaTime)
 {
-    if (!m_Active) return;
+    //if (!m_Active) return;
 
-    // Update Mouse Position
-    if (IsMouseButtonUp(3))
-    {
-        m_MouseRec.x = (float)GetMouseX();
-        m_MouseRec.y = (float)GetMouseY();
-    }
+    //// Update Mouse Position
+    //if (IsMouseButtonUp(3))
+    //{
+    //    m_MouseRec.x = (float)GetMouseX();
+    //    m_MouseRec.y = (float)GetMouseY();
+    //}
 
-    if (IsMouseButtonDown(3))
-    {
-        if (CheckCollisionRecs(m_Rectangle, m_MouseRec))
-        {
-            m_ButtonPressed = true;
-        }
-    }
-    else
-    {
-        m_ButtonPressed = false;
-    }
+    //if (IsMouseButtonDown(3))
+    //{
+    //    if (CheckCollisionRecs(m_Rectangle, m_MouseRec))
+    //    {
+    //        m_ButtonPressed = true;
+    //    }
+    //}
+    //else
+    //{
+    //    m_ButtonPressed = false;
+    //}
 
-    // IDLE
-    DrawTexture(
-        m_Image,
-        m_Rectangle.x,
-        m_Rectangle.y,
-        m_IdleColour
-    );
+    //// IDLE
+    //DrawTexture(
+    //    m_Image,
+    //    m_Rectangle.x,
+    //    m_Rectangle.y,
+    //    m_IdleColour
+    //);
 
-    // HOVER
-    if (CheckCollisionRecs(m_Rectangle, m_MouseRec))
-    {
-        DrawTexture(
-            m_Image,
-            m_Rectangle.x,
-            m_Rectangle.y,
-            m_HoverColour
-        );
-    }
+    //// HOVER
+    //if (CheckCollisionRecs(m_Rectangle, m_MouseRec))
+    //{
+    //    DrawTexture(
+    //        m_Image,
+    //        m_Rectangle.x,
+    //        m_Rectangle.y,
+    //        m_HoverColour
+    //    );
+    //}
 
-    // CLICKED
-    if (m_ButtonPressed)
-    {
-        DrawTexture(
-            m_Image,
-            m_Rectangle.x,
-            m_Rectangle.y,
-            m_ClickedColour
-        );
-    }
+    //// CLICKED
+    //if (m_ButtonPressed)
+    //{
+    //    DrawTexture(
+    //        m_Image,
+    //        m_Rectangle.x,
+    //        m_Rectangle.y,
+    //        m_ClickedColour
+    //    );
+    //}
 
-    // TEXT WITHIN THE BUTTON
-    DrawText(
-        m_Text,
-        m_Rectangle.x + m_Padding.x,
-        m_Rectangle.y + m_Padding.y,
-        m_TextSize,
-        WHITE
-    );
+    //// TEXT WITHIN THE BUTTON
+    //DrawText(
+    //    m_Text,
+    //    m_Rectangle.x + m_Padding.x,
+    //    m_Rectangle.y + m_Padding.y,
+    //    m_TextSize,
+    //    WHITE
+    //);
 
 
 

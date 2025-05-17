@@ -12,6 +12,7 @@
 #include "ComponentEntity.h"
 
 #include <optional>
+#include <vector>
 
 unsigned int constexpr MAX_COMPONENTS = 10u;
 

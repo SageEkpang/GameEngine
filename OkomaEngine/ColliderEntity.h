@@ -5,13 +5,15 @@
 #include "HeaderManager.h"
 #include "CollisionManifold.h"
 #include "OKTransform2.h"
+#include <vector>
 
 // PARENT INCLUDE(s)
 #include "ComponentEntity.h"
 
-// TODO: Prefix-fix with name of enum
+
 enum ColliderType
 {
+    COLLIDER_TYPE_NONE,
     COLLIDER_TYPE_POINT,
     COLLIDER_TYPE_RECTANGLE,
     COLLIDER_TYPE_CIRCLE,

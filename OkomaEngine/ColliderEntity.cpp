@@ -2,6 +2,7 @@
 
 ColliderEntity::ColliderEntity()
 {
+    m_ColliderType = ColliderType::COLLIDER_TYPE_NONE;
     m_HasCollided = false;
     m_IsActivated = true;
 }
@@ -17,7 +18,7 @@ float ColliderEntity::PolygonArea()
     // NOTE: Init Area
     float t_Area = 0.0f;
     size_t t_Size = m_Vertices.size();
-    int t_J = t_Size - 1;
+    size_t t_J = t_Size - 1;
 
     // NOTE: Shoelace Formula
     for (int i = 0; i < t_Size; ++i)

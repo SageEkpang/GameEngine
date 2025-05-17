@@ -3,6 +3,8 @@
 #include "Timer.h"
 #include "TimeStepConstants.h"
 
+#include <iostream>
+
 int main()
 {
 	// NOTE: Check the window has actually been inited

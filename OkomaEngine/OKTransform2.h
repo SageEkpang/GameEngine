@@ -39,7 +39,13 @@ public: // PUBLIC VARIABLE(s)
 
 public: // OPERATOR OVERLOAD FUNCTION(s)
 
-    OKTransform2() = default;
+    OKTransform2()
+    {
+        this->position = OKVector2<float>(0.f, 0.f);
+        this->scale = OKVector2<float>(0.f, 0.f);
+        this->rotation = 0.f;
+    }
+
     OKTransform2(OKVector2<T> position, OKVector2<T> scale, T rotation)
     {
         this->position = position;

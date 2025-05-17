@@ -2,7 +2,6 @@
 #define CAMERA_COMPONENT_H
 
 #include "ComponentEntity.h"
-
 #include "OKVector2.h"
 
 class OKCameraComponent : public ComponentEntity

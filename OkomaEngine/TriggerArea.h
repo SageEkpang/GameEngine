@@ -4,6 +4,7 @@
 // PARENT CLASS
 #include "ColliderEntity.h"
 #include "CollisionManager.h"
+
 #include <set>
 #include <bitset>
 
@@ -41,7 +42,9 @@ public:
 	~TriggerArea();
 
 	// BASE FUNCTION(s)
-	void Draw();
+
+	void Update(const float deltaTime) override;
+	void Draw() override;
 
 	// TRIGGER RESPONSE FUNCTION(s)
 	void TriggerEntered(GameObject* physicsObject, void (*func)() = nullptr);

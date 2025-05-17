@@ -6,7 +6,6 @@
 #include "OKVector3.h"
 
 #include <memory>
-#include <vector>
 #include <utility>
 #include <map>
 #include <cmath>

@@ -3,6 +3,8 @@
 
 #include "HeaderManager.h"
 
+#include <limits>
+
 template<class T>
 class OKVector4
 {

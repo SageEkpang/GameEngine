@@ -2,6 +2,35 @@
 
 ParticleEffectComponent::ParticleEffectComponent()
 {
+	m_CheckParticleActionFunctionPtr = nullptr;
+	m_CheckParticleSpawnFunctionPtr = nullptr;
+	m_CheckParticleResizingFunctionPtr = nullptr;
+	m_CheckParticlePhysicsOverTimeFunctionPtr = nullptr;
+	m_CheckParticleColourOverTimerFunctionPtr = nullptr;
+
+	m_EmissionRateOverTime = 0u;
+	m_IsLooping = false;
+	m_MaxParticleCount = 0u;
+
+	m_MaxVelocityByColour = 0.f;
+	m_MaxVelocityBySize = 0.f;
+
+	m_MinVelocityByColour = 0.f;
+	m_MinVelocityBySize = 0.f;
+
+	m_ParticleAction = PARTICLE_ACTION_NONE;
+	m_ParticleEmitterType = PARTICLE_EMITTER_TYPE_SINGLE;
+	m_ParticleIndexIncrement = 0u;
+	m_ParticleSpawnArea = PARTICLE_SPAWN_AREA_NONE;
+
+	m_ParticleTimer = 0.f;
+	m_ParticleSimulationDuration = 0.f;
+	m_SimulateGravity = false;
+	m_SimulationSpeed = 0.f;
+	m_StartDelay = 0.f;
+	m_StartSpeed = 0.f;
+	m_StartLifeTime = 0.f;
+
 
 }
 
@@ -9,6 +38,13 @@ ParticleEffectComponent::ParticleEffectComponent(OKVector2<float> position, unsi
 {
 	// NOTE: Init Timer to NULL for random function
 	srand((unsigned int)time(NULL));
+
+	// NOTE: Init Velocity Variables
+	m_MaxVelocityByColour = 0.f;
+	m_MinVelocityByColour = 0.f;
+
+	m_MaxVelocityBySize = 0.f;
+	m_MinVelocityBySize = 0.f;
 
 	// NOTE: Set Transform
 	m_Transform = OKTransform2<float>(position, OKVector2<float>(1.f, 1.f), 0);
@@ -811,10 +847,10 @@ void ParticleEffectComponent::ProcessActionSpray(ParticleEffectObject& particle_
 	if (particle_system_object.GetPosition() == centre_position)
 	{
 		int RangeX = (45) - (-45) + 1;
-		float NumX = rand() % RangeX + -45;
+		int NumX = rand() % RangeX + -45;
 
 		int RangeY = (45) - (-45) + 1;
-		float NumY = rand() % RangeY + -45;
+		int NumY = rand() % RangeY + -45;
 
 		OKVector2<float> NewDirction = OKVector2<float>(Direction.x + NumX, Direction.y + NumY);
 		

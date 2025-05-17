@@ -6,6 +6,7 @@
 
 // NOTE: Parent Class
 #include "PhysicsEntity.h"
+#include <cmath>
 
 enum RigidbodyMovementType
 {

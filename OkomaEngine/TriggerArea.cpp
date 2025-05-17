@@ -26,9 +26,14 @@ TriggerArea::~TriggerArea()
 	//}
 }
 
+void TriggerArea::Update(const float deltaTime)
+{
+
+}
+
 void TriggerArea::Draw()
 {
-	ColliderEntity::Draw();
+	// ColliderEntity::Draw();
 }
 
 void TriggerArea::TriggerEntered(GameObject* object, void (*func)())

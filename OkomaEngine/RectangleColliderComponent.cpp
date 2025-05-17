@@ -96,7 +96,7 @@ void RectangleColliderComponent::Draw()
 {
 	if (m_ColliderType == COLLIDER_TYPE_RECTANGLE)
 	{
-		DrawRectangleLines(m_Position.ConvertToVec2().x - (m_Scale.x / 2.f), m_Position.ConvertToVec2().y - (m_Scale.y / 2.f), m_Scale.ConvertToVec2().x, m_Scale.ConvertToVec2().y, GREEN);
+		DrawRectangleLines((int)m_Position.ConvertToVec2().x - (int)(m_Scale.x / 2.f), (int)m_Position.ConvertToVec2().y - (int)(m_Scale.y / 2.f), (int)m_Scale.ConvertToVec2().x, (int)m_Scale.ConvertToVec2().y, GREEN);
 	}
 	else
 	{
