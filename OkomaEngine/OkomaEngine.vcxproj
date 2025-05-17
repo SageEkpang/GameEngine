@@ -150,6 +150,7 @@
     <ClCompile Include="OKTransform2.cpp" />
     <ClCompile Include="OKVector2.cpp" />
     <ClCompile Include="OKVector3.cpp" />
+    <ClCompile Include="OKVector4.cpp" />
     <ClCompile Include="PhysicsEntity.cpp" />
     <ClCompile Include="ParticleEffectComponent.cpp" />
     <ClCompile Include="ParticleEffectObject.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="OKTransform2.h" />
     <ClInclude Include="OKVector2.h" />
     <ClInclude Include="OKVector3.h" />
+    <ClInclude Include="OKVector4.h" />
     <ClInclude Include="PhysicsEntity.h" />
     <ClInclude Include="ParticleEffectComponent.h" />
     <ClInclude Include="ParticleEffectObject.h" />

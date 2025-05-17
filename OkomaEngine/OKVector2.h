@@ -10,6 +10,18 @@ public: // PUBLIC VARIABLE(s)
 
     T x, y;
 
+    OKVector2(T x = 0.f, T y = 0.f)
+    {
+        this->x = x;
+        this->y = y;
+    }
+
+    OKVector2(const OKVector2& value)
+    {
+        this->x = value.x;
+        this->y = value.y;
+    }
+
     OKVector2 zero()
     {
         this->x = 0;
@@ -71,13 +83,6 @@ public: // MATH FUNCTION(s)
     }
 
 public: // OPERATOR OVERLOAD FUNCTION(s)
-
-    // BASE CONSTRUCTOR
-    OKVector2(T x = 0.f, T y = 0.f)
-    {
-        this->x = x;
-        this->y = y;
-    }
 
     // OPERATOR OVERLOAD(s) (Arithmetic)
     OKVector2 operator ++()
@@ -241,8 +246,8 @@ public: // OPERATOR OVERLOAD FUNCTION(s)
 
 #define OKVECTOR2_ZERO {0, 0}
 #define OKVECTOR2_ONE {1, 1}
-#define OKVECTOR2_UP {0, -1}
-#define OKVECTOR2_DOWN {0, 1}
+#define OKVECTOR2_UP {0, 1}
+#define OKVECTOR2_DOWN {0, -1}
 #define OKVECTOR2_RIGHT {1, 0}
 #define OKVECTOR2_LEFT {-1, 0}
 

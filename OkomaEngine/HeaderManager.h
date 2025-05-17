@@ -1,11 +1,11 @@
 #pragma once
 
 // TODO: Redo this
-// NOTE: Should only be used for Header Files
 #include <raylib.h>
 #include <raymath.h>
 #include <rlgl.h>
 
+// NOTE: Should only be used for Header Files
 #include <fstream>
 #include <iostream>
 #include <vector>
