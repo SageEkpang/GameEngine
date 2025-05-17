@@ -9,7 +9,7 @@ class ComponentEntity
 {
 protected: // PROTECTED VARIABLE(s)
 
-	uint16_t m_ID;
+	unsigned short m_ID;
 
 public: // PUBLIC FUNCTION(s)
 

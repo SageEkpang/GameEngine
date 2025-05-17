@@ -106,6 +106,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)\raylib-5.5_win64_msvc16\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,9 +142,9 @@
     <ClCompile Include="ColliderEntity.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="CollisionManifold.cpp" />
-    <ClCompile Include="CollisionResolution.cpp" />
+    <ClCompile Include="CollisionResolutionManager.cpp" />
     <ClCompile Include="ComponentEntity.cpp" />
-    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="GameObjectEntity.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="LineColliderComponent.cpp" />
     <ClCompile Include="main.cpp" />
@@ -156,7 +157,6 @@
     <ClCompile Include="ParticleEffectObject.cpp" />
     <ClCompile Include="PhysicsManager.cpp" />
     <ClCompile Include="PhysicsMaterialCoefficientManager.cpp" />
-    <ClCompile Include="PhysicsObject.cpp" />
     <ClCompile Include="RectangleColliderComponent.cpp" />
     <ClCompile Include="Rigidbody2DComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -171,9 +171,9 @@
     <ClInclude Include="ColliderEntity.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="CollisionManifold.h" />
-    <ClInclude Include="CollisionResolution.h" />
+    <ClInclude Include="CollisionResolutionManager.h" />
     <ClInclude Include="ComponentEntity.h" />
-    <ClInclude Include="Entity.h" />
+    <ClInclude Include="GameObjectEntity.h" />
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="GravityConstants.h" />
     <ClInclude Include="HeaderManager.h" />
@@ -187,7 +187,6 @@
     <ClInclude Include="ParticleEffectObject.h" />
     <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="PhysicsMaterialCoefficientManager.h" />
-    <ClInclude Include="PhysicsObject.h" />
     <ClInclude Include="RectangleColliderComponent.h" />
     <ClInclude Include="Rigidbody2DComponent.h" />
     <ClInclude Include="Scene.h" />

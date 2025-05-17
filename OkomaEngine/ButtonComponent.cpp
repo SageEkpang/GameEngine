@@ -36,8 +36,8 @@ void ButtonComponent::Update(float deltaTime)
     // Update Mouse Position
     if (IsMouseButtonUp(3))
     {
-        m_MouseRec.x = GetMouseX();
-        m_MouseRec.y = GetMouseY();
+        m_MouseRec.x = (float)GetMouseX();
+        m_MouseRec.y = (float)GetMouseY();
     }
 
     if (IsMouseButtonDown(3))

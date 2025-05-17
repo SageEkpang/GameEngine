@@ -87,6 +87,12 @@
     <Filter Include="Components\ColliderComponents\Source">
       <UniqueIdentifier>{254dc7cc-d92f-4087-a00f-eb2872f7f7d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Components\PhysicsComponents\Header">
+      <UniqueIdentifier>{ceb1758d-6f9c-4ea6-b187-98ea80b86403}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\PhysicsComponents\Source">
+      <UniqueIdentifier>{99fefcb1-369e-4a1c-b210-77a7ce6f38e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -110,14 +116,11 @@
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Managers\Source</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionResolution.cpp">
+    <ClCompile Include="CollisionResolutionManager.cpp">
       <Filter>Managers\Source</Filter>
     </ClCompile>
     <ClCompile Include="GameObjectManager.cpp">
       <Filter>Managers\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsObject.cpp">
-      <Filter>GameObjects\Source</Filter>
     </ClCompile>
     <ClCompile Include="TriggerArea.cpp">
       <Filter>GameObjects\Source</Filter>
@@ -133,15 +136,6 @@
     </ClCompile>
     <ClCompile Include="ColliderEntity.cpp">
       <Filter>BaseClasses\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Rigidbody2DComponent.cpp">
-      <Filter>Components\PhysicsComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleEffectComponent.cpp">
-      <Filter>Components\PhysicsComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>GameObjects\Source</Filter>
     </ClCompile>
     <ClCompile Include="ButtonComponent.cpp">
       <Filter>Components\UIComponents</Filter>
@@ -172,6 +166,15 @@
     </ClCompile>
     <ClCompile Include="OKVector4.cpp">
       <Filter>Structs\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEffectComponent.cpp">
+      <Filter>Components\PhysicsComponents\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Rigidbody2DComponent.cpp">
+      <Filter>Components\PhysicsComponents\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectEntity.cpp">
+      <Filter>BaseClasses\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -205,14 +208,11 @@
     <ClInclude Include="CollisionManager.h">
       <Filter>Managers\Header</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionResolution.h">
+    <ClInclude Include="CollisionResolutionManager.h">
       <Filter>Managers\Header</Filter>
     </ClInclude>
     <ClInclude Include="GameObjectManager.h">
       <Filter>Managers\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsObject.h">
-      <Filter>GameObjects\Header</Filter>
     </ClInclude>
     <ClInclude Include="TriggerArea.h">
       <Filter>GameObjects\Header</Filter>
@@ -228,15 +228,6 @@
     </ClInclude>
     <ClInclude Include="ColliderEntity.h">
       <Filter>BaseClasses\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Rigidbody2DComponent.h">
-      <Filter>Components\PhysicsComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleEffectComponent.h">
-      <Filter>Components\PhysicsComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>GameObjects\Header</Filter>
     </ClInclude>
     <ClInclude Include="ButtonComponent.h">
       <Filter>Components\UIComponents</Filter>
@@ -267,6 +258,15 @@
     </ClInclude>
     <ClInclude Include="OKVector4.h">
       <Filter>Structs\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEffectComponent.h">
+      <Filter>Components\PhysicsComponents\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Rigidbody2DComponent.h">
+      <Filter>Components\PhysicsComponents\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectEntity.h">
+      <Filter>BaseClasses\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,28 +1,23 @@
-#include "CollisionResolution.h"
+#include "CollisionResolutionManager.h"
 
-CollisionResolution::CollisionResolution()
+CollisionResolutionManager::CollisionResolutionManager()
 {
 
 }
 
-CollisionResolution::~CollisionResolution()
+CollisionResolutionManager::~CollisionResolutionManager()
 {
 
 }
 
-void CollisionResolution::ResolveCollision(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float CoefRest, float penetration, OKVector2<float> collisionNormal, float deltaTime)
+void CollisionResolutionManager::ResolveCollision(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float CoefRest, float penetration, OKVector2<float> collisionNormal, float deltaTime)
 {
 	// NOTE: Move the object out of the other object first and then apply the force to the object
 	ResolveVelocity(rigidbodyA, rigidbodyB, CoefRest, deltaTime, collisionNormal);
 	ResolveInterpenetration(rigidbodyA, rigidbodyB, CoefRest, collisionNormal);
 }
 
-//void CollisionResolution::ResolveCollisionsWithRotation(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float CoefRest, float penetration, OKVector2<float> collisionNormal, float deltaTime)
-//{
-//
-//}
-
-void CollisionResolution::ResolveVelocity(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float CoefRest, float deltaTime, OKVector2<float> collisionNormal)
+void CollisionResolutionManager::ResolveVelocity(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float CoefRest, float deltaTime, OKVector2<float> collisionNormal)
 {
 	OKVector2<float> t_SeperatingVelocity = CalculateSeperatingVelocity(rigidbodyA, rigidbodyB, collisionNormal);
 
@@ -67,7 +62,7 @@ void CollisionResolution::ResolveVelocity(Rigidbody2DComponent* rigidbodyA, Rigi
 }
 
 // NOTE: This Collision Function can only be for collisions that have no rotations to them
-void CollisionResolution::ResolveInterpenetration(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float penetration, OKVector2<float> collisionNormal)
+void CollisionResolutionManager::ResolveInterpenetration(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float penetration, OKVector2<float> collisionNormal)
 {
 	// No Penetration, so no need for it
 	if (penetration <= 0) { return; }
@@ -96,7 +91,7 @@ void CollisionResolution::ResolveInterpenetration(Rigidbody2DComponent* rigidbod
 	}
 }
 
-OKVector2<float> CollisionResolution::CalculateSeperatingVelocity(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, OKVector2<float> contactNormal)
+OKVector2<float> CollisionResolutionManager::CalculateSeperatingVelocity(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, OKVector2<float> contactNormal)
 {
 	OKVector2<float> t_RelativeVelocity = rigidbodyA->GetVelocity();
 	t_RelativeVelocity -= rigidbodyB->GetVelocity();

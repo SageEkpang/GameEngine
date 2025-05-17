@@ -9,6 +9,8 @@
 
 class GameObject;
 
+// TODO AND TO CONSIDER: Can have an "is trigger" bool in the collider class and cast to this class when it has to do stuff
+
 class TriggerArea : public ColliderEntity
 {
 private:

@@ -3,14 +3,6 @@
 #include "Timer.h"
 #include "TimeStepConstants.h"
 
-#include "PhysicsObject.h"
-#include "TriggerArea.h"
-#include "CollisionManager.h"
-#include "CollisionResolution.h"
-#include "ParticleEffectComponent.h"
-
-// std::vector<PhysicsObject*> m_PhysicsObjects;
-
 int main()
 {
 	// NOTE: Check the window has actually been inited
@@ -146,9 +138,7 @@ int main()
 			// NOTE: Draw Here ------
 
 
-
-
-
+			DrawCircle(0, 0, 3, GREEN);
 
 
 

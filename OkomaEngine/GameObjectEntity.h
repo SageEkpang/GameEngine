@@ -1,5 +1,5 @@
-#ifndef ENTITY_H
-#define ENTITY_H
+#ifndef GAME_OBJECT_ENTITY_H
+#define GAME_OBJECT_ENTITY_H
 
 // NOTE: INFORMATION ABOUT ECS (Entity Component System)
 // https://github.com/SanderMertens/ecs-faq?tab=readme-ov-file#when-is-something-an-ecs
@@ -8,30 +8,34 @@
 // Sparse ECS
 // Bitset Based ECS
 
-// NEEDED INCLUDE(s)
 #include "HeaderManager.h"
 #include "ComponentEntity.h"
 
-int constexpr MAX_COMPONENTS = 10;
+#include <optional>
 
-class Entity
+unsigned int constexpr MAX_COMPONENTS = 10u;
+
+class GameObjectEntity
 {
-private: // PRIVATE VARIABLE(s)
-	
+private:
+
 	std::vector<ComponentEntity*> m_Components;
 
-public: // PUBLIC FUNCTION(s)
+public:
 
 	// CLASS FUNCTION(s)
-	Entity();
-	~Entity();
+	GameObjectEntity();
+	~GameObjectEntity();
 
 	// BASE FUNCTION(s)
 	void Update(const float deltaTime);
+	void Draw();
+
 
 	// HELPER FUNCTION(s)
-	void AddComponent(ComponentEntity* component);
-	void RemoveComponent(ComponentEntity* component);
+	void AddComponent();
+	void RemoveComponent();
+	bool HasComponent();
 
 };
 

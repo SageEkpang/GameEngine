@@ -45,6 +45,11 @@ public: // PUBLIC VARIABLE(s)
 
 public: // MATH FUNCTION(s)
 
+    T dot(T x, T y)
+    {
+        return T(this-x * x + this->y * y);
+    }
+
     T dot(const OKVector2& value)
     {
         return T(this->x * value.x + this->y * value.y);

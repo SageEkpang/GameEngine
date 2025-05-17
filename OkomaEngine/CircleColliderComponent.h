@@ -22,6 +22,11 @@ public:
 	~CircleColliderComponent();
 
 
+	// BASE FUNCTION(s)
+	void Update(const float deltaTime) override;
+	void Draw() override;
+
+
 	// GETTER FUNCTION(s)
 	inline OKVector2<float> GetPosition() { return m_Position; }
 	inline float GetRadius() { return m_Radius; }

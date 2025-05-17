@@ -10,6 +10,20 @@ public: // PUBLIC VARIABLE(s)
 
 	T x, y, z;
 
+    OKVector3(T x = 0.f, T y = 0.f, T z = 0.f)
+    {
+        this->x = x;
+        this->y = y;
+        this->z = z;
+    }
+
+    OKVector3(const OKVector3& value)
+    {
+        this->x = value.x;
+        this->y = value.y;
+        this->z = value.z;
+    }
+
 	OKVector3 zero()
 	{
 		this->x = 0.f;
@@ -36,6 +50,11 @@ public: // PUBLIC VARIABLE(s)
 
 public: // MATH FUNCTION(s)
 
+    T dot(T x, T y, T z)
+    {
+        return T(this->x * x + this->y * y + this->z * z);
+    }
+
     T dot(const OKVector3& value)
     {
         return T(this->x * value.x + this->y * value.y + this->z * value.z);
@@ -45,6 +64,26 @@ public: // MATH FUNCTION(s)
     {
         T t_Length = this->magnitude();
         return OKVector3(this->x / t_Length, this->y / t_Length, this->z / t_Length);
+    }
+
+    OKVector3 cross(const OKVector3& value)
+    {
+        OKVector3 t_CrossTemp;
+        t_CrossTemp.x = this->y * value.z - this->z * value.y;
+        t_CrossTemp.y = -(this->x * value.z - this->z * value.x);
+        t_CrossTemp.z = this->x * value.y - this->y * value.x;
+
+        return t_CrossTemp;
+    }
+
+    OKVector3 cross(T x, T y, T z)
+    {
+        OKVector3 t_CrossTemp;
+        t_CrossTemp.x = this->y * z - this->z * y;
+        t_CrossTemp.y = -(this->x * z - this->z * x);
+        t_CrossTemp.z = this->x * y - this->y * x;
+
+        return t_CrossTemp;
     }
 
     T magnitude()
@@ -74,13 +113,6 @@ public: // MATH FUNCTION(s)
     }
 
 public: // OPERATOR OVERLOAD FUNCTION(s)
-
-    OKVector3(T x = 0.f, T y = 0.f, T z = 0.f)
-    {
-        this->x = x;
-        this->y = y;
-        this->z = z;
-    }
 
     OKVector3 operator ++()
     {
@@ -118,16 +150,16 @@ public: // OPERATOR OVERLOAD FUNCTION(s)
     {
         bool s_CheckX = this->x == value.x ? true : false;
         bool s_CheckY = this->y == value.y ? true : false;
-        bool s_CheckZ = this->y == value.z ? true : false;
+        bool s_CheckZ = this->z == value.z ? true : false;
 
         return (s_CheckX && s_CheckY && s_CheckZ);
     }
 
-    OKVector3 operator !=(const OKVector3& value)
+    bool operator !=(const OKVector3& value)
     {
         bool s_CheckX = this->x != value.x ? true : false;
         bool s_CheckY = this->y != value.y ? true : false;
-        bool s_CheckZ = this->y != value.z ? true : false;
+        bool s_CheckZ = this->z != value.z ? true : false;
 
         return (s_CheckX && s_CheckY && s_CheckZ);
     }
@@ -135,6 +167,11 @@ public: // OPERATOR OVERLOAD FUNCTION(s)
     OKVector3 operator +(const OKVector3& value)
     {
         return OKVector3(this->x + value.x, this->y + value.y, this->z + value.z);
+    }
+
+    friend OKVector3 operator +(const T value, OKVector3<T> rhs)
+    {
+        return rhs + value;
     }
 
     OKVector3 operator -(const OKVector3& value)
@@ -257,8 +294,8 @@ public: // OPERATOR OVERLOAD FUNCTION(s)
 
 #define OKVECTOR3_ZERO {0.f, 0.f, 0.f}
 #define OKVECTOR3_ONE {1.f, 1.f, 1.f}
-#define OKVECTOR3_UP {0.f, -1.f, 0.f}
-#define OKVECTOR3_DOWN {0.f, 1.f, 0.f}
+#define OKVECTOR3_UP {0.f, 1.f, 0.f}
+#define OKVECTOR3_DOWN {0.f, -1.f, 0.f}
 #define OKVECTOR3_RIGHT {1.f, 0.f, 0.f}
 #define OKVECTOR3_LEFT {-1.f, 0.f, 0.f}
 

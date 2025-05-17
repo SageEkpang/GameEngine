@@ -4,19 +4,17 @@
 #include "OKVector2.h"
 #include "OKTransform2.h"
 #include "Rigidbody2DComponent.h"
-#include "PhysicsObject.h"
 
-class CollisionResolution
+class CollisionResolutionManager
 {
 public:
 
 	// CLASS FUNCTION(s)
-	CollisionResolution();
-	~CollisionResolution();
+	CollisionResolutionManager();
+	~CollisionResolutionManager();
 
 	// BASE FUNCTION(s)
 	void ResolveCollision(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float CoefRest, float penetration, OKVector2<float> collisionNormal, float deltaTime);
-	// void ResolveCollisionsWithRotation(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float CoefRest, float penetration, OKVector2<float> collisionNormal, float deltaTime);
 
 private:
 

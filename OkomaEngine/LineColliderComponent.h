@@ -12,6 +12,7 @@ private:
 
 public:
 
+	// CLASS FUNCTION(s)
 	LineColliderComponent();
 
 	LineColliderComponent(OKVector2<float> lineStartPosition, OKVector2<float> lineEndPosition);
@@ -21,7 +22,10 @@ public:
 
 	~LineColliderComponent();
 
-	
+	// BASE FUNCTION(s)
+	void Update(const float deltaTime) override;
+	void Draw() override;
+
 	// GETTER FUNCTION(s)
 
 	inline OKVector2<float> GetLineStart() const { return m_LineStartPosition; }

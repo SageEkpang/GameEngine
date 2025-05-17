@@ -3,10 +3,8 @@
 
 #include "CollisionManifold.h"
 #include "CollisionManager.h"
-#include "CollisionResolution.h"
+#include "CollisionResolutionManager.h"
 #include "PhysicsMaterialCoefficientManager.h"
-
-#include "PhysicsObject.h"
 
 class PhysicsManager
 {
@@ -14,13 +12,13 @@ private: // PRIVATE MANAGER VARIABLE(s)
 
 	CollisionManifold m_CollisionManifold;
 	CollisionManager m_ColliderManager;
-	CollisionResolution m_CollisionResolution;
+	CollisionResolutionManager m_CollisionResolutionManager;
 	PhysicsMaterialCoefficientManager m_PhysicsMaterialCoefficientManager;
 
 private: // PRIVATE VECTOR VARIABLE(s)
 
 	// TODO: Need to change this to "entity" list
-	std::vector<PhysicsObject*> m_PhysicsObjects;
+	std::vector<int> m_PhysicsObjects;
 
 public:
 

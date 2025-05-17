@@ -13,6 +13,7 @@ private:
 
 public:
 
+	// CLASS FUNCTION(s)
 	CapsuleColliderComponent();
 
 	// NOTE: Axis Aligned Constructor
@@ -22,7 +23,6 @@ public:
 	CapsuleColliderComponent(float x, float y, OKVector2<float> scale);
 	CapsuleColliderComponent(float x, float y, float width, float height);
 
-
 	// NOTE: Oriented Constructor
 	CapsuleColliderComponent(OKVector2<float> position, OKVector2<float> scale, float rotation);
 	CapsuleColliderComponent(OKVector2<float> position, float width, float height, float rotation);
@@ -31,6 +31,11 @@ public:
 	CapsuleColliderComponent(float x, float y, float width, float height, float rotation);
 
 	~CapsuleColliderComponent();
+
+
+	// BASE FUNCTION(s)
+	void Update(const float deltaTime) override;
+	void Draw() override;
 
 
 	// GETTER FUNCTION(s)

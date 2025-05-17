@@ -34,6 +34,12 @@ public:
 
 	~RectangleColliderComponent();
 
+
+	// BASE FUNCTION(s)
+	void Update(const float deltaTime) override;
+	void Draw() override;
+
+
 	// GETTER FUNCTION(s)
 
 	inline OKTransform2<float> GetTransform() { return OKTransform2<float>(m_Position, m_Scale, m_Rotation); }

@@ -12,13 +12,13 @@
 // TODO: Prefix-fix with name of enum
 enum ColliderType
 {
-    COLLIDER_POINT,
-    COLLIDER_RECTANGLE,
-    COLLIDER_CIRCLE,
-    COLLIDER_CAPSULE,
-    COLLIDER_ORIENTED_RECTANGLE,
-    COLLIDER_COMPLEX,
-    COLLIDER_LINE,
+    COLLIDER_TYPE_POINT,
+    COLLIDER_TYPE_RECTANGLE,
+    COLLIDER_TYPE_CIRCLE,
+    COLLIDER_TYPE_CAPSULE,
+    COLLIDER_TYPE_ORIENTED_RECTANGLE,
+    COLLIDER_TYPE_COMPLEX,
+    COLLIDER_TYPE_LINE,
 };
 
 class ColliderEntity : public ComponentEntity
@@ -44,15 +44,11 @@ public: // PUBLIC FUNCTION(s)
     ~ColliderEntity();
 
     // BASE FUNCTION(s)
-    void Update(const float deltaTime) { };
-    void Draw();
-
-    // NOTE: Check if it is an absolute enter or a partial enter
-
+    virtual void Update(const float deltaTime) = 0;
+    virtual void Draw() = 0;
 
     // GETTER FUNCTION(s)
     inline ColliderType GetColliderType() const { return m_ColliderType; }
-
 
     // SETTER FUNCTION(s)
     inline void SetColliderType(ColliderType colliderType) { m_ColliderType = colliderType; }
