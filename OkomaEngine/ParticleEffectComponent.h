@@ -274,6 +274,9 @@ public:
 
 	// HELPER FUNCTION(s)
 
+	void PrefabFire();
+	void PrefabSmoke();
+
 		// NOTE: Process the Particles
 		void ProcessParticleToSimulatingParticles();
 

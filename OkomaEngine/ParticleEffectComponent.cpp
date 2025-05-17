@@ -310,6 +310,37 @@ void ParticleEffectComponent::Draw()
 	}
 }
 
+void ParticleEffectComponent::PrefabFire()
+{
+	AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
+	AssignParticleAction(PARTICLE_ACTION_BURST_OUT);
+	AssignParticleSpawnAreaCircle(40.f);
+	AssignParticleAction(PARTICLE_ACTION_SPRAY);
+	SetLooping(true);
+	SetEmissionRateOverTime(500u);
+	SetDuration(0.5f);
+	SetStartSpeed(5.0);
+	SetStartSpeed(1.0);
+	SetStartLifeTime(1.0f);
+	AssignVelocityOverLifeTime(OKVector2<float>(0.f, -100.f), OKVector2<float>(0.f, -400.f));
+	AssignVelocityOverLifeTime(OKVector2<float>(0.f, -100.f), OKVector2<float>(0.f, -400.f));
+	AssignColourOverLifeTime(OKVector3<unsigned int>(255, 255, 0), OKVector3<unsigned int>(255, 0, 0));
+	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(1.f, 1.f));
+}
+
+void ParticleEffectComponent::PrefabSmoke()
+{
+	AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
+	AssignParticleSpawnAreaCircle(40.f);
+	SetLooping(true);
+	SetEmissionRateOverTime(5u);
+	SetDuration(0.5f);
+	SetStartLifeTime(6.0f);
+	AssignVelocityOverLifeTime(OKVector2<float>(0.f, -50.f), OKVector2<float>(0.f, -100.f));
+	AssignColourOverLifeTime(OKVector3<unsigned int>(200, 200, 200), OKVector3<unsigned int>(50, 50, 50));
+	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(5.f, 5.f));
+}
+
 void ParticleEffectComponent::ProcessParticleToSimulatingParticles()
 {
 	unsigned int tempParticleAmount = 0;
