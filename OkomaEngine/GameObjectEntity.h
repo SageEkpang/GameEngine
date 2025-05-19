@@ -16,6 +16,11 @@
 #include <unordered_map>
 #include <optional>
 #include <vector>
+#include <memory>
+#include <bitset>
+
+
+
 
 // DERIVED COMPONENT CLASSE(s)
 //class RectangleColliderComponent;
@@ -28,7 +33,8 @@
 //
 //class CameraComponent;
 
-unsigned int constexpr MAX_COMPONENTS = 10u;
+unsigned int constexpr MAX_COMPONENTS = 8u;
+std::bitset<MAX_COMPONENTS> EntityBitMask;
 
 using ComponentId = unsigned int;
 using Type = std::vector<ComponentId>;
@@ -66,9 +72,13 @@ struct Record
 	size_t row;
 };
 
+// TODO: Bit masking, Entity Mask
+
 class GameObjectEntity
 {
 private:
+
+	unsigned int m_ComponentIndexer = 0u;
 
 	using ArchetypeMap = std::unordered_map < ArchetypeId, ArchetypeRecord>;
 	std::unordered_map<ComponentId, ArchetypeMap> m_ComponentIndex;
@@ -78,6 +88,10 @@ private:
 	std::unordered_set<ComponentEntity*> m_Components;
 	std::unordered_map<EntityId, Record> m_EntityIndex;
 	std::unordered_map<Type, Archetype> m_ArchetypeIndex;
+
+	std::shared_ptr<ComponentEntity*> m_SharedComponents;
+	std::unique_ptr<ComponentEntity*[MAX_COMPONENTS]> m_UniqueComponents;
+	
 
 public:
 
@@ -89,17 +103,31 @@ public:
 	void Update(const float deltaTime);
 	void Draw();
 
-
 	// HELPER FUNCTION(s)
 	Archetype& AddToArchetype(Archetype& source, ComponentId id);
 
 	void AddComponent(EntityId entity, ComponentId component);
 
-	void RemoveComponent();
+	void RemoveComponent() { };
 
 	void* GetComponent(EntityId entity, ComponentId component);
 
 	bool HasComponent(EntityId entity, ComponentId component);
+
+	// TODO: Linked List this shit
+	template<typename T>
+	void AddComponentAlt(ComponentEntity* component)
+	{
+		m_UniqueComponents[m_ComponentIndexer] = std::make_unique<ComponentEntity*>(component);
+	}
+
+	template<typename T>
+	T* GetComponentAlt()
+	{
+		return (T*)m_UniqueComponents.get();
+	}
+
+
 };
 
 #endif

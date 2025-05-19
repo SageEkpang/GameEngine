@@ -3,6 +3,7 @@
 #include "Timer.h"
 #include "TimeStepConstants.h"
 #include "GameObjectEntity.h"
+#include "RectangleColliderComponent.h"
 
 #include <iostream>
 
@@ -41,7 +42,8 @@ int main()
 
 
 	GameObjectEntity m_Tester;
-	m_Tester.GetComponent(0, 0);
+	
+	m_Tester.GetComponentAlt<RectangleColliderComponent>()->GetTransform();
 	// m_Tester.GetComponent<RectangleColliderComponent>();
 
 

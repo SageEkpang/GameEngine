@@ -43,11 +43,6 @@ void GameObjectEntity::Draw()
 Archetype& GameObjectEntity::AddToArchetype(Archetype& source, ComponentId id)
 {
 	
-
-
-
-
-
 }
 
 void GameObjectEntity::AddComponent(EntityId entity, ComponentId component)
@@ -77,7 +72,12 @@ void* GameObjectEntity::GetComponent(EntityId entity, ComponentId component)
 
 bool GameObjectEntity::HasComponent(EntityId entity, ComponentId component)
 {
-	Archetype& t_Archetype = m_EntityIndex[entity].archetype;
-	ArchetypeMap& t_ArchetypeMap = m_ComponentIndex[component];
-	return t_ArchetypeMap.count(t_Archetype.id) != 0;
+	
+
+
+
+
+
+
+	return true;
 }
