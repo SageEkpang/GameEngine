@@ -3,6 +3,7 @@
 
 #include "PhysicsEntity.h"
 #include "ParticleEffectObject.h"
+#include "ComponentEntity.h"
 #include "OKVector3.h"
 
 #include <memory>
@@ -77,7 +78,7 @@ enum ParticleColourOverLifeTime
 	PARTICLE_COLOUR_VELOCITY_OVER_LIFE_TIME
 };
 
-class ParticleEffectComponent
+class ParticleEffectComponent : public ComponentEntity
 {
 private:
 

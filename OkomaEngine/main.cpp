@@ -42,15 +42,11 @@ int main()
 
 
 	GameObjectEntity m_Tester;
+
+	m_Tester.AddComponent<RectangleColliderComponent>();
+	m_Tester.GetComponent<RectangleColliderComponent>()->SetScale(10.f, 10.f);
+	m_Tester.RemoveComponent<RectangleColliderComponent>();
 	
-	m_Tester.GetComponentAlt<RectangleColliderComponent>()->GetTransform();
-	// m_Tester.GetComponent<RectangleColliderComponent>();
-
-
-
-
-
-
 	// SetTargetFPS(60);
 	while (!WindowShouldClose())
 	{

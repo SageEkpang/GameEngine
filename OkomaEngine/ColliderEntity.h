@@ -10,7 +10,6 @@
 // PARENT INCLUDE(s)
 #include "ComponentEntity.h"
 
-
 enum ColliderType
 {
     COLLIDER_TYPE_NONE,
@@ -23,7 +22,7 @@ enum ColliderType
     COLLIDER_TYPE_LINE,
 };
 
-class ColliderEntity : public ComponentEntity
+class ColliderEntity
 {
 protected: // PROTECTED VARIABLE(s)
 

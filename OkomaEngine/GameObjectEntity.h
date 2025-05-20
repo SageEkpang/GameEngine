@@ -12,86 +12,35 @@
 #include "ComponentEntity.h"
 #include "OKTransform2.h"
 
-#include <unordered_set>
 #include <unordered_map>
-#include <optional>
-#include <vector>
-#include <memory>
 #include <bitset>
-
-
-
-
-// DERIVED COMPONENT CLASSE(s)
-//class RectangleColliderComponent;
-//class SphereColliderComponent;
-//class CapsuleColliderComponent;
-//class LineColliderComponent;
-//
-//class ParticleEffectComponent;
-//class Rigidbody2DComponent;
-//
-//class CameraComponent;
+#include <typeindex>
+#include <typeinfo>
 
 unsigned int constexpr MAX_COMPONENTS = 8u;
-std::bitset<MAX_COMPONENTS> EntityBitMask;
 
-using ComponentId = unsigned int;
-using Type = std::vector<ComponentId>;
-using ArchetypeId = unsigned int;
-using EntityId = unsigned int;
+// DERIVED COMPONENT CLASSE(s)
+class RectangleColliderComponent;
+class SphereColliderComponent;
+class CapsuleColliderComponent;
+class LineColliderComponent;
 
-// CHECK THIS: May need to change this to a void*
-template<typename T = ComponentEntity*>
-using Column = std::vector<T>;
+class ParticleEffectComponent;
+class Rigidbody2DComponent;
 
-struct ArchetypeEdge
-{
-	Archetype& add;
-	Archetype& remove;
-};
-
-struct Archetype
-{
-	Type type;
-	ArchetypeId id;
-	std::vector<Column<>> components;
-	std::unordered_map<ComponentId, Archetype&> addArchetypes;
-	std::unordered_map<ComponentId, Archetype&> removeArchetypes;
-	std::unordered_map<ComponentId, ArchetypeEdge&> edges;
-};
-
-struct ArchetypeRecord
-{
-	size_t column;
-};
-
-struct Record
-{
-	Archetype& archetype;
-	size_t row;
-};
-
-// TODO: Bit masking, Entity Mask
+class CameraComponent;
+// ---------------------------------
 
 class GameObjectEntity
 {
 private:
 
-	unsigned int m_ComponentIndexer = 0u;
+	// BASE COMPONENT VARIABLE(s)
+	unsigned int m_ComponentIndex = 0u;
+	std::bitset<MAX_COMPONENTS> m_ComponentBitMask;
 
-	using ArchetypeMap = std::unordered_map < ArchetypeId, ArchetypeRecord>;
-	std::unordered_map<ComponentId, ArchetypeMap> m_ComponentIndex;
-
-	typedef std::unordered_set<ArchetypeId> ArchetypeSet;
-
-	std::unordered_set<ComponentEntity*> m_Components;
-	std::unordered_map<EntityId, Record> m_EntityIndex;
-	std::unordered_map<Type, Archetype> m_ArchetypeIndex;
-
-	std::shared_ptr<ComponentEntity*> m_SharedComponents;
-	std::unique_ptr<ComponentEntity*[MAX_COMPONENTS]> m_UniqueComponents;
-	
+	// COMPONENT ARRAY(s)
+	std::unordered_map<std::type_index, ComponentEntity*> m_Components;
 
 public:
 
@@ -104,30 +53,76 @@ public:
 	void Draw();
 
 	// HELPER FUNCTION(s)
-	Archetype& AddToArchetype(Archetype& source, ComponentId id);
-
-	void AddComponent(EntityId entity, ComponentId component);
-
-	void RemoveComponent() { };
-
-	void* GetComponent(EntityId entity, ComponentId component);
-
-	bool HasComponent(EntityId entity, ComponentId component);
-
-	// TODO: Linked List this shit
-	template<typename T>
-	void AddComponentAlt(ComponentEntity* component)
-	{
-		m_UniqueComponents[m_ComponentIndexer] = std::make_unique<ComponentEntity*>(component);
-	}
 
 	template<typename T>
-	T* GetComponentAlt()
-	{
-		return (T*)m_UniqueComponents.get();
-	}
+	void AddComponent();
 
+	template<typename T>
+	void RemoveComponent();
+
+	template<typename T>
+	T* GetComponent();
+
+	template<typename T>
+	bool HasComponent();
 
 };
 
+template<typename T>
+inline void GameObjectEntity::AddComponent()
+{
+	try
+	{
+		++m_ComponentIndex;
+		if (m_ComponentIndex > MAX_COMPONENTS)
+		{
+			m_Components = MAX_COMPONENTS;
+			throw;
+		}
+	}
+	catch (...)
+	{
+		printf("Max Component count has been reached");
+		return;
+	}
+	
+	m_Components[std::type_index(typeid(T))] = new T();
+}
+
+template<typename T>
+inline void GameObjectEntity::RemoveComponent()
+{
+	try
+	{
+		--m_ComponentIndex;
+		if (m_ComponentIndex < 0u)
+		{
+			m_ComponentIndex = 0u;
+			throw;
+		}
+	}
+	catch (...)
+	{
+		printf("No Component is on this Game Object");
+		return;
+	}
+
+	m_Components.erase(std::type_index(typeid(T)));
+}
+
+template<typename T>
+inline T* GameObjectEntity::GetComponent()
+{
+	auto t_Index = m_Components.find(std::type_index(typeid(T)));
+	return t_Index == m_Components.end() ? nullptr : static_cast<T*>(t_Index->second);
+}
+
+template<typename T>
+inline bool GameObjectEntity::HasComponent()
+{
+	auto t_Index = m_Components.find(std::type_index(typeid(T)));
+	return t_Index == m_Components.end() ? false : true;
+}
+
 #endif
+

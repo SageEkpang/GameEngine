@@ -2,8 +2,9 @@
 #define CAPSULE_COLLIDER_COMPONENT_H
 
 #include "ColliderEntity.h"
+#include "ComponentEntity.h"
 
-class CapsuleColliderComponent : public ColliderEntity
+class CapsuleColliderComponent : public ColliderEntity, public ComponentEntity
 {
 private:
 
