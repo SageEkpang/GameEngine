@@ -2,8 +2,9 @@
 #define LINE_COLLIDER_COMPONENT_H
 
 #include "ColliderEntity.h"
+#include "ComponentEntity.h"
 
-class LineColliderComponent : public ColliderEntity
+class LineColliderComponent : public ColliderEntity, public ComponentEntity
 {
 private:
 

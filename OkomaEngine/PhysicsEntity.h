@@ -10,10 +10,7 @@
 // NOTE: Constant(s)
 #include "GravityConstants.h"
 
-// NOTE: PARENT CLASS
-#include "ComponentEntity.h"
-
-class PhysicsEntity : public ComponentEntity
+class PhysicsEntity
 {
 private: // PRIVATE VARIABLE(s)
 

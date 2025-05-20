@@ -3,8 +3,9 @@
 
 // PARENT INCLUDE(s)
 #include "ColliderEntity.h"
+#include "ComponentEntity.h"
 
-class CircleColliderComponent : public ColliderEntity
+class CircleColliderComponent : public ColliderEntity, public ComponentEntity
 {
 private:
 

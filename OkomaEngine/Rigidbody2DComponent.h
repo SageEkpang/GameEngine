@@ -6,6 +6,7 @@
 
 // NOTE: Parent Class
 #include "PhysicsEntity.h"
+#include "ComponentEntity.h"
 #include <cmath>
 
 enum RigidbodyMovementType
@@ -50,7 +51,7 @@ struct Mat22
 };
 
 // TODO: Split these into different rigidbody classes
-class Rigidbody2DComponent : public PhysicsEntity
+class Rigidbody2DComponent : public PhysicsEntity, public ComponentEntity
 {
 private:
 
