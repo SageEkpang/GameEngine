@@ -1,6 +1,7 @@
 #ifndef COLLIDER_MANAGER_H
 #define COLLIDER_MANAGER_H
 
+#include "GameObjectEntity.h"
 #include "ColliderEntity.h"
 #include "CollisionManifold.h"
 #include <utility>
