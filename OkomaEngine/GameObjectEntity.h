@@ -20,10 +20,11 @@
 unsigned int constexpr MAX_COMPONENTS = 8u;
 
 // DERIVED COMPONENT CLASSE(s)
+class CapsuleColliderComponent;
+class ComplexColliderComponent;
+class LineColliderComponent;
 class RectangleColliderComponent;
 class SphereColliderComponent;
-class CapsuleColliderComponent;
-class LineColliderComponent;
 
 class ParticleEffectComponent;
 class Rigidbody2DComponent;

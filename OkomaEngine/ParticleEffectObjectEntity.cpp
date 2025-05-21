@@ -1,6 +1,6 @@
-#include "ParticleEffectObject.h"
+#include "ParticleEffectObjectEntity.h"
 
-ParticleEffectObject::ParticleEffectObject(OKVector2<float> position, float mass)
+ParticleEffectObjectEntity::ParticleEffectObjectEntity(OKVector2<float> position, float mass)
 	: PhysicsEntity(position, mass)
 {
 	m_StartDelay = nullptr;
@@ -37,7 +37,7 @@ ParticleEffectObject::ParticleEffectObject(OKVector2<float> position, float mass
 	m_CurrentColourOverLifeTimer = 0.0f;
 }
 
-ParticleEffectObject::~ParticleEffectObject()
+ParticleEffectObjectEntity::~ParticleEffectObjectEntity()
 {
 	m_StartDelay = nullptr;
 	m_StartLifeTime = nullptr;
@@ -61,12 +61,12 @@ ParticleEffectObject::~ParticleEffectObject()
 	m_EndingColourOverLifeTime = nullptr;
 }
 
-void ParticleEffectObject::Update(float deltaTime)
+void ParticleEffectObjectEntity::Update(float deltaTime)
 {
 	PhysicsEntity::Update(deltaTime);
 }
 
-void ParticleEffectObject::Draw()
+void ParticleEffectObjectEntity::Draw()
 {
 	PhysicsEntity::Draw();
 }

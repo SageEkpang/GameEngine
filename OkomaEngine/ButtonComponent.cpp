@@ -27,6 +27,7 @@ ButtonComponent::ButtonComponent()
 
 ButtonComponent::~ButtonComponent()
 {
+
 }
 
 void ButtonComponent::Update(float deltaTime)

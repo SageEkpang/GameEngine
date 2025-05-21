@@ -1,10 +1,10 @@
-#ifndef PARTICLE_EFFECT_OBJECT_H
-#define PARTICLE_EFFECT_OBJECT_H
+#ifndef PARTICLE_EFFECT_OBJECT_ENTITY_H
+#define PARTICLE_EFFECT_OBJECT_ENTITY_H
 
 #include "PhysicsEntity.h"
 #include "OKVector3.h"
 
-class ParticleEffectObject : public PhysicsEntity
+class ParticleEffectObjectEntity : public PhysicsEntity
 {
 public:
 
@@ -43,9 +43,9 @@ public:
 	float m_CurrentColourOverLifeTimer;
 
 	// CLASS FUNCTION(s)
-	ParticleEffectObject() = default;
-	ParticleEffectObject(OKVector2<float> position, float mass);
-	~ParticleEffectObject();
+	ParticleEffectObjectEntity() = default;
+	ParticleEffectObjectEntity(OKVector2<float> position, float mass);
+	~ParticleEffectObjectEntity();
 
 
 	// BASE FUNCTION(s)

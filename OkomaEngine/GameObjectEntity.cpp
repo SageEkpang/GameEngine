@@ -2,7 +2,7 @@
 
 GameObjectEntity::GameObjectEntity()
 {
-	// m_Components.clear();
+	m_Components.clear();
 	// m_Components.reserve(MAX_COMPONENTS);
 }
 

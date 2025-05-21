@@ -27,6 +27,7 @@ public:
 	CapsuleColliderComponent(float x, float y, float width, float height);
 
 	// NOTE: Oriented Constructor
+
 	CapsuleColliderComponent(OKVector2<float> position, OKVector2<float> scale, float rotation);
 	CapsuleColliderComponent(OKVector2<float> position, float width, float height, float rotation);
 

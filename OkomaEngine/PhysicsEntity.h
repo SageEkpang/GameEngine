@@ -78,7 +78,7 @@ public: // PUBLIC FUNCTION(s)
 
     // BASE FUNCTION(s)
     virtual void Update(const float deltaTime);
-    virtual void Draw();
+    virtual void Draw() { }
 
     // PHYSICS FUNCTION(s)
     void ApplyImpulse(OKVector2<float> impulse) { m_Velocity += impulse; }

@@ -33,42 +33,6 @@ void PhysicsEntity::Update(const float deltaTime)
     m_Acceleration.zero();
 }
 
-void PhysicsEntity::Draw()
-{
-
-    // DrawCircleV(m_Transform->position.ConvertToVec2(), m_Transform->scale.ConvertToVec2().x, RED);
-
-    // NOTE: Debug Drawing
-
-    // Draw Velocity Direction (Not Normalised)
-    //if (m_DrawVelocity)
-    //{
-    //    Vector2 t_VecEnd = Vector2Multiply(m_Velocity.normalise().ConvertToVec2(), Vector2{ m_Velocity.magnitude(), m_Velocity.magnitude() });
-    //    t_VecEnd = Vector2Add(t_VecEnd, m_Position.ConvertToVec2());
-    //    DrawLineV(m_Position.ConvertToVec2(), t_VecEnd, GREEN);
-    //}
-
-    // Draw Gravity Force Line
-    //if (m_DrawGravity)
-    //{
-    //    Vector2 t_GravityVec = Vector2Add(pm_CalculatedGravity.ConvertToVec2(), m_Position.ConvertToVec2());
-    //    DrawLineV(m_Position.ConvertToVec2(), t_GravityVec, PURPLE);
-    //}
-
-    //// Draw Drag Force Line
-    //if (m_DrawDrag)
-    //{
-    //    Vector2 t_DragVec = Vector2Add(pm_CalculatedDrag.ConvertToVec2(), m_Transform->position.ConvertToVec2());
-    //    DrawLineV(m_Transform->position.ConvertToVec2(), t_DragVec, BLUE);
-    //}
-
-    //// Draw Lift Force Line
-    //if (m_DrawLift)
-    //{
-
-    //}
-}
-
 void PhysicsEntity::CalculateAcceleration(const float deltaTime)
 {
     // NOTE: Add Force to Acceleration
