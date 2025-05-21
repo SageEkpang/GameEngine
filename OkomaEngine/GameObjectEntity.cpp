@@ -15,7 +15,6 @@ GameObjectEntity::~GameObjectEntity()
 	//	if ((*itr).get() != nullptr)
 	//	{
 	//		delete (*itr).get();
-
 	//	}
 	//}
 

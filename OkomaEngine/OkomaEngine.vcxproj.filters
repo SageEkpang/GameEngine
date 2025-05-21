@@ -93,6 +93,18 @@
     <Filter Include="Components\PhysicsComponents\Source">
       <UniqueIdentifier>{99fefcb1-369e-4a1c-b210-77a7ce6f38e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Components\CameraComponents\Header">
+      <UniqueIdentifier>{2955199d-f420-456b-bf6e-5204b59bdbeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\CameraComponents\Source">
+      <UniqueIdentifier>{33f96b22-e6b9-406e-b525-cd2d11b5e03d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\UIComponents\Header">
+      <UniqueIdentifier>{a8dbeaeb-dd93-4c69-8720-45f79323e569}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\UIComponents\Source">
+      <UniqueIdentifier>{e68fd4f2-670e-4347-9ed6-09a0006f5790}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -137,12 +149,6 @@
     <ClCompile Include="ColliderEntity.cpp">
       <Filter>BaseClasses\Source</Filter>
     </ClCompile>
-    <ClCompile Include="ButtonComponent.cpp">
-      <Filter>Components\UIComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="CameraComponent.cpp">
-      <Filter>Components\CameraComponents</Filter>
-    </ClCompile>
     <ClCompile Include="PhysicsManager.cpp">
       <Filter>Managers\Source</Filter>
     </ClCompile>
@@ -173,11 +179,20 @@
     <ClCompile Include="GameObjectEntity.cpp">
       <Filter>BaseClasses\Source</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleEffectObject.cpp">
+    <ClCompile Include="ParticleEffectObjectEntity.cpp">
       <Filter>BaseClasses\Source</Filter>
     </ClCompile>
     <ClCompile Include="ComplexColliderComponent.cpp">
       <Filter>Components\ColliderComponents\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>Components\CameraComponents\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonComponent.cpp">
+      <Filter>Components\UIComponents\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugDraw.cpp">
+      <Filter>Helper\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -232,12 +247,6 @@
     <ClInclude Include="ColliderEntity.h">
       <Filter>BaseClasses\Header</Filter>
     </ClInclude>
-    <ClInclude Include="ButtonComponent.h">
-      <Filter>Components\UIComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraComponent.h">
-      <Filter>Components\CameraComponents</Filter>
-    </ClInclude>
     <ClInclude Include="PhysicsManager.h">
       <Filter>Managers\Header</Filter>
     </ClInclude>
@@ -268,11 +277,20 @@
     <ClInclude Include="GameObjectEntity.h">
       <Filter>BaseClasses\Header</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleEffectObject.h">
+    <ClInclude Include="ParticleEffectObjectEntity.h">
       <Filter>BaseClasses\Header</Filter>
     </ClInclude>
     <ClInclude Include="ComplexColliderComponent.h">
       <Filter>Components\ColliderComponents\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraComponent.h">
+      <Filter>Components\CameraComponents\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonComponent.h">
+      <Filter>Components\UIComponents\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugDraw.h">
+      <Filter>Helper\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
