@@ -1,6 +1,8 @@
 #ifndef COLLIDER_ENTITY_H
 #define COLLIDER_ENTITY_H
 
+#include <iostream>
+
 enum class ColliderType : std::int8_t
 {
     COLLIDER_TYPE_NONE,

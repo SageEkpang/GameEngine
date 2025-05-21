@@ -4,6 +4,7 @@
 // PARENT INCLUDE(s)
 #include "ColliderEntity.h"
 #include "ComponentEntity.h"
+#include "OKTransform2.h"
 #include "OKVector2.h"
 
 class RectangleColliderComponent : public ColliderEntity, public ComponentEntity

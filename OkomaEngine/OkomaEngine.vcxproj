@@ -159,6 +159,7 @@
     <ClCompile Include="ParticleEffectObjectEntity.cpp" />
     <ClCompile Include="PhysicsManager.cpp" />
     <ClCompile Include="PhysicsMaterialCoefficientManager.cpp" />
+    <ClCompile Include="PointColliderComponent.cpp" />
     <ClCompile Include="RectangleColliderComponent.cpp" />
     <ClCompile Include="Rigidbody2DComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="ParticleEffectObjectEntity.h" />
     <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="PhysicsMaterialCoefficientManager.h" />
+    <ClInclude Include="PointColliderComponent.h" />
     <ClInclude Include="RectangleColliderComponent.h" />
     <ClInclude Include="Rigidbody2DComponent.h" />
     <ClInclude Include="Scene.h" />

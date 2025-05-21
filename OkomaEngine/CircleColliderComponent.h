@@ -23,16 +23,16 @@ public:
 
 	~CircleColliderComponent();
 
-	// GETTER FUNCTION(s)
-	inline OKVector2<float> GetPosition() { return m_Position; }
-	inline float GetRadius() { return m_Radius; }
+	//// GETTER FUNCTION(s)
+	//inline OKVector2<float> GetPosition() { return m_Position; }
+	//inline float GetRadius() { return m_Radius; }
 
 
-	// SETTER FUNCTION(s)
-	inline void SetPosition(OKVector2<float> position) { m_Position = position; }
-	inline void SetPosition(float x, float y) { m_Position = OKVector2<float>(x, y); }
-	
-	inline void SetRadius(float radius) { m_Radius = radius; }
+	//// SETTER FUNCTION(s)
+	//inline void SetPosition(OKVector2<float> position) { m_Position = position; }
+	//inline void SetPosition(float x, float y) { m_Position = OKVector2<float>(x, y); }
+	//
+	//inline void SetRadius(float radius) { m_Radius = radius; }
 
 };
 

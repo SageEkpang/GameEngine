@@ -41,10 +41,6 @@ public:
 	// DESTRUCTOR
 	~TriggerArea();
 
-	// BASE FUNCTION(s)
-
-	void Update(const float deltaTime) override;
-	void Draw() override;
 
 	// TRIGGER RESPONSE FUNCTION(s)
 	void TriggerEntered(GameObject* physicsObject, void (*func)() = nullptr);

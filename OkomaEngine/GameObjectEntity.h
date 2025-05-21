@@ -55,21 +55,21 @@ public:
 
 	// HELPER FUNCTION(s)
 
-	template<typename T>
+	template<std::derived_from<ComponentEntity> T>
 	void AddComponent();
 
-	template<typename T>
+	template<std::derived_from<ComponentEntity> T>
 	void RemoveComponent();
 
-	template<typename T>
+	template<std::derived_from<ComponentEntity> T>
 	T* GetComponent();
 
-	template<typename T>
+	template<std::derived_from<ComponentEntity> T>
 	bool HasComponent();
 
 };
 
-template<typename T>
+template<std::derived_from<ComponentEntity> T>
 inline void GameObjectEntity::AddComponent()
 {
 	try
@@ -90,7 +90,7 @@ inline void GameObjectEntity::AddComponent()
 	m_Components[std::type_index(typeid(T))] = new T();
 }
 
-template<typename T>
+template<std::derived_from<ComponentEntity> T>
 inline void GameObjectEntity::RemoveComponent()
 {
 	try
@@ -111,14 +111,14 @@ inline void GameObjectEntity::RemoveComponent()
 	m_Components.erase(std::type_index(typeid(T)));
 }
 
-template<typename T>
+template<std::derived_from<ComponentEntity> T>
 inline T* GameObjectEntity::GetComponent()
 {
 	auto t_Index = m_Components.find(std::type_index(typeid(T)));
 	return t_Index == m_Components.end() ? nullptr : static_cast<T*>(t_Index->second);
 }
 
-template<typename T>
+template<std::derived_from<ComponentEntity> T>
 inline bool GameObjectEntity::HasComponent()
 {
 	auto t_Index = m_Components.find(std::type_index(typeid(T)));

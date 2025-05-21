@@ -194,6 +194,9 @@
     <ClCompile Include="DebugDraw.cpp">
       <Filter>Helper\Source</Filter>
     </ClCompile>
+    <ClCompile Include="PointColliderComponent.cpp">
+      <Filter>Components\ColliderComponents\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OKVector2.h">
@@ -291,6 +294,9 @@
     </ClInclude>
     <ClInclude Include="DebugDraw.h">
       <Filter>Helper\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="PointColliderComponent.h">
+      <Filter>Components\ColliderComponents\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
