@@ -4,6 +4,8 @@
 // PARENT INCLUDE(s)
 #include "ColliderEntity.h"
 #include "ComponentEntity.h"
+#include "OKTransform2.h"
+#include "OKVector2.h"
 
 class RectangleColliderComponent : public ColliderEntity, public ComponentEntity
 {
@@ -17,6 +19,8 @@ public:
 
 	// CLASS FUNCTION(s)
 	RectangleColliderComponent();
+
+	// TODO: Add transform variables as well stuff
 
 	// NOTE: Axis Aligned Constructor
 	RectangleColliderComponent(OKVector2<float> position, OKVector2<float> scale);
@@ -36,13 +40,7 @@ public:
 	~RectangleColliderComponent();
 
 
-	// BASE FUNCTION(s)
-	void Update(const float deltaTime) override;
-	void Draw() override;
-
-
 	// GETTER FUNCTION(s)
-
 	inline OKTransform2<float> GetTransform() { return OKTransform2<float>(m_Position, m_Scale, m_Rotation); }
 	inline OKVector2<float> GetPosition() { return m_Position; }
 	inline OKVector2<float> GetScale() { return m_Scale; }

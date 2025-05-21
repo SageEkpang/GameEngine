@@ -3,6 +3,7 @@
 
 #include "ColliderEntity.h"
 #include "ComponentEntity.h"
+#include "OKVector2.h"
 
 class LineColliderComponent : public ColliderEntity, public ComponentEntity
 {
@@ -23,9 +24,6 @@ public:
 
 	~LineColliderComponent();
 
-	// BASE FUNCTION(s)
-	void Update(const float deltaTime) override;
-	void Draw() override;
 
 	// GETTER FUNCTION(s)
 

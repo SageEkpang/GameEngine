@@ -40,15 +40,3 @@ LineColliderComponent::~LineColliderComponent()
 	m_LineStartPosition = OKVector2<float>(0.f, 0.f);
 	m_LineEndPosition = OKVector2<float>(0.f, 0.f);
 }
-
-void LineColliderComponent::Update(const float deltaTime)
-{
-
-
-
-}
-
-void LineColliderComponent::Draw()
-{
-	DrawLineV(m_LineStartPosition.ConvertToVec2(), m_LineEndPosition.ConvertToVec2(), GREEN);
-}

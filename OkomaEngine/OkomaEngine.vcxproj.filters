@@ -143,9 +143,6 @@
     <ClCompile Include="CameraComponent.cpp">
       <Filter>Components\CameraComponents</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleEffectObject.cpp">
-      <Filter>GameObjects\Source</Filter>
-    </ClCompile>
     <ClCompile Include="PhysicsManager.cpp">
       <Filter>Managers\Source</Filter>
     </ClCompile>
@@ -175,6 +172,12 @@
     </ClCompile>
     <ClCompile Include="GameObjectEntity.cpp">
       <Filter>BaseClasses\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEffectObject.cpp">
+      <Filter>BaseClasses\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ComplexColliderComponent.cpp">
+      <Filter>Components\ColliderComponents\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -235,9 +238,6 @@
     <ClInclude Include="CameraComponent.h">
       <Filter>Components\CameraComponents</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleEffectObject.h">
-      <Filter>GameObjects\Header</Filter>
-    </ClInclude>
     <ClInclude Include="PhysicsManager.h">
       <Filter>Managers\Header</Filter>
     </ClInclude>
@@ -267,6 +267,12 @@
     </ClInclude>
     <ClInclude Include="GameObjectEntity.h">
       <Filter>BaseClasses\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEffectObject.h">
+      <Filter>BaseClasses\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexColliderComponent.h">
+      <Filter>Components\ColliderComponents\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

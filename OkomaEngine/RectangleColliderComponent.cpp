@@ -86,21 +86,3 @@ RectangleColliderComponent::~RectangleColliderComponent()
 	m_Scale = OKVector2<float>(0.f, 0.f);
 	m_Rotation = 0.f;
 }
-
-void RectangleColliderComponent::Update(const float deltaTime)
-{
-
-}
-
-void RectangleColliderComponent::Draw()
-{
-	if (m_ColliderType == COLLIDER_TYPE_RECTANGLE)
-	{
-		DrawRectangleLines((int)m_Position.ConvertToVec2().x - (int)(m_Scale.x / 2.f), (int)m_Position.ConvertToVec2().y - (int)(m_Scale.y / 2.f), (int)m_Scale.ConvertToVec2().x, (int)m_Scale.ConvertToVec2().y, GREEN);
-	}
-	else
-	{
-		Rectangle t_Rec = Rectangle{ m_Position.x, m_Position.y, m_Scale.x, m_Scale.y };
-		DrawRectanglePro(t_Rec, Vector2{m_Scale.x / 2.f, m_Scale.y / 2.f}, m_Rotation, GREEN);
-	}
-}

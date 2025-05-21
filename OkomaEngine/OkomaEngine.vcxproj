@@ -143,6 +143,7 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="CollisionManifold.cpp" />
     <ClCompile Include="CollisionResolutionManager.cpp" />
+    <ClCompile Include="ComplexColliderComponent.cpp" />
     <ClCompile Include="ComponentEntity.cpp" />
     <ClCompile Include="GameObjectEntity.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="CollisionManifold.h" />
     <ClInclude Include="CollisionResolutionManager.h" />
+    <ClInclude Include="ComplexColliderComponent.h" />
     <ClInclude Include="ComponentEntity.h" />
     <ClInclude Include="GameObjectEntity.h" />
     <ClInclude Include="GameObjectManager.h" />

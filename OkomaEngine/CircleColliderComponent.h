@@ -4,6 +4,7 @@
 // PARENT INCLUDE(s)
 #include "ColliderEntity.h"
 #include "ComponentEntity.h"
+#include "OKVector2.h"
 
 class CircleColliderComponent : public ColliderEntity, public ComponentEntity
 {
@@ -21,12 +22,6 @@ public:
 	CircleColliderComponent(float x, float y, float radius);
 
 	~CircleColliderComponent();
-
-
-	// BASE FUNCTION(s)
-	void Update(const float deltaTime) override;
-	void Draw() override;
-
 
 	// GETTER FUNCTION(s)
 	inline OKVector2<float> GetPosition() { return m_Position; }

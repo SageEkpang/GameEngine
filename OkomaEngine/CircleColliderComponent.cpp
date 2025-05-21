@@ -26,13 +26,3 @@ CircleColliderComponent::~CircleColliderComponent()
 	m_Position = OKVector2<float>(0.f, 0.f);
 	m_Radius = 0.f;
 }
-
-void CircleColliderComponent::Update(const float deltaTime)
-{
-
-}
-
-void CircleColliderComponent::Draw()
-{
-	DrawCircleLinesV(m_Position.ConvertToVec2(), m_Radius, GREEN);
-}

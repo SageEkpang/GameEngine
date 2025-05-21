@@ -1,16 +1,7 @@
 #ifndef COLLIDER_ENTITY_H
 #define COLLIDER_ENTITY_H
 
-// NEEDED INCLUDE(s)
-#include "HeaderManager.h"
-#include "CollisionManifold.h"
-#include "OKTransform2.h"
-#include <vector>
-
-// PARENT INCLUDE(s)
-#include "ComponentEntity.h"
-
-enum ColliderType
+enum class ColliderType : std::int8_t
 {
     COLLIDER_TYPE_NONE,
     COLLIDER_TYPE_POINT,
@@ -34,20 +25,14 @@ public: // PROTECTED VARIABLE(s)
     // COLLIDER VARIABLE(s)
     ColliderType m_ColliderType;
 
-    // TODO: Complex collision class needed
-    std::vector<OKVector2<float>> m_Vertices;
-
 public: // PUBLIC FUNCTION(s)
 
     // CLASS FUNCTION(s)
-    ColliderEntity();
+    ColliderEntity() 
+        : m_HasCollided(false), m_IsActivated(true), m_IsTrigger(false), m_ColliderType(ColliderType::COLLIDER_TYPE_NONE) { }
 
     // DESTRUCTOR
-    ~ColliderEntity();
-
-    // BASE FUNCTION(s)
-    virtual void Update(const float deltaTime) = 0;
-    virtual void Draw() = 0;
+    ~ColliderEntity() { };
 
     // GETTER FUNCTION(s)
     inline ColliderType GetColliderType() const { return m_ColliderType; }
@@ -55,10 +40,6 @@ public: // PUBLIC FUNCTION(s)
     // SETTER FUNCTION(s)
     inline void SetColliderType(ColliderType colliderType) { m_ColliderType = colliderType; }
 
-    // POLYGONE FUNCTION(s)
-    float PolygonArea();
 };
-
-// https://www.geeksforgeeks.org/area-of-a-polygon-with-given-n-ordered-vertices/
 
 #endif

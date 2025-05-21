@@ -3,6 +3,8 @@
 
 #include "ColliderEntity.h"
 #include "ComponentEntity.h"
+#include "OKTransform2.h"
+#include "OKVector2.h"
 
 class CapsuleColliderComponent : public ColliderEntity, public ComponentEntity
 {
@@ -32,11 +34,6 @@ public:
 	CapsuleColliderComponent(float x, float y, float width, float height, float rotation);
 
 	~CapsuleColliderComponent();
-
-
-	// BASE FUNCTION(s)
-	void Update(const float deltaTime) override;
-	void Draw() override;
 
 
 	// GETTER FUNCTION(s)
