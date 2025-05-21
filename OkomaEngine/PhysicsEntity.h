@@ -24,7 +24,7 @@ private: // PRIVATE VARIABLE(s)
     OKVector2<float> m_Acceleration{};
     OKVector2<float> m_Velocity{};
 
-protected: // PROTECTED VARIABLE(s)
+public: // PROTECTED VARIABLE(s)
 
     // POSITION VARIABLE(s)
     OKVector2<float> m_Position;

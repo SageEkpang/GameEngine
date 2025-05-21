@@ -7,7 +7,7 @@
 
 class RectangleColliderComponent : public ColliderEntity, public ComponentEntity
 {
-private:
+public: // PUBLIC VARIABLE(s)
 
 	OKVector2<float> m_Position;
 	OKVector2<float> m_Scale;

@@ -6,7 +6,7 @@
 
 class OKCameraComponent : public ComponentEntity
 {
-private:
+public: // PUBLIC ACCESS VARIABLE(s)
 
     // Camera Component
     Camera2D* m_Camera;
@@ -18,7 +18,7 @@ private:
     float m_Rotation;
     float m_Zoom;
 
-public:
+public: // PUBLIC FUNCTION(s)
 
     // CLASS FUNCTION(s)
 

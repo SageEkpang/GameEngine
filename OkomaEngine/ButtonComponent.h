@@ -8,7 +8,7 @@
 
 class ButtonComponent : public ComponentEntity
 {
-private:
+public:
 
     // BASE VARIABLE(s)
     Rectangle m_MouseRec;

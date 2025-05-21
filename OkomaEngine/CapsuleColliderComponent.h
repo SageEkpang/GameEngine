@@ -6,7 +6,7 @@
 
 class CapsuleColliderComponent : public ColliderEntity, public ComponentEntity
 {
-private:
+public:
 
 	OKVector2<float> m_Position;
 	OKVector2<float> m_Scale;

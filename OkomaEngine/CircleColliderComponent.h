@@ -7,7 +7,7 @@
 
 class CircleColliderComponent : public ColliderEntity, public ComponentEntity
 {
-private:
+public:
 
 	OKVector2<float> m_Position;
 	float m_Radius;

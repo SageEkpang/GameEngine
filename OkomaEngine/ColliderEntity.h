@@ -24,11 +24,12 @@ enum ColliderType
 
 class ColliderEntity
 {
-protected: // PROTECTED VARIABLE(s)
+public: // PROTECTED VARIABLE(s)
 
     // BASE VARIABLE(s)
     bool m_HasCollided;
     bool m_IsActivated;
+    bool m_IsTrigger;
 
     // COLLIDER VARIABLE(s)
     ColliderType m_ColliderType;

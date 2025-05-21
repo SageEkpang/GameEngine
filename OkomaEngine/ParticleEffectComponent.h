@@ -149,6 +149,12 @@ private:
 	float m_EmissionTimer = 0.0f;
 	unsigned int m_EmissionRateOverTime;
 
+public:
+
+	// TODO: Move Variables here some way, some how
+
+
+
 
 public: // PARTICLE OVERTIME VARIABLE(s)
 

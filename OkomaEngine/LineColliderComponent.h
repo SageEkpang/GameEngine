@@ -6,7 +6,7 @@
 
 class LineColliderComponent : public ColliderEntity, public ComponentEntity
 {
-private:
+public:
 
 	OKVector2<float> m_LineStartPosition;
 	OKVector2<float> m_LineEndPosition;
