@@ -47,7 +47,7 @@ int main()
 	GameObjectEntity m_Tester;
 	m_Tester.AddComponent<ParticleEffectComponent>();
 	m_Tester.GetComponent<ParticleEffectComponent>()->Construct(OKVector2<float>(0, 0), 1000u);
-	m_Tester.GetComponent<ParticleEffectComponent>()->PrefabWaterFall();
+	m_Tester.GetComponent<ParticleEffectComponent>()->PrefabBloodLeak();
 	
 	// SetTargetFPS(60);
 	while (!WindowShouldClose())

@@ -12,7 +12,7 @@ ParticleEffectObjectEntity::ParticleEffectObjectEntity(OKVector2<float> position
 	m_Scale = OKVector2<float>(1.f, 1.f);
 	m_Rotation = 0.f;
 
-	m_Colour = OKVector3<unsigned int>(255, 255, 255);
+	m_Colour = OKVector4<unsigned int>(255, 255, 255, 255);
 
 	m_StartSize = nullptr;
 

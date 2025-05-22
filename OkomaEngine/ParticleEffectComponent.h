@@ -4,7 +4,7 @@
 #include "PhysicsEntity.h"
 #include "ParticleEffectObjectEntity.h"
 #include "ComponentEntity.h"
-#include "OKVector3.h"
+#include "OKVector4.h"
 
 #include "OKMaths.h"
 #include <memory>
@@ -169,8 +169,8 @@ public: // PARTICLE OVERTIME VARIABLE(s)
 	float m_MaxVelocityBySize;
 	float m_MinVelocityBySize;
 
-	OKVector3<unsigned int> m_StartingColourOverLifeTime;
-	OKVector3<unsigned int> m_EndingColourOverLifeTime;
+	OKVector4<unsigned int> m_StartingColourOverLifeTime;
+	OKVector4<unsigned int> m_EndingColourOverLifeTime;
 
 	float m_MaxVelocityByColour;
 	float m_MinVelocityByColour;
@@ -270,10 +270,15 @@ public:
 
 		// NOTE: Prefab Particle Effects
 		void PrefabFire();
+		void PrefabFireWall();
+
 		void PrefabSmoke();
 		void PrefabSmokeScreen();
 		void PrefabSmokeScreenOut();
+
 		void PrefabWaterFall();
+
+		void PrefabBloodLeak();
 
 		// NOTE: Process the Particles
 		void ProcessParticleToSimulatingParticles();
@@ -308,8 +313,8 @@ public:
 		void AssignResizeByVelocityOverLifeTime(OKVector2<float> starting_resize_velocity_over_lifetime, OKVector2<float> ending_resize_velocity_over_lifetime, float max_velocity_by_size, float min_velocity_by_size);
 
 		// NOTE: ASSIGN PARTICLE COLOUR
-		void AssignColourOverLifeTime(OKVector3<unsigned int> starting_colour_over_lifetime, OKVector3<unsigned int> ending_colour_over_lifetime);
-		void AssignColourVelocityOverLifeTime(OKVector3<unsigned int> starting_colour_over_lifetime, OKVector3<unsigned int> ending_colour_over_lifetime, float max_velocity_by_colour, float min_velocity_by_colour);
+		void AssignColourOverLifeTime(OKVector4<unsigned int> starting_colour_over_lifetime, OKVector4<unsigned int> ending_colour_over_lifetime);
+		void AssignColourVelocityOverLifeTime(OKVector4<unsigned int> starting_colour_over_lifetime, OKVector4<unsigned int> ending_colour_over_lifetime, float max_velocity_by_colour, float min_velocity_by_colour);
 
 
 		// NOTE: ASSIGN PARTICLE TYPE

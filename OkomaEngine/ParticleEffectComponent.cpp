@@ -107,8 +107,8 @@ void ParticleEffectComponent::Construct(OKVector2<float> position, unsigned int 
 	m_StartingForceOverLifeTime = OKVector2<float>(1.0f, 1.0f);
 	m_EndingForceOverLifeTime = OKVector2<float>(1.0f, 1.0f);
 
-	m_StartingColourOverLifeTime = OKVector3<unsigned int>(255, 255, 255);
-	m_StartingColourOverLifeTime = OKVector3<unsigned int>(255, 255, 255);
+	m_StartingColourOverLifeTime = OKVector4<unsigned int>(255, 255, 255, 255);
+	m_StartingColourOverLifeTime = OKVector4<unsigned int>(255, 255, 255, 255);
 
 	m_StartingSizeOverLifeTime = m_StartSize;
 	m_EndingSizeOverLifeTime = m_StartSize;
@@ -263,7 +263,20 @@ void ParticleEffectComponent::PrefabFire()
 	SetStartSpeed(1.0);
 	SetStartLifeTime(1.0f);
 	AssignVelocityOverLifeTime(OKVector2<float>(0.f, 100.f), OKVector2<float>(0.f, 400.f));
-	AssignColourOverLifeTime(OKVector3<unsigned int>(255, 255, 0), OKVector3<unsigned int>(255, 0, 0));
+	AssignColourOverLifeTime(OKVector4<unsigned int>(255, 255, 0, 255), OKVector4<unsigned int>(255, 0, 0, 255));
+	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(1.f, 1.f));
+}
+
+void ParticleEffectComponent::PrefabFireWall()
+{
+	AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
+	AssignParticleSpawnAreaEdge(200.f);
+	SetLooping(true);
+	SetEmissionRateOverTime(500u);
+	SetStartSpeed(1.0);
+	SetStartLifeTime(1.f);
+	AssignVelocityOverLifeTime(OKVector2<float>(0.f, 100), OKVector2<float>(0.f, 400));
+	AssignColourOverLifeTime(OKVector4<unsigned int>(255, 255, 0, 255), OKVector4<unsigned int>(255, 0, 0, 255));
 	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(1.f, 1.f));
 }
 
@@ -276,7 +289,7 @@ void ParticleEffectComponent::PrefabSmoke()
 	SetDuration(0.5f);
 	SetStartLifeTime(6.0f);
 	AssignVelocityOverLifeTime(OKVector2<float>(0.f, 50.f), OKVector2<float>(0.f, 100.f));
-	AssignColourOverLifeTime(OKVector3<unsigned int>(200, 200, 200), OKVector3<unsigned int>(50, 50, 50));
+	AssignColourOverLifeTime(OKVector4<unsigned int>(200, 200, 200, 255), OKVector4<unsigned int>(50, 50, 50, 255));
 	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(5.f, 5.f));
 }
 
@@ -287,7 +300,7 @@ void ParticleEffectComponent::PrefabSmokeScreen()
 	SetLooping(true);
 	SetEmissionRateOverTime(700u);
 	SetStartSpeed(0.5);
-	AssignColourOverLifeTime(OKVector3<unsigned int>(200, 200, 200), OKVector3<unsigned int>(50, 50, 50));
+	AssignColourOverLifeTime(OKVector4<unsigned int>(200, 200, 200, 255), OKVector4<unsigned int>(50, 50, 50, 255));
 	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(1.f, 1.f));
 }
 
@@ -299,7 +312,7 @@ void ParticleEffectComponent::PrefabSmokeScreenOut()
 	SetLooping(true);
 	SetEmissionRateOverTime(700u);
 	SetStartSpeed(0.5);
-	AssignColourOverLifeTime(OKVector3<unsigned int>(200, 200, 200), OKVector3<unsigned int>(50, 50, 50));
+	AssignColourOverLifeTime(OKVector4<unsigned int>(200, 200, 200, 255), OKVector4<unsigned int>(50, 50, 50, 255));
 	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(1.f, 1.f));
 }
 
@@ -312,8 +325,25 @@ void ParticleEffectComponent::PrefabWaterFall()
 	SetStartSpeed(1.0);
 	SetStartLifeTime(1.0f);
 	AssignVelocityOverLifeTime(OKVector2<float>(0.f, OKMaths::RandomRangeFLOAT(-100, -1)), OKVector2<float>(0.f, -400.f));
-	AssignColourOverLifeTime(OKVector3<unsigned int>(137, 120, 240), OKVector3<unsigned int>(137, 207, 240));
+	AssignColourOverLifeTime(OKVector4<unsigned int>(137, 120, 240, 255), OKVector4<unsigned int>(137, 207, 240, 255));
 	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(10.f, 10.f));
+}
+
+void ParticleEffectComponent::PrefabBloodLeak()
+{
+	AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
+	AssignParticleAction(PARTICLE_ACTION_BURST_OUT);
+	AssignParticleSpawnAreaNone();
+	SetLooping(true);
+	SetEmissionRateOverTime(500u);
+
+	SetStartSpeed(1.0);
+	SetStartLifeTime(1.f);
+	SetSimulateGravity(true);
+	SetGravity(OKVector2<float>(0, 2000));
+
+	AssignColourOverLifeTime(OKVector4<unsigned int>(255, 0, 0, 255), OKVector4<unsigned int>(0, 0, 0, 255));
+	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(5.f, 5.f));
 }
 
 void ParticleEffectComponent::ProcessParticleToSimulatingParticles()
@@ -621,9 +651,10 @@ void ParticleEffectComponent::ProcessColourOverLifeTime(ParticleEffectObjectEnti
 	const float tempLerpX = lerp((float)particle_system_object.m_StartingColourOverLifeTime->x, (float)particle_system_object.m_EndingColourOverLifeTime->x, particle_system_object.m_CurrentColourOverLifeTimer);
 	const float tempLerpY = lerp((float)particle_system_object.m_StartingColourOverLifeTime->y, (float)particle_system_object.m_EndingColourOverLifeTime->y, particle_system_object.m_CurrentColourOverLifeTimer);
 	const float tempLerpZ = lerp((float)particle_system_object.m_StartingColourOverLifeTime->z, (float)particle_system_object.m_EndingColourOverLifeTime->z, particle_system_object.m_CurrentColourOverLifeTimer);
+	const float tempLerpW = lerp((float)particle_system_object.m_StartingColourOverLifeTime->w, (float)particle_system_object.m_EndingColourOverLifeTime->w, particle_system_object.m_CurrentColourOverLifeTimer);
 
 	// NOTE: Set Particle Colour
-	particle_system_object.m_Colour = OKVector3<unsigned int>((unsigned int)tempLerpX, (unsigned int)tempLerpY, (unsigned int)tempLerpZ);
+	particle_system_object.m_Colour = OKVector4<unsigned int>((unsigned int)tempLerpX, (unsigned int)tempLerpY, (unsigned int)tempLerpZ, (unsigned int)tempLerpW);
 }
 
 void ParticleEffectComponent::ProcessColourOverVelocity(ParticleEffectObjectEntity& particle_system_object, float deltaTime)
@@ -644,9 +675,10 @@ void ParticleEffectComponent::ProcessColourOverVelocity(ParticleEffectObjectEnti
 	const float tempLerpX = lerp((float)particle_system_object.m_StartingColourOverLifeTime->x, (float)particle_system_object.m_EndingColourOverLifeTime->x, tempRemapValue);
 	const float tempLerpY = lerp((float)particle_system_object.m_StartingColourOverLifeTime->y, (float)particle_system_object.m_EndingColourOverLifeTime->y, tempRemapValue);
 	const float tempLerpZ = lerp((float)particle_system_object.m_StartingColourOverLifeTime->z, (float)particle_system_object.m_EndingColourOverLifeTime->z, tempRemapValue);
+	const float tempLerpW = lerp((float)particle_system_object.m_StartingColourOverLifeTime->w, (float)particle_system_object.m_EndingColourOverLifeTime->w, tempRemapValue);
 
 	// NOTE: Assign the resize to the scale of the current particle
-	particle_system_object.m_Colour = OKVector3<unsigned int>((unsigned int)tempLerpX, (unsigned int)tempLerpY, (unsigned int)tempLerpZ);
+	particle_system_object.m_Colour = OKVector4<unsigned int>((unsigned int)tempLerpX, (unsigned int)tempLerpY, (unsigned int)tempLerpZ, (unsigned int)tempLerpW);
 }
 
 // NOTE: Action Functions
@@ -758,7 +790,7 @@ void ParticleEffectComponent::AssignResizeByVelocityOverLifeTime(OKVector2<float
 	m_CheckParticleResizingFunctionPtr = m_ParticleResizeMap[PARTICLE_RESIZE_VELOCITY];
 }
 
-void ParticleEffectComponent::AssignColourOverLifeTime(OKVector3<unsigned int> starting_colour_over_lifetime, OKVector3<unsigned int> ending_colour_over_lifetime)
+void ParticleEffectComponent::AssignColourOverLifeTime(OKVector4<unsigned int> starting_colour_over_lifetime, OKVector4<unsigned int> ending_colour_over_lifetime)
 {
 	m_StartingColourOverLifeTime = starting_colour_over_lifetime;
 	m_EndingColourOverLifeTime = ending_colour_over_lifetime;
@@ -766,7 +798,7 @@ void ParticleEffectComponent::AssignColourOverLifeTime(OKVector3<unsigned int> s
 	m_CheckParticleColourOverTimerFunctionPtr = m_ParticleColourOverTimerMap[PARTICLE_COLOUR_OVER_LIFE_TIME];
 }
 
-void ParticleEffectComponent::AssignColourVelocityOverLifeTime(OKVector3<unsigned int> starting_colour_over_lifetime, OKVector3<unsigned int> ending_colour_over_lifetime, float max_velocity_by_colour, float min_velocity_by_colour)
+void ParticleEffectComponent::AssignColourVelocityOverLifeTime(OKVector4<unsigned int> starting_colour_over_lifetime, OKVector4<unsigned int> ending_colour_over_lifetime, float max_velocity_by_colour, float min_velocity_by_colour)
 {
 	m_StartingColourOverLifeTime = starting_colour_over_lifetime;
 	m_EndingColourOverLifeTime = ending_colour_over_lifetime;

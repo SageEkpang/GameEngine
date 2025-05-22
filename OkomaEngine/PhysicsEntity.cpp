@@ -49,7 +49,7 @@ void PhysicsEntity::CalculateAcceleration(const float deltaTime)
 
 OKVector2<float> PhysicsEntity::ApplyGravity()
 {
-    pm_CalculatedGravity = m_Gravity * m_Mass;
+    pm_CalculatedGravity = m_Gravity * m_Mass * -1;
     pm_CalculatedGravity.negate();
 
     return pm_CalculatedGravity;

@@ -2,7 +2,7 @@
 #define PARTICLE_EFFECT_OBJECT_ENTITY_H
 
 #include "PhysicsEntity.h"
-#include "OKVector3.h"
+#include "OKVector4.h"
 
 class ParticleEffectObjectEntity : public PhysicsEntity
 {
@@ -18,7 +18,7 @@ public:
 	OKVector2<float> m_Scale;
 	float m_Rotation;
 
-	OKVector3<unsigned int> m_Colour;
+	OKVector4<unsigned int> m_Colour;
 
 	OKVector2<float>* m_StartSize;
 
@@ -38,8 +38,8 @@ public:
 	OKVector2<float>* m_EndingSizeByVelocity;
 	float m_CurrentSizeByVelocity;
 
-	OKVector3<unsigned int>* m_StartingColourOverLifeTime;
-	OKVector3<unsigned int>* m_EndingColourOverLifeTime;
+	OKVector4<unsigned int>* m_StartingColourOverLifeTime;
+	OKVector4<unsigned int>* m_EndingColourOverLifeTime;
 	float m_CurrentColourOverLifeTimer;
 
 	// CLASS FUNCTION(s)
