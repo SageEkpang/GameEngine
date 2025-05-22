@@ -150,6 +150,7 @@
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="LineColliderComponent.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OKMaths.cpp" />
     <ClCompile Include="OKTransform2.cpp" />
     <ClCompile Include="OKVector2.cpp" />
     <ClCompile Include="OKVector3.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="GravityConstants.h" />
     <ClInclude Include="HeaderManager.h" />
     <ClInclude Include="LineColliderComponent.h" />
+    <ClInclude Include="OKMaths.h" />
     <ClInclude Include="OKTransform2.h" />
     <ClInclude Include="OKVector2.h" />
     <ClInclude Include="OKVector3.h" />

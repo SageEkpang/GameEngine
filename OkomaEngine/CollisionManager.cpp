@@ -165,8 +165,10 @@ CollisionManifold CollisionManager::CheckCollisions(GameObjectEntity* gameObject
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
+	// NOTE:
 	GameObjectEntity* tempA = nullptr;
 	GameObjectEntity* tempB = nullptr;
+
 
 	// NOTE: Check if the collider component exists within the game object
 	// PROBLEM: This could potentially not work for the type id type, need to test this

@@ -3,7 +3,7 @@
 #include "Timer.h"
 #include "TimeStepConstants.h"
 #include "GameObjectEntity.h"
-#include "RectangleColliderComponent.h"
+#include "OKMaths.h"
 
 #include <iostream>
 
@@ -59,17 +59,24 @@ int main()
 			BeginMode2D(camera);
 
 			rlPushMatrix();
+			rlScalef(1.0f, 1.0f, 1.0f);
+			
+			// NOTE: Text Here
+
+			rlPopMatrix();
+
+
+			rlPushMatrix();
 			rlScalef(1.0f, -1.0f, 1.0f);
+			
+			
 
 			// NOTE: Draw Here ------
 
-
 			DrawCircle(0, 0, 3, GREEN);
-
-
-
 		
 			rlPopMatrix();
+
 			EndMode2D();
 		EndDrawing();
 	}

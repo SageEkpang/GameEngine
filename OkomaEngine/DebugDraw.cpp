@@ -6,7 +6,7 @@ namespace DebugDraw
 	{
 		void DebugRectangle(RectangleColliderComponent rectangleComponent)
 		{
-			DrawRectangleLines(rectangleComponent.m_Position.x - (rectangleComponent.m_Scale.x / 2.f), rectangleComponent.m_Position.y - (rectangleComponent.m_Scale.y / 2.f), rectangleComponent.m_Scale.x, rectangleComponent.m_Scale.y, GREEN);
+			DrawRectangleLines((int)rectangleComponent.m_Position.x - (int)(rectangleComponent.m_Scale.x / 2.f), (int)rectangleComponent.m_Position.y - (int)(rectangleComponent.m_Scale.y / 2.f), (int)rectangleComponent.m_Scale.x, (int)rectangleComponent.m_Scale.y, GREEN);
 		}
 
 		void DebugCircle(CircleColliderComponent circleComponent)

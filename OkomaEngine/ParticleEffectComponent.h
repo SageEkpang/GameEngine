@@ -6,6 +6,7 @@
 #include "ComponentEntity.h"
 #include "OKVector3.h"
 
+#include "OKMaths.h"
 #include <memory>
 #include <utility>
 #include <map>
@@ -27,15 +28,12 @@ enum ParticleSpawnArea
 	PARTICLE_SPAWN_AREA_CUSTOM
 };
 
+// TODO: Change this to the prefab actions instead of action functions
 enum ParticleAction
 {
 	PARTICLE_ACTION_NONE,
 	PARTICLE_ACTION_BURST_OUT,
 	PARTICLE_ACTION_BURST_IN,
-
-	PARTICLE_ACTION_SCREEN,
-	PARTICLE_ACTION_SCREEN_OUT,
-	PARTICLE_ACTION_SCREEN_IN,
 
 	PARTICLE_ACTION_FALL,
 	PARTICLE_ACTION_RISE,
@@ -43,10 +41,6 @@ enum ParticleAction
 	PARTICLE_ACTION_LEFT,
 
 	PARTICLE_ACTION_SPRAY,
-
-	PARTICLE_ACTION_FIRE,
-	PARTICLE_ACTION_SMOKE,
-	PARTICLE_ACTION_SPARK,
 
 	PARTICLE_ACTION_CUSTOM
 };
@@ -114,7 +108,7 @@ private:
 	OKVector2<float> m_EmitterPositionOffset;
 
 	// PARTICLE VARIABLE(s)
-	std::vector<ParticleEffectObjectEntity*> m_Particles;
+	ParticleEffectObjectEntity* m_DefaultParticle;
 	std::vector<ParticleEffectObjectEntity> m_SimulatingParticles;
 	unsigned int m_ParticleIndexIncrement;
 
@@ -247,10 +241,6 @@ private: // PRIVATE FUNCTION(s)
 	void ProcessActionBurstOut(ParticleEffectObjectEntity& particle_system_object); // Update Type: Once (Done)
 	void ProcessActionBurstIn(ParticleEffectObjectEntity& particle_system_object);
 
-	void ProcessActionScreen(ParticleEffectObjectEntity& particle_system_object); // Update Type: Constant (Done)
-	void ProcessActionScreenOut(ParticleEffectObjectEntity& particle_system_object); // Update Type: Constant (Done)
-	void ProcessActionScreenIn(ParticleEffectObjectEntity& particle_system_object); // Update Type: Constant (Done)
-
 	// NOTE: Reverse these values when it comes to the game engine project
 	void ProcessActionFall(ParticleEffectObjectEntity& particle_system_object); // Update Type: Once (Done)
 	void ProcessActionRise(ParticleEffectObjectEntity& particle_system_object); // Update Type: Once (Done)
@@ -258,10 +248,6 @@ private: // PRIVATE FUNCTION(s)
 	void ProcessActionLeft(ParticleEffectObjectEntity& particle_system_object); // Update Type: Once (Done)
 
 	void ProcessActionSpray(ParticleEffectObjectEntity& particle_system_object); // TODO
-
-	void ProcessActionFire(ParticleEffectObjectEntity& particle_system_object); // Update Type: Constant (REWORK)
-	void ProcessActionSmoke(ParticleEffectObjectEntity& particle_system_object); // Update Type: Once (REWORK)
-	void ProcessActionSpark(ParticleEffectObjectEntity& particle_system_object); // Update Type: Once (Done)
 
 	void ProcessActionCustom(ParticleEffectObjectEntity& particle_system_object); // Update Type: Constant (Done)
 
