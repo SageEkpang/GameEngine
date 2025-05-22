@@ -3,6 +3,9 @@
 
 #include "ComponentEntity.h"
 #include <iostream>
+#include <unordered_set>
+
+class GameObjectEntity;
 
 enum class ColliderType : std::int8_t
 {
@@ -25,24 +28,40 @@ public: // PROTECTED VARIABLE(s)
     bool m_IsActivated;
     bool m_IsTrigger;
 
+    // TRIGGER AREA VARIABLE(s)
+    bool m_HasEntered = false;
+    bool m_HasStayed = false;
+    bool m_HasExited = false;
+
+    std::unordered_set<GameObjectEntity*> m_ObjectList;
+
     // COLLIDER VARIABLE(s)
     ColliderType m_ColliderType;
 
 public: // PUBLIC FUNCTION(s)
 
     // CLASS FUNCTION(s)
-    ColliderEntity() 
-        : m_HasCollided(false), m_IsActivated(true), m_IsTrigger(false), m_ColliderType(ColliderType::COLLIDER_TYPE_NONE) { }
+    ColliderEntity();
 
     // DESTRUCTOR
-    ~ColliderEntity() { };
+    ~ColliderEntity();
+
+
+    // TRIGGER AREA FUNCTION(s)
+    void TriggerEntered(GameObjectEntity* gameObject, void(*func)() = nullptr);
+    void TriggerStayed(GameObjectEntity* gameObject, void(*func)() = nullptr);
+    void TriggerExited(GameObjectEntity* gameObject, void(*func)() = nullptr);
+
 
     // GETTER FUNCTION(s)
     inline ColliderType GetColliderType() const { return m_ColliderType; }
+    inline bool GetActivated() const { return m_IsActivated; }
+    inline std::unordered_set<GameObjectEntity*>& GetObjects() { return m_ObjectList; }
 
     // SETTER FUNCTION(s)
     inline void SetColliderType(ColliderType colliderType) { m_ColliderType = colliderType; }
-
+    inline void SetActived(bool activated) { m_IsActivated = activated; }
+    inline void SetIsTrigger(bool isTrigger) { m_IsTrigger = isTrigger; }
 };
 
 #endif

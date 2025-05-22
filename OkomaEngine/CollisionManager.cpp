@@ -169,7 +169,6 @@ CollisionManifold CollisionManager::CheckCollisions(GameObjectEntity* gameObject
 	GameObjectEntity* tempA = nullptr;
 	GameObjectEntity* tempB = nullptr;
 
-
 	// NOTE: Check if the collider component exists within the game object
 	// PROBLEM: This could potentially not work for the type id type, need to test this
 	if (gameObjectA->HasComponent<ColliderEntity>()) { tempA = gameObjectA; }

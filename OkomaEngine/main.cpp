@@ -5,6 +5,9 @@
 #include "GameObjectEntity.h"
 #include "OKMaths.h"
 
+#include "ParticleEffectComponent.h"
+#include "RectangleColliderComponent.h"
+
 #include <iostream>
 
 int main()
@@ -42,10 +45,9 @@ int main()
 
 
 	GameObjectEntity m_Tester;
-
-	//m_Tester.AddComponent<RectangleColliderComponent>();
-	//m_Tester.GetComponent<RectangleColliderComponent>();
-	//m_Tester.RemoveComponent<RectangleColliderComponent>();
+	m_Tester.AddComponent<ParticleEffectComponent>();
+	m_Tester.GetComponent<ParticleEffectComponent>()->Construct(OKVector2<float>(0, 0), 1000u);
+	m_Tester.GetComponent<ParticleEffectComponent>()->PrefabWaterFall();
 	
 	// SetTargetFPS(60);
 	while (!WindowShouldClose())
@@ -61,7 +63,7 @@ int main()
 			rlPushMatrix();
 			rlScalef(1.0f, 1.0f, 1.0f);
 			
-			// NOTE: Text Here
+			// NOTE: Text Here ------
 
 			rlPopMatrix();
 
@@ -69,9 +71,15 @@ int main()
 			rlPushMatrix();
 			rlScalef(1.0f, -1.0f, 1.0f);
 			
-			
-
 			// NOTE: Draw Here ------
+			m_Tester.GetComponent<ParticleEffectComponent>()->Update(GetFrameTime());
+			m_Tester.GetComponent<ParticleEffectComponent>()->Draw();
+
+			// m_Tester
+
+
+
+
 
 			DrawCircle(0, 0, 3, GREEN);
 		

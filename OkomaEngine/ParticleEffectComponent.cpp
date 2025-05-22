@@ -1,42 +1,7 @@
 #include "ParticleEffectComponent.h"
 
-ParticleEffectComponent::ParticleEffectComponent()
+void ParticleEffectComponent::Construct(OKVector2<float> position, unsigned int maxParticleCount, ParticleEmitterType particleEmitterType, ParticleSpawnArea particleSpawnArea, ParticleAction particleAction, float mass, bool isLooping, float simulationSpeed, bool simulateGravity)
 {
-	m_CheckParticleActionFunctionPtr = nullptr;
-	m_CheckParticleSpawnFunctionPtr = nullptr;
-	m_CheckParticleResizingFunctionPtr = nullptr;
-	m_CheckParticlePhysicsOverTimeFunctionPtr = nullptr;
-	m_CheckParticleColourOverTimerFunctionPtr = nullptr;
-
-	m_EmissionRateOverTime = 0u;
-	m_IsLooping = false;
-	m_MaxParticleCount = 0u;
-
-	m_MaxVelocityByColour = 0.f;
-	m_MaxVelocityBySize = 0.f;
-
-	m_MinVelocityByColour = 0.f;
-	m_MinVelocityBySize = 0.f;
-
-	m_ParticleAction = PARTICLE_ACTION_NONE;
-	m_ParticleEmitterType = PARTICLE_EMITTER_TYPE_SINGLE;
-	m_ParticleIndexIncrement = 0u;
-	m_ParticleSpawnArea = PARTICLE_SPAWN_AREA_NONE;
-
-	m_ParticleTimer = 0.f;
-	m_ParticleSimulationDuration = 0.f;
-	m_SimulateGravity = false;
-	m_SimulationSpeed = 0.f;
-	m_StartDelay = 0.f;
-	m_StartSpeed = 0.f;
-	m_StartLifeTime = 0.f;
-}
-
-ParticleEffectComponent::ParticleEffectComponent(OKVector2<float> position, unsigned int maxParticleCount, ParticleEmitterType particleEmitterType, ParticleSpawnArea particleSpawnArea, ParticleAction particleAction, float mass, bool isLooping, float simulationSpeed, bool simulateGravity)
-{
-	// NOTE: Init Timer to NULL for random function
-	srand((unsigned int)time(NULL));
-
 	// NOTE: Init Velocity Variables
 	m_MaxVelocityByColour = 0.f;
 	m_MinVelocityByColour = 0.f;
@@ -68,67 +33,67 @@ ParticleEffectComponent::ParticleEffectComponent(OKVector2<float> position, unsi
 	m_EmissionTimer = 0.f;
 	m_EmissionRateOverTime = 1u;
 
-	#pragma region Particle System Pointer Functions
+#pragma region Particle System Pointer Functions
 
-		// NOTE: PARTICLE SPAWN MAP INIT AND ASSIGNMENT
+	// NOTE: PARTICLE SPAWN MAP INIT AND ASSIGNMENT
 
-		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_NONE] = &ParticleEffectComponent::ProcessSpawnAreaNone;
-		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CIRCLE] = &ParticleEffectComponent::ProcessSpawnAreaCircle;
-		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_RECTANGLE] = &ParticleEffectComponent::ProcessSpawnAreaRectangle;
-		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CAPSULE] = &ParticleEffectComponent::ProcessSpawnAreaCapsule;
-		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_DONUT] = &ParticleEffectComponent::ProcessSpawnAreaDonut;
-		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_EDGE] = &ParticleEffectComponent::ProcessSpawnAreaEdge;
-		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CUSTOM] = &ParticleEffectComponent::ProcessSpawnAreaCustom;
-		m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_SPRAY] = &ParticleEffectComponent::ProcessSpawnAreaSpray;
+	m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_NONE] = &ParticleEffectComponent::ProcessSpawnAreaNone;
+	m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CIRCLE] = &ParticleEffectComponent::ProcessSpawnAreaCircle;
+	m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_RECTANGLE] = &ParticleEffectComponent::ProcessSpawnAreaRectangle;
+	m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CAPSULE] = &ParticleEffectComponent::ProcessSpawnAreaCapsule;
+	m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_DONUT] = &ParticleEffectComponent::ProcessSpawnAreaDonut;
+	m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_EDGE] = &ParticleEffectComponent::ProcessSpawnAreaEdge;
+	m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_CUSTOM] = &ParticleEffectComponent::ProcessSpawnAreaCustom;
+	m_ParticleSpawnMap[PARTICLE_SPAWN_AREA_SPRAY] = &ParticleEffectComponent::ProcessSpawnAreaSpray;
 
-		m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[m_ParticleSpawnArea];
-
-
-		// NOTE: PARTICLE ACTION MAP INIT AND ASSIGNMENT
-
-		m_ParticleActionMap[PARTICLE_ACTION_NONE] = &ParticleEffectComponent::ProcessActionNone;
-		m_ParticleActionMap[PARTICLE_ACTION_BURST_OUT] = &ParticleEffectComponent::ProcessActionBurstOut;
-		m_ParticleActionMap[PARTICLE_ACTION_BURST_IN] = &ParticleEffectComponent::ProcessActionBurstIn;
-
-		m_ParticleActionMap[PARTICLE_ACTION_FALL] = &ParticleEffectComponent::ProcessActionFall;
-		m_ParticleActionMap[PARTICLE_ACTION_RISE] = &ParticleEffectComponent::ProcessActionRise;
-		m_ParticleActionMap[PARTICLE_ACTION_RIGHT] = &ParticleEffectComponent::ProcessActionRight;
-		m_ParticleActionMap[PARTICLE_ACTION_LEFT] = &ParticleEffectComponent::ProcessActionLeft;
-
-		m_ParticleActionMap[PARTICLE_ACTION_SPRAY] = &ParticleEffectComponent::ProcessActionSpray;
-
-		m_ParticleActionMap[PARTICLE_ACTION_CUSTOM] = &ParticleEffectComponent::ProcessActionCustom;
-
-		m_CheckParticleActionFunctionPtr = m_ParticleActionMap[m_ParticleAction];
+	m_CheckParticleSpawnFunctionPtr = m_ParticleSpawnMap[m_ParticleSpawnArea];
 
 
-		// NOTE: PARTICLE RESIZING VARIABLE(s)
-		// m_ParticleResizeMap[PARTICLE_RESIZE_NONE] = nullptr; // TODO: Can change this to a nullptr reference instead of a function pointer, can remove the 
-		m_ParticleResizeMap[PARTICLE_RESIZE_NONE] = &ParticleEffectComponent::ProcessResizeNone;
-		m_ParticleResizeMap[PARTICLE_RESIZE_OVER_LIFETIME] = &ParticleEffectComponent::ProcessResizeOverLifeTime;
-		m_ParticleResizeMap[PARTICLE_RESIZE_VELOCITY] = &ParticleEffectComponent::ProcessResizeVelocity;
+	// NOTE: PARTICLE ACTION MAP INIT AND ASSIGNMENT
 
-		m_CheckParticleResizingFunctionPtr = m_ParticleResizeMap[PARTICLE_RESIZE_NONE];
+	m_ParticleActionMap[PARTICLE_ACTION_NONE] = &ParticleEffectComponent::ProcessActionNone;
+	m_ParticleActionMap[PARTICLE_ACTION_BURST_OUT] = &ParticleEffectComponent::ProcessActionBurstOut;
+	m_ParticleActionMap[PARTICLE_ACTION_BURST_IN] = &ParticleEffectComponent::ProcessActionBurstIn;
+
+	m_ParticleActionMap[PARTICLE_ACTION_FALL] = &ParticleEffectComponent::ProcessActionFall;
+	m_ParticleActionMap[PARTICLE_ACTION_RISE] = &ParticleEffectComponent::ProcessActionRise;
+	m_ParticleActionMap[PARTICLE_ACTION_RIGHT] = &ParticleEffectComponent::ProcessActionRight;
+	m_ParticleActionMap[PARTICLE_ACTION_LEFT] = &ParticleEffectComponent::ProcessActionLeft;
+
+	m_ParticleActionMap[PARTICLE_ACTION_SPRAY] = &ParticleEffectComponent::ProcessActionSpray;
+
+	m_ParticleActionMap[PARTICLE_ACTION_CUSTOM] = &ParticleEffectComponent::ProcessActionCustom;
+
+	m_CheckParticleActionFunctionPtr = m_ParticleActionMap[m_ParticleAction];
 
 
-		// NOTE: PARTICLE PHYSICS FORCE OVER TIME
-		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_NONE] = &ParticleEffectComponent::ProcessPhysicsOverLifeTimeNone;
-		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_FORCE_OVER_LIFETIME] = &ParticleEffectComponent::ProcessPhysicsOverLifeTimeForce;
-		m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_VELOCITY_OVER_LIFETIME] = &ParticleEffectComponent::ProcessPhysicsOverLifeTimeVelocity;
+	// NOTE: PARTICLE RESIZING VARIABLE(s)
+	// m_ParticleResizeMap[PARTICLE_RESIZE_NONE] = nullptr; // TODO: Can change this to a nullptr reference instead of a function pointer, can remove the 
+	m_ParticleResizeMap[PARTICLE_RESIZE_NONE] = &ParticleEffectComponent::ProcessResizeNone;
+	m_ParticleResizeMap[PARTICLE_RESIZE_OVER_LIFETIME] = &ParticleEffectComponent::ProcessResizeOverLifeTime;
+	m_ParticleResizeMap[PARTICLE_RESIZE_VELOCITY] = &ParticleEffectComponent::ProcessResizeVelocity;
 
-		m_CheckParticlePhysicsOverTimeFunctionPtr = m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_NONE];
+	m_CheckParticleResizingFunctionPtr = m_ParticleResizeMap[PARTICLE_RESIZE_NONE];
 
 
-		// NOTE: PARTICLE COLOUR OVER TIME VARIABLE(s)
-		m_ParticleColourOverTimerMap[PARTICLE_COLOUR_NONE] = &ParticleEffectComponent::ProcessColourNone;
-		m_ParticleColourOverTimerMap[PARTICLE_COLOUR_OVER_LIFE_TIME] = &ParticleEffectComponent::ProcessColourOverLifeTime;
-		m_ParticleColourOverTimerMap[PARTICLE_COLOUR_VELOCITY_OVER_LIFE_TIME] = &ParticleEffectComponent::ProcessColourOverVelocity;
+	// NOTE: PARTICLE PHYSICS FORCE OVER TIME
+	m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_NONE] = &ParticleEffectComponent::ProcessPhysicsOverLifeTimeNone;
+	m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_FORCE_OVER_LIFETIME] = &ParticleEffectComponent::ProcessPhysicsOverLifeTimeForce;
+	m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_VELOCITY_OVER_LIFETIME] = &ParticleEffectComponent::ProcessPhysicsOverLifeTimeVelocity;
 
-		m_CheckParticleColourOverTimerFunctionPtr = m_ParticleColourOverTimerMap[PARTICLE_COLOUR_NONE];
+	m_CheckParticlePhysicsOverTimeFunctionPtr = m_ParticlePhysicsOverTimeMap[PARTICLE_PHYSICS_NONE];
 
-	#pragma endregion
 
-	#pragma region Particle System Object Inits
+	// NOTE: PARTICLE COLOUR OVER TIME VARIABLE(s)
+	m_ParticleColourOverTimerMap[PARTICLE_COLOUR_NONE] = &ParticleEffectComponent::ProcessColourNone;
+	m_ParticleColourOverTimerMap[PARTICLE_COLOUR_OVER_LIFE_TIME] = &ParticleEffectComponent::ProcessColourOverLifeTime;
+	m_ParticleColourOverTimerMap[PARTICLE_COLOUR_VELOCITY_OVER_LIFE_TIME] = &ParticleEffectComponent::ProcessColourOverVelocity;
+
+	m_CheckParticleColourOverTimerFunctionPtr = m_ParticleColourOverTimerMap[PARTICLE_COLOUR_NONE];
+
+#pragma endregion
+
+#pragma region Particle System Object Inits
 
 	m_StartDelay = 0.0f;
 	m_StartLifeTime = 1.0f;
@@ -181,7 +146,8 @@ ParticleEffectComponent::ParticleEffectComponent(OKVector2<float> position, unsi
 	m_DefaultParticle->m_StartingColourOverLifeTime = &m_StartingColourOverLifeTime;
 	m_DefaultParticle->m_EndingColourOverLifeTime = &m_EndingColourOverLifeTime;
 
-	#pragma endregion
+#pragma endregion
+	//ParticleEffectComponent::ParticleEffectComponent(position, maxParticleCount, particleEmitterType, particleSpawnArea, particleAction, mass, isLooping, simulationSpeed, simulateGravity);
 }
 
 ParticleEffectComponent::~ParticleEffectComponent()
@@ -272,11 +238,6 @@ void ParticleEffectComponent::Update(const float deltaTime)
 	}
 
 	#pragma endregion
-
-	static float SimpleCounter;
-	SimpleCounter += SimulationSpeedDelta;
-	DrawText(TextFormat("Timer: %f", SimpleCounter), 10, 10, 40, GREEN);
-
 }
 
 void ParticleEffectComponent::Draw()
@@ -296,15 +257,12 @@ void ParticleEffectComponent::PrefabFire()
 	AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
 	AssignParticleAction(PARTICLE_ACTION_BURST_OUT);
 	AssignParticleSpawnAreaCircle(40.f);
-	AssignParticleAction(PARTICLE_ACTION_SPRAY);
 	SetLooping(true);
 	SetEmissionRateOverTime(500u);
 	SetDuration(0.5f);
-	SetStartSpeed(5.0);
 	SetStartSpeed(1.0);
 	SetStartLifeTime(1.0f);
-	AssignVelocityOverLifeTime(OKVector2<float>(0.f, -100.f), OKVector2<float>(0.f, -400.f));
-	AssignVelocityOverLifeTime(OKVector2<float>(0.f, -100.f), OKVector2<float>(0.f, -400.f));
+	AssignVelocityOverLifeTime(OKVector2<float>(0.f, 100.f), OKVector2<float>(0.f, 400.f));
 	AssignColourOverLifeTime(OKVector3<unsigned int>(255, 255, 0), OKVector3<unsigned int>(255, 0, 0));
 	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(1.f, 1.f));
 }
@@ -317,9 +275,45 @@ void ParticleEffectComponent::PrefabSmoke()
 	SetEmissionRateOverTime(5u);
 	SetDuration(0.5f);
 	SetStartLifeTime(6.0f);
-	AssignVelocityOverLifeTime(OKVector2<float>(0.f, -50.f), OKVector2<float>(0.f, -100.f));
+	AssignVelocityOverLifeTime(OKVector2<float>(0.f, 50.f), OKVector2<float>(0.f, 100.f));
 	AssignColourOverLifeTime(OKVector3<unsigned int>(200, 200, 200), OKVector3<unsigned int>(50, 50, 50));
 	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(5.f, 5.f));
+}
+
+void ParticleEffectComponent::PrefabSmokeScreen()
+{
+	AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
+	AssignParticleSpawnAreaRectangle(100.f, 100.f);
+	SetLooping(true);
+	SetEmissionRateOverTime(700u);
+	SetStartSpeed(0.5);
+	AssignColourOverLifeTime(OKVector3<unsigned int>(200, 200, 200), OKVector3<unsigned int>(50, 50, 50));
+	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(1.f, 1.f));
+}
+
+void ParticleEffectComponent::PrefabSmokeScreenOut()
+{
+	AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
+	AssignParticleAction(PARTICLE_ACTION_SPRAY);
+	AssignParticleSpawnAreaRectangle(100.f, 100.f);
+	SetLooping(true);
+	SetEmissionRateOverTime(700u);
+	SetStartSpeed(0.5);
+	AssignColourOverLifeTime(OKVector3<unsigned int>(200, 200, 200), OKVector3<unsigned int>(50, 50, 50));
+	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(1.f, 1.f));
+}
+
+void ParticleEffectComponent::PrefabWaterFall()
+{
+	AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
+	AssignParticleSpawnAreaEdge(100.f);
+	SetLooping(true);
+	SetEmissionRateOverTime(200u);
+	SetStartSpeed(1.0);
+	SetStartLifeTime(1.0f);
+	AssignVelocityOverLifeTime(OKVector2<float>(0.f, OKMaths::RandomRangeFLOAT(-100, -1)), OKVector2<float>(0.f, -400.f));
+	AssignColourOverLifeTime(OKVector3<unsigned int>(137, 120, 240), OKVector3<unsigned int>(137, 207, 240));
+	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(10.f, 10.f));
 }
 
 void ParticleEffectComponent::ProcessParticleToSimulatingParticles()
@@ -677,12 +671,12 @@ void ParticleEffectComponent::ProcessActionBurstIn(ParticleEffectObjectEntity& p
 
 void ParticleEffectComponent::ProcessActionFall(ParticleEffectObjectEntity& particle_system_object)
 {
-	particle_system_object.ApplyImpulse(0, 1 * m_StartSpeed);
+	particle_system_object.ApplyImpulse(0, -1 * m_StartSpeed);
 }
 
 void ParticleEffectComponent::ProcessActionRise(ParticleEffectObjectEntity& particle_system_object)
 {
-	particle_system_object.ApplyImpulse(0, -1 * m_StartSpeed);
+	particle_system_object.ApplyImpulse(0, 1 * m_StartSpeed);
 }
 
 void ParticleEffectComponent::ProcessActionRight(ParticleEffectObjectEntity& particle_system_object)

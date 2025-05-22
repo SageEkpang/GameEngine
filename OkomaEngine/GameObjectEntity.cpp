@@ -3,33 +3,32 @@
 GameObjectEntity::GameObjectEntity()
 {
 	m_Components.clear();
-	// m_Components.reserve(MAX_COMPONENTS);
 }
 
 GameObjectEntity::~GameObjectEntity()
 {
-	// std::unordered_set<std::unique_ptr<ComponentEntity*>>::iterator itr;
+	 std::unordered_map<std::type_index, ComponentEntity*>::iterator itr;
 
-	//for (itr = m_Components.begin(); itr != m_Components.end(); ++itr)
-	//{
-	//	if ((*itr).get() != nullptr)
-	//	{
-	//		delete (*itr).get();
-	//	}
-	//}
+	for (itr = m_Components.begin(); itr != m_Components.end(); ++itr)
+	{
+		if ((*itr).second != nullptr)
+		{
+			delete (*itr).second;
+		}
+	}
 
-	// m_Components.clear();
+	 m_Components.clear();
 }
 
 void GameObjectEntity::Update(const float deltaTime)
 {
-	//if (!m_Components.empty())
-	//{
-	//	for (auto& [ComponentType, Component] : m_Components)
-	//	{
-	//		Component.get()->Update(deltaTime);
-	//	}
-	//}
+	if (!m_Components.empty())
+	{
+		for (auto& [ComponentType, Component] : m_Components)
+		{
+			Component->Update(deltaTime);
+		}
+	}
 }
 
 void GameObjectEntity::Draw()

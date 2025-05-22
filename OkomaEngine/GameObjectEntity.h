@@ -10,7 +10,7 @@
 
 #include "HeaderManager.h"
 #include "ComponentEntity.h"
-#include "OKTransform2.h"
+// #include "OKTransform2.h"
 
 #include <unordered_map>
 #include <bitset>
@@ -55,9 +55,6 @@ public:
 
 	// HELPER FUNCTION(s)
 	template<std::derived_from<ComponentEntity> T>
-	T* FindComponent();
-
-	template<std::derived_from<ComponentEntity> T>
 	void AddComponent();
 
 	template<std::derived_from<ComponentEntity> T>
@@ -72,12 +69,6 @@ public:
 };
 
 template<std::derived_from<ComponentEntity> T>
-inline T* GameObjectEntity::FindComponent()
-{
-	return nullptr;
-}
-
-template<std::derived_from<ComponentEntity> T>
 inline void GameObjectEntity::AddComponent()
 {
 	try
@@ -85,7 +76,7 @@ inline void GameObjectEntity::AddComponent()
 		++m_ComponentIndex;
 		if (m_ComponentIndex > MAX_COMPONENTS)
 		{
-			m_Components = MAX_COMPONENTS;
+			m_ComponentIndex = MAX_COMPONENTS;
 			throw;
 		}
 	}
