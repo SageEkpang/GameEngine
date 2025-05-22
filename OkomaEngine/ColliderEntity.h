@@ -1,6 +1,7 @@
 #ifndef COLLIDER_ENTITY_H
 #define COLLIDER_ENTITY_H
 
+#include "ComponentEntity.h"
 #include <iostream>
 
 enum class ColliderType : std::int8_t
@@ -15,7 +16,7 @@ enum class ColliderType : std::int8_t
     COLLIDER_TYPE_LINE,
 };
 
-class ColliderEntity
+class ColliderEntity : public ComponentEntity
 {
 public: // PROTECTED VARIABLE(s)
 

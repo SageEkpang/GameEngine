@@ -54,6 +54,8 @@ public:
 	void Draw();
 
 	// HELPER FUNCTION(s)
+	template<std::derived_from<ComponentEntity> T>
+	T* FindComponent();
 
 	template<std::derived_from<ComponentEntity> T>
 	void AddComponent();
@@ -68,6 +70,12 @@ public:
 	bool HasComponent();
 
 };
+
+template<std::derived_from<ComponentEntity> T>
+inline T* GameObjectEntity::FindComponent()
+{
+	return nullptr;
+}
 
 template<std::derived_from<ComponentEntity> T>
 inline void GameObjectEntity::AddComponent()

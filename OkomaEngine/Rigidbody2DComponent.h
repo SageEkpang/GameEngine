@@ -51,7 +51,7 @@ struct Mat22
 };
 
 // TODO: Split these into different rigidbody classes
-class Rigidbody2DComponent : public PhysicsEntity, public ComponentEntity
+class Rigidbody2DComponent : public PhysicsEntity
 {
 public:
 

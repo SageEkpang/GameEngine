@@ -17,7 +17,6 @@ class CapsuleColliderComponent;
 class ComplexColliderComponent;
 class PointColliderComponent;
 
-// TODO: Pre-fix collision
 enum Collider_Type_Collisions
 {
     COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_RECTANGLE,
@@ -83,10 +82,6 @@ public:
     // CLASS FUNCTION(s)
     CollisionManager();
     ~CollisionManager();
-
-    // BASE FUNCTION(s)
-    void Update(float deltaTime) {};
-    void Draw() {};
 
     CollisionManifold CheckCollisions(GameObjectEntity* colliderA, GameObjectEntity* colliderB);
 

@@ -2,10 +2,9 @@
 #define LINE_COLLIDER_COMPONENT_H
 
 #include "ColliderEntity.h"
-#include "ComponentEntity.h"
 #include "OKVector2.h"
 
-class LineColliderComponent : public ColliderEntity, public ComponentEntity
+class LineColliderComponent : public ColliderEntity
 {
 public:
 

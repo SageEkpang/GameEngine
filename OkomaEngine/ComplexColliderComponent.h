@@ -3,7 +3,6 @@
 
 // PARENT INCLUDE(s)
 #include "ColliderEntity.h"
-#include "ComponentEntity.h"
 
 // NOTE: File Loading
 #include "OKVector2.h"
@@ -13,7 +12,7 @@
 // NOTE: Resource notes
 // https://www.geeksforgeeks.org/area-of-a-polygon-with-given-n-ordered-vertices/
 
-class ComplexColliderComponent : public ColliderEntity, public ComponentEntity
+class ComplexColliderComponent : public ColliderEntity
 {
 public:
 

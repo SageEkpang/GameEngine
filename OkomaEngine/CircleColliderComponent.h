@@ -3,10 +3,9 @@
 
 // PARENT INCLUDE(s)
 #include "ColliderEntity.h"
-#include "ComponentEntity.h"
 #include "OKVector2.h"
 
-class CircleColliderComponent : public ColliderEntity, public ComponentEntity
+class CircleColliderComponent : public ColliderEntity
 {
 public:
 

@@ -3,6 +3,7 @@
 
 // NOTE: Header File(s)
 #include "HeaderManager.h"
+#include "ComponentEntity.h"
 
 // NOTE: Variable Include(s)
 #include "OKTransform2.h"
@@ -10,10 +11,11 @@
 // NOTE: Constant(s)
 #include "GravityConstants.h"
 
-class PhysicsEntity
+class PhysicsEntity : public ComponentEntity
 {
 private: // PRIVATE VARIABLE(s)
 
+    // CALCULATING VARIABLE(s)
     OKVector2<float> pm_CalculatedGravity;
     OKVector2<float> pm_CalculatedDrag;
     OKVector2<float> pm_CalculatedLift;

@@ -152,13 +152,6 @@ CollisionManager::CollisionManager()
 	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_POINT, ColliderType::COLLIDER_TYPE_RECTANGLE)] = COLLIDER_TYPE_COLLISIONS_POINT_TO_RECTANGLE;
 	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_POINT, ColliderType::COLLIDER_TYPE_CAPSULE)] = COLLIDER_TYPE_COLLISIONS_POINT_TO_CAPSULE;
 	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_POINT, ColliderType::COLLIDER_TYPE_ORIENTED_RECTANGLE)] = COLLIDER_TYPE_COLLISIONS_POINT_TO_ORIENTED;
-
-
-	// NOTE: Potential ID Mapping Init
-
-
-
-
 }
 
 CollisionManager::~CollisionManager()
@@ -171,10 +164,18 @@ CollisionManager::~CollisionManager()
 CollisionManifold CollisionManager::CheckCollisions(GameObjectEntity* gameObjectA, GameObjectEntity* gameObjectB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
-	auto collision_made_pair = std::make_pair(gameObjectA->GetComponent<RectangleColliderComponent>()->GetColliderType(), gameObjectB->GetComponent<RectangleColliderComponent>()->GetColliderType());
 
-	GameObjectEntity* tempA = gameObjectA;
-	GameObjectEntity* tempB = gameObjectB;
+	GameObjectEntity* tempA = nullptr;
+	GameObjectEntity* tempB = nullptr;
+
+	// NOTE: Check if the collider component exists within the game object
+	// PROBLEM: This could potentially not work for the type id type, need to test this
+	if (gameObjectA->HasComponent<ColliderEntity>()) { tempA = gameObjectA; }
+	if (gameObjectB->HasComponent<ColliderEntity>()) { tempB = gameObjectB; }
+	if (tempA == nullptr || tempB == nullptr) { return CollisionManifold(); }
+
+	// NOTE: Assign the static casted class to the Game Objects
+	auto collision_made_pair = std::make_pair(gameObjectA->GetComponent<ColliderEntity>()->GetColliderType(), gameObjectB->GetComponent<ColliderEntity>()->GetColliderType());
 
 	// NOTE: Reverse pair if it is not within the collision map
 	if (m_CollisionMapping.count(collision_made_pair) == 0)

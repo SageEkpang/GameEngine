@@ -2,11 +2,10 @@
 #define CAPSULE_COLLIDER_COMPONENT_H
 
 #include "ColliderEntity.h"
-#include "ComponentEntity.h"
 #include "OKTransform2.h"
 #include "OKVector2.h"
 
-class CapsuleColliderComponent : public ColliderEntity, public ComponentEntity
+class CapsuleColliderComponent : public ColliderEntity
 {
 public:
 
