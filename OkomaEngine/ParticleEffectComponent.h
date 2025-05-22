@@ -4,7 +4,6 @@
 #include "PhysicsEntity.h"
 #include "ParticleEffectObjectEntity.h"
 #include "ComponentEntity.h"
-#include "OKVector4.h"
 
 #include "OKMaths.h"
 #include <memory>
@@ -103,25 +102,42 @@ private:
 	void (ParticleEffectComponent::* m_CheckParticlePhysicsOverTimeFunctionPtr)(ParticleEffectObjectEntity&, float) = nullptr;
 	void (ParticleEffectComponent::* m_CheckParticleColourOverTimerFunctionPtr)(ParticleEffectObjectEntity&, float);
 
-	// TRANSFORM VARIABLE(s)
-	OKTransform2<float> m_Transform;
-	OKVector2<float> m_EmitterPositionOffset;
-
 	// PARTICLE VARIABLE(s)
-	ParticleEffectObjectEntity* m_DefaultParticle;
+	ParticleEffectObjectEntity m_DefaultParticle;
 	std::vector<ParticleEffectObjectEntity> m_SimulatingParticles;
 	unsigned int m_ParticleIndexIncrement;
-
-	// PARTICLE EXCUTE ONCE
-	// NOTE: This assumes to be used with the "NOT" looping
-	bool m_ExecuteOnce = false;
 
 	ParticleSpawnArea m_ParticleSpawnArea;
 	ParticleAction m_ParticleAction;
 	ParticleEmitterType m_ParticleEmitterType;
 
+	// NOTE: For NOT Looping
+	float m_ParticleTimer;
+
+	// EMISSION VARIABLE(s)
+	float m_EmissionTimer = 0.0f;
+
+public:
+
+	// TRANSFORM VARIABLE(s)
+	OKTransform2<float> m_Transform;
+	OKVector2<float> m_EmitterPositionOffset;
+
 	// BASE VARIABLE(s)
 	unsigned int m_MaxParticleCount;
+
+	// PARTICLE EXCUTE ONCE (NOTE: This assumes to be used with the "NOT" looping)
+	bool m_ExecuteOnce = false;
+	bool m_IsLooping;
+
+	// GRAVITY VARIABLE(s)
+	OKVector2<float> m_Gravity;
+	bool m_SimulateGravity;
+	float m_SimulationSpeed;
+
+	// EMISSION VARIABLE(s)
+	unsigned int m_EmissionRateOverTime;
+	float m_ParticleSimulationDuration;
 
 	// NOTE: Setting Variable(s)
 	float m_StartDelay;
@@ -130,27 +146,7 @@ private:
 	OKVector2<float> m_StartSize;
 
 
-	// NOTE: For NOT Looping
-	float m_ParticleTimer;
-	float m_ParticleSimulationDuration;
-	bool m_IsLooping;
-
-	OKVector2<float> m_Gravity;
-	bool m_SimulateGravity;
-	float m_SimulationSpeed;
-
-	// EMISSION VARIABLE(s)
-	float m_EmissionTimer = 0.0f;
-	unsigned int m_EmissionRateOverTime;
-
-public:
-
-	// TODO: Move Variables here some way, some how
-
-
-
-
-public: // PARTICLE OVERTIME VARIABLE(s)
+private: // PARTICLE OVERTIME VARIABLE(s)
 
 	#pragma region PARTICLE OVERTIME VARIABLE(s)
 
@@ -256,7 +252,7 @@ private: // PRIVATE FUNCTION(s)
 public:
 
 	// CLASS FUNCTION(s)
-	ParticleEffectComponent() { }
+	ParticleEffectComponent() = default;
 	void Construct(OKVector2<float> position, unsigned int maxParticleCount, ParticleEmitterType particleEmitterType = PARTICLE_EMITTER_TYPE_SINGLE, ParticleSpawnArea particleSpawnArea = PARTICLE_SPAWN_AREA_NONE, ParticleAction particleAction = PARTICLE_ACTION_NONE, float mass = 1.f, bool isLooping = false, float simulationSpeed = 1.f, bool simulateGravity = false);
 	
 	~ParticleEffectComponent();
@@ -321,89 +317,9 @@ public:
 		void AssignParticleEmitterType(ParticleEmitterType particle_emitter_type);
 
 
-	// GETTER FUNCTION(s)
+	// GETTER FUNCTION(s) // NOT NEEDED
 
-	#pragma region Getter Functions
-
-		inline OKTransform2<float> GetTransform() const { return m_Transform; }
-		inline OKVector2<float> GetPosition() const { return m_Transform.position; }
-		inline OKVector2<float> GetScale() const { return m_Transform.scale; }
-		inline float GetRotation() const { return m_Transform.rotation; }
-
-		inline unsigned int GetMaxParticleCount() const { return m_MaxParticleCount; }
-		
-		inline bool GetExecuteOnce() const { return m_ExecuteOnce; }
-
-		/// <summary> Getter function for the Particle Simulation Duration, 
-		/// NOTE: Does not apply when Looping is TRUE 
-		/// </summary>
-		inline float GetParticleSimulationDuration() const { return m_ParticleSimulationDuration; }
-
-		inline bool GetLooping() const { return m_IsLooping; }
-
-		inline float GetStartDelay() const { return m_StartDelay; }
-		inline float GetStartLifeTime() const { return m_StartLifeTime; }
-		inline float GetStartSpeed() const { return m_StartSpeed; }
-		inline OKVector2<float> GetStartSize() const { return m_StartSize; }
-
-		inline OKVector2<float> GetGravity() const { return m_Gravity; }
-		inline bool GetSimulateGravity() const { return m_SimulateGravity; }
-		inline float GetSimulationSpeed() const { return m_SimulationSpeed; }
-
-		inline unsigned int GetEmissionRateOverTime() const { return m_EmissionRateOverTime; }
-
-		inline OKVector2<float> GetStartingVelocityOverLifeTime() const { return m_StartingVelocityOverLifeTime; }
-		inline OKVector2<float> GetEndingVelocityOverLifeTime() const { return m_EndingVelocityOverLifeTime; }
-
-		inline OKVector2<float> GetStartingForceOverLifeTime() const { return m_StartingForceOverLifeTime; }
-		inline OKVector2<float> GetEndingForceOverLifeTime() const { return m_EndingForceOverLifeTime; }
-
-		inline OKVector2<float> GetStartingSizeBySpeed() const { return m_StartingSizeByVelocity; }
-		inline OKVector2<float> GetEndingSizeBySpeed() const { return m_EndingSizeByVelocity; }
-
-	#pragma endregion
-
-
-	// SETTER FUNCTION(s)
-
-	#pragma region Setter Functions
-
-		// BASE FUNCTION(s)
-		inline void SetTransform(OKTransform2<float> transform) { m_Transform = transform; }
-		inline void SetEmitterOffset(OKVector2<float> emitter_position_offset) { m_EmitterPositionOffset = emitter_position_offset; }
-		inline void SetPosition(OKVector2<float> position) { m_Transform.position = position; }
-		inline void SetScale(OKVector2<float> scale) { m_Transform.scale = scale; }
-		inline void SetRotation(float rotation) { m_Transform.rotation = rotation; }
-			
-		// PARTICLE SYSTEM FUNCTION(s)
-		inline void SetMaxParticleCount(unsigned int maxParticleCount) { m_MaxParticleCount = maxParticleCount; }
-		inline void SetExecuteOnce(bool executeOnce) { m_ExecuteOnce = executeOnce; }
-		inline void SetLooping(bool looping) { m_IsLooping = looping; }
-		inline void SetSimulateGravity(bool simulateGravity) { m_SimulateGravity = simulateGravity; }
-		inline void SetSimulationSpeed(float simulateSpeed) { m_SimulationSpeed = simulateSpeed; }
-		inline void SetEmissionRateOverTime(unsigned int emissionRateOverTime) { m_EmissionRateOverTime = emissionRateOverTime; }
-
-		inline void SetDuration(float duration) { m_ParticleSimulationDuration = duration; }
-		inline void SetStartDelay(float startDelay) { m_StartDelay = startDelay; }
-		inline void SetStartLifeTime(float startLifeTime) { m_StartLifeTime = startLifeTime; }
-		inline void SetStartSpeed(float startSpeed) { m_StartSpeed = startSpeed; }
-		inline void SetStartSize(OKVector2<float> startSize) { m_StartSize = startSize; }
-
-		inline void SetGravity(OKVector2<float> gravity) { m_Gravity = gravity; }
-		
-		inline void SetStartingVelocityOverLifeTime(OKVector2<float> startingVelocityOverLifeTime) { m_StartingVelocityOverLifeTime = startingVelocityOverLifeTime; }
-		inline void SetEndingVelocityOverLifeTime(OKVector2<float> endingVelocityOverLifeTime) { m_EndingVelocityOverLifeTime = endingVelocityOverLifeTime; }
-		
-		inline void SetStartingForceOverLifeTime(OKVector2<float> startingForceOverLifeTime) { m_StartingForceOverLifeTime = startingForceOverLifeTime; }
-		inline void SetEndingForceOverLifeTime(OKVector2<float> endingForceOverLifeTime) { m_EndingForceOverLifeTime = endingForceOverLifeTime; }
-
-		inline void SetStartingSizeOverLifeTime(OKVector2<float> startingSizeOverLifeTime) { m_StartingSizeOverLifeTime = startingSizeOverLifeTime; }
-		inline void SetEndingSizeOverLifeTime(OKVector2<float> endingSizeOverLifeTime) { m_EndingForceOverLifeTime = endingSizeOverLifeTime; }
-
-		inline void SetStartingSizeBySpeed(OKVector2<float> startingSizeByVelocity) { m_StartingSizeByVelocity = startingSizeByVelocity; }
-		inline void SetEndingSizeBySpeed(OKVector2<float> endingSizeByVelocity) { m_EndingSizeByVelocity = endingSizeByVelocity; }
-
-	#pragma endregion
+	// SETTER FUNCTION(s) // NOT NEEDED
 
 };
 

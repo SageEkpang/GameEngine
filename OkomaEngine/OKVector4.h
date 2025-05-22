@@ -5,7 +5,7 @@
 
 #include <limits>
 
-template<class T>
+template<typename T>
 class OKVector4
 {
 public: // PUBLIC VARIABLE(s)
@@ -131,6 +131,7 @@ public: // OPERATOR OVERLOAD FUNCTION(s)
 		this->y = value.y;
 		this->z = value.z;
 		this->w = value.w;
+		return *this;
 	}
 
 	bool operator ==(const OKVector4& value)

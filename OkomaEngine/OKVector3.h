@@ -5,7 +5,7 @@
 
 #include <limits>
 
-template<class T>
+template<typename T>
 class OKVector3
 {
 public: // PUBLIC VARIABLE(s)

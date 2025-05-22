@@ -107,8 +107,8 @@ void ParticleEffectComponent::Construct(OKVector2<float> position, unsigned int 
 	m_StartingForceOverLifeTime = OKVector2<float>(1.0f, 1.0f);
 	m_EndingForceOverLifeTime = OKVector2<float>(1.0f, 1.0f);
 
-	m_StartingColourOverLifeTime = OKVector4<unsigned int>(255, 255, 255, 255);
-	m_StartingColourOverLifeTime = OKVector4<unsigned int>(255, 255, 255, 255);
+	m_StartingColourOverLifeTime = OKVector4<unsigned int>(255u, 255u, 255u, 255u);
+	m_StartingColourOverLifeTime = OKVector4<unsigned int>(255u, 255u, 255u, 255u);
 
 	m_StartingSizeOverLifeTime = m_StartSize;
 	m_EndingSizeOverLifeTime = m_StartSize;
@@ -117,34 +117,34 @@ void ParticleEffectComponent::Construct(OKVector2<float> position, unsigned int 
 	m_EndingSizeByVelocity = m_StartSize;
 
 	// NOTE: Init Default Particle
-	m_DefaultParticle = new ParticleEffectObjectEntity(position, mass);
-	m_DefaultParticle->SimulateGravity(m_SimulateGravity);
-	m_DefaultParticle->SetGravity(m_Gravity);
+	m_DefaultParticle = ParticleEffectObjectEntity(position, mass);
+	m_DefaultParticle.SimulateGravity(m_SimulateGravity);
+	m_DefaultParticle.SetGravity(m_Gravity);
 
-	m_DefaultParticle->m_Scale = (m_StartSize.x, m_StartSize.y);
-	m_DefaultParticle->m_Rotation = 0.f;
+	m_DefaultParticle.m_Scale = (m_StartSize.x, m_StartSize.y);
+	m_DefaultParticle.m_Rotation = 0.f;
 
-	m_DefaultParticle->m_StartDelay = &m_StartDelay;
-	m_DefaultParticle->m_StartLifeTime = &m_StartLifeTime;
-	m_DefaultParticle->m_CurrentLifeTime = 0;
+	m_DefaultParticle.m_StartDelay = &m_StartDelay;
+	m_DefaultParticle.m_StartLifeTime = &m_StartLifeTime;
+	m_DefaultParticle.m_CurrentLifeTime = 0;
 
-	m_DefaultParticle->m_StartSpeed = &m_StartSpeed;
-	m_DefaultParticle->m_StartSize = &m_StartSize;
+	m_DefaultParticle.m_StartSpeed = &m_StartSpeed;
+	m_DefaultParticle.m_StartSize = &m_StartSize;
 
-	m_DefaultParticle->m_StartingVelocityOverLifeTime = &m_StartingVelocityOverLifeTime;
-	m_DefaultParticle->m_EndingVelocityOverLifeTime = &m_EndingVelocityOverLifeTime;
+	m_DefaultParticle.m_StartingVelocityOverLifeTime = &m_StartingVelocityOverLifeTime;
+	m_DefaultParticle.m_EndingVelocityOverLifeTime = &m_EndingVelocityOverLifeTime;
 
-	m_DefaultParticle->m_StartingForceOverLifeTime = &m_StartingForceOverLifeTime;
-	m_DefaultParticle->m_EndingForceOverLifeTime = &m_EndingForceOverLifeTime;
+	m_DefaultParticle.m_StartingForceOverLifeTime = &m_StartingForceOverLifeTime;
+	m_DefaultParticle.m_EndingForceOverLifeTime = &m_EndingForceOverLifeTime;
 
-	m_DefaultParticle->m_StartingSizeOverLifeTime = &m_StartingSizeOverLifeTime;
-	m_DefaultParticle->m_EndingSizeOverLifeTime = &m_EndingSizeOverLifeTime;
+	m_DefaultParticle.m_StartingSizeOverLifeTime = &m_StartingSizeOverLifeTime;
+	m_DefaultParticle.m_EndingSizeOverLifeTime = &m_EndingSizeOverLifeTime;
 
-	m_DefaultParticle->m_StartingSizeByVelocity = &m_StartingSizeByVelocity;
-	m_DefaultParticle->m_EndingSizeByVelocity = &m_EndingSizeByVelocity;
+	m_DefaultParticle.m_StartingSizeByVelocity = &m_StartingSizeByVelocity;
+	m_DefaultParticle.m_EndingSizeByVelocity = &m_EndingSizeByVelocity;
 
-	m_DefaultParticle->m_StartingColourOverLifeTime = &m_StartingColourOverLifeTime;
-	m_DefaultParticle->m_EndingColourOverLifeTime = &m_EndingColourOverLifeTime;
+	m_DefaultParticle.m_StartingColourOverLifeTime = &m_StartingColourOverLifeTime;
+	m_DefaultParticle.m_EndingColourOverLifeTime = &m_EndingColourOverLifeTime;
 
 #pragma endregion
 	//ParticleEffectComponent::ParticleEffectComponent(position, maxParticleCount, particleEmitterType, particleSpawnArea, particleAction, mass, isLooping, simulationSpeed, simulateGravity);
@@ -246,7 +246,7 @@ void ParticleEffectComponent::Draw()
 	{
 		for (auto& v : m_SimulatingParticles)
 		{
-			Color tempColour = {(unsigned char)v.m_Colour.x, (unsigned char)v.m_Colour.y, (unsigned char)v.m_Colour.z, (unsigned char)255.f};
+			Color tempColour = {(unsigned char)v.m_Colour.x, (unsigned char)v.m_Colour.y, (unsigned char)v.m_Colour.z, (unsigned char)v.m_Colour.w};
 			DrawRectangleV(v.GetPosition().ConvertToVec2(), v.m_Scale.ConvertToVec2(), tempColour);
 		}
 	}
@@ -257,13 +257,13 @@ void ParticleEffectComponent::PrefabFire()
 	AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
 	AssignParticleAction(PARTICLE_ACTION_BURST_OUT);
 	AssignParticleSpawnAreaCircle(40.f);
-	SetLooping(true);
-	SetEmissionRateOverTime(500u);
-	SetDuration(0.5f);
-	SetStartSpeed(1.0);
-	SetStartLifeTime(1.0f);
+	m_IsLooping = true;
+	m_EmissionRateOverTime = 500u;
+	m_ParticleSimulationDuration = 0.5f;
+	m_StartSpeed = 1.0f;
+	m_StartLifeTime = 1.0f;
 	AssignVelocityOverLifeTime(OKVector2<float>(0.f, 100.f), OKVector2<float>(0.f, 400.f));
-	AssignColourOverLifeTime(OKVector4<unsigned int>(255, 255, 0, 255), OKVector4<unsigned int>(255, 0, 0, 255));
+	AssignColourOverLifeTime(OKVector4<unsigned int>(255, 255, 0, 255), OKVector4<unsigned int>(255, 0, 0, 0));
 	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(1.f, 1.f));
 }
 
@@ -271,12 +271,12 @@ void ParticleEffectComponent::PrefabFireWall()
 {
 	AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
 	AssignParticleSpawnAreaEdge(200.f);
-	SetLooping(true);
-	SetEmissionRateOverTime(500u);
-	SetStartSpeed(1.0);
-	SetStartLifeTime(1.f);
+	m_IsLooping = true;
+	m_EmissionRateOverTime = 500u;
+	m_StartSpeed = 1.0f;
+	m_StartLifeTime = 1.0f;
 	AssignVelocityOverLifeTime(OKVector2<float>(0.f, 100), OKVector2<float>(0.f, 400));
-	AssignColourOverLifeTime(OKVector4<unsigned int>(255, 255, 0, 255), OKVector4<unsigned int>(255, 0, 0, 255));
+	AssignColourOverLifeTime(OKVector4<unsigned int>(255, 255, 0, 255), OKVector4<unsigned int>(255, 0, 0, 0));
 	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(1.f, 1.f));
 }
 
@@ -284,12 +284,12 @@ void ParticleEffectComponent::PrefabSmoke()
 {
 	AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
 	AssignParticleSpawnAreaCircle(40.f);
-	SetLooping(true);
-	SetEmissionRateOverTime(5u);
-	SetDuration(0.5f);
-	SetStartLifeTime(6.0f);
+	m_IsLooping = true;
+	m_EmissionRateOverTime = 500u;
+	m_ParticleSimulationDuration = 0.5f;
+	m_StartLifeTime = 6.0f;
 	AssignVelocityOverLifeTime(OKVector2<float>(0.f, 50.f), OKVector2<float>(0.f, 100.f));
-	AssignColourOverLifeTime(OKVector4<unsigned int>(200, 200, 200, 255), OKVector4<unsigned int>(50, 50, 50, 255));
+	AssignColourOverLifeTime(OKVector4<unsigned int>(200, 200, 200, 255), OKVector4<unsigned int>(50, 50, 50, 0));
 	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(5.f, 5.f));
 }
 
@@ -297,10 +297,10 @@ void ParticleEffectComponent::PrefabSmokeScreen()
 {
 	AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
 	AssignParticleSpawnAreaRectangle(100.f, 100.f);
-	SetLooping(true);
-	SetEmissionRateOverTime(700u);
-	SetStartSpeed(0.5);
-	AssignColourOverLifeTime(OKVector4<unsigned int>(200, 200, 200, 255), OKVector4<unsigned int>(50, 50, 50, 255));
+	m_IsLooping = true;
+	m_EmissionRateOverTime = 700u;
+	m_StartSpeed = 0.5f;
+	AssignColourOverLifeTime(OKVector4<unsigned int>(200, 200, 200, 255), OKVector4<unsigned int>(50, 50, 50, 0));
 	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(1.f, 1.f));
 }
 
@@ -309,10 +309,10 @@ void ParticleEffectComponent::PrefabSmokeScreenOut()
 	AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
 	AssignParticleAction(PARTICLE_ACTION_SPRAY);
 	AssignParticleSpawnAreaRectangle(100.f, 100.f);
-	SetLooping(true);
-	SetEmissionRateOverTime(700u);
-	SetStartSpeed(0.5);
-	AssignColourOverLifeTime(OKVector4<unsigned int>(200, 200, 200, 255), OKVector4<unsigned int>(50, 50, 50, 255));
+	m_IsLooping = true;
+	m_EmissionRateOverTime = 700u;
+	m_StartSpeed = 0.5f;
+	AssignColourOverLifeTime(OKVector4<unsigned int>(200, 200, 200, 255), OKVector4<unsigned int>(50, 50, 50, 0));
 	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(1.f, 1.f));
 }
 
@@ -320,12 +320,12 @@ void ParticleEffectComponent::PrefabWaterFall()
 {
 	AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
 	AssignParticleSpawnAreaEdge(100.f);
-	SetLooping(true);
-	SetEmissionRateOverTime(200u);
-	SetStartSpeed(1.0);
-	SetStartLifeTime(1.0f);
-	AssignVelocityOverLifeTime(OKVector2<float>(0.f, OKMaths::RandomRangeFLOAT(-100, -1)), OKVector2<float>(0.f, -400.f));
-	AssignColourOverLifeTime(OKVector4<unsigned int>(137, 120, 240, 255), OKVector4<unsigned int>(137, 207, 240, 255));
+	m_IsLooping = true;
+	m_EmissionRateOverTime = 500u;
+	m_StartSpeed = 0.5f;
+	m_StartLifeTime = 1.0f;
+	AssignVelocityOverLifeTime(OKVector2<float>(0.f, -100), OKVector2<float>(0.f, -400.f));
+	AssignColourOverLifeTime(OKVector4<unsigned int>(137, 120, 240, 200), OKVector4<unsigned int>(137, 207, 240, 0));
 	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(10.f, 10.f));
 }
 
@@ -334,15 +334,14 @@ void ParticleEffectComponent::PrefabBloodLeak()
 	AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
 	AssignParticleAction(PARTICLE_ACTION_BURST_OUT);
 	AssignParticleSpawnAreaNone();
-	SetLooping(true);
-	SetEmissionRateOverTime(500u);
+	m_IsLooping = true;
+	m_EmissionRateOverTime = 500u;
+	m_StartSpeed = 0.5f;
+	m_StartLifeTime = 1.0f;
+	m_SimulateGravity = true;
+	m_Gravity = OKVector2 <float>(0, 2000);
 
-	SetStartSpeed(1.0);
-	SetStartLifeTime(1.f);
-	SetSimulateGravity(true);
-	SetGravity(OKVector2<float>(0, 2000));
-
-	AssignColourOverLifeTime(OKVector4<unsigned int>(255, 0, 0, 255), OKVector4<unsigned int>(0, 0, 0, 255));
+	AssignColourOverLifeTime(OKVector4<unsigned int>(255, 0, 0, 255), OKVector4<unsigned int>(255, 0, 0, 0));
 	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(5.f, 5.f));
 }
 
@@ -356,7 +355,7 @@ void ParticleEffectComponent::ProcessParticleToSimulatingParticles()
 	for (unsigned int i = 0; i < tempParticleAmount; ++i)
 	{
 		// NOTE: Push particles to the simuatling vector
-		m_SimulatingParticles.push_back(*m_DefaultParticle);
+		m_SimulatingParticles.push_back(m_DefaultParticle);
 
 		// NOTE: Get the last particle that was inserted in the list and update that, assuming that is the particle that needs to be updated
 		std::vector<ParticleEffectObjectEntity>::iterator itr = m_SimulatingParticles.end() - 1;
