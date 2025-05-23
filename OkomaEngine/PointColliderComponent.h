@@ -14,12 +14,18 @@ public:
 
 public:
 
+	// CLASS FUNCTION(s)
 	PointColliderComponent();
 
-	PointColliderComponent(OKVector2<float> position, float radius = 1.f);
-	PointColliderComponent(float x, float y, float radius = 1.f);
+	void Construct(OKVector2<float> position, float radius = 1.f);
+	void Construct(float x, float y, float radius = 1.f);
 
 	~PointColliderComponent();
+
+	// GETTER FUNCTION(s) // NOT NEEDED
+
+	// SETTER FUNCTION(s) // NOT NEEDED
+
 };
 
 #endif

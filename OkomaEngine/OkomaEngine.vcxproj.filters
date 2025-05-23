@@ -200,6 +200,9 @@
     <ClCompile Include="OKMaths.cpp">
       <Filter>Helper\Source</Filter>
     </ClCompile>
+    <ClCompile Include="OrientedRectangleColliderComponent.cpp">
+      <Filter>Components\ColliderComponents\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OKVector2.h">
@@ -303,6 +306,9 @@
     </ClInclude>
     <ClInclude Include="OKMaths.h">
       <Filter>Helper\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="OrientedRectangleColliderComponent.h">
+      <Filter>Components\ColliderComponents\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

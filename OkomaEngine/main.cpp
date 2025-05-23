@@ -8,6 +8,8 @@
 #include "ParticleEffectComponent.h"
 #include "RectangleColliderComponent.h"
 
+#include "CollisionManager.h"
+
 #include <iostream>
 
 int main()
@@ -45,9 +47,14 @@ int main()
 
 
 	GameObjectEntity m_Tester;
-	m_Tester.AddComponent<ParticleEffectComponent>();
-	m_Tester.GetComponent<ParticleEffectComponent>()->Construct(OKVector2<float>(0, 0), 1000u);
-	m_Tester.GetComponent<ParticleEffectComponent>()->PrefabFire();
+	//m_Tester.AddComponent<RectangleColliderComponent>();
+
+	GameObjectEntity m_Object2;
+	//m_Object2.AddComponent<RectangleColliderComponent>();
+
+	CollisionManager m_ColMani;
+	m_ColMani.CheckCollisions(&m_Tester, &m_Object2);
+
 	
 	// SetTargetFPS(60);
 	while (!WindowShouldClose())
@@ -72,8 +79,12 @@ int main()
 			rlScalef(1.0f, -1.0f, 1.0f);
 			
 			// NOTE: Draw Here ------
-			m_Tester.GetComponent<ParticleEffectComponent>()->Update(GetFrameTime());
-			m_Tester.GetComponent<ParticleEffectComponent>()->Draw();
+			/*m_Tester.GetComponent<ParticleEffectComponent>()->Update(GetFrameTime());
+			m_Tester.GetComponent<ParticleEffectComponent>()->Draw();*/
+
+
+
+
 
 			// m_Tester
 

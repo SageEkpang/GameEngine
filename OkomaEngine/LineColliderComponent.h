@@ -13,29 +13,26 @@ public:
 
 public:
 
-	// CLASS FUNCTION(s)
-	LineColliderComponent();
-
+	// CLASS FUNCTION(s) (GENERAL)
 	LineColliderComponent(OKVector2<float> lineStartPosition, OKVector2<float> lineEndPosition);
 	LineColliderComponent(OKVector2<float> lineStartPosition, float endX, float endY);
 	LineColliderComponent(float startX, float startY, OKVector2<float> lineEndPosition);
 	LineColliderComponent(float startX, float startY, float endX, float endY);
 
+
+	// CLASS FUNCTION(s) (COMPONENTS)
+	LineColliderComponent();
+
+	void Construct(OKVector2<float> lineStartPosition, OKVector2<float> lineEndPosition);
+	void Construct(OKVector2<float> lineStartPosition, float endX, float endY);
+	void Construct(float startX, float startY, OKVector2<float> lineEndPosition);
+	void Construct(float startX, float startY, float endX, float endY);
+
 	~LineColliderComponent();
 
+	// GETTER FUNCTION(s) // NOT NEEDED
 
-	// GETTER FUNCTION(s)
-
-	inline OKVector2<float> GetLineStart() const { return m_LineStartPosition; }
-	inline OKVector2<float> GetLineEnd() const { return m_LineEndPosition; }
-
-	// SETTER FUNCTION(s)
-
-	inline void SetLineStartPosition(OKVector2<float> lineStartPosition) { m_LineStartPosition = lineStartPosition; }
-	inline void SetLineStartPosition(float startX, float startY) { m_LineStartPosition = OKVector2<float>(startX, startY); }
-
-	inline void SetLineEndPosition(OKVector2<float> lineEndPosition) { m_LineEndPosition = lineEndPosition; }
-	inline void SetLineEndPosition(float endX, float endY) { m_LineEndPosition = OKVector2<float>(endX, endY); }
+	// SETTER FUNCTION(s) // NOT NEEDED
 
 };
 

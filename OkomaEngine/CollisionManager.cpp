@@ -2,6 +2,7 @@
 
 // FORWARD DEC INCLUDE(s)
 #include "RectangleColliderComponent.h"
+#include "OrientedRectangleColliderComponent.h"
 #include "CircleColliderComponent.h"
 #include "LineColliderComponent.h"
 #include "CapsuleColliderComponent.h"
@@ -47,7 +48,7 @@ bool CollisionManager::Multiply(float* out, const float* matA, int aRows, int aC
 	return true;
 }
 
-Interval2D CollisionManager::GetOrientedRectangleInterval(RectangleColliderComponent* orRectA, OKVector2<float>& axis)
+Interval2D CollisionManager::GetOrientedRectangleInterval(OrientedRectangleColliderComponent* orRectA, OKVector2<float>& axis)
 {
 	OKVector2<float> MaxB = orRectA->m_Position + orRectA->m_Scale;
 	OKVector2<float> MinB = orRectA->m_Position - orRectA->m_Scale;
@@ -57,7 +58,7 @@ Interval2D CollisionManager::GetOrientedRectangleInterval(RectangleColliderCompo
 		OKVector2<float>(MinB.x, MaxB.y),  OKVector2<float>(MaxB.x, MinB.y)
 	};
 
-	float theta = orRectA->GetRotation() * DEG2RAD;
+	float theta = orRectA->m_Rotation * DEG2RAD;
 
 	float zRotation2x2[] = {
 		std::cosf(theta), std::sinf(theta),
@@ -116,7 +117,7 @@ Interval2D CollisionManager::GetRectangleInterval(RectangleColliderComponent* re
 	return result;
 }
 
-bool CollisionManager::OverlapOnAxis(RectangleColliderComponent* rectA, RectangleColliderComponent* orRectB, OKVector2<float> axis)
+bool CollisionManager::OverlapOnAxis(RectangleColliderComponent* rectA, OrientedRectangleColliderComponent* orRectB, OKVector2<float> axis)
 {
 	Interval2D A = GetRectangleInterval(rectA, axis);
 	Interval2D B = GetOrientedRectangleInterval(orRectB, axis);
@@ -126,38 +127,37 @@ bool CollisionManager::OverlapOnAxis(RectangleColliderComponent* rectA, Rectangl
 CollisionManager::CollisionManager()
 {
 	// NOTE: Potential Collision Mapping Init
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_RECTANGLE, ColliderType::COLLIDER_TYPE_RECTANGLE)] = COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_RECTANGLE;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(RectangleColliderComponent)), std::type_index(typeid(RectangleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_RECTANGLE;
 
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_CIRCLE, ColliderType::COLLIDER_TYPE_CIRCLE)] = COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_CIRCLE;
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_CIRCLE, ColliderType::COLLIDER_TYPE_RECTANGLE)] = COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_RECTANGLE;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(CircleColliderComponent)), std::type_index(typeid(CircleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_CIRCLE;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(CircleColliderComponent)), std::type_index(typeid(RectangleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_RECTANGLE;
 
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_CAPSULE, ColliderType::COLLIDER_TYPE_CAPSULE)] = COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CAPSULE;
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_CAPSULE, ColliderType::COLLIDER_TYPE_RECTANGLE)] = COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_RECTANGLE;
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_CAPSULE, ColliderType::COLLIDER_TYPE_CIRCLE)] = COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CIRCLE;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(CapsuleColliderComponent)), std::type_index(typeid(CapsuleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CAPSULE;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(CapsuleColliderComponent)), std::type_index(typeid(RectangleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_RECTANGLE;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(CapsuleColliderComponent)), std::type_index(typeid(CircleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CIRCLE;
 
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_ORIENTED_RECTANGLE, ColliderType::COLLIDER_TYPE_ORIENTED_RECTANGLE)] = COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_ORIENTED;
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_ORIENTED_RECTANGLE, ColliderType::COLLIDER_TYPE_RECTANGLE)] = COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_RECTANGLE;
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_ORIENTED_RECTANGLE, ColliderType::COLLIDER_TYPE_CIRCLE)] = COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_CIRCLE;
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_ORIENTED_RECTANGLE, ColliderType::COLLIDER_TYPE_CAPSULE)] = COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_CAPSULE;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(OrientedRectangleColliderComponent)), std::type_index(typeid(OrientedRectangleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_ORIENTED;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(OrientedRectangleColliderComponent)), std::type_index(typeid(RectangleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_RECTANGLE;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(OrientedRectangleColliderComponent)), std::type_index(typeid(CircleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_CIRCLE;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(OrientedRectangleColliderComponent)), std::type_index(typeid(CapsuleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_CAPSULE;
 
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_LINE, ColliderType::COLLIDER_TYPE_LINE)] = COLLIDER_TYPE_COLLISIONS_LINE_TO_LINE;
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_LINE, ColliderType::COLLIDER_TYPE_CIRCLE)] = COLLIDER_TYPE_COLLISIONS_LINE_TO_CIRCLE;
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_LINE, ColliderType::COLLIDER_TYPE_RECTANGLE)] = COLLIDER_TYPE_COLLISIONS_LINE_TO_RECTANGLE;
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_LINE, ColliderType::COLLIDER_TYPE_CAPSULE)] = COLLIDER_TYPE_COLLISIONS_LINE_TO_CAPSULE;
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_LINE, ColliderType::COLLIDER_TYPE_ORIENTED_RECTANGLE)] = COLLIDER_TYPE_COLLISIONS_LINE_TO_ORIENTED;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(LineColliderComponent)), std::type_index(typeid(LineColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_LINE_TO_LINE;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(LineColliderComponent)), std::type_index(typeid(CircleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_LINE_TO_CIRCLE;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(LineColliderComponent)), std::type_index(typeid(RectangleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_LINE_TO_RECTANGLE;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(LineColliderComponent)), std::type_index(typeid(CapsuleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_LINE_TO_CAPSULE;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(LineColliderComponent)), std::type_index(typeid(OrientedRectangleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_LINE_TO_ORIENTED;
 
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_POINT, ColliderType::COLLIDER_TYPE_POINT)] = COLLIDER_TYPE_COLLISIONS_POINT_TO_POINT;
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_POINT, ColliderType::COLLIDER_TYPE_LINE)] = COLLIDER_TYPE_COLLISIONS_POINT_TO_LINE;
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_POINT, ColliderType::COLLIDER_TYPE_CIRCLE)] = COLLIDER_TYPE_COLLISIONS_POINT_TO_CIRCLE;
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_POINT, ColliderType::COLLIDER_TYPE_RECTANGLE)] = COLLIDER_TYPE_COLLISIONS_POINT_TO_RECTANGLE;
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_POINT, ColliderType::COLLIDER_TYPE_CAPSULE)] = COLLIDER_TYPE_COLLISIONS_POINT_TO_CAPSULE;
-	m_CollisionMapping[std::make_pair(ColliderType::COLLIDER_TYPE_POINT, ColliderType::COLLIDER_TYPE_ORIENTED_RECTANGLE)] = COLLIDER_TYPE_COLLISIONS_POINT_TO_ORIENTED;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(PointColliderComponent)), std::type_index(typeid(PointColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_POINT_TO_POINT;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(PointColliderComponent)), std::type_index(typeid(LineColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_POINT_TO_LINE;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(PointColliderComponent)), std::type_index(typeid(CircleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_POINT_TO_CIRCLE;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(PointColliderComponent)), std::type_index(typeid(RectangleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_POINT_TO_RECTANGLE;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(PointColliderComponent)), std::type_index(typeid(CapsuleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_POINT_TO_CAPSULE;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(PointColliderComponent)), std::type_index(typeid(OrientedRectangleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_POINT_TO_ORIENTED;
 }
 
 CollisionManager::~CollisionManager()
 {
 	m_CollisionMapping.clear();
-	m_IdMapping.clear();
 }
 
 // FIX ME: Fix this 
@@ -165,18 +165,18 @@ CollisionManifold CollisionManager::CheckCollisions(GameObjectEntity* gameObject
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
-	// NOTE:
+	// NOTE: Temp Collision Variables
 	GameObjectEntity* tempA = nullptr;
 	GameObjectEntity* tempB = nullptr;
 
 	// NOTE: Check if the collider component exists within the game object
-	// PROBLEM: This could potentially not work for the type id type, need to test this
-	if (gameObjectA->HasComponent<ColliderEntity>()) { tempA = gameObjectA; }
-	if (gameObjectB->HasComponent<ColliderEntity>()) { tempB = gameObjectB; }
+	if (gameObjectA->FindChildComponent<ColliderEntity>()) { tempA = gameObjectA; }
+	if (gameObjectB->FindChildComponent<ColliderEntity>()) { tempB = gameObjectB; }
+
 	if (tempA == nullptr || tempB == nullptr) { return CollisionManifold(); }
 
 	// NOTE: Assign the static casted class to the Game Objects
-	auto collision_made_pair = std::make_pair(gameObjectA->GetComponent<ColliderEntity>()->GetColliderType(), gameObjectB->GetComponent<ColliderEntity>()->GetColliderType());
+	auto collision_made_pair = std::make_pair(std::type_index(typeid(gameObjectA->FindChildComponent<ColliderEntity>())), std::type_index(typeid(gameObjectB->FindChildComponent<ColliderEntity>())));
 
 	// NOTE: Reverse pair if it is not within the collision map
 	if (m_CollisionMapping.count(collision_made_pair) == 0)
@@ -196,15 +196,15 @@ CollisionManifold CollisionManager::CheckCollisions(GameObjectEntity* gameObject
 		case COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_RECTANGLE: return t_ColMani = CapsuleToRectangle(tempA->GetComponent<CapsuleColliderComponent>(), tempB->GetComponent<RectangleColliderComponent>()); break;
 		case COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CIRCLE: return t_ColMani = CapsuleToCircle(tempA->GetComponent<CapsuleColliderComponent>(), tempB->GetComponent<CircleColliderComponent>()); break;
 
-		case COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_ORIENTED: return t_ColMani = OrientedRectangleToOrientedRectangle(tempA->GetComponent<RectangleColliderComponent>(), tempB->GetComponent<RectangleColliderComponent>()); break;
-		case COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_RECTANGLE: return t_ColMani = OrientedRectangleToRectangle(tempA->GetComponent<RectangleColliderComponent>(), tempA->GetComponent<RectangleColliderComponent>()); break;
-		case COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_CIRCLE: return t_ColMani = OrientedRectangleToCircle(tempA->GetComponent<RectangleColliderComponent>(), tempB->GetComponent<CircleColliderComponent>()); break;
-		case COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_CAPSULE: return t_ColMani = OrientedRectangleToCapsule(tempA->GetComponent<RectangleColliderComponent>(), tempB->GetComponent<CapsuleColliderComponent>()); break;
+		case COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_ORIENTED: return t_ColMani = OrientedRectangleToOrientedRectangle(tempA->GetComponent<OrientedRectangleColliderComponent>(), tempB->GetComponent<OrientedRectangleColliderComponent>()); break;
+		case COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_RECTANGLE: return t_ColMani = OrientedRectangleToRectangle(tempA->GetComponent<OrientedRectangleColliderComponent>(), tempA->GetComponent<RectangleColliderComponent>()); break;
+		case COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_CIRCLE: return t_ColMani = OrientedRectangleToCircle(tempA->GetComponent<OrientedRectangleColliderComponent>(), tempB->GetComponent<CircleColliderComponent>()); break;
+		case COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_CAPSULE: return t_ColMani = OrientedRectangleToCapsule(tempA->GetComponent<OrientedRectangleColliderComponent>(), tempB->GetComponent<CapsuleColliderComponent>()); break;
 
 		case COLLIDER_TYPE_COLLISIONS_LINE_TO_LINE: return t_ColMani = LineToLine(tempA->GetComponent<LineColliderComponent>(), tempB->GetComponent<LineColliderComponent>()); break;
 		case COLLIDER_TYPE_COLLISIONS_LINE_TO_CIRCLE: return t_ColMani = LineToCircle(tempA->GetComponent<LineColliderComponent>(), tempB->GetComponent<CircleColliderComponent>()); break;
 		case COLLIDER_TYPE_COLLISIONS_LINE_TO_RECTANGLE: return t_ColMani = LineToRectangle(tempA->GetComponent<LineColliderComponent>(), tempB->GetComponent<RectangleColliderComponent>()); break;
-		case COLLIDER_TYPE_COLLISIONS_LINE_TO_ORIENTED: return t_ColMani = LineToOrientedRectangle(tempA->GetComponent<LineColliderComponent>(), tempB->GetComponent<RectangleColliderComponent>()); break;
+		case COLLIDER_TYPE_COLLISIONS_LINE_TO_ORIENTED: return t_ColMani = LineToOrientedRectangle(tempA->GetComponent<LineColliderComponent>(), tempB->GetComponent<OrientedRectangleColliderComponent>()); break;
 		case COLLIDER_TYPE_COLLISIONS_LINE_TO_CAPSULE: return t_ColMani = LineToCapsule(tempA->GetComponent<LineColliderComponent>(), tempB->GetComponent<CapsuleColliderComponent>()); break;
 
 		case COLLIDER_TYPE_COLLISIONS_POINT_TO_POINT: return t_ColMani = PointToPoint(tempA->GetComponent<PointColliderComponent>(), tempB->GetComponent<PointColliderComponent>()); break;
@@ -212,7 +212,7 @@ CollisionManifold CollisionManager::CheckCollisions(GameObjectEntity* gameObject
 		case COLLIDER_TYPE_COLLISIONS_POINT_TO_CIRCLE: return t_ColMani = PointToCircle(tempA->GetComponent<PointColliderComponent>(), tempB->GetComponent<CircleColliderComponent>()); break;
 		case COLLIDER_TYPE_COLLISIONS_POINT_TO_RECTANGLE: return t_ColMani = PointToRectangle(tempA->GetComponent<PointColliderComponent>(), tempB->GetComponent<RectangleColliderComponent>()); break;
 		case COLLIDER_TYPE_COLLISIONS_POINT_TO_CAPSULE: return t_ColMani = PointToCapsule(tempA->GetComponent<PointColliderComponent>(), tempB->GetComponent<CapsuleColliderComponent>()); break;
-		case COLLIDER_TYPE_COLLISIONS_POINT_TO_ORIENTED: return t_ColMani = PointToOrientedRectangle(tempA->GetComponent<PointColliderComponent>(), tempB->GetComponent<RectangleColliderComponent>()); break;
+		case COLLIDER_TYPE_COLLISIONS_POINT_TO_ORIENTED: return t_ColMani = PointToOrientedRectangle(tempA->GetComponent<PointColliderComponent>(), tempB->GetComponent<OrientedRectangleColliderComponent>()); break;
 
 		default: t_ColMani = CollisionManifold();
 	}
@@ -340,10 +340,10 @@ CollisionManifold CollisionManager::RectangleToRectangle(RectangleColliderCompon
 	DrawCircleV(NearPointA.ConvertToVec2(), 1.f, YELLOW);
 
 	// REFACTOR: Fix the size of the circle  
-	CircleColliderComponent circle_temp_A = CircleColliderComponent(NearPointA, 0.5f);
-	CircleColliderComponent circle_temp_B = CircleColliderComponent(NearPointB, 0.5f);
+	// CircleColliderComponent circle_temp_A = CircleColliderComponent(NearPointA, 0.5f);
+	// CircleColliderComponent circle_temp_B = CircleColliderComponent(NearPointB, 0.5f);
 
-	return t_ColMani = CircleToCircle(&circle_temp_A, &circle_temp_B);
+	return t_ColMani;// = CircleToCircle(&circle_temp_A, &circle_temp_B);
 }
 
 CollisionManifold CollisionManager::CircleToCircle(CircleColliderComponent* circA, CircleColliderComponent* circB)
@@ -428,9 +428,9 @@ CollisionManifold CollisionManager::CircleToRectangle(CircleColliderComponent* c
 		NearPoint.x = BottomSide.x;
 	}
 
-	CircleColliderComponent circle_temp_A = CircleColliderComponent(NearPoint, 1.f);
+	//CircleColliderComponent circle_temp_A = CircleColliderComponent(NearPoint, 1.f);
 
-	return t_ColMani = CircleToCircle(circA, &circle_temp_A);
+	return t_ColMani;// = CircleToCircle(circA, &circle_temp_A);
 }
 
 CollisionManifold CollisionManager::CapsuleToCircle(CapsuleColliderComponent* capsuleA, CircleColliderComponent* circB)
@@ -456,9 +456,9 @@ CollisionManifold CollisionManager::CapsuleToCircle(CapsuleColliderComponent* ca
 	closest_point.y = Clamp(closest_point.y, base_a.y, tip_a.y);
 
 	// NOTE: Create the circle based of the capsule components
-	CircleColliderComponent circle_temp = CircleColliderComponent(closest_point, capsuleA->m_Width / 2.f);
+	//CircleColliderComponent circle_temp = CircleColliderComponent(closest_point, capsuleA->m_Width / 2.f);
 
-	t_ColMani = CircleToCircle(&circle_temp, circB);
+	// t_ColMani = CircleToCircle(&circle_temp, circB);
 
 	return t_ColMani;
 }
@@ -487,9 +487,9 @@ CollisionManifold CollisionManager::CapsuleToRectangle(CapsuleColliderComponent*
 	closest_point.y = Clamp(closest_point.y, base_a.y, tip_a.y);
 
 	// NOTE: Create the circle based of the capsule components
-	CircleColliderComponent circle_temp = CircleColliderComponent(closest_point, capsuleA->m_Width / 2.f);
+	// CircleColliderComponent circle_temp = CircleColliderComponent(closest_point, capsuleA->m_Width / 2.f);
 
-	return t_ColMani = CircleToRectangle(&circle_temp, rectB);
+	return t_ColMani; // = CircleToRectangle(&circle_temp, rectB);
 }
 
 CollisionManifold CollisionManager::CapsuleToCapsule(CapsuleColliderComponent* capsuleA, CapsuleColliderComponent* capsuleB)
@@ -531,16 +531,16 @@ CollisionManifold CollisionManager::CapsuleToCapsule(CapsuleColliderComponent* c
 	DrawCircleV(closest_point_B.ConvertToVec2(), 10.f, PURPLE);
 
 	// NOTE: Circle Construction (A)
-	CircleColliderComponent circle_temp_A = CircleColliderComponent(closest_point_A, capsuleA->m_Width / 2.f);
+	// CircleColliderComponent circle_temp_A = CircleColliderComponent(closest_point_A, capsuleA->m_Width / 2.f);
 
 	// NOTE: Circle Construction (B)
-	CircleColliderComponent circle_temp_B = CircleColliderComponent(closest_point_B, capsuleB->m_Width / 2.f);
+	// CircleColliderComponent circle_temp_B = CircleColliderComponent(closest_point_B, capsuleB->m_Width / 2.f);
 
-	t_ColMani = CircleToCircle(&circle_temp_A, &circle_temp_B);
+	// t_ColMani = CircleToCircle(&circle_temp_A, &circle_temp_B);
 	return t_ColMani;
 }
 
-CollisionManifold CollisionManager::OrientedRectangleToOrientedRectangle(RectangleColliderComponent* OrRectA, RectangleColliderComponent* OrRectB)
+CollisionManifold CollisionManager::OrientedRectangleToOrientedRectangle(OrientedRectangleColliderComponent* OrRectA, OrientedRectangleColliderComponent* OrRectB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -552,7 +552,7 @@ CollisionManifold CollisionManager::OrientedRectangleToOrientedRectangle(Rectang
 	return t_ColMani;
 }
 
-CollisionManifold CollisionManager::OrientedRectangleToRectangle(RectangleColliderComponent* OrRectA, RectangleColliderComponent* rectB) // rect2 = OrRectA
+CollisionManifold CollisionManager::OrientedRectangleToRectangle(OrientedRectangleColliderComponent* OrRectA, RectangleColliderComponent* rectB) // rect2 = OrRectA
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -561,7 +561,7 @@ CollisionManifold CollisionManager::OrientedRectangleToRectangle(RectangleCollid
 		OKVector2<float>(0, 0), OKVector2<float>(0, 0)
 	};
 
-	float theta = DEG2RAD * OrRectA->GetRotation();
+	float theta = DEG2RAD * OrRectA->m_Rotation;
 
 	float zRotation2x2[] = {
 		std::cosf(theta), std::sinf(theta),
@@ -592,12 +592,12 @@ CollisionManifold CollisionManager::OrientedRectangleToRectangle(RectangleCollid
 	return t_ColMani;
 }
 
-CollisionManifold CollisionManager::OrientedRectangleToCircle(RectangleColliderComponent* OrRectA, CircleColliderComponent* circB)
+CollisionManifold CollisionManager::OrientedRectangleToCircle(OrientedRectangleColliderComponent* OrRectA, CircleColliderComponent* circB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
 	OKVector2<float> Rad = circB->m_Position - OrRectA->m_Position;
-	float theta = -DEG2RAD * OrRectA->GetRotation();
+	float theta = -DEG2RAD * OrRectA->m_Rotation;
 	
 	float zRotation2x2[] = {
 		std::cosf(theta), std::sinf(theta),
@@ -607,15 +607,16 @@ CollisionManifold CollisionManager::OrientedRectangleToCircle(RectangleColliderC
 	Multiply(Rad.asArray(), OKVector2<float>(Rad.x, Rad.y).asArray(), 1, 2, zRotation2x2, 2, 2);
 
 	OKTransform2<float> lcircle = OKTransform2<float>(Rad + (OrRectA->m_Scale / 2), OKVector2<float>(0, 0), 0);
-	CircleColliderComponent circle_temp = CircleColliderComponent(Rad + (OrRectA->m_Scale / 2.f), circB->m_Radius);
+	// CircleColliderComponent circle_temp = CircleColliderComponent(Rad + (OrRectA->m_Scale / 2.f), circB->m_Radius);
 
 	OKTransform2<float> lRect = OKTransform2<float>(OKVector2<float>(0, 0), OrRectA->m_Scale, 0);
-	RectangleColliderComponent rectangle_temp = RectangleColliderComponent(OKVector2<float>(0, 0), OrRectA->m_Scale);
+	// RectangleColliderComponent rectangle_temp = RectangleColliderComponent(OKVector2<float>(0, 0), OrRectA->m_Scale);
 
-	return t_ColMani = CircleToRectangle(&circle_temp, &rectangle_temp);
+	return t_ColMani;
+	// return t_ColMani = CircleToRectangle(&circle_temp, &rectangle_temp);
 }
 
-CollisionManifold CollisionManager::OrientedRectangleToCapsule(RectangleColliderComponent* OrRectA, CapsuleColliderComponent* capsuleB)
+CollisionManifold CollisionManager::OrientedRectangleToCapsule(OrientedRectangleColliderComponent* OrRectA, CapsuleColliderComponent* capsuleB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -640,23 +641,24 @@ CollisionManifold CollisionManager::OrientedRectangleToCapsule(RectangleCollider
 	closest_point.y = Clamp(closest_point.y, base_a.y, tip_a.y);
 
 	// NOTE: Create the circle based of the capsule components
-	CircleColliderComponent circle_temp = CircleColliderComponent(closest_point, capsuleB->m_Width / 2);
+	//CircleColliderComponent circle_temp = CircleColliderComponent(closest_point, capsuleB->m_Width / 2);
 
 	// ROTATED BOX TO CIRCLE
-	OKVector2<float> Rad = circle_temp.m_Position - OrRectA->m_Position;
-	float theta = -DEG2RAD * OrRectA->GetRotation();
+	// OKVector2<float> Rad = circle_temp.m_Position - OrRectA->m_Position;
+	float theta = -DEG2RAD * OrRectA->m_Rotation;
 
 	float zRotation2x2[] = {
 		std::cosf(theta), std::sinf(theta),
 		-std::sinf(theta), std::cosf(theta)
 	};
 
-	Multiply(Rad.asArray(), OKVector2<float>(Rad.x, Rad.y).asArray(), 1, 2, zRotation2x2, 2, 2);
+	// Multiply(Rad.asArray(), OKVector2<float>(Rad.x, Rad.y).asArray(), 1, 2, zRotation2x2, 2, 2);
 
-	CircleColliderComponent circle_temp_or = CircleColliderComponent(Rad + (OrRectA->m_Scale / 2), circle_temp.m_Radius);
-	RectangleColliderComponent rectangle_temp = RectangleColliderComponent(OKVector2<float>(0, 0), OrRectA->m_Scale);
+	//CircleColliderComponent circle_temp_or = CircleColliderComponent(Rad + (OrRectA->m_Scale / 2), circle_temp.m_Radius);
+	// RectangleColliderComponent rectangle_temp = RectangleColliderComponent(OKVector2<float>(0, 0), OrRectA->m_Scale);
 
-	return t_ColMani = CircleToRectangle(&circle_temp_or, &rectangle_temp);
+	return t_ColMani;
+	// return t_ColMani = CircleToRectangle(&circle_temp_or, &rectangle_temp);
 }
 
 CollisionManifold CollisionManager::PointToPoint(PointColliderComponent* pointA, PointColliderComponent* pointB)
@@ -787,12 +789,12 @@ CollisionManifold CollisionManager::PointToCapsule(PointColliderComponent* point
 	closest_point.y = Clamp(closest_point.y, base_a.y, tip_a.y);
 
 	// NOTE: Create the circle based of the capsule components
-	CircleColliderComponent circle_temp = CircleColliderComponent(closest_point, capsuleB->m_Width / 2);
+	// CircleColliderComponent circle_temp = CircleColliderComponent(closest_point, capsuleB->m_Width / 2);
 
-	return t_ColMani = PointToCircle(pointA, &circle_temp);
+	return t_ColMani;// = PointToCircle(pointA, &circle_temp);
 }
 
-CollisionManifold CollisionManager::PointToOrientedRectangle(PointColliderComponent* pointA, RectangleColliderComponent* OrRectB)
+CollisionManifold CollisionManager::PointToOrientedRectangle(PointColliderComponent* pointA, OrientedRectangleColliderComponent* OrRectB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
@@ -839,58 +841,58 @@ CollisionManifold CollisionManager::LineToCircle(LineColliderComponent* lineA, C
 	CollisionManifold t_ColMani = CollisionManifold();
 
 	// NOTE: Check if its already inside the circle
-	PointColliderComponent PointOne = PointColliderComponent(lineA->m_LineStartPosition, 1.f);
-	PointColliderComponent PointTwo = PointColliderComponent(lineA->m_LineEndPosition, 1.f);
+	// PointColliderComponent PointOne = PointColliderComponent(lineA->m_LineStartPosition, 1.f);
+	// PointColliderComponent PointTwo = PointColliderComponent(lineA->m_LineEndPosition, 1.f);
 
-	bool insideOne = PointToCircle(&PointOne, circB).m_HasCollision;
-	bool insideTwo = PointToCircle(&PointTwo, circB).m_HasCollision;
+	//bool insideOne = PointToCircle(&PointOne, circB).m_HasCollision;
+	//bool insideTwo = PointToCircle(&PointTwo, circB).m_HasCollision;
 
-	if (insideOne || insideTwo)
-	{
-		t_ColMani.m_HasCollision = true;
-		t_ColMani.m_CollisionNormal = lineA->m_LineStartPosition - circB->m_Position;
-		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
-		t_ColMani.m_ContactPointAmount = 1;
-		t_ColMani.m_PenetrationDepth = OKVector2<float>(lineA->m_LineStartPosition - circB->m_Position).magnitude();
-		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+	//if (insideOne || insideTwo)
+	//{
+	//	t_ColMani.m_HasCollision = true;
+	//	t_ColMani.m_CollisionNormal = lineA->m_LineStartPosition - circB->m_Position;
+	//	t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+	//	t_ColMani.m_ContactPointAmount = 1;
+	//	t_ColMani.m_PenetrationDepth = OKVector2<float>(lineA->m_LineStartPosition - circB->m_Position).magnitude();
+	//	t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
 
-		return t_ColMani;
-	}
+	//	return t_ColMani;
+	//}
 
 
-	// NOTE: Get Length of Circle
-	float distX = lineA->m_LineStartPosition.x - lineA->m_LineEndPosition.x;
-	float distY = lineA->m_LineStartPosition.y - lineA->m_LineEndPosition.y;
-	float length = sqrt((distX * distX) + (distY * distY));
+	//// NOTE: Get Length of Circle
+	//float distX = lineA->m_LineStartPosition.x - lineA->m_LineEndPosition.x;
+	//float distY = lineA->m_LineStartPosition.y - lineA->m_LineEndPosition.y;
+	//float length = sqrt((distX * distX) + (distY * distY));
 
-	float dot = ( ((circB->m_Position.x - lineA->m_LineStartPosition.x) * (lineA->m_LineEndPosition.x - lineA->m_LineStartPosition.x)) +  ((circB->m_Position.y - lineA->m_LineStartPosition.y) * (lineA->m_LineEndPosition.y - lineA->m_LineStartPosition.y))) / (length * length);
+	//float dot = ( ((circB->m_Position.x - lineA->m_LineStartPosition.x) * (lineA->m_LineEndPosition.x - lineA->m_LineStartPosition.x)) +  ((circB->m_Position.y - lineA->m_LineStartPosition.y) * (lineA->m_LineEndPosition.y - lineA->m_LineStartPosition.y))) / (length * length);
 
-	float closestX = lineA->m_LineStartPosition.x + (dot * (lineA->m_LineEndPosition.x - lineA->m_LineStartPosition.x));
-	float closestY = lineA->m_LineStartPosition.y + (dot * (lineA->m_LineEndPosition.y - lineA->m_LineStartPosition.y));
+	//float closestX = lineA->m_LineStartPosition.x + (dot * (lineA->m_LineEndPosition.x - lineA->m_LineStartPosition.x));
+	//float closestY = lineA->m_LineStartPosition.y + (dot * (lineA->m_LineEndPosition.y - lineA->m_LineStartPosition.y));
 
-	PointColliderComponent tempCollider = PointColliderComponent(circB->m_Position, circB->m_Radius);
-	CollisionManifold onSegment = PointToLine(&tempCollider, lineA);
+	//PointColliderComponent tempCollider = PointColliderComponent(circB->m_Position, circB->m_Radius);
+	//CollisionManifold onSegment = PointToLine(&tempCollider, lineA);
 
-	if (!onSegment.m_HasCollision)
-	{
-		return t_ColMani;
-	}
+	//if (!onSegment.m_HasCollision)
+	//{
+	//	return t_ColMani;
+	//}
 
-	distX = closestX - circB->m_Position.x;
-	distY = closestY - circB->m_Position.y;
-	float distance = sqrt((distX * distX) + (distY * distY));
+	//distX = closestX - circB->m_Position.x;
+	//distY = closestY - circB->m_Position.y;
+	//float distance = sqrt((distX * distX) + (distY * distY));
 
-	if (distance <= circB->m_Radius)
-	{
-		t_ColMani.m_HasCollision = true;
-		t_ColMani.m_CollisionNormal = lineA->m_LineStartPosition - circB->m_Position;
-		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
-		t_ColMani.m_ContactPointAmount = 1;
-		t_ColMani.m_PenetrationDepth = OKVector2<float>(lineA->m_LineStartPosition - circB->m_Position).magnitude();
-		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+	//if (distance <= circB->m_Radius)
+	//{
+	//	t_ColMani.m_HasCollision = true;
+	//	t_ColMani.m_CollisionNormal = lineA->m_LineStartPosition - circB->m_Position;
+	//	t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+	//	t_ColMani.m_ContactPointAmount = 1;
+	//	t_ColMani.m_PenetrationDepth = OKVector2<float>(lineA->m_LineStartPosition - circB->m_Position).magnitude();
+	//	t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
 
-		return t_ColMani;
-	}
+	//	return t_ColMani;
+	//}
 
 	return t_ColMani;
 }
@@ -944,7 +946,7 @@ CollisionManifold CollisionManager::LineToRectangle(LineColliderComponent* lineA
 	return t_ColMani;
 }
 
-CollisionManifold CollisionManager::LineToOrientedRectangle(LineColliderComponent* lineA, RectangleColliderComponent* OrRectB)
+CollisionManifold CollisionManager::LineToOrientedRectangle(LineColliderComponent* lineA, OrientedRectangleColliderComponent* OrRectB)
 {
 	return CollisionManifold();
 }
@@ -1023,11 +1025,11 @@ CollisionManifold CollisionManager::LineToCapsule(LineColliderComponent* lineA, 
 	DrawCircleV(closest_point_B.ConvertToVec2(), 10.f, PURPLE);
 
 	// NOTE: Circle Construction (A)
-	PointColliderComponent point_temp_A = PointColliderComponent(closest_point_A);
+	// PointColliderComponent point_temp_A = PointColliderComponent(closest_point_A);
 
 	// NOTE: Circle Construction (B)
-	CircleColliderComponent circle_temp_B = CircleColliderComponent(closest_point_B, capsuleB->m_Width / 2.f);
+	// CircleColliderComponent circle_temp_B = CircleColliderComponent(closest_point_B, capsuleB->m_Width / 2.f);
 
-	t_ColMani = PointToCircle(&point_temp_A, &circle_temp_B);
+	// t_ColMani = PointToCircle(&point_temp_A, &circle_temp_B);
 	return t_ColMani;
 }

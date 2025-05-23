@@ -11,6 +11,7 @@
 #include <typeinfo>
 
 class RectangleColliderComponent;
+class OrientedRectangleColliderComponent;
 class CircleColliderComponent;
 class LineColliderComponent;
 class CapsuleColliderComponent;
@@ -60,12 +61,8 @@ private:
     int m_CollisionDelta = 0;
 
     // Collider Typedef Pairs
-    typedef std::pair<ColliderType, ColliderType> col_type_pair;
+    typedef std::pair<std::type_index, std::type_index> col_type_pair;
     std::map<col_type_pair, Collider_Type_Collisions> m_CollisionMapping;
-
-    // ID Map
-    std::unordered_map<std::type_index, ColliderEntity> m_IdMapping;
-
 
     // NOTE: This is for the Rectangle Collision Code
     OKVector2<float> ProjectPointOntoLine(OKVector2<float> point, OKVector2<float> positionReference, OKVector2<float> lineStart, OKVector2<float> lineEnd, OKVector2<float> offsetLine);
@@ -73,9 +70,9 @@ private:
 
 
     // SAT / OBB Testing
-    Interval2D GetOrientedRectangleInterval(RectangleColliderComponent* orRectA, OKVector2<float>& axis);
+    Interval2D GetOrientedRectangleInterval(OrientedRectangleColliderComponent* orRectA, OKVector2<float>& axis);
     Interval2D GetRectangleInterval(RectangleColliderComponent* rectA, OKVector2<float>& axis);
-    bool OverlapOnAxis(RectangleColliderComponent* rectA, RectangleColliderComponent* orRectB, OKVector2<float> axis);
+    bool OverlapOnAxis(RectangleColliderComponent* rectA, OrientedRectangleColliderComponent* orRectB, OKVector2<float> axis);
 
 public:
 
@@ -100,11 +97,11 @@ public:
     CollisionManifold CapsuleToCapsule(CapsuleColliderComponent* capsuleA, CapsuleColliderComponent* capsuleB);
 
     // ORIENTED RECTANGLE 
-    CollisionManifold OrientedRectangleToOrientedRectangle(RectangleColliderComponent* OrRectA, RectangleColliderComponent* OrRectB);
-    CollisionManifold OrientedRectangleToRectangle(RectangleColliderComponent* OrRectA, RectangleColliderComponent* rectB);
+    CollisionManifold OrientedRectangleToOrientedRectangle(OrientedRectangleColliderComponent* OrRectA, OrientedRectangleColliderComponent* OrRectB);
+    CollisionManifold OrientedRectangleToRectangle(OrientedRectangleColliderComponent* OrRectA, RectangleColliderComponent* rectB);
 
-    CollisionManifold OrientedRectangleToCircle(RectangleColliderComponent* OrRectA, CircleColliderComponent* circB);
-    CollisionManifold OrientedRectangleToCapsule(RectangleColliderComponent* OrRectA, CapsuleColliderComponent* capsuleB);
+    CollisionManifold OrientedRectangleToCircle(OrientedRectangleColliderComponent* OrRectA, CircleColliderComponent* circB);
+    CollisionManifold OrientedRectangleToCapsule(OrientedRectangleColliderComponent* OrRectA, CapsuleColliderComponent* capsuleB);
 
     // FIX THESE
     // POINT
@@ -113,16 +110,18 @@ public:
     CollisionManifold PointToCircle(PointColliderComponent* pointA, CircleColliderComponent* circleB);
     CollisionManifold PointToRectangle(PointColliderComponent* pointA, RectangleColliderComponent* rectB);
     CollisionManifold PointToCapsule(PointColliderComponent* pointA, CapsuleColliderComponent* capsuleB);
-    CollisionManifold PointToOrientedRectangle(PointColliderComponent* pointA, RectangleColliderComponent* OrRectB);
+    CollisionManifold PointToOrientedRectangle(PointColliderComponent* pointA, OrientedRectangleColliderComponent* OrRectB);
 
     // LINE
     CollisionManifold LineToLine(LineColliderComponent* lineA, LineColliderComponent* lineB);
     CollisionManifold LineToCircle(LineColliderComponent* lineA, CircleColliderComponent* circB);
     CollisionManifold LineToRectangle(LineColliderComponent* lineA, RectangleColliderComponent* rectB);
-    CollisionManifold LineToOrientedRectangle(LineColliderComponent* lineA, RectangleColliderComponent* OrRectB);
+    CollisionManifold LineToOrientedRectangle(LineColliderComponent* lineA, OrientedRectangleColliderComponent* OrRectB);
     CollisionManifold LineToCapsule(LineColliderComponent* lineA, CapsuleColliderComponent* capsuleB);
 
-public: // EXTRA COLLISION FUNCTION(s)
+public: // EXTRA COLLISION FUNCTION(s) (ALTERNATIVES)
+
+
 
 
 

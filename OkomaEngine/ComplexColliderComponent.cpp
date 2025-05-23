@@ -3,38 +3,37 @@
 ComplexColliderComponent::ComplexColliderComponent()
 {
     m_Vertices.clear();
+    m_FileName = " ";
 
 }
 
-ComplexColliderComponent::ComplexColliderComponent(const char* fileName)
+void ComplexColliderComponent::Construct(const char* fileName)
 {
-    m_Vertices.clear();
+    m_FileName = fileName;
+}
 
+void ComplexColliderComponent::Construct(const char* fileName, float sizeOffset)
+{
+    m_FileName = fileName;
 
 }
 
-ComplexColliderComponent::ComplexColliderComponent(const char* fileName, float sizeOffset)
+void ComplexColliderComponent::Construct(const char* fileName, OKVector2<float> positionOffset)
 {
-    m_Vertices.clear();
+    m_FileName = fileName;
 
 }
 
-ComplexColliderComponent::ComplexColliderComponent(const char* fileName, OKVector2<float> positionOffset)
+void ComplexColliderComponent::Construct(const char* fileName, OKVector2<float> positionOffset, float sizeOffset)
 {
-    m_Vertices.clear();
-
-}
-
-ComplexColliderComponent::ComplexColliderComponent(const char* fileName, OKVector2<float> positionOffset, float sizeOffset)
-{
-    m_Vertices.clear();
+    m_FileName = fileName;
 
 }
 
 ComplexColliderComponent::~ComplexColliderComponent()
 {
     m_Vertices.clear();
-
+    m_FileName = " ";
 }
 
 float ComplexColliderComponent::PolygonArea()

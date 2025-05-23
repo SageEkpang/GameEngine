@@ -16,9 +16,12 @@ class ComplexColliderComponent : public ColliderEntity
 {
 public:
 
+	// BASE VARIABLE(s)
 	OKVector2<float> m_Scale;
 	float m_Rotation;
 
+	// FILE VARIABLE(s)
+	const char* m_FileName;
 	std::vector<OKVector2<float>> m_Vertices;
 
 public:
@@ -26,10 +29,10 @@ public:
 	// CLASS FUNCTION(s)
 	ComplexColliderComponent();
 
-	ComplexColliderComponent(const char* fileName);
-	ComplexColliderComponent(const char* fileName, float sizeOffset);
-	ComplexColliderComponent(const char* fileName, OKVector2<float> positionOffset);
-	ComplexColliderComponent(const char* fileName, OKVector2<float> positionOffset, float sizeOffset);
+	void Construct(const char* fileName);
+	void Construct(const char* fileName, float sizeOffset);
+	void Construct(const char* fileName, OKVector2<float> positionOffset);
+	void Construct(const char* fileName, OKVector2<float> positionOffset, float sizeOffset);
 
 	~ComplexColliderComponent();
 

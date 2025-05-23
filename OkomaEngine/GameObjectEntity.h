@@ -60,6 +60,9 @@ public:
 	template<std::derived_from<ComponentEntity> T>
 	void RemoveComponent();
 
+	template<typename T>
+	T* FindChildComponent();
+
 	template<std::derived_from<ComponentEntity> T>
 	T* GetComponent();
 
@@ -68,6 +71,10 @@ public:
 
 };
 
+/// <summary>
+/// Add the component to the component map, if it is derived from the component entity
+/// </summary>
+/// <typeparam name="T"></typeparam>
 template<std::derived_from<ComponentEntity> T>
 inline void GameObjectEntity::AddComponent()
 {
@@ -89,6 +96,10 @@ inline void GameObjectEntity::AddComponent()
 	m_Components[std::type_index(typeid(T))] = new T();
 }
 
+/// <summary>
+/// Remove the component from the component list
+/// </summary>
+/// <typeparam name="T"></typeparam>
 template<std::derived_from<ComponentEntity> T>
 inline void GameObjectEntity::RemoveComponent()
 {
@@ -110,6 +121,29 @@ inline void GameObjectEntity::RemoveComponent()
 	m_Components.erase(std::type_index(typeid(T)));
 }
 
+/// <summary>
+/// Find the Component from Parent Component
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <returns></returns>
+template<typename T>
+inline T* GameObjectEntity::FindChildComponent()
+{
+	T* t_Result = nullptr;
+	for (auto& [ComponentId, ComponentType] : m_Components)
+	{
+		t_Result = dynamic_cast<T*>(ComponentType);
+		if (t_Result) { break; }
+	}
+
+	return t_Result;
+}
+
+/// <summary>
+/// Get the Component currently in the Components map
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <returns></returns>
 template<std::derived_from<ComponentEntity> T>
 inline T* GameObjectEntity::GetComponent()
 {
@@ -117,6 +151,11 @@ inline T* GameObjectEntity::GetComponent()
 	return t_Index == m_Components.end() ? nullptr : static_cast<T*>(t_Index->second);
 }
 
+/// <summary>
+/// Check if the game object has said component
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <returns></returns>
 template<std::derived_from<ComponentEntity> T>
 inline bool GameObjectEntity::HasComponent()
 {

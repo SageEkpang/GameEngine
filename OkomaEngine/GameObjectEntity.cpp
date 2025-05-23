@@ -7,7 +7,7 @@ GameObjectEntity::GameObjectEntity()
 
 GameObjectEntity::~GameObjectEntity()
 {
-	 std::unordered_map<std::type_index, ComponentEntity*>::iterator itr;
+	std::unordered_map<std::type_index, ComponentEntity*>::iterator itr;
 
 	for (itr = m_Components.begin(); itr != m_Components.end(); ++itr)
 	{
