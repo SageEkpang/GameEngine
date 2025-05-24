@@ -21,7 +21,6 @@ public:
 	// CLASS FUNCTION(s) (Components)
 	CapsuleColliderComponent(OKVector2<float> position, OKVector2<float> scale);
 	CapsuleColliderComponent(OKVector2<float> position, float width, float height);
-
 	CapsuleColliderComponent(float x, float y, OKVector2<float> scale);
 	CapsuleColliderComponent(float x, float y, float width, float height);
 	

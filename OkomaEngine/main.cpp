@@ -15,6 +15,9 @@
 int main()
 {
 	// NOTE: Check the window has actually been inited
+
+	#pragma region Window SetUp
+
 	try
 	{
 		InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE_NAME);
@@ -26,6 +29,10 @@ int main()
 		std::cerr << "Window Bad Exception: " << e.what() << std::endl;
 	}
 
+	#pragma endregion
+
+	#pragma region Audio SetUp
+
 	// NOTE: Check the Audio has actually been inited
 	try
 	{
@@ -36,6 +43,8 @@ int main()
 	{
 		std::cerr << "Audio Bad Exception: " << e.what() << std::endl;
 	}
+
+	#pragma endregion
 
 	Camera2D camera = { 0 };
 
@@ -69,7 +78,6 @@ int main()
 
 			rlPushMatrix();
 			rlScalef(1.0f, 1.0f, 1.0f);
-			
 			// NOTE: Text Here ------
 
 			rlPopMatrix();
@@ -77,20 +85,10 @@ int main()
 
 			rlPushMatrix();
 			rlScalef(1.0f, -1.0f, 1.0f);
-			
 			// NOTE: Draw Here ------
+
 			/*m_Tester.GetComponent<ParticleEffectComponent>()->Update(GetFrameTime());
 			m_Tester.GetComponent<ParticleEffectComponent>()->Draw();*/
-
-
-
-
-
-			// m_Tester
-
-
-
-
 
 			DrawCircle(0, 0, 3, GREEN);
 		
