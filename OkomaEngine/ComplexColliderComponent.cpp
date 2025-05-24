@@ -1,5 +1,22 @@
 #include "ComplexColliderComponent.h"
 
+ComplexColliderComponent::ComplexColliderComponent(const char* fileName)
+{
+
+}
+
+ComplexColliderComponent::ComplexColliderComponent(const char* fileName, float sizeOffset)
+{
+}
+
+ComplexColliderComponent::ComplexColliderComponent(const char* fileName, OKVector2<float> positionOffset)
+{
+}
+
+ComplexColliderComponent::ComplexColliderComponent(const char* fileName, OKVector2<float> positionOffset, float sizeOffset)
+{
+}
+
 ComplexColliderComponent::ComplexColliderComponent()
 {
     m_Vertices.clear();

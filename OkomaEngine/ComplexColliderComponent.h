@@ -12,6 +12,7 @@
 // NOTE: Resource notes
 // https://www.geeksforgeeks.org/area-of-a-polygon-with-given-n-ordered-vertices/
 
+// TODO: NEED TO FINISH THIS CLASS
 class ComplexColliderComponent : public ColliderEntity
 {
 public:
@@ -26,7 +27,13 @@ public:
 
 public:
 
-	// CLASS FUNCTION(s)
+	// CLASS FUNCTION(s) (General)
+	ComplexColliderComponent(const char* fileName);
+	ComplexColliderComponent(const char* fileName, float sizeOffset);
+	ComplexColliderComponent(const char* fileName, OKVector2<float> positionOffset);
+	ComplexColliderComponent(const char* fileName, OKVector2<float> positionOffset, float sizeOffset);
+
+	// CLASS FUNCTION(s) (Components)
 	ComplexColliderComponent();
 
 	void Construct(const char* fileName);
@@ -36,9 +43,12 @@ public:
 
 	~ComplexColliderComponent();
 
-
 	// BASE FUNCTION(s)
 	float PolygonArea();
+
+	// GETTER FUNCTION(s) // NOT NEEDED
+
+	// SETTER FUNCTION(s) // NOT NEEDED
 
 };
 

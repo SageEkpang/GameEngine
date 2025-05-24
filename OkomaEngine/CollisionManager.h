@@ -68,7 +68,6 @@ private:
     OKVector2<float> ProjectPointOntoLine(OKVector2<float> point, OKVector2<float> positionReference, OKVector2<float> lineStart, OKVector2<float> lineEnd, OKVector2<float> offsetLine);
     bool Multiply(float* out, const float* matA, int aRows, int aCols, const float* matB, int bRows, int bCols);
 
-
     // SAT / OBB Testing
     Interval2D GetOrientedRectangleInterval(OrientedRectangleColliderComponent* orRectA, OKVector2<float>& axis);
     Interval2D GetRectangleInterval(RectangleColliderComponent* rectA, OKVector2<float>& axis);

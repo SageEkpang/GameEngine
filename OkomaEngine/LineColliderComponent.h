@@ -13,14 +13,13 @@ public:
 
 public:
 
-	// CLASS FUNCTION(s) (GENERAL)
+	// CLASS FUNCTION(s) (General)
 	LineColliderComponent(OKVector2<float> lineStartPosition, OKVector2<float> lineEndPosition);
 	LineColliderComponent(OKVector2<float> lineStartPosition, float endX, float endY);
 	LineColliderComponent(float startX, float startY, OKVector2<float> lineEndPosition);
 	LineColliderComponent(float startX, float startY, float endX, float endY);
 
-
-	// CLASS FUNCTION(s) (COMPONENTS)
+	// CLASS FUNCTION(s) (Components)
 	LineColliderComponent();
 
 	void Construct(OKVector2<float> lineStartPosition, OKVector2<float> lineEndPosition);

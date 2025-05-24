@@ -14,7 +14,11 @@ public:
 
 public:
 
-	// CLASS FUNCTION(s)
+	// CLASS FUNCTION(s) (General)
+	PointColliderComponent(OKVector2<float> position, float radius = 1.f);
+	PointColliderComponent(float x, float y, float radius = 1.f);
+
+	// CLASS FUNCTION(s) (Components)
 	PointColliderComponent();
 
 	void Construct(OKVector2<float> position, float radius = 1.f);

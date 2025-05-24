@@ -15,6 +15,13 @@ public:
 
 public:
 
+	// CLASS FUNCTION(s) (General)
+	OrientedRectangleColliderComponent(OKVector2<float> position, OKVector2<float> scale, float rotation);
+	OrientedRectangleColliderComponent(OKVector2<float> position, float width, float height, float rotation);
+	OrientedRectangleColliderComponent(float x, float y, OKVector2<float> scale, float rotation);
+	OrientedRectangleColliderComponent(float x, float y, float width, float height, float rotation);
+
+	// CLASS FUNCTION(s) (Components)
 	OrientedRectangleColliderComponent();
 
 	void Construct(OKVector2<float> position, OKVector2<float> scale, float rotation);

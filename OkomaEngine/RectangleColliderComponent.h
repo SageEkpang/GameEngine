@@ -15,7 +15,13 @@ public: // PUBLIC VARIABLE(s)
 
 public:
 
-	// CLASS FUNCTION(s)
+	// CLASS FUNCTION(s) (General)
+	RectangleColliderComponent(OKVector2<float> position, OKVector2<float> scale);
+	RectangleColliderComponent(OKVector2<float> position, float width, float height);
+	RectangleColliderComponent(float x, float y, OKVector2<float> scale);
+	RectangleColliderComponent(float x, float y, float width, float height);
+
+	// CLASS FUNCTION(s) (Components)
 	RectangleColliderComponent();
 
 	// NOTE: Axis Aligned Constructor

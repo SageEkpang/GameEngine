@@ -2,81 +2,71 @@
 
 CapsuleColliderComponent::CapsuleColliderComponent()
 {
-	m_ColliderType = ColliderType::COLLIDER_TYPE_CAPSULE;
 	m_Position = OKVector2<float>(0.f, 0.f);
-	// m_Scale = OKVector2<float>(0.f, 0.f);
-	m_Rotation = 0.f;
+	m_Width = 0.f;
+	m_Height = 0.f;
+}
+
+void CapsuleColliderComponent::Construct(OKVector2<float> position, OKVector2<float> scale)
+{
+	m_Position = position;
+	m_Width = scale.x;
+	m_Height = scale.y;
+}
+
+void CapsuleColliderComponent::Construct(OKVector2<float> position, float width, float height)
+{
+	m_Position = position;
+	m_Width = width;
+	m_Height = height;
+}
+
+void CapsuleColliderComponent::Construct(float x, float y, OKVector2<float> scale)
+{
+	m_Position = OKVector2<float>(x, y);
+	m_Width = scale.x;
+	m_Height = scale.y;
+}
+
+void CapsuleColliderComponent::Construct(float x, float y, float width, float height)
+{
+	m_Position = OKVector2<float>(x, y);
+	m_Width = width;
+	m_Height = height;
 }
 
 CapsuleColliderComponent::CapsuleColliderComponent(OKVector2<float> position, OKVector2<float> scale)
 {
-	m_ColliderType = ColliderType::COLLIDER_TYPE_CAPSULE;
 	m_Position = position;
-	// m_Scale = scale;
-	m_Rotation = 0.f;
+	m_Width = scale.x;
+	m_Height = scale.y;
 }
 
 CapsuleColliderComponent::CapsuleColliderComponent(OKVector2<float> position, float width, float height)
 {
-	m_ColliderType = ColliderType::COLLIDER_TYPE_CAPSULE;
 	m_Position = position;
-	// m_Scale = OKVector2<float>(width, height);
-	m_Rotation = 0.f;
+	m_Width = width;
+	m_Height = height;
 }
 
 CapsuleColliderComponent::CapsuleColliderComponent(float x, float y, OKVector2<float> scale)
 {
-	m_ColliderType = ColliderType::COLLIDER_TYPE_CAPSULE;
 	m_Position = OKVector2<float>(x, y);
-	// m_Scale = scale;
-	m_Rotation = 0.f;
+	m_Width = scale.x;
+	m_Height = scale.y;
 }
 
 CapsuleColliderComponent::CapsuleColliderComponent(float x, float y, float width, float height)
 {
-	m_ColliderType = ColliderType::COLLIDER_TYPE_CAPSULE;
 	m_Position = OKVector2<float>(x, y);
-	// m_Scale = OKVector2<float>(width, height);
-	m_Rotation = 0.f;
-}
-
-CapsuleColliderComponent::CapsuleColliderComponent(OKVector2<float> position, OKVector2<float> scale, float rotation)
-{
-	m_ColliderType = ColliderType::COLLIDER_TYPE_CAPSULE;
-	m_Position = position;
-	// m_Scale = scale;
-	m_Rotation = rotation;
-}
-
-CapsuleColliderComponent::CapsuleColliderComponent(OKVector2<float> position, float width, float height, float rotation)
-{
-	m_ColliderType = ColliderType::COLLIDER_TYPE_CAPSULE;
-	m_Position = position;
-	// m_Scale = OKVector2<float>(width, height);
-	m_Rotation = rotation;
-}
-
-CapsuleColliderComponent::CapsuleColliderComponent(float x, float y, OKVector2<float> scale, float rotation)
-{
-	m_ColliderType = ColliderType::COLLIDER_TYPE_CAPSULE;
-	m_Position = OKVector2<float>(x, y);
-	// m_Scale = scale;
-	m_Rotation = rotation;
-}
-
-CapsuleColliderComponent::CapsuleColliderComponent(float x, float y, float width, float height, float rotation)
-{
-	m_ColliderType = ColliderType::COLLIDER_TYPE_CAPSULE;
-	m_Position = OKVector2<float>(x, y);
-	// m_Scale = OKVector2<float>(width, height);
-	m_Rotation = rotation;
+	m_Width = width;
+	m_Height = height;
 }
 
 CapsuleColliderComponent::~CapsuleColliderComponent()
 {
-	m_ColliderType = ColliderType::COLLIDER_TYPE_CAPSULE;
 	m_Position = OKVector2<float>(0.f, 0.f);
-	// m_Scale = OKVector2<float>(0.f, 0.f);
-	m_Rotation = 0.f;
+	m_Width = 0.f;
+	m_Height = 0.f;
 }
 

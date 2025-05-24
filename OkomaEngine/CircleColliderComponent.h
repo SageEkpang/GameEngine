@@ -14,12 +14,16 @@ public:
 
 public:
 
-	// CLASS FUNCTION(s)
+	// CLASS FUNCTION(s) (Components)
+	CircleColliderComponent(OKVector2<float> position, float radius);
+	CircleColliderComponent(float x, float y, float radius);
+
+	// CLASS FUNCTION(s) (General)
 	CircleColliderComponent();
 
 	void Construct(OKVector2<float> position, float radius);
 	void Construct(float x, float y, float radius);
-
+	
 	~CircleColliderComponent();
 
 	// GETTER FUNCTION(s) // NOT NEEDED
