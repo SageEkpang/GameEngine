@@ -113,7 +113,6 @@ public:
     CollisionManifold OrientedRectangleToCircle(GameObjectEntity* OrRectA, GameObjectEntity* circB);
     CollisionManifold OrientedRectangleToCapsule(GameObjectEntity* OrRectA, GameObjectEntity* capsuleB);
 
-    // FIX THESE
     // POINT
     CollisionManifold PointToPoint(GameObjectEntity* pointA, GameObjectEntity* pointB);
     CollisionManifold PointToLine(GameObjectEntity* pointA, GameObjectEntity* lineB);
@@ -132,15 +131,43 @@ public:
 public: // EXTRA COLLISION FUNCTION(s) (ALTERNATIVES)
 
     // RECTANGLE (STATIC)
+    
+    static CollisionManifold S_RectangleToRectangle(OKVector2<float> position1, OKVector2<float> scale1, OKVector2<float> position2, OKVector2<float> scale2);
     static CollisionManifold S_RectangleToRectangle(float x1, float y1, float width1, float height1, float x2, float y2, float width2, float height2);
 
     // CIRCLE (STATIC)
-    static CollisionManifold S_CircleToCircle();
-    static CollisionManifold S_CircleToRectangle();
+    static CollisionManifold S_CircleToCircle(OKVector2<float> position1, float radius1, OKVector2<float> position2, float radius2);
+    static CollisionManifold S_CircleToCircle(float x1, float y1, float radius1, float x2, float y2, float radius2);
 
+    static CollisionManifold S_CircleToRectangle(OKVector2<float> position1, float radius1, OKVector2<float> position2, OKVector2<float> scale2);
+    static CollisionManifold S_CircleToRectangle(float x1, float y1, float radius1, float x2, float y2, float width2, float height2);
 
+    // CAPSULE (STATIC)
+    static CollisionManifold S_CapsuleToCircle();
+    static CollisionManifold S_CapsuleToRectangle();
+    static CollisionManifold S_CapsuleToCapsule();
 
+    // ORIENTED RECTANGLE (STATIC)
+    static CollisionManifold S_OrientedRectangleToOrientedRectangle();
+    static CollisionManifold S_OrientedRectangleToRectangle();
 
+    static CollisionManifold S_OrientedRectangleToCircle();
+    static CollisionManifold S_OrientedRectangleToCapsule();
+
+    // POINT (STATIC)
+    static CollisionManifold S_PointToPoint();
+    static CollisionManifold S_PointToLine();
+    static CollisionManifold S_PointToCircle();
+    static CollisionManifold S_PointToRectangle();
+    static CollisionManifold S_PointToCapsule();
+    static CollisionManifold S_PointToOrientedRectangle();
+
+    // LINE (STATIC)
+    static CollisionManifold S_LineToLine();
+    static CollisionManifold S_LineToCircle();
+    static CollisionManifold S_LineToRectangle();
+    static CollisionManifold S_LineToOrientedRectangle();
+    static CollisionManifold S_LineToCapsule();
 };
 
 #endif
