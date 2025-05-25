@@ -9,11 +9,11 @@ ComplexColliderComponent::ComplexColliderComponent(const char* fileName, float s
 {
 }
 
-ComplexColliderComponent::ComplexColliderComponent(const char* fileName, OKVector2<float> positionOffset)
+ComplexColliderComponent::ComplexColliderComponent(const char* fileName, OKVector2<float> offset)
 {
 }
 
-ComplexColliderComponent::ComplexColliderComponent(const char* fileName, OKVector2<float> positionOffset, float sizeOffset)
+ComplexColliderComponent::ComplexColliderComponent(const char* fileName, OKVector2<float> offset, float sizeOffset)
 {
 }
 
@@ -35,13 +35,13 @@ void ComplexColliderComponent::Construct(const char* fileName, float sizeOffset)
 
 }
 
-void ComplexColliderComponent::Construct(const char* fileName, OKVector2<float> positionOffset)
+void ComplexColliderComponent::Construct(const char* fileName, OKVector2<float> offset)
 {
     m_FileName = fileName;
 
 }
 
-void ComplexColliderComponent::Construct(const char* fileName, OKVector2<float> positionOffset, float sizeOffset)
+void ComplexColliderComponent::Construct(const char* fileName, OKVector2<float> offset, float sizeOffset)
 {
     m_FileName = fileName;
 

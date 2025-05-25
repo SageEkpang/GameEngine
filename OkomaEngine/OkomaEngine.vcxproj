@@ -161,12 +161,12 @@
     <ClCompile Include="ParticleEffectObjectEntity.cpp" />
     <ClCompile Include="PhysicsManager.cpp" />
     <ClCompile Include="PhysicsMaterialCoefficientManager.cpp" />
+    <ClCompile Include="PlayerGameObject.cpp" />
     <ClCompile Include="PointColliderComponent.cpp" />
     <ClCompile Include="RectangleColliderComponent.cpp" />
     <ClCompile Include="Rigidbody2DComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="TriggerArea.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ButtonComponent.h" />
@@ -196,13 +196,13 @@
     <ClInclude Include="ParticleEffectObjectEntity.h" />
     <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="PhysicsMaterialCoefficientManager.h" />
+    <ClInclude Include="PlayerGameObject.h" />
     <ClInclude Include="PointColliderComponent.h" />
     <ClInclude Include="RectangleColliderComponent.h" />
     <ClInclude Include="Rigidbody2DComponent.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TimeStepConstants.h" />
-    <ClInclude Include="TriggerArea.h" />
     <ClInclude Include="WindowConstants.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

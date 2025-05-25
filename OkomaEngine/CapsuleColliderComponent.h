@@ -9,7 +9,7 @@ class CapsuleColliderComponent : public ColliderEntity
 {
 public:
 
-	OKVector2<float> m_Position;
+	OKVector2<float> m_Offset;
 
 	float m_Height;
 	float m_Width;
@@ -19,18 +19,24 @@ public:
 public:
 
 	// CLASS FUNCTION(s) (Components)
-	CapsuleColliderComponent(OKVector2<float> position, OKVector2<float> scale);
-	CapsuleColliderComponent(OKVector2<float> position, float width, float height);
+	CapsuleColliderComponent(OKVector2<float> offset, OKVector2<float> scale);
+	CapsuleColliderComponent(OKVector2<float> offset, float width, float height);
 	CapsuleColliderComponent(float x, float y, OKVector2<float> scale);
 	CapsuleColliderComponent(float x, float y, float width, float height);
+
+	CapsuleColliderComponent(OKVector2<float> scale);
+	CapsuleColliderComponent(float width, float height);
 	
 	// CLASS FUNCTION(s) (General)
 	CapsuleColliderComponent();
 
-	void Construct(OKVector2<float> position, OKVector2<float> scale);
-	void Construct(OKVector2<float> position, float width, float height);
+	void Construct(OKVector2<float> offset, OKVector2<float> scale);
+	void Construct(OKVector2<float> offset, float width, float height);
 	void Construct(float x, float y, OKVector2<float> scale);
 	void Construct(float x, float y, float width, float height);
+
+	void Construct(OKVector2<float> scale);
+	void Construct(float width, float height);
 
 	~CapsuleColliderComponent();
 

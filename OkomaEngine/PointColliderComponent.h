@@ -9,19 +9,19 @@ class PointColliderComponent : public ColliderEntity
 {
 public:
 
-	OKVector2<float> m_Position;
+	OKVector2<float> m_Offset;
 	float m_Radius = 1.f;
 
 public:
 
 	// CLASS FUNCTION(s) (General)
-	PointColliderComponent(OKVector2<float> position, float radius = 1.f);
+	PointColliderComponent(OKVector2<float> offset, float radius = 1.f);
 	PointColliderComponent(float x, float y, float radius = 1.f);
 
 	// CLASS FUNCTION(s) (Components)
 	PointColliderComponent();
 
-	void Construct(OKVector2<float> position, float radius = 1.f);
+	void Construct(OKVector2<float> offset, float radius = 1.f);
 	void Construct(float x, float y, float radius = 1.f);
 
 	~PointColliderComponent();

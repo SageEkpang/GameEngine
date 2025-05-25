@@ -134,9 +134,6 @@
     <ClCompile Include="GameObjectManager.cpp">
       <Filter>Managers\Source</Filter>
     </ClCompile>
-    <ClCompile Include="TriggerArea.cpp">
-      <Filter>GameObjects\Source</Filter>
-    </ClCompile>
     <ClCompile Include="OKVector3.cpp">
       <Filter>Structs\Source</Filter>
     </ClCompile>
@@ -203,6 +200,9 @@
     <ClCompile Include="OrientedRectangleColliderComponent.cpp">
       <Filter>Components\ColliderComponents\Source</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerGameObject.cpp">
+      <Filter>GameObjects\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OKVector2.h">
@@ -240,9 +240,6 @@
     </ClInclude>
     <ClInclude Include="GameObjectManager.h">
       <Filter>Managers\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="TriggerArea.h">
-      <Filter>GameObjects\Header</Filter>
     </ClInclude>
     <ClInclude Include="OKVector3.h">
       <Filter>Structs\Header</Filter>
@@ -309,6 +306,9 @@
     </ClInclude>
     <ClInclude Include="OrientedRectangleColliderComponent.h">
       <Filter>Components\ColliderComponents\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerGameObject.h">
+      <Filter>GameObjects\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
