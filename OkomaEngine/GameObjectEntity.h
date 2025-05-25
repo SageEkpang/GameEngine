@@ -10,7 +10,7 @@
 
 #include "HeaderManager.h"
 #include "ComponentEntity.h"
-// #include "OKTransform2.h"
+#include "OKTransform2.h"
 
 #include <unordered_map>
 #include <bitset>
@@ -36,7 +36,10 @@ class GameObjectEntity
 {
 private:
 
-	// BASE COMPONENT VARIABLE(s)
+	// NOTE: BASE VARIABLE(s)
+	OKTransform2<float> m_Transform;
+
+	// COMPONENT VARIABLE(s)
 	unsigned int m_ComponentIndex = 0u;
 	std::bitset<MAX_COMPONENTS> m_ComponentBitMask;
 
