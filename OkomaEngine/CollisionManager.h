@@ -132,19 +132,23 @@ public: // EXTRA COLLISION FUNCTION(s) (ALTERNATIVES)
 
     // RECTANGLE (STATIC)
     
-    static CollisionManifold S_RectangleToRectangle(OKVector2<float> position1, OKVector2<float> scale1, OKVector2<float> position2, OKVector2<float> scale2);
-    static CollisionManifold S_RectangleToRectangle(float x1, float y1, float width1, float height1, float x2, float y2, float width2, float height2);
+    static CollisionManifold S_RectangleToRectangle(OKVector2<float> recPositionA, OKVector2<float> recScaleA, OKVector2<float> recPositionB, OKVector2<float> recScaleB);
+    static CollisionManifold S_RectangleToRectangle(float recXA, float recYA, float recWidthA, float recHeightA, float recXB, float recYB, float recWidthB, float recHeightB);
 
     // CIRCLE (STATIC)
-    static CollisionManifold S_CircleToCircle(OKVector2<float> position1, float radius1, OKVector2<float> position2, float radius2);
-    static CollisionManifold S_CircleToCircle(float x1, float y1, float radius1, float x2, float y2, float radius2);
+    static CollisionManifold S_CircleToCircle(OKVector2<float> circPositionA, float circRadiusA, OKVector2<float> circPositionB, float circRadiusB);
+    static CollisionManifold S_CircleToCircle(float circXA, float circYA, float circRadiusA, float circXB, float circYB, float circRadiusB);
 
-    static CollisionManifold S_CircleToRectangle(OKVector2<float> position1, float radius1, OKVector2<float> position2, OKVector2<float> scale2);
-    static CollisionManifold S_CircleToRectangle(float x1, float y1, float radius1, float x2, float y2, float width2, float height2);
+    static CollisionManifold S_CircleToRectangle(OKVector2<float> circPositionA, float circRadiusA, OKVector2<float> recPositionB, OKVector2<float> recScaleB);
+    static CollisionManifold S_CircleToRectangle(float circXA, float circYA, float circRadiusA, float recXB, float recYB, float recWidthB, float recHeightB);
 
     // CAPSULE (STATIC)
-    static CollisionManifold S_CapsuleToCircle();
+    static CollisionManifold S_CapsuleToCircle(OKVector2<float> capPositionA, float capWidthA, float capHeightA, OKVector2<float> circPositionB, float circRadiusB);
+    static CollisionManifold S_CapsuleToCircle(float capXA, float capYA, float capWidthA, float capHeightA, float circXB, float circYB, float circRadiusB);
+
     static CollisionManifold S_CapsuleToRectangle();
+
+
     static CollisionManifold S_CapsuleToCapsule();
 
     // ORIENTED RECTANGLE (STATIC)

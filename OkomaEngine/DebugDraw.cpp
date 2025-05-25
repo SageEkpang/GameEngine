@@ -1,32 +1,48 @@
 #include "DebugDraw.h"
+#include "GameObjectEntity.h"
+#include "RectangleColliderComponent.h"
+#include "CircleColliderComponent.h"
+#include "CapsuleColliderComponent.h"
+#include "ComplexColliderComponent.h"
+#include "LineColliderComponent.h"
+
+#include "Rigidbody2DComponent.h"
 
 namespace DebugDraw
 {
 	namespace Shape
 	{
-		void DebugRectangle(GameObjectEntity* rectangleComponent)
+		void DebugRectangle(GameObjectEntity* gameObject)
 		{
-
-			DrawRectangleLines((int)rectangleComponent.m_Position.x - (int)(rectangleComponent.m_Scale.x / 2.f), (int)rectangleComponent.m_Position.y - (int)(rectangleComponent.m_Scale.y / 2.f), (int)rectangleComponent.m_Scale.x, (int)rectangleComponent.m_Scale.y, GREEN);
+			if (gameObject->HasComponent<RectangleColliderComponent>())
+			{
+				DrawRectangleLines((int)gameObject->m_Transform.position.x - (int)(gameObject->GetComponent<RectangleColliderComponent>()->m_Scale.x / 2.f), (int)gameObject->m_Transform.position.y - (int)(gameObject->GetComponent<RectangleColliderComponent>()->m_Scale.y / 2.f), (int)gameObject->GetComponent<RectangleColliderComponent>()->m_Scale.x, (int)gameObject->GetComponent<RectangleColliderComponent>()->m_Scale.y, GREEN);
+			}
 		}
 
-		void DebugCircle(GameObjectEntity* circleComponent)
+		void DebugCircle(GameObjectEntity* gameObject)
 		{
-			DrawCircleLinesV(circleComponent.m_Position.ConvertToVec2(), circleComponent.m_Radius, GREEN);
+			if (gameObject->HasComponent<CircleColliderComponent>())
+			{
+				DrawCircleLinesV(gameObject->m_Transform.position.ConvertToVec2(), gameObject->GetComponent<CircleColliderComponent>()->m_Radius, GREEN);
+			}
 		}
 
-		void DebugCapsule(GameObjectEntity* capsuleComponent)
+		void DebugCapsule(GameObjectEntity* gameObject)
 		{
 
 
 		}
 
-		void DebugLines(GameObjectEntity* lineComponent)
+		void DebugLines(GameObjectEntity* gameObject)
 		{
-			DrawLineV(lineComponent.m_LineStartPosition.ConvertToVec2(), lineComponent.m_LineEndPosition.ConvertToVec2(), GREEN);
+			if (gameObject->HasComponent<LineColliderComponent>())
+			{
+				DrawLineV(gameObject->GetComponent<LineColliderComponent>()->m_LineStartPosition.ConvertToVec2(), gameObject->GetComponent<LineColliderComponent>()->m_LineEndPosition.ConvertToVec2(), GREEN);
+			}
 		}
 
-		void DebugComplexShape(GameObjectEntity* complexComponent)
+		void DebugComplexShape(GameObjectEntity* gameObject)
 		{
 			// DrawLineStrip(complexComponent.m_Vertices, complexComponent.m_Vertices.size(), GREEN);
 		}
@@ -36,9 +52,8 @@ namespace DebugDraw
 	{
 		void DebugGravityLine(OKVector2<float> gravity)
 		{
-			// Vector2 t_GravityVec = Vector2Add(pm_CalculatedGravity.ConvertToVec2(), m_Position.ConvertToVec2());
+			// Vector2 t_GravityVec = Vector2Add(gravity.ConvertToVec2(), m_Position.ConvertToVec2());
 			// DrawLineV(m_Position.ConvertToVec2(), t_GravityVec, PURPLE);
-
 		}
 
 		void DebugVelocityLine(OKVector2<float> velocity)

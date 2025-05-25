@@ -5,12 +5,6 @@
 #include "HeaderManager.h"
 
 // CLASS(es) FOR DRAWING
-#include "RectangleColliderComponent.h"
-#include "CircleColliderComponent.h"
-#include "CapsuleColliderComponent.h"
-#include "ComplexColliderComponent.h"
-#include "LineColliderComponent.h"
-
 #include "OKVector2.h"
 
 class GameObjectEntity;
@@ -21,11 +15,11 @@ namespace DebugDraw
 {
 	namespace Shape
 	{
-		void DebugRectangle(GameObjectEntity* rectangleComponent);
-		void DebugCircle(GameObjectEntity* circleComponent);
-		void DebugCapsule(GameObjectEntity* capsuleComponent);
-		void DebugLines(GameObjectEntity* lineComponent);
-		void DebugComplexShape(GameObjectEntity* complexComponent);
+		void DebugRectangle(GameObjectEntity* gameObject);
+		void DebugCircle(GameObjectEntity* gameObject);
+		void DebugCapsule(GameObjectEntity* gameObject);
+		void DebugLines(GameObjectEntity* gameObject);
+		void DebugComplexShape(GameObjectEntity* gameObject);
 	}
 
 	namespace Physics
