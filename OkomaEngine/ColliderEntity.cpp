@@ -1,8 +1,9 @@
 #include "ColliderEntity.h"
 
 ColliderEntity::ColliderEntity()
-	: m_HasCollided(false), m_IsActivated(true), m_IsTrigger(false), m_ColliderType(ColliderType::COLLIDER_TYPE_NONE)
+	: m_HasCollided(false), m_IsActivated(true), m_IsTrigger(false)
 {
+	m_TriggerState = TriggerAreaState::TRIGGER_AREA_STATE_NONE;
 	m_ObjectList.clear();
 }
 
@@ -17,6 +18,42 @@ ColliderEntity::~ColliderEntity()
 		}
 
 		m_ObjectList.clear();
+	}
+
+	m_TriggerState = TriggerAreaState::TRIGGER_AREA_STATE_NONE;
+}
+
+void ColliderEntity::TriggerQuery(GameObjectEntity* gameObject)
+{
+	if (m_IsActivated == false) { return; }
+
+
+}
+
+void ColliderEntity::TriggerEnteredExecute(void(*func)())
+{
+	m_TriggerEnteredLambda = func;
+}
+
+void ColliderEntity::TriggerStayedExecute(void(*func)())
+{
+	m_TriggerStayedLambda = func;
+}
+
+void ColliderEntity::TriggerExitedExecute(void(*func)())
+{
+	m_TriggerExitedLambda = func;
+}
+
+void ColliderEntity::TriggerQueryExecute()
+{
+	switch (m_TriggerState)
+	{
+		case TriggerAreaState::TRIGGER_AREA_STATE_ENTERED: if (m_TriggerEnteredLambda != nullptr) { m_TriggerEnteredLambda(); } break;
+		case TriggerAreaState::TRIGGER_AREA_STATE_STAYED: if (m_TriggerStayedLambda != nullptr) { m_TriggerStayedLambda(); } break;
+		case TriggerAreaState::TRIGGER_AREA_STATE_EXITED: if (m_TriggerExitedLambda != nullptr) { m_TriggerExitedLambda(); } break;
+		case TriggerAreaState::TRIGGER_AREA_STATE_NONE: break;
+		default: break;
 	}
 }
 

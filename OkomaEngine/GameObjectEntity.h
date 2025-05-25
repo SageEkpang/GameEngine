@@ -36,15 +36,17 @@ class GameObjectEntity
 {
 private:
 
-	// NOTE: BASE VARIABLE(s)
-	OKTransform2<float> m_Transform;
-
 	// COMPONENT VARIABLE(s)
 	unsigned int m_ComponentIndex = 0u;
 	std::bitset<MAX_COMPONENTS> m_ComponentBitMask;
 
 	// COMPONENT ARRAY(s)
 	std::unordered_map<std::type_index, ComponentEntity*> m_Components;
+
+public:
+
+	// NOTE: BASE VARIABLE(s)
+	OKTransform2<float> m_Transform;
 
 public:
 

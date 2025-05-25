@@ -18,16 +18,17 @@ class CapsuleColliderComponent;
 class ComplexColliderComponent;
 class PointColliderComponent;
 
+// TODO: Make sure to add the collision offset to the position of the transform when doing the collider calculations
 enum Collider_Type_Collisions
 {
-    COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_RECTANGLE,
+    COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_RECTANGLE, // fix 
 
     COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_CIRCLE,
-    COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_RECTANGLE,
+    COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_RECTANGLE, // fix
 
+    COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CIRCLE, // fix
+    COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_RECTANGLE, // fix
     COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CAPSULE,
-    COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_RECTANGLE,
-    COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CIRCLE,
 
     COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_ORIENTED,
     COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_RECTANGLE,
@@ -35,14 +36,14 @@ enum Collider_Type_Collisions
     COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_CAPSULE,
 
     COLLIDER_TYPE_COLLISIONS_POINT_TO_POINT, // Working
-    COLLIDER_TYPE_COLLISIONS_POINT_TO_LINE, // Working
+    COLLIDER_TYPE_COLLISIONS_POINT_TO_LINE, // Working // fix
     COLLIDER_TYPE_COLLISIONS_POINT_TO_CIRCLE, // Working
     COLLIDER_TYPE_COLLISIONS_POINT_TO_RECTANGLE, // Working
     COLLIDER_TYPE_COLLISIONS_POINT_TO_CAPSULE, // Working
     COLLIDER_TYPE_COLLISIONS_POINT_TO_ORIENTED, // DO LATER (Maybe)
 
-    COLLIDER_TYPE_COLLISIONS_LINE_TO_LINE, // Working
-    COLLIDER_TYPE_COLLISIONS_LINE_TO_CIRCLE, // Working
+    COLLIDER_TYPE_COLLISIONS_LINE_TO_LINE, // Working // fix 
+    COLLIDER_TYPE_COLLISIONS_LINE_TO_CIRCLE, // Working // fix
     COLLIDER_TYPE_COLLISIONS_LINE_TO_RECTANGLE, // Working
     COLLIDER_TYPE_COLLISIONS_LINE_TO_CAPSULE, // Do Later
     COLLIDER_TYPE_COLLISIONS_LINE_TO_ORIENTED // Do Later
@@ -69,9 +70,19 @@ private:
     bool Multiply(float* out, const float* matA, int aRows, int aCols, const float* matB, int bRows, int bCols);
 
     // SAT / OBB Testing
-    Interval2D GetOrientedRectangleInterval(OrientedRectangleColliderComponent* orRectA, OKVector2<float>& axis);
-    Interval2D GetRectangleInterval(RectangleColliderComponent* rectA, OKVector2<float>& axis);
-    bool OverlapOnAxis(RectangleColliderComponent* rectA, OrientedRectangleColliderComponent* orRectB, OKVector2<float> axis);
+    Interval2D GetOrientedRectangleInterval(GameObjectEntity* orRectA, OKVector2<float>& axis);
+    Interval2D GetRectangleInterval(GameObjectEntity* rectA, OKVector2<float>& axis);
+    bool OverlapOnAxis(GameObjectEntity* rectA, GameObjectEntity* orRectB, OKVector2<float> axis);
+
+
+private: // PRIVATE FUNCTION(s)
+
+    // Closest point checks functions here, need to make them
+
+
+
+
+
 
 public:
 
@@ -84,44 +95,48 @@ public:
     // COLLIDER FUNCTION(s)
 
     // RECTANGLE
-    CollisionManifold RectangleToRectangle(RectangleColliderComponent* rectA, RectangleColliderComponent* rectB);
+    CollisionManifold RectangleToRectangle(GameObjectEntity* rectA, GameObjectEntity* rectB);
 
     // CIRCLE
-    CollisionManifold CircleToCircle(CircleColliderComponent* circA, CircleColliderComponent* circB);
-    CollisionManifold CircleToRectangle(CircleColliderComponent* circA, RectangleColliderComponent* rectB);
+    CollisionManifold CircleToCircle(GameObjectEntity* circA, GameObjectEntity* circB);
+    CollisionManifold CircleToRectangle(GameObjectEntity* circA, GameObjectEntity* rectB);
 
     // CAPSULE
-    CollisionManifold CapsuleToCircle(CapsuleColliderComponent* capsuleA, CircleColliderComponent* circB);
-    CollisionManifold CapsuleToRectangle(CapsuleColliderComponent* capsuleA, RectangleColliderComponent* rectB);
-    CollisionManifold CapsuleToCapsule(CapsuleColliderComponent* capsuleA, CapsuleColliderComponent* capsuleB);
+    CollisionManifold CapsuleToCircle(GameObjectEntity* capsuleA, GameObjectEntity* circB);
+    CollisionManifold CapsuleToRectangle(GameObjectEntity* capsuleA, GameObjectEntity* rectB);
+    CollisionManifold CapsuleToCapsule(GameObjectEntity* capsuleA, GameObjectEntity* capsuleB);
 
     // ORIENTED RECTANGLE 
-    CollisionManifold OrientedRectangleToOrientedRectangle(OrientedRectangleColliderComponent* OrRectA, OrientedRectangleColliderComponent* OrRectB);
-    CollisionManifold OrientedRectangleToRectangle(OrientedRectangleColliderComponent* OrRectA, RectangleColliderComponent* rectB);
+    CollisionManifold OrientedRectangleToOrientedRectangle(GameObjectEntity* OrRectA, GameObjectEntity* OrRectB);
+    CollisionManifold OrientedRectangleToRectangle(GameObjectEntity* OrRectA, GameObjectEntity* rectB);
 
-    CollisionManifold OrientedRectangleToCircle(OrientedRectangleColliderComponent* OrRectA, CircleColliderComponent* circB);
-    CollisionManifold OrientedRectangleToCapsule(OrientedRectangleColliderComponent* OrRectA, CapsuleColliderComponent* capsuleB);
+    CollisionManifold OrientedRectangleToCircle(GameObjectEntity* OrRectA, GameObjectEntity* circB);
+    CollisionManifold OrientedRectangleToCapsule(GameObjectEntity* OrRectA, GameObjectEntity* capsuleB);
 
     // FIX THESE
     // POINT
-    CollisionManifold PointToPoint(PointColliderComponent* pointA, PointColliderComponent* pointB);
-    CollisionManifold PointToLine(PointColliderComponent* pointA, LineColliderComponent* lineB);
-    CollisionManifold PointToCircle(PointColliderComponent* pointA, CircleColliderComponent* circleB);
-    CollisionManifold PointToRectangle(PointColliderComponent* pointA, RectangleColliderComponent* rectB);
-    CollisionManifold PointToCapsule(PointColliderComponent* pointA, CapsuleColliderComponent* capsuleB);
-    CollisionManifold PointToOrientedRectangle(PointColliderComponent* pointA, OrientedRectangleColliderComponent* OrRectB);
+    CollisionManifold PointToPoint(GameObjectEntity* pointA, GameObjectEntity* pointB);
+    CollisionManifold PointToLine(GameObjectEntity* pointA, GameObjectEntity* lineB);
+    CollisionManifold PointToCircle(GameObjectEntity* pointA, GameObjectEntity* circleB);
+    CollisionManifold PointToRectangle(GameObjectEntity* pointA, GameObjectEntity* rectB);
+    CollisionManifold PointToCapsule(GameObjectEntity* pointA, GameObjectEntity* capsuleB);
+    CollisionManifold PointToOrientedRectangle(GameObjectEntity* pointA, GameObjectEntity* OrRectB);
 
     // LINE
-    CollisionManifold LineToLine(LineColliderComponent* lineA, LineColliderComponent* lineB);
-    CollisionManifold LineToCircle(LineColliderComponent* lineA, CircleColliderComponent* circB);
-    CollisionManifold LineToRectangle(LineColliderComponent* lineA, RectangleColliderComponent* rectB);
-    CollisionManifold LineToOrientedRectangle(LineColliderComponent* lineA, OrientedRectangleColliderComponent* OrRectB);
-    CollisionManifold LineToCapsule(LineColliderComponent* lineA, CapsuleColliderComponent* capsuleB);
+    CollisionManifold LineToLine(GameObjectEntity* lineA, GameObjectEntity* lineB);
+    CollisionManifold LineToCircle(GameObjectEntity* lineA, GameObjectEntity* circB);
+    CollisionManifold LineToRectangle(GameObjectEntity* lineA, GameObjectEntity* rectB);
+    CollisionManifold LineToOrientedRectangle(GameObjectEntity* lineA, GameObjectEntity* OrRectB);
+    CollisionManifold LineToCapsule(GameObjectEntity* lineA, GameObjectEntity* capsuleB);
 
 public: // EXTRA COLLISION FUNCTION(s) (ALTERNATIVES)
 
+    // RECTANGLE (STATIC)
+    static CollisionManifold S_RectangleToRectangle(float x1, float y1, float width1, float height1, float x2, float y2, float width2, float height2);
 
-
+    // CIRCLE (STATIC)
+    static CollisionManifold S_CircleToCircle();
+    static CollisionManifold S_CircleToRectangle();
 
 
 

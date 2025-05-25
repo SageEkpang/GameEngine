@@ -7,21 +7,38 @@
 
 class GameObjectEntity;
 
-enum class ColliderType : std::int8_t
+// NOTE: Depericate way but may need to revisite
+//enum class collidertype : std::int8_t
+//{
+//    collider_type_none,
+//    collider_type_point,
+//    collider_type_rectangle,
+//    collider_type_circle,
+//    collider_type_capsule,
+//    collider_type_oriented_rectangle,
+//    collider_type_complex,
+//    collider_type_line,
+//};
+
+enum class TriggerAreaState : std::int8_t
 {
-    COLLIDER_TYPE_NONE,
-    COLLIDER_TYPE_POINT,
-    COLLIDER_TYPE_RECTANGLE,
-    COLLIDER_TYPE_CIRCLE,
-    COLLIDER_TYPE_CAPSULE,
-    COLLIDER_TYPE_ORIENTED_RECTANGLE,
-    COLLIDER_TYPE_COMPLEX,
-    COLLIDER_TYPE_LINE,
+    TRIGGER_AREA_STATE_ENTERED,
+    TRIGGER_AREA_STATE_STAYED,
+    TRIGGER_AREA_STATE_EXITED,
+    TRIGGER_AREA_STATE_NONE
 };
 
 class ColliderEntity : public ComponentEntity
 {
-public: // PROTECTED VARIABLE(s)
+private: // PRIVATE VARIABLE(s)
+
+    void (*m_TriggerEnteredLambda)() = nullptr;
+    void (*m_TriggerStayedLambda)() = nullptr;
+    void (*m_TriggerExitedLambda)() = nullptr;
+
+    std::unordered_set<GameObjectEntity*> m_ObjectList;
+
+public: // PUBLIC VARIABLE(s)
 
     // BASE VARIABLE(s)
     bool m_HasCollided;
@@ -29,14 +46,13 @@ public: // PROTECTED VARIABLE(s)
     bool m_IsTrigger;
 
     // TRIGGER AREA VARIABLE(s)
+    TriggerAreaState m_TriggerState;
     bool m_HasEntered = false;
     bool m_HasStayed = false;
     bool m_HasExited = false;
 
-    std::unordered_set<GameObjectEntity*> m_ObjectList;
-
     // COLLIDER VARIABLE(s)
-    ColliderType m_ColliderType;
+    // ColliderType m_ColliderType;
 
 public: // PUBLIC FUNCTION(s)
 
@@ -47,21 +63,18 @@ public: // PUBLIC FUNCTION(s)
     ~ColliderEntity();
 
 
+    void TriggerQuery(GameObjectEntity* gameObject);
+
+    void TriggerEnteredExecute(void(*func)() = nullptr);
+    void TriggerStayedExecute(void(*func)() = nullptr);
+    void TriggerExitedExecute(void(*func)() = nullptr);
+
+    void TriggerQueryExecute();
+
     // TRIGGER AREA FUNCTION(s)
     void TriggerEntered(GameObjectEntity* gameObject, void(*func)() = nullptr);
     void TriggerStayed(GameObjectEntity* gameObject, void(*func)() = nullptr);
     void TriggerExited(GameObjectEntity* gameObject, void(*func)() = nullptr);
-
-
-    // GETTER FUNCTION(s)
-    inline ColliderType GetColliderType() const { return m_ColliderType; }
-    inline bool GetActivated() const { return m_IsActivated; }
-    inline std::unordered_set<GameObjectEntity*>& GetObjects() { return m_ObjectList; }
-
-    // SETTER FUNCTION(s)
-    inline void SetColliderType(ColliderType colliderType) { m_ColliderType = colliderType; }
-    inline void SetActived(bool activated) { m_IsActivated = activated; }
-    inline void SetIsTrigger(bool isTrigger) { m_IsTrigger = isTrigger; }
 };
 
 #endif
