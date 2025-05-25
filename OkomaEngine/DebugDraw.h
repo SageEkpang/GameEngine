@@ -13,17 +13,19 @@
 
 #include "OKVector2.h"
 
+class GameObjectEntity;
+
 // TODO: Finish this
 
 namespace DebugDraw
 {
 	namespace Shape
 	{
-		void DebugRectangle(RectangleColliderComponent rectangleComponent);
-		void DebugCircle(CircleColliderComponent circleComponent);
-		void DebugCapsule(CapsuleColliderComponent capsuleComponent);
-		void DebugLines(LineColliderComponent lineComponent);
-		void DebugComplexShape(ComplexColliderComponent complexComponent);
+		void DebugRectangle(GameObjectEntity* rectangleComponent);
+		void DebugCircle(GameObjectEntity* circleComponent);
+		void DebugCapsule(GameObjectEntity* capsuleComponent);
+		void DebugLines(GameObjectEntity* lineComponent);
+		void DebugComplexShape(GameObjectEntity* complexComponent);
 	}
 
 	namespace Physics

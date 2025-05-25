@@ -4,28 +4,29 @@ namespace DebugDraw
 {
 	namespace Shape
 	{
-		void DebugRectangle(RectangleColliderComponent rectangleComponent)
+		void DebugRectangle(GameObjectEntity* rectangleComponent)
 		{
+
 			DrawRectangleLines((int)rectangleComponent.m_Position.x - (int)(rectangleComponent.m_Scale.x / 2.f), (int)rectangleComponent.m_Position.y - (int)(rectangleComponent.m_Scale.y / 2.f), (int)rectangleComponent.m_Scale.x, (int)rectangleComponent.m_Scale.y, GREEN);
 		}
 
-		void DebugCircle(CircleColliderComponent circleComponent)
+		void DebugCircle(GameObjectEntity* circleComponent)
 		{
 			DrawCircleLinesV(circleComponent.m_Position.ConvertToVec2(), circleComponent.m_Radius, GREEN);
 		}
 
-		void DebugCapsule(CapsuleColliderComponent capsuleComponent)
+		void DebugCapsule(GameObjectEntity* capsuleComponent)
 		{
 
 
 		}
 
-		void DebugLines(LineColliderComponent lineComponent)
+		void DebugLines(GameObjectEntity* lineComponent)
 		{
 			DrawLineV(lineComponent.m_LineStartPosition.ConvertToVec2(), lineComponent.m_LineEndPosition.ConvertToVec2(), GREEN);
 		}
 
-		void DebugComplexShape(ComplexColliderComponent complexComponent)
+		void DebugComplexShape(GameObjectEntity* complexComponent)
 		{
 			// DrawLineStrip(complexComponent.m_Vertices, complexComponent.m_Vertices.size(), GREEN);
 		}
