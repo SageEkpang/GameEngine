@@ -1,4 +1,5 @@
 #include "ColliderEntity.h"
+#include "GameObjectEntity.h"
 
 ColliderEntity::ColliderEntity()
 	: m_HasCollided(false), m_IsActivated(true), m_IsTrigger(false)
@@ -39,15 +40,14 @@ void ColliderEntity::TriggerQuery(GameObjectEntity* gameObject)
 	if (m_ObjectList.empty()) { return; }
 	
 	// NOTE: Game Object has stayed in the trigger
-	//if (m_ObjectList.find(gameObject) != m_ObjectList.end() && m_TriggerState == TriggerAreaState::TRIGGER_AREA_STATE_ENTERED)
-	//{
-	//	m_TriggerState = TriggerAreaState::TRIGGER_AREA_STATE_STAYED;
-	//	return;
-	//}
+	if (m_ObjectList.find(gameObject) != m_ObjectList.end() && gameObject->FindChildComponent<ColliderEntity>()->m_HasCollided == true)
+	{
+		m_TriggerState = TriggerAreaState::TRIGGER_AREA_STATE_STAYED;
+		return;
+	}
 
-	// Make sure to add the has collided function
 	// NOTE: Game Object has exited the trigger
-	if ((m_TriggerState == TriggerAreaState::TRIGGER_AREA_STATE_ENTERED || m_TriggerState == TriggerAreaState::TRIGGER_AREA_STATE_STAYED) && m_ObjectList.count(gameObject) != 0)
+	if (m_ObjectList.find(gameObject) != m_ObjectList.end() && gameObject->FindChildComponent<ColliderEntity>()->m_HasCollided == false)
 	{
 		m_TriggerState = TriggerAreaState::TRIGGER_AREA_STATE_EXITED;
 		m_ObjectList.erase(gameObject);
@@ -80,21 +80,4 @@ void ColliderEntity::TriggerQueryExecute()
 		case TriggerAreaState::TRIGGER_AREA_STATE_NONE: break;
 		default: break;
 	}
-}
-
-void ColliderEntity::TriggerEntered(GameObjectEntity* gameObject, void(*func)())
-{
-
-
-	
-}
-
-void ColliderEntity::TriggerStayed(GameObjectEntity* gameObject, void(*func)())
-{
-	
-}
-
-void ColliderEntity::TriggerExited(GameObjectEntity* gameObject, void(*func)())
-{
-	
 }

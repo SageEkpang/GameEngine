@@ -67,11 +67,6 @@ public: // PUBLIC FUNCTION(s)
     void TriggerExitedExecute(void(*func)() = nullptr);
 
     void TriggerQueryExecute();
-
-    // TRIGGER AREA FUNCTION(s)
-    void TriggerEntered(GameObjectEntity* gameObject, void(*func)() = nullptr);
-    void TriggerStayed(GameObjectEntity* gameObject, void(*func)() = nullptr);
-    void TriggerExited(GameObjectEntity* gameObject, void(*func)() = nullptr);
 };
 
 #endif
