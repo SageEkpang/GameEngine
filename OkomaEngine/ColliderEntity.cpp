@@ -27,7 +27,32 @@ void ColliderEntity::TriggerQuery(GameObjectEntity* gameObject)
 {
 	if (m_IsActivated == false) { return; }
 
+	// NOTE: Game Object has entered trigger
+	if (m_ObjectList.find(gameObject) == m_ObjectList.end())
+	{
+		m_TriggerState = TriggerAreaState::TRIGGER_AREA_STATE_ENTERED;
+		m_ObjectList.insert(gameObject);
+		return;
+	}
 
+	// NOTE: Check if the Object List is there
+	if (m_ObjectList.empty()) { return; }
+	
+	// NOTE: Game Object has stayed in the trigger
+	//if (m_ObjectList.find(gameObject) != m_ObjectList.end() && m_TriggerState == TriggerAreaState::TRIGGER_AREA_STATE_ENTERED)
+	//{
+	//	m_TriggerState = TriggerAreaState::TRIGGER_AREA_STATE_STAYED;
+	//	return;
+	//}
+
+	// Make sure to add the has collided function
+	// NOTE: Game Object has exited the trigger
+	if ((m_TriggerState == TriggerAreaState::TRIGGER_AREA_STATE_ENTERED || m_TriggerState == TriggerAreaState::TRIGGER_AREA_STATE_STAYED) && m_ObjectList.count(gameObject) != 0)
+	{
+		m_TriggerState = TriggerAreaState::TRIGGER_AREA_STATE_EXITED;
+		m_ObjectList.erase(gameObject);
+		return;
+	}
 }
 
 void ColliderEntity::TriggerEnteredExecute(void(*func)())
@@ -59,46 +84,17 @@ void ColliderEntity::TriggerQueryExecute()
 
 void ColliderEntity::TriggerEntered(GameObjectEntity* gameObject, void(*func)())
 {
-	if (m_IsActivated == false) { return; }
 
-	if (m_ObjectList.find(gameObject) == m_ObjectList.end())
-	{
-		m_HasEntered = true;
-		m_HasStayed = false;
-		m_HasExited = false;
 
-		m_ObjectList.insert(gameObject);
-		if (func != nullptr) { func(); }
-	}
+	
 }
 
 void ColliderEntity::TriggerStayed(GameObjectEntity* gameObject, void(*func)())
 {
-	if (m_IsActivated == false) { return; }
-	if (m_ObjectList.empty()) { return; }
-
-	if (!m_ObjectList.count(gameObject) == 0)
-	{
-		m_HasEntered = true;
-		m_HasStayed = true;
-		m_HasExited = false;
-		if (func != nullptr) { func(); }
-	}
+	
 }
 
 void ColliderEntity::TriggerExited(GameObjectEntity* gameObject, void(*func)())
 {
-	if (m_IsActivated == false) { return; }
-
-	if (m_HasStayed == true && m_HasEntered == true && !m_ObjectList.count(gameObject) == 0)
-	{
-		if (m_ObjectList.empty()) { return; }
 	
-		m_HasEntered = false;
-		m_HasStayed = false;
-		m_HasExited = true;
-
-		m_ObjectList.erase(gameObject);
-		if (func != nullptr) { func(); }
-	}
 }

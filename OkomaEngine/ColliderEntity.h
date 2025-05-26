@@ -47,9 +47,6 @@ public: // PUBLIC VARIABLE(s)
 
     // TRIGGER AREA VARIABLE(s)
     TriggerAreaState m_TriggerState;
-    bool m_HasEntered = false;
-    bool m_HasStayed = false;
-    bool m_HasExited = false;
 
     // COLLIDER VARIABLE(s)
     // ColliderType m_ColliderType;
