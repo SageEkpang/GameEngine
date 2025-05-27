@@ -151,7 +151,7 @@ public: // EXTRA COLLISION FUNCTION(s) (ALTERNATIVES)
     static CollisionManifold S_CapsuleToRectangle(float capXA, float capYA, float capWidthA, float capHeightA, float recXB, float recYB, float recWidthB, float recHeightB);
 
     static CollisionManifold S_CapsuleToCapsule();
-    static CollisionManifold S_CapsuleToCapsule();
+    // static CollisionManifold S_CapsuleToCapsule();
 
 
     // ORIENTED RECTANGLE (STATIC)
