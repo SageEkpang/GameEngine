@@ -6,6 +6,12 @@ PointColliderComponent::PointColliderComponent()
 	m_Radius = 1.f;
 }
 
+PointColliderComponent::PointColliderComponent(float radius)
+{
+	m_Offset = OKVector2<float>(0.f, 0.f);
+	m_Radius = radius;
+}
+
 PointColliderComponent::PointColliderComponent(OKVector2<float> offset, float radius)
 {
 	m_Offset = offset;
@@ -15,6 +21,12 @@ PointColliderComponent::PointColliderComponent(OKVector2<float> offset, float ra
 PointColliderComponent::PointColliderComponent(float x, float y, float radius)
 {
 	m_Offset = OKVector2<float>(x, y);
+	m_Radius = radius;
+}
+
+void PointColliderComponent::Construct(float radius)
+{
+	m_Offset = OKVector2<float>(0.f, 0.f);
 	m_Radius = radius;
 }
 

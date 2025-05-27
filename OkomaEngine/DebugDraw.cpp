@@ -1,12 +1,4 @@
 #include "DebugDraw.h"
-#include "GameObjectEntity.h"
-#include "RectangleColliderComponent.h"
-#include "CircleColliderComponent.h"
-#include "CapsuleColliderComponent.h"
-#include "ComplexColliderComponent.h"
-#include "LineColliderComponent.h"
-
-#include "Rigidbody2DComponent.h"
 
 namespace DebugDraw
 {
@@ -16,7 +8,13 @@ namespace DebugDraw
 		{
 			if (gameObject->HasComponent<RectangleColliderComponent>())
 			{
-				DrawRectangleLines((int)gameObject->m_Transform.position.x - (int)(gameObject->GetComponent<RectangleColliderComponent>()->m_Scale.x / 2.f), (int)gameObject->m_Transform.position.y - (int)(gameObject->GetComponent<RectangleColliderComponent>()->m_Scale.y / 2.f), (int)gameObject->GetComponent<RectangleColliderComponent>()->m_Scale.x, (int)gameObject->GetComponent<RectangleColliderComponent>()->m_Scale.y, GREEN);
+				DrawRectangleLines(
+				(int)(gameObject->m_Transform.position.x + gameObject->GetComponent<RectangleColliderComponent>()->m_Offset.x) - (int)(gameObject->GetComponent<RectangleColliderComponent>()->m_Scale.x / 2.f), 
+				(int)(gameObject->m_Transform.position.y + gameObject->GetComponent<RectangleColliderComponent>()->m_Offset.y) - (int)(gameObject->GetComponent<RectangleColliderComponent>()->m_Scale.y / 2.f), 
+				(int)gameObject->GetComponent<RectangleColliderComponent>()->m_Scale.x, 
+				(int)gameObject->GetComponent<RectangleColliderComponent>()->m_Scale.y, 
+				GREEN
+				);
 			}
 		}
 
@@ -24,7 +22,7 @@ namespace DebugDraw
 		{
 			if (gameObject->HasComponent<CircleColliderComponent>())
 			{
-				DrawCircleLinesV(gameObject->m_Transform.position.ConvertToVec2(), gameObject->GetComponent<CircleColliderComponent>()->m_Radius, GREEN);
+				DrawCircleLinesV((gameObject->m_Transform.position + gameObject->GetComponent<CircleColliderComponent>()->m_Offset).ConvertToVec2(), gameObject->GetComponent<CircleColliderComponent>()->m_Radius, GREEN);
 			}
 		}
 
@@ -32,6 +30,14 @@ namespace DebugDraw
 		{
 
 
+		}
+
+		void DebugPoint(GameObjectEntity* gameObject)
+		{
+			if (gameObject->HasComponent<PointColliderComponent>())
+			{
+				DrawCircleLinesV((gameObject->m_Transform.position + gameObject->GetComponent<PointColliderComponent>()->m_Offset).ConvertToVec2(), gameObject->GetComponent<PointColliderComponent>()->m_Radius, GREEN);
+			}
 		}
 
 		void DebugLines(GameObjectEntity* gameObject)

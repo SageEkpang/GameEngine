@@ -9,6 +9,17 @@
 
 class GameObjectEntity;
 
+#include "GameObjectEntity.h"
+#include "RectangleColliderComponent.h"
+#include "CircleColliderComponent.h"
+#include "CapsuleColliderComponent.h"
+
+#include "PointColliderComponent.h"
+#include "LineColliderComponent.h"
+#include "ComplexColliderComponent.h"
+
+#include "Rigidbody2DComponent.h"
+
 // TODO: Finish this
 
 namespace DebugDraw
@@ -18,6 +29,8 @@ namespace DebugDraw
 		void DebugRectangle(GameObjectEntity* gameObject);
 		void DebugCircle(GameObjectEntity* gameObject);
 		void DebugCapsule(GameObjectEntity* gameObject);
+
+		void DebugPoint(GameObjectEntity* gameObject);
 		void DebugLines(GameObjectEntity* gameObject);
 		void DebugComplexShape(GameObjectEntity* gameObject);
 	}

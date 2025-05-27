@@ -4,9 +4,7 @@
 #include "TimeStepConstants.h"
 #include "GameObjectEntity.h"
 #include "OKMaths.h"
-
-#include "ParticleEffectComponent.h"
-#include "RectangleColliderComponent.h"
+#include "DebugDraw.h"
 
 #include "CollisionManager.h"
 
@@ -55,15 +53,17 @@ int main()
 	rlDisableBackfaceCulling();
 
 	GameObjectEntity m_Tester;
-	// m_Tester.AddComponent<ParticleEffectComponent>();
-	// m_Tester.GetComponent<ParticleEffectComponent>()->Construct(OKVector2<float>(0.f, 0.f), 1000u);
-	// m_Tester.GetComponent<ParticleEffectComponent>()->PrefabBloodLeak();
+	m_Tester.m_Transform.position = OKVector2<float>(0, 0);
+	m_Tester.AddComponent<LineColliderComponent>();
+	m_Tester.GetComponent<LineColliderComponent>()->Construct(OKVector2<float>(500, 500), OKVector2<float>(600, 600));
 
 	GameObjectEntity m_Object2;
-	//m_Object2.AddComponent<RectangleColliderComponent>();
+	m_Object2.m_Transform.position = OKVector2<float>(0, 0);
+	m_Object2.AddComponent<CircleColliderComponent>();
+	m_Object2.GetComponent<CircleColliderComponent>()->Construct(100.f);
 
 	CollisionManager m_ColMani;
-	// m_ColMani.CheckCollisions(&m_Tester, &m_Object2);
+	CollisionManifold m_Result;
 	
 	// SetTargetFPS(60);
 	while (!WindowShouldClose())
@@ -79,6 +79,25 @@ int main()
 			rlPushMatrix();
 			rlScalef(1.0f, 1.0f, 1.0f);
 			// NOTE: Text Here ------
+			m_Result = m_ColMani.CheckCollisions(&m_Tester, &m_Object2);
+
+			if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+			{
+				m_Tester.GetComponent<LineColliderComponent>()->m_LineStartPosition = OKVector2<float>(GetMouseX() - camera.offset.x, GetMouseY() - camera.offset.y);
+			}
+
+			if (m_Result.m_HasCollision)
+			{
+				DrawText("Collided", 10, 10, 40, GREEN);
+			}
+			else
+			{
+				DrawText("Not Collided", 10, 10, 40, RED);
+			}
+
+			DebugDraw::Shape::DebugLines(&m_Tester);
+			DebugDraw::Shape::DebugCircle(&m_Object2);
+			
 
 			rlPopMatrix();
 
@@ -86,6 +105,8 @@ int main()
 			rlPushMatrix();
 			rlScalef(1.0f, -1.0f, 1.0f);
 			// NOTE: Draw Here ------
+
+
 
 			// m_Tester.GetComponent<ParticleEffectComponent>()->Update(GetFrameTime());
 			// m_Tester.GetComponent<ParticleEffectComponent>()->Draw();

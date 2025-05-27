@@ -17,20 +17,21 @@
 #include <typeindex>
 #include <typeinfo>
 
-unsigned int constexpr MAX_COMPONENTS = 8u;
-
 // DERIVED COMPONENT CLASSE(s)
-class CapsuleColliderComponent;
-class ComplexColliderComponent;
-class LineColliderComponent;
-class RectangleColliderComponent;
-class SphereColliderComponent;
+#include "RectangleColliderComponent.h"
+#include "CircleColliderComponent.h"
+#include "CapsuleColliderComponent.h"
 
-class ParticleEffectComponent;
-class Rigidbody2DComponent;
+#include "PointColliderComponent.h"
+#include "LineColliderComponent.h"
+#include "ComplexColliderComponent.h"
 
-class CameraComponent;
-// ---------------------------------
+#include "ParticleEffectComponent.h"
+#include "Rigidbody2DComponent.h"
+
+#include "CameraComponent.h"
+
+unsigned int constexpr MAX_COMPONENTS = 8u;
 
 class GameObjectEntity
 {
@@ -67,6 +68,9 @@ public:
 
 	template<typename T>
 	T* FindChildComponent();
+
+	template<typename T>
+	std::type_index FindChildComponentID();
 
 	template<std::derived_from<ComponentEntity> T>
 	T* GetComponent();
@@ -127,7 +131,7 @@ inline void GameObjectEntity::RemoveComponent()
 }
 
 /// <summary>
-/// Find the Component from Parent Component
+/// Find the Component from Parent Class
 /// </summary>
 /// <typeparam name="T"></typeparam>
 /// <returns></returns>
@@ -142,6 +146,27 @@ inline T* GameObjectEntity::FindChildComponent()
 	}
 
 	return t_Result;
+}
+
+/// <summary>
+/// Find the ID from Parent Id
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <returns></returns>
+template<typename T>
+inline std::type_index GameObjectEntity::FindChildComponentID()
+{
+	T* t_Result = nullptr;
+	for (auto& [ComponentId, ComponentType] : m_Components)
+	{
+		t_Result = dynamic_cast<T*>(ComponentType);
+		if (t_Result) 
+		{ 
+			return ComponentId;
+		}
+	}
+
+	return std::type_index(typeid(0));
 }
 
 /// <summary>

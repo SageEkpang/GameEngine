@@ -178,11 +178,10 @@ CollisionManifold CollisionManager::CheckCollisions(GameObjectEntity* gameObject
 	// NOTE: Check if the collider component exists within the game object
 	if (gameObjectA->FindChildComponent<ColliderEntity>()) { tempA = gameObjectA; }
 	if (gameObjectB->FindChildComponent<ColliderEntity>()) { tempB = gameObjectB; }
-
 	if (tempA == nullptr || tempB == nullptr) { return CollisionManifold(); }
 
 	// NOTE: Assign the static casted class to the Game Objects
-	auto collision_made_pair = std::make_pair(std::type_index(typeid(gameObjectA->FindChildComponent<ColliderEntity>())), std::type_index(typeid(gameObjectB->FindChildComponent<ColliderEntity>())));
+	auto collision_made_pair = std::make_pair(tempA->FindChildComponentID<ColliderEntity>(), tempB->FindChildComponentID<ColliderEntity>());
 
 	// NOTE: Reverse pair if it is not within the collision map
 	if (m_CollisionMapping.count(collision_made_pair) == 0)
@@ -354,36 +353,44 @@ CollisionManifold CollisionManager::RectangleToRectangle(GameObjectEntity* rectA
 CollisionManifold CollisionManager::CircleToCircle(GameObjectEntity* circA, GameObjectEntity* circB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
+	circA->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
+	circB->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
 
-	OKVector2<float> distance = circA->m_Transform.position - circB->m_Transform.position;
-	float radii_sum = circA->GetComponent<CircleColliderComponent>()->m_Radius + circB->GetComponent<CircleColliderComponent>()->m_Radius;
+	OKVector2<float> distance = (circA->m_Transform.position + circA->GetComponent<CircleColliderComponent>()->m_Offset) - (circB->m_Transform.position + circB->GetComponent<CircleColliderComponent>()->m_Offset);
+	float radii_sum = circA->GetComponent<CircleColliderComponent>()->m_Radius + circB->GetComponent<CircleColliderComponent>()->m_Radius; 
 
 	if (distance.magnitude() <= radii_sum)
 	{
+		circA->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
+		circB->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
+
 		if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true && circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
 		{
 			circA->GetComponent<CircleColliderComponent>()->TriggerQuery(circB);
 			circB->GetComponent<CircleColliderComponent>()->TriggerQuery(circA);
+			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
 
 		if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
 		{
 			circA->GetComponent<CircleColliderComponent>()->TriggerQuery(circB);
+			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
 
 		if (circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
 		{
 			circB->GetComponent<CircleColliderComponent>()->TriggerQuery(circA);
+			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
 
 		t_ColMani.m_HasCollision = true;
-		t_ColMani.m_CollisionNormal = circA->m_Transform.position - circB->m_Transform.position;
+		t_ColMani.m_CollisionNormal = (circA->m_Transform.position + circA->GetComponent<CircleColliderComponent>()->m_Offset) - (circB->m_Transform.position + circB->GetComponent<CircleColliderComponent>()->m_Offset);
 		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
 		t_ColMani.m_ContactPointAmount = 1;
-		t_ColMani.m_PenetrationDepth = OKVector2<float>(circA->m_Transform.position - circB->m_Transform.position).magnitude();
+		t_ColMani.m_PenetrationDepth = OKVector2<float>((circA->m_Transform.position + circA->GetComponent<CircleColliderComponent>()->m_Offset) - (circB->m_Transform.position + circB->GetComponent<CircleColliderComponent>()->m_Offset)).magnitude();
 		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
 
 		return t_ColMani;
@@ -688,33 +695,41 @@ CollisionManifold CollisionManager::OrientedRectangleToCapsule(GameObjectEntity*
 CollisionManifold CollisionManager::PointToPoint(GameObjectEntity* pointA, GameObjectEntity* pointB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
+	pointA->GetComponent<PointColliderComponent>()->m_HasCollided = false;
+	pointB->GetComponent<PointColliderComponent>()->m_HasCollided = false;
 
-	if (pointA->m_Transform.position == pointB->m_Transform.position)
+	if ((pointA->m_Transform.position + pointA->GetComponent<PointColliderComponent>()->m_Offset) == (pointB->m_Transform.position + pointB->GetComponent<PointColliderComponent>()->m_Offset))
 	{
+		pointA->GetComponent<PointColliderComponent>()->m_HasCollided = true;
+		pointB->GetComponent<PointColliderComponent>()->m_HasCollided = true;
+
 		if (pointA->GetComponent<PointColliderComponent>()->m_IsTrigger == true && pointB->GetComponent<PointColliderComponent>()->m_IsTrigger == true)
 		{
 			pointA->GetComponent<PointColliderComponent>()->TriggerQuery(pointB);
 			pointB->GetComponent<PointColliderComponent>()->TriggerQuery(pointA);
+			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
 
 		if (pointA->GetComponent<PointColliderComponent>()->m_IsTrigger == true)
 		{
 			pointA->GetComponent<PointColliderComponent>()->TriggerQuery(pointB);
+			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
 
 		if (pointB->GetComponent<PointColliderComponent>()->m_IsTrigger == true)
 		{
 			pointB->GetComponent<PointColliderComponent>()->TriggerQuery(pointA);
+			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
 
 		t_ColMani.m_HasCollision = true;
-		t_ColMani.m_CollisionNormal = pointA->m_Transform.position - pointB->m_Transform.position;
+		t_ColMani.m_CollisionNormal = (pointA->m_Transform.position + pointA->GetComponent<PointColliderComponent>()->m_Offset) - (pointB->m_Transform.position + pointB->GetComponent<PointColliderComponent>()->m_Offset);
 		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
 		t_ColMani.m_ContactPointAmount = 1;
-		t_ColMani.m_PenetrationDepth = OKVector2<float>(pointA->m_Transform.position - pointB->m_Transform.position).magnitude();
+		t_ColMani.m_PenetrationDepth = OKVector2<float>((pointA->m_Transform.position + pointA->GetComponent<PointColliderComponent>()->m_Offset) - (pointB->m_Transform.position + pointB->GetComponent<PointColliderComponent>()->m_Offset)).magnitude();
 		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
 
 		return t_ColMani;
@@ -727,6 +742,9 @@ CollisionManifold CollisionManager::PointToLine(GameObjectEntity* pointA, GameOb
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
+	pointA->GetComponent<PointColliderComponent>()->m_HasCollided = false;
+	lineB->GetComponent<LineColliderComponent>()->m_HasCollided = false;
+
 	OKVector2<float> t_LineBStart = lineB->GetComponent<LineColliderComponent>()->m_LineStartPosition;
 	OKVector2<float> t_LineBEnd = lineB->GetComponent<LineColliderComponent>()->m_LineEndPosition;
 
@@ -734,48 +752,56 @@ CollisionManifold CollisionManager::PointToLine(GameObjectEntity* pointA, GameOb
 	// NOTE: Distance Point from Start of Line
 	float PointOneDistX = pointA->m_Transform.position.x - t_LineBStart.x;
 	float PointOneDistY = pointA->m_Transform.position.y - t_LineBStart.y;
-	float distanceOne = sqrt((PointOneDistX * PointOneDistX) + (PointOneDistY * PointOneDistY));
+	float distanceOne = OKVector2<float>(PointOneDistX, PointOneDistY).magnitude();
 
 	// NOTE: Distance Point from End of Line
 	float PointTwoDistX = pointA->m_Transform.position.x - t_LineBEnd.x;
 	float PointTwoDistY = pointA->m_Transform.position.y - t_LineBEnd.y;
-	float distanceTwo = sqrt((PointTwoDistX * PointTwoDistX) + (PointTwoDistY * PointTwoDistY));
+	float distanceTwo = OKVector2<float>(PointTwoDistX, PointTwoDistY).magnitude();
 
 	// NOTE: Distance from Start to End
 	float distX = t_LineBStart.x - t_LineBEnd.x;
 	float distY = t_LineBStart.y - t_LineBEnd.y;
-	float LineLength = sqrt((distX * distX) + (distY * distY));
+	float LineLength = OKVector2<float>(distX, distY).magnitude();
 
 	// NOTE: Accuracy of colliding line
 	float LineBuffer = pointA->GetComponent<PointColliderComponent>()->m_Radius;
+	// float LineBuffer = 0.1f;
 
 	// NOTE: Collision Check
-	if ((distanceOne + distanceTwo) >= LineLength - LineBuffer && distanceOne + distanceTwo <= LineLength + LineBuffer)
+	if ((distanceOne + distanceTwo) >= LineLength - LineBuffer && (distanceOne + distanceTwo) <= LineLength + LineBuffer)
 	{
+		pointA->GetComponent<PointColliderComponent>()->m_HasCollided = true;
+		lineB->GetComponent<LineColliderComponent>()->m_HasCollided = true;
+
 		if (pointA->GetComponent<PointColliderComponent>()->m_IsTrigger == true && lineB->GetComponent<LineColliderComponent>()->m_IsTrigger == true)
 		{
 			pointA->GetComponent<PointColliderComponent>()->TriggerQuery(lineB);
 			lineB->GetComponent<LineColliderComponent>()->TriggerQuery(pointA);
+			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
 
 		if (pointA->GetComponent<PointColliderComponent>()->m_IsTrigger == true)
 		{
 			pointA->GetComponent<PointColliderComponent>()->TriggerQuery(lineB);
+			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
 
 		if (lineB->GetComponent<LineColliderComponent>()->m_IsTrigger == true)
 		{
 			lineB->GetComponent<LineColliderComponent>()->TriggerQuery(pointA);
+			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
 
+		// FIXME
 		t_ColMani.m_HasCollision = true;
-		t_ColMani.m_CollisionNormal = pointA->m_Transform.position - t_LineBStart;
+		t_ColMani.m_CollisionNormal = pointA->m_Transform.position - t_LineBEnd;
 		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
 		t_ColMani.m_ContactPointAmount = 1;
-		t_ColMani.m_PenetrationDepth = OKVector2<float>(pointA->m_Transform.position - t_LineBStart).magnitude();
+		t_ColMani.m_PenetrationDepth = OKVector2<float>(pointA->m_Transform.position - t_LineBEnd).magnitude();
 		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
 
 		return t_ColMani;
@@ -788,37 +814,46 @@ CollisionManifold CollisionManager::PointToCircle(GameObjectEntity* pointA, Game
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
+	pointA->GetComponent<PointColliderComponent>()->m_HasCollided = false;
+	circleB->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
+
 	// NOTE: Work out Distance between colliders
-	float distX = pointA->m_Transform.position.x - circleB->m_Transform.position.x;
-	float distY = pointA->m_Transform.position.y - circleB->m_Transform.position.y;
-	float distance = sqrt((distX * distX) + (distY * distY));
+	float distX = (pointA->m_Transform.position.x + pointA->GetComponent<PointColliderComponent>()->m_Offset.x) - (circleB->m_Transform.position.x + circleB->GetComponent<CircleColliderComponent>()->m_Offset.x);
+	float distY = (pointA->m_Transform.position.y + pointA->GetComponent<PointColliderComponent>()->m_Offset.y) - (circleB->m_Transform.position.y + circleB->GetComponent<CircleColliderComponent>()->m_Offset.y);
+	float distance = OKVector2<float>(distX, distY).magnitude();
 
 	if (distance <= circleB->GetComponent<CircleColliderComponent>()->m_Radius)
 	{
+		pointA->GetComponent<PointColliderComponent>()->m_HasCollided = true;
+		circleB->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
+
 		if (pointA->GetComponent<PointColliderComponent>()->m_IsTrigger == true && circleB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
 		{
 			pointA->GetComponent<PointColliderComponent>()->TriggerQuery(circleB);
 			circleB->GetComponent<CircleColliderComponent>()->TriggerQuery(pointA);
+			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
 
 		if (pointA->GetComponent<PointColliderComponent>()->m_IsTrigger == true)
 		{
 			pointA->GetComponent<PointColliderComponent>()->TriggerQuery(circleB);
+			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
 
 		if (circleB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
 		{
+			t_ColMani.m_HasCollision = true;
 			circleB->GetComponent<CircleColliderComponent>()->TriggerQuery(pointA);
 			return t_ColMani;
 		}
 
 		t_ColMani.m_HasCollision = true;
-		t_ColMani.m_CollisionNormal = pointA->m_Transform.position - circleB->m_Transform.position;
+		t_ColMani.m_CollisionNormal = (pointA->m_Transform.position + pointA->GetComponent<PointColliderComponent>()->m_Offset) - (circleB->m_Transform.position + circleB->GetComponent<CircleColliderComponent>()->m_Offset);
 		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
 		t_ColMani.m_ContactPointAmount = 1;
-		t_ColMani.m_PenetrationDepth = OKVector2<float>(pointA->m_Transform.position - circleB->m_Transform.position).magnitude();
+		t_ColMani.m_PenetrationDepth = OKVector2<float>((pointA->m_Transform.position + pointA->GetComponent<PointColliderComponent>()->m_Offset) - (circleB->m_Transform.position + circleB->GetComponent<CircleColliderComponent>()->m_Offset)).magnitude();
 		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
 
 		return t_ColMani;
@@ -831,27 +866,42 @@ CollisionManifold CollisionManager::PointToRectangle(GameObjectEntity* pointA, G
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
-	if (pointA->m_Transform.position.x >= rectB->m_Transform.position.x &&
-		pointA->m_Transform.position.x <= rectB->m_Transform.position.x + rectB->GetComponent<RectangleColliderComponent>()->m_Scale.x &&
-		pointA->m_Transform.position.y >= rectB->m_Transform.position.y &&
-		pointA->m_Transform.position.y <= rectB->m_Transform.position.y + rectB->GetComponent<RectangleColliderComponent>()->m_Scale.y)
+	pointA->GetComponent<PointColliderComponent>()->m_HasCollided = false;
+	rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = false;
+
+	const OKVector2<float> t_tempPointPosition = pointA->m_Transform.position + pointA->GetComponent<PointColliderComponent>()->m_Offset;
+
+	const OKVector2<float> t_tempRecPosition = rectB->m_Transform.position + rectB->GetComponent<RectangleColliderComponent>()->m_Offset - (rectB->GetComponent<RectangleColliderComponent>()->m_Scale / 2.f);
+	const OKVector2<float> t_tempRecScale = rectB->GetComponent<RectangleColliderComponent>()->m_Scale;
+
+
+	if (t_tempPointPosition.x >= t_tempRecPosition.x &&
+		t_tempPointPosition.x <= t_tempRecPosition.x + t_tempRecScale.x &&
+		t_tempPointPosition.y >= t_tempRecPosition.y &&
+		t_tempPointPosition.y <= t_tempRecPosition.y + t_tempRecScale.y)
 	{
+		pointA->GetComponent<PointColliderComponent>()->m_HasCollided = true;
+		rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
+
 		if (pointA->GetComponent<PointColliderComponent>()->m_IsTrigger == true && rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
 		{
 			pointA->GetComponent<PointColliderComponent>()->TriggerQuery(rectB);
 			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(pointA);
+			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
 
 		if (pointA->GetComponent<PointColliderComponent>()->m_IsTrigger == true)
 		{
 			pointA->GetComponent<PointColliderComponent>()->TriggerQuery(rectB);
+			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
 
 		if (rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
 		{
 			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(pointA);
+			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
 
@@ -906,6 +956,9 @@ CollisionManifold CollisionManager::LineToLine(GameObjectEntity* lineA, GameObje
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
+	lineA->GetComponent<LineColliderComponent>()->m_HasCollided = false;
+	lineB->GetComponent<LineColliderComponent>()->m_HasCollided = false;
+
 	const float x1 = lineA->GetComponent<LineColliderComponent>()->m_LineStartPosition.x;
 	const float y1 = lineA->GetComponent<LineColliderComponent>()->m_LineStartPosition.y;
 
@@ -924,12 +977,42 @@ CollisionManifold CollisionManager::LineToLine(GameObjectEntity* lineA, GameObje
 
 	if (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1) 
 	{
+		lineA->GetComponent<LineColliderComponent>()->m_HasCollided = true;
+		lineB->GetComponent<LineColliderComponent>()->m_HasCollided = true;
+
+		if (lineA->GetComponent<LineColliderComponent>()->m_IsTrigger == true && lineB->GetComponent<LineColliderComponent>()->m_IsTrigger == true)
+		{
+			lineA->GetComponent<LineColliderComponent>()->TriggerQuery(lineB);
+			lineB->GetComponent<LineColliderComponent>()->TriggerQuery(lineA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		if (lineA->GetComponent<LineColliderComponent>()->m_IsTrigger == true)
+		{
+			lineA->GetComponent<LineColliderComponent>()->TriggerQuery(lineB);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		if (lineB->GetComponent<LineColliderComponent>()->m_IsTrigger == true)
+		{
+			lineB->GetComponent<LineColliderComponent>()->TriggerQuery(lineA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+
 		t_ColMani.m_HasCollision = true;
 		t_ColMani.m_CollisionNormal = lineA->m_Transform.position - lineB->m_Transform.position;
 		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
 		t_ColMani.m_ContactPointAmount = 1;
 		t_ColMani.m_PenetrationDepth = OKVector2<float>(lineA->m_Transform.position - lineB->m_Transform.position).magnitude();
-		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+		
+		float intersectionX = x1 + (uA * (x2 - x1));
+		float intersectionY = y1 + (uA * (y2 - y1));
+
+		t_ColMani.m_CollisionPoints[0] = OKVector2<float>(intersectionX, intersectionY);
 
 		return t_ColMani;
 	};
@@ -1025,10 +1108,10 @@ CollisionManifold CollisionManager::LineToRectangle(GameObjectEntity* lineA, Gam
 	OKVector2<float> tempBottomPosEnd = OKVector2<float>(t_tempRectPosition.x - t_tempRectHalfScale.x, t_tempRectPosition.y - t_tempRectHalfScale.y);
 	LineColliderComponent t_LineBottom = LineColliderComponent(tempBottomPosStart, tempBottomPosEnd);
 
-	//CollisionManifold t_Left = LineToLine(lineA, &t_LineLeft);
-	//CollisionManifold t_Right = LineToLine(lineA, &t_LineRight);
-	//CollisionManifold t_Top = LineToLine(lineA, &t_LineTop);
-	//CollisionManifold t_Bottom = LineToLine(lineA, &t_LineBottom);
+	// CollisionManifold t_Left = LineToLine(lineA, &t_LineLeft);
+	// CollisionManifold t_Right = LineToLine(lineA, &t_LineRight);
+	// CollisionManifold t_Top = LineToLine(lineA, &t_LineTop);
+	// CollisionManifold t_Bottom = LineToLine(lineA, &t_LineBottom);
 
 	//if (t_Left.m_HasCollision == true ||
 	//	t_Right.m_HasCollision == true ||
@@ -1135,3 +1218,128 @@ CollisionManifold CollisionManager::LineToCapsule(GameObjectEntity* lineA, GameO
 	// t_ColMani = PointToCircle(&point_temp_A, &circle_temp_B);
 	return t_ColMani;
 }
+
+CollisionManifold CollisionManager::S_PointToPoint(OKVector2<float> pointPositionA, OKVector2<float> pointPositionB)
+{
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	if (pointPositionA == pointPositionB)
+	{
+		t_ColMani.m_HasCollision = true;
+		t_ColMani.m_CollisionNormal = pointPositionA - pointPositionB;
+		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+		t_ColMani.m_ContactPointAmount = 1;
+		t_ColMani.m_PenetrationDepth = OKVector2<float>(pointPositionA - pointPositionB).magnitude();
+		t_ColMani.m_CollisionPoints[0] = pointPositionA;
+
+		return t_ColMani;
+	}
+
+	return t_ColMani;
+}
+
+CollisionManifold CollisionManager::S_PointToPoint(float pointXA, float pointYA, float pointXB, float pointYB)
+{
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	OKVector2<float> t_tempPositionA = OKVector2<float>(pointXA, pointYA);
+	OKVector2<float> t_tempPositionB = OKVector2<float>(pointXB, pointYB);
+
+	if (t_tempPositionA == t_tempPositionB)
+	{
+		t_ColMani.m_HasCollision = true;
+		t_ColMani.m_CollisionNormal = t_tempPositionA - t_tempPositionB;
+		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+		t_ColMani.m_ContactPointAmount = 1;
+		t_ColMani.m_PenetrationDepth = OKVector2<float>(t_tempPositionA - t_tempPositionB).magnitude();
+		t_ColMani.m_CollisionPoints[0] = t_tempPositionA;
+
+		return t_ColMani;
+	}
+
+	return t_ColMani;
+}
+
+CollisionManifold CollisionManager::S_PointToLine(OKVector2<float> pointPositionA, OKVector2<float> lineStartPositionB, OKVector2<float> lineEndPositionB)
+{
+	CollisionManifold t_ColMani;
+
+	// NOTE: Distance Point from Start of Line
+	float PointOneDistX = pointPositionA.x - lineStartPositionB.x;
+	float PointOneDistY = pointPositionA.y - lineStartPositionB.y;
+	float distanceOne = OKVector2<float>(PointOneDistX, PointOneDistY).magnitude();
+
+	// NOTE: Distance Point from End of Line
+	float PointTwoDistX = pointPositionA.x - lineEndPositionB.x;
+	float PointTwoDistY = pointPositionA.y - lineEndPositionB.y;
+	float distanceTwo = OKVector2<float>(PointTwoDistX, PointTwoDistY).magnitude();
+
+	// NOTE: Distance from Start to End
+	float distX = lineStartPositionB.x - lineEndPositionB.x;
+	float distY = lineStartPositionB.y - lineEndPositionB.y;
+	float LineLength = OKVector2<float>(distX, distY).magnitude();
+
+	// NOTE: Accuracy of colliding line
+	float LineBuffer = 0.1f;
+	// float LineBuffer = 0.1f;
+
+	// NOTE: Collision Check
+	if ((distanceOne + distanceTwo) >= LineLength - LineBuffer && (distanceOne + distanceTwo) <= LineLength + LineBuffer)
+	{
+		// FIXME
+		t_ColMani.m_HasCollision = true;
+		t_ColMani.m_CollisionNormal = pointPositionA;
+		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+		t_ColMani.m_ContactPointAmount = 1;
+		t_ColMani.m_PenetrationDepth = OKVector2<float>(pointPositionA).magnitude();
+		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+
+		return t_ColMani;
+	}
+
+	return t_ColMani;
+}
+
+CollisionManifold CollisionManager::S_PointToLine(float pointXA, float pointYA, float lineStartXB, float lineStartYB, float lineEndXB, float lineEndYB)
+{
+	CollisionManifold t_ColMani;
+
+	OKVector2<float> t_tempPointPosition = OKVector2<float>(pointXA, pointYA);
+	OKVector2<float> t_tempLineStart = OKVector2<float>(lineStartXB, lineStartYB);
+	OKVector2<float> t_tempLineEnd = OKVector2<float>(lineEndXB, lineEndYB);
+
+	// NOTE: Distance Point from Start of Line
+	float PointOneDistX = t_tempPointPosition.x - t_tempLineStart.x;
+	float PointOneDistY = t_tempPointPosition.y - t_tempLineStart.y;
+	float distanceOne = OKVector2<float>(PointOneDistX, PointOneDistY).magnitude();
+
+	// NOTE: Distance Point from End of Line
+	float PointTwoDistX = t_tempPointPosition.x - t_tempLineEnd.x;
+	float PointTwoDistY = t_tempPointPosition.y - t_tempLineEnd.y;
+	float distanceTwo = OKVector2<float>(PointTwoDistX, PointTwoDistY).magnitude();
+
+	// NOTE: Distance from Start to End
+	float distX = t_tempLineStart.x - t_tempLineEnd.x;
+	float distY = t_tempLineStart.y - t_tempLineEnd.y;
+	float LineLength = OKVector2<float>(distX, distY).magnitude();
+
+	// NOTE: Accuracy of colliding line
+	float LineBuffer = 0.1f;
+
+	// NOTE: Collision Check
+	if ((distanceOne + distanceTwo) >= LineLength - LineBuffer && (distanceOne + distanceTwo) <= LineLength + LineBuffer)
+	{
+		// FIXME
+		t_ColMani.m_HasCollision = true;
+		t_ColMani.m_CollisionNormal = t_tempPointPosition;
+		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+		t_ColMani.m_ContactPointAmount = 1;
+		t_ColMani.m_PenetrationDepth = OKVector2<float>(t_tempPointPosition).magnitude();
+		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+
+		return t_ColMani;
+	}
+
+	return t_ColMani;
+}
+

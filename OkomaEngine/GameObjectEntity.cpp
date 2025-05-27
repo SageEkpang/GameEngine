@@ -7,13 +7,24 @@ GameObjectEntity::GameObjectEntity()
 
 GameObjectEntity::~GameObjectEntity()
 {
-	std::unordered_map<std::type_index, ComponentEntity*>::iterator itr;
+	//std::unordered_map<std::type_index, ComponentEntity*>::iterator itr;
 
-	for (itr = m_Components.begin(); itr != m_Components.end(); ++itr)
+	//for (itr = m_Components.begin(); itr != m_Components.end(); ++itr)
+	//{
+	//	if ((*itr).second != nullptr)
+	//	{
+	//		delete (*itr).second;
+	//	}
+	//}
+
+	if (!m_Components.empty())
 	{
-		if ((*itr).second != nullptr)
+		for (auto& [ComponentType, Component] : m_Components)
 		{
-			delete (*itr).second;
+			if (Component == nullptr) { continue; }
+
+			delete Component;
+			Component = nullptr;
 		}
 	}
 

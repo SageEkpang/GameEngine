@@ -15,12 +15,14 @@ public:
 public:
 
 	// CLASS FUNCTION(s) (General)
+	PointColliderComponent(float radius);
 	PointColliderComponent(OKVector2<float> offset, float radius = 1.f);
 	PointColliderComponent(float x, float y, float radius = 1.f);
 
 	// CLASS FUNCTION(s) (Components)
 	PointColliderComponent();
 
+	void Construct(float radius);
 	void Construct(OKVector2<float> offset, float radius = 1.f);
 	void Construct(float x, float y, float radius = 1.f);
 
