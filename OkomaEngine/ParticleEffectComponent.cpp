@@ -287,7 +287,7 @@ void ParticleEffectComponent::PrefabSmoke()
 	m_IsLooping = true;
 	m_EmissionRateOverTime = 500u;
 	m_ParticleSimulationDuration = 0.5f;
-	m_StartLifeTime = 6.0f;
+	m_StartLifeTime = 2.0f;
 	AssignVelocityOverLifeTime(OKVector2<float>(0.f, 50.f), OKVector2<float>(0.f, 100.f));
 	AssignColourOverLifeTime(OKVector4<unsigned int>(200, 200, 200, 255), OKVector4<unsigned int>(50, 50, 50, 0));
 	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(5.f, 5.f));
