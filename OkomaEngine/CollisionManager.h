@@ -18,7 +18,7 @@ class CapsuleColliderComponent;
 class ComplexColliderComponent;
 class PointColliderComponent;
 
-// TODO: Make sure to add the collision offset to the position of the transform when doing the collider calculations
+// TODO: Check that the current ones implemented work
 enum Collider_Type_Collisions
 {
     COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_RECTANGLE, // DONE
@@ -28,7 +28,7 @@ enum Collider_Type_Collisions
 
     COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CIRCLE, // DONE
     COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_RECTANGLE, // DONE
-    COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CAPSULE, // NEED TO WORK ON
+    COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CAPSULE, // DONE
 
     COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_ORIENTED, // NEED TO WORK ON
     COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_RECTANGLE, // NEED TO WORK ON

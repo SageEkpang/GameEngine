@@ -225,7 +225,6 @@ CollisionManifold CollisionManager::CheckCollisions(GameObjectEntity* gameObject
 	return t_ColMani;
 }
 
-// FIX ME: Fix how this works
 CollisionManifold CollisionManager::RectangleToRectangle(GameObjectEntity* rectA, GameObjectEntity* rectB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
@@ -677,6 +676,9 @@ CollisionManifold CollisionManager::CapsuleToCircle(GameObjectEntity* capsuleA, 
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
+	capsuleA->GetComponent<CapsuleColliderComponent>()->m_HasCollided = false;
+	circB->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
+
 	const OKVector2<float> t_tempCirclePositionB = circB->m_Transform.position + circB->GetComponent<CircleColliderComponent>()->m_Offset;
 	const float t_tempCircleRadiusB = circB->GetComponent<CircleColliderComponent>()->m_Radius;
 
@@ -812,6 +814,9 @@ CollisionManifold CollisionManager::CapsuleToRectangle(GameObjectEntity* capsule
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
+	capsuleA->GetComponent<CapsuleColliderComponent>()->m_HasCollided = false;
+	rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = false;
+
 	const OKVector2<float> t_tempRectPositionB = rectB->m_Transform.position + rectB->GetComponent<RectangleColliderComponent>()->m_Offset;
 	const OKVector2<float> t_tempRectScaleB = rectB->GetComponent<RectangleColliderComponent>()->m_Scale;
 
@@ -943,26 +948,81 @@ CollisionManifold CollisionManager::CapsuleToRectangle(GameObjectEntity* capsule
 	return CollisionManifold();
 }
 
+// Need to check this
 CollisionManifold CollisionManager::CapsuleToCapsule(GameObjectEntity* capsuleA, GameObjectEntity* capsuleB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
+	capsuleA->GetComponent<CapsuleColliderComponent>()->m_HasCollided = false;
+	capsuleB->GetComponent<CapsuleColliderComponent>()->m_HasCollided = false;
 
+	// Capsule (A)
+	// NOTE: Capsule Position and Variable(s)
+	OKVector2<float> tip_a = OKVector2<float>(capsuleA->m_Transform.position.x, capsuleA->m_Transform.position.y + (capsuleA->GetComponent<CapsuleColliderComponent>()->m_Height / 2.f) - (capsuleA->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f));
+	OKVector2<float> base_a = OKVector2<float>(capsuleA->m_Transform.position.x, capsuleA->m_Transform.position.y - (capsuleA->GetComponent<CapsuleColliderComponent>()->m_Height / 2.f) + (capsuleA->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f));
+	float t_DistanceXA = tip_a.x - base_a.x;
+	float t_DistanceYA = tip_a.y - base_a.y;
+	float lenA = sqrt((t_DistanceXA * t_DistanceXA) + (t_DistanceYA * t_DistanceYA));
+	float dotA = ((capsuleB->m_Transform.position.x - tip_a.x) * (base_a.x - tip_a.x)) + ((capsuleB->m_Transform.position.y - tip_a.y) * (base_a.y - tip_a.y)) / powf(lenA, 2);
 
+	// Capsule (B)
+	OKVector2<float> tip_b = OKVector2<float>(capsuleB->m_Transform.position.x, capsuleB->m_Transform.position.y + (capsuleB->GetComponent<CapsuleColliderComponent>()->m_Height / 2.f) - (capsuleB->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f));
+	OKVector2<float> base_b = OKVector2<float>(capsuleB->m_Transform.position.x, capsuleB->m_Transform.position.y - (capsuleB->GetComponent<CapsuleColliderComponent>()->m_Height / 2.f) + (capsuleB->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f));
+	float t_DistanceXB = tip_b.x - base_b.x;
+	float t_DistanceYB = tip_b.y - base_b.y;
+	float lenB = sqrt((t_DistanceXB * t_DistanceXB) + (t_DistanceYB * t_DistanceYB));
+	float dotB = ((capsuleA->m_Transform.position.x - tip_b.x) * (base_b.x - tip_b.x)) + ((capsuleA->m_Transform.position.y - tip_b.y) * (base_b.y - tip_b.y)) / powf(lenB, 2);
 
+	// NOTE: Closest Point (A)
+	OKVector2<float> closest_point_A;
+	closest_point_A.x = tip_a.x + (dotA * (base_a.x - tip_a.x)) / 2;
+	closest_point_A.y = tip_a.y + (dotA * (base_a.y - tip_a.y)) / 2;
+	closest_point_A.x = Clamp(closest_point_A.x, base_a.x, tip_a.x);
+	closest_point_A.y = Clamp(closest_point_A.y, base_a.y, tip_a.y);
 
+	// NOTE: Closest Point (B)
+	OKVector2<float> closest_point_B;
+	closest_point_B.x = tip_b.x + (dotB * (base_b.x - tip_b.x)) / 2;
+	closest_point_B.y = tip_b.y + (dotB * (base_b.y - tip_b.y)) / 2;
+	closest_point_B.x = Clamp(closest_point_B.x, base_b.x, tip_b.x);
+	closest_point_B.y = Clamp(closest_point_B.y, base_b.y, tip_b.y);
 
+	//DrawCircleV(closest_point_A.ConvertToVec2(), 10.f, RED);
+	//DrawCircleV(closest_point_B.ConvertToVec2(), 10.f, PURPLE);
 
+	t_ColMani = S_CircleToCircle(closest_point_A, capsuleA->GetComponent<CapsuleColliderComponent>()->m_Width, closest_point_B, capsuleB->GetComponent<CapsuleColliderComponent>()->m_Width);
 
+	if (t_ColMani.m_HasCollision)
+	{
+		capsuleA->GetComponent<CapsuleColliderComponent>()->m_HasCollided = true;
+		capsuleB->GetComponent<CapsuleColliderComponent>()->m_HasCollided = true;
 
+		if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true && capsuleB->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true)
+		{
+			capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(capsuleB);
+			capsuleB->GetComponent<CapsuleColliderComponent>()->TriggerQuery(capsuleA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
 
+		if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true)
+		{
+			capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(capsuleB);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
 
+		if (capsuleB->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true)
+		{
+			capsuleB->GetComponent<CapsuleColliderComponent>()->TriggerQuery(capsuleA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
 
+		return t_ColMani;
+	}
 
-
-
-
-	return t_ColMani;
+	return t_ColMani = CollisionManifold();
 }
 
 CollisionManifold CollisionManager::OrientedRectangleToOrientedRectangle(GameObjectEntity* OrRectA, GameObjectEntity* OrRectB)
@@ -1008,10 +1068,10 @@ CollisionManifold CollisionManager::OrientedRectangleToRectangle(GameObjectEntit
 	//}
 
 	//t_ColMani.m_HasCollision = true;
-	//t_ColMani.m_CollisionNormal = OrRectA->m_Position - rectB->m_Position;
+	//t_ColMani.m_CollisionNormal = OrRectA->m_Transform.position - rectB->m_Transform.position;
 	//t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
 	//t_ColMani.m_ContactPointAmount = 1;
-	//t_ColMani.m_PenetrationDepth = OKVector2<float>(OrRectA->m_Position - rectB->m_Position).magnitude();
+	//t_ColMani.m_PenetrationDepth = OKVector2<float>(OrRectA->m_Transform.position - rectB->m_Transform.position).magnitude();
 	//t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
 
 	return t_ColMani;
