@@ -230,13 +230,13 @@ CollisionManifold CollisionManager::RectangleToRectangle(GameObjectEntity* rectA
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
-	//OKVector2<float> RectCentreA = rectA->m_Position; // Centre A
-	//OKVector2<float> RectScaleA = rectA->m_Scale; // Full Extents
-	//OKVector2<float> NearPointA = OKVector2<float>(0, 0);
-	//
-	//OKVector2<float> RectCentreB = rectB->m_Position; // Centre B
-	//OKVector2<float> RectScaleB = rectB->m_Scale; // Half Extents
-	//OKVector2<float> NearPointB = OKVector2<float>(0, 0);
+	OKVector2<float> RectCentreA = rectA->m_Transform.position + rectA->GetComponent<RectangleColliderComponent>()->m_Offset; // Centre A
+	OKVector2<float> RectScaleA = rectA->GetComponent<RectangleColliderComponent>()->m_Scale; // Full Extents
+	OKVector2<float> NearPointA = OKVector2<float>(0, 0);
+	
+	OKVector2<float> RectCentreB = rectB->m_Transform.position + rectA->GetComponent<RectangleColliderComponent>()->m_Offset; // Centre B
+	OKVector2<float> RectScaleB = rectB->GetComponent<RectangleColliderComponent>()->m_Scale; // Half Extents
+	OKVector2<float> NearPointB = OKVector2<float>(0, 0);
 
 	//if (TopLeftCornerA.x < TopLeftCornerB.x)
 	//{
@@ -1174,17 +1174,17 @@ CollisionManifold CollisionManager::LineToLine(GameObjectEntity* lineA, GameObje
 			return t_ColMani;
 		}
 
-
-		t_ColMani.m_HasCollision = true;
-		t_ColMani.m_CollisionNormal = lineA->m_Transform.position - lineB->m_Transform.position;
-		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
-		t_ColMani.m_ContactPointAmount = 1;
-		t_ColMani.m_PenetrationDepth = OKVector2<float>(lineA->m_Transform.position - lineB->m_Transform.position).magnitude();
-		
 		float intersectionX = x1 + (uA * (x2 - x1));
 		float intersectionY = y1 + (uA * (y2 - y1));
 
+		DrawCircle(intersectionX, intersectionY, 5.f, PURPLE);
+
+		t_ColMani.m_HasCollision = true;
 		t_ColMani.m_CollisionPoints[0] = OKVector2<float>(intersectionX, intersectionY);
+		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionPoints[0];
+		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+		t_ColMani.m_ContactPointAmount = 1;
+		t_ColMani.m_PenetrationDepth = t_ColMani.m_CollisionPoints[0].magnitude();
 
 		return t_ColMani;
 	};
