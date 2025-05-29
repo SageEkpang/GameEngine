@@ -24,7 +24,7 @@ enum Collider_Type_Collisions
     COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_RECTANGLE, // TODO
 
     COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_CIRCLE, // DONE
-    COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_RECTANGLE, // TODO
+    COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_RECTANGLE, // DONE
 
     COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CIRCLE, // NEED TO WORK ON
     COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_RECTANGLE, // NEED TO WORK ON
@@ -36,15 +36,15 @@ enum Collider_Type_Collisions
     COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_CAPSULE, // NEED TO WORK ON
 
     COLLIDER_TYPE_COLLISIONS_POINT_TO_POINT, // DONE
-    COLLIDER_TYPE_COLLISIONS_POINT_TO_LINE, // NEED TO WORK ON
+    COLLIDER_TYPE_COLLISIONS_POINT_TO_LINE, // DONE
     COLLIDER_TYPE_COLLISIONS_POINT_TO_CIRCLE, // Done
     COLLIDER_TYPE_COLLISIONS_POINT_TO_RECTANGLE, // Done
     COLLIDER_TYPE_COLLISIONS_POINT_TO_CAPSULE, // NEED TO WORK ON
     COLLIDER_TYPE_COLLISIONS_POINT_TO_ORIENTED, // NEED TO WORK ON
 
     COLLIDER_TYPE_COLLISIONS_LINE_TO_LINE, // DONE
-    COLLIDER_TYPE_COLLISIONS_LINE_TO_CIRCLE, // NEED TO WORK ON
-    COLLIDER_TYPE_COLLISIONS_LINE_TO_RECTANGLE, // NEED TO WORK ON
+    COLLIDER_TYPE_COLLISIONS_LINE_TO_CIRCLE, // DONE
+    COLLIDER_TYPE_COLLISIONS_LINE_TO_RECTANGLE, // DONE
     COLLIDER_TYPE_COLLISIONS_LINE_TO_CAPSULE, // NEED TO WORK ON
     COLLIDER_TYPE_COLLISIONS_LINE_TO_ORIENTED // NEED TO WORK ON
 };
@@ -173,11 +173,11 @@ public: // EXTRA COLLISION FUNCTION(s) (ALTERNATIVES)
     static CollisionManifold S_PointToLine(OKVector2<float> pointPositionA, OKVector2<float> lineStartPositionB, OKVector2<float> lineEndPositionB);
     static CollisionManifold S_PointToLine(float pointXA, float pointYA, float lineStartXB, float lineStartYB, float lineEndXB, float lineEndYB);
 
-    static CollisionManifold S_PointToCircle(OKVector2<float> pointPositionA, OKVector2<float> circPositionB, OKVector2<float> circRadiusB);
+    static CollisionManifold S_PointToCircle(OKVector2<float> pointPositionA, OKVector2<float> circPositionB, float circRadiusB);
     static CollisionManifold S_PointToCircle(float pointXA, float pointYA, float circXB, float circYB, float circRadiusB);
 
-    static CollisionManifold S_PointToRectangle(OKVector2<float> pointPositionA, float pointRadiusA, OKVector2<float> recPositionB, OKVector2<float> recScaleB);
-    static CollisionManifold S_PointToRectangle(float pointXA, float pointYA, float pointRadiusA, float recXB, float recYB, float recWidthB, float recHeightB);
+    static CollisionManifold S_PointToRectangle(OKVector2<float> pointPositionA, OKVector2<float> recPositionB, OKVector2<float> recScaleB);
+    static CollisionManifold S_PointToRectangle(float pointXA, float pointYA, float recXB, float recYB, float recWidthB, float recHeightB);
 
     static CollisionManifold S_PointToCapsule(OKVector2<float> pointPositionA, float pointRadiusA, OKVector2<float> capPositionB, float capWidthB, float capHeightB);
     static CollisionManifold S_PointToCapsule(float pointXA, float pointYA, float pointRadiusA, float capXB, float capYB, float capWidthB, float capHeightB);
