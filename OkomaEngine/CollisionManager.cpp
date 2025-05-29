@@ -230,124 +230,156 @@ CollisionManifold CollisionManager::RectangleToRectangle(GameObjectEntity* rectA
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
-	OKVector2<float> RectCentreA = rectA->m_Transform.position + rectA->GetComponent<RectangleColliderComponent>()->m_Offset; // Centre A
-	OKVector2<float> RectScaleA = rectA->GetComponent<RectangleColliderComponent>()->m_Scale; // Full Extents
+	rectA->GetComponent<RectangleColliderComponent>()->m_HasCollided = false;
+	rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = false;
+
+	OKVector2<float> RectCentreA = rectA->m_Transform.position + rectA->GetComponent<RectangleColliderComponent>()->m_Offset - (rectA->GetComponent<RectangleColliderComponent>()->m_Scale / 2.f); // Centre A
+	OKVector2<float> RectScaleA = rectA->GetComponent<RectangleColliderComponent>()->m_Scale;// ; // Full Extents
+	OKVector2<float> RectScaleHalfA = RectScaleA / 2.f;
 	OKVector2<float> NearPointA = OKVector2<float>(0, 0);
 	
-	OKVector2<float> RectCentreB = rectB->m_Transform.position + rectA->GetComponent<RectangleColliderComponent>()->m_Offset; // Centre B
-	OKVector2<float> RectScaleB = rectB->GetComponent<RectangleColliderComponent>()->m_Scale; // Half Extents
+	OKVector2<float> RectCentreB = rectB->m_Transform.position + rectB->GetComponent<RectangleColliderComponent>()->m_Offset - (rectB->GetComponent<RectangleColliderComponent>()->m_Scale / 2.f); // Centre B
+	OKVector2<float> RectScaleB = rectB->GetComponent<RectangleColliderComponent>()->m_Scale;// ; // Half Extents
+	OKVector2<float> RectScaleHalfB = RectScaleB / 2.f;
 	OKVector2<float> NearPointB = OKVector2<float>(0, 0);
 
-	//if (TopLeftCornerA.x < TopLeftCornerB.x)
-	//{
-	//	OKVector2<float> LeftSide = ProjectPointOntoLine(
-	//		TopLeftCornerB,
-	//		TopLeftCornerA,
-	//		OKVector2<float>(TopLeftCornerB.x, TopLeftCornerB.y),
-	//		OKVector2<float>(TopLeftCornerB.x, TopLeftCornerB.y + RectScaleB.y),
-	//		OKVector2<float>(0, 1)
-	//	);
+	if (RectCentreA.x < RectCentreB.x)
+	{
+		OKVector2<float> LeftSide = ProjectPointOntoLine(
+			RectCentreB,
+			RectCentreA,
+			OKVector2<float>(RectCentreB.x, RectCentreB.y),
+			OKVector2<float>(RectCentreB.x, RectCentreB.y + RectScaleB.y),
+			OKVector2<float>(0, 1)
+		);
 
-	//	NearPointB.y = LeftSide.y;
-	//}
-	//else if (TopLeftCornerA.x > TopLeftCornerB.x)
-	//{
-	//	OKVector2<float> RightSide = ProjectPointOntoLine(
-	//		TopLeftCornerB,
-	//		TopLeftCornerA,
-	//		OKVector2<float>(TopLeftCornerB.x + RectScaleB.x, TopLeftCornerB.y),
-	//		OKVector2<float>(TopLeftCornerB.x + RectScaleB.x, TopLeftCornerB.y + RectScaleB.y),
-	//		OKVector2<float>(0, 1)
-	//	);
+		NearPointB.y = LeftSide.y;
+	}
+	else if (RectCentreA.x > RectCentreB.x)
+	{
+		OKVector2<float> RightSide = ProjectPointOntoLine(
+			RectCentreB,
+			RectCentreA,
+			OKVector2<float>(RectCentreB.x + RectScaleB.x, RectCentreB.y),
+			OKVector2<float>(RectCentreB.x + RectScaleB.x, RectCentreB.y + RectScaleB.y),
+			OKVector2<float>(0, 1)
+		);
 
-	//	NearPointB.y = RightSide.y;
-	//}
+		NearPointB.y = RightSide.y;
+	}
 
-	//if (TopLeftCornerA.y < RectCentreB.y)
-	//{
-	//	OKVector2<float> TopSide = ProjectPointOntoLine(
-	//		TopLeftCornerB,
-	//		TopLeftCornerA,
-	//		OKVector2<float>(TopLeftCornerB.x, TopLeftCornerB.y),
-	//		OKVector2<float>(TopLeftCornerB.x + RectScaleB.x, TopLeftCornerB.y),
-	//		OKVector2<float>(1, 0)
-	//	);
+	if (RectCentreA.y < RectCentreB.y)
+	{
+		OKVector2<float> TopSide = ProjectPointOntoLine(
+			RectCentreB,
+			RectCentreA,
+			OKVector2<float>(RectCentreB.x, RectCentreB.y),
+			OKVector2<float>(RectCentreB.x + RectScaleB.x, RectCentreB.y),
+			OKVector2<float>(1, 0)
+		);
 
-	//	NearPointB.x = TopSide.x;
-	//}
-	//else if (TopLeftCornerA.y > RectCentreB.y)
-	//{
-	//	OKVector2<float> BottomSide = ProjectPointOntoLine(
-	//		TopLeftCornerB,
-	//		TopLeftCornerA,
-	//		OKVector2<float>(TopLeftCornerB.x, TopLeftCornerB.y + RectScaleB.y),
-	//		OKVector2<float>(TopLeftCornerB.x + RectScaleB.x, TopLeftCornerB.y + RectScaleB.y),
-	//		OKVector2<float>(1, 0)
-	//	);
+		NearPointB.x = TopSide.x;
+	}
+	else if (RectCentreA.y > RectCentreB.y)
+	{
+		OKVector2<float> BottomSide = ProjectPointOntoLine(
+			RectCentreB,
+			RectCentreA,
+			OKVector2<float>(RectCentreB.x, RectCentreB.y + RectScaleB.y),
+			OKVector2<float>(RectCentreB.x + RectScaleB.x, RectCentreB.y + RectScaleB.y),
+			OKVector2<float>(1, 0)
+		);
 
-	//	NearPointB.x = BottomSide.x;
-	//}
+		NearPointB.x = BottomSide.x;
+	}
 
-	//if (TopLeftCornerB.x < TopLeftCornerA.x)
+	if (RectCentreB.x < RectCentreA.x)
 
-	//{
-	//	OKVector2<float> LeftSide = ProjectPointOntoLine(
-	//		TopLeftCornerA,
-	//		TopLeftCornerB,
-	//		OKVector2<float>(TopLeftCornerA.x, TopLeftCornerA.y),
-	//		OKVector2<float>(TopLeftCornerA.x, TopLeftCornerA.y + RectScaleA.y),
-	//		OKVector2<float>(0, 1)
-	//	);
+	{
+		OKVector2<float> LeftSide = ProjectPointOntoLine(
+			RectCentreA,
+			RectCentreB,
+			OKVector2<float>(RectCentreA.x, RectCentreA.y),
+			OKVector2<float>(RectCentreA.x, RectCentreA.y + RectScaleA.y),
+			OKVector2<float>(0, 1)
+		);
 
-	//	NearPointA.y = LeftSide.y;
-	//}
-	//else if (TopLeftCornerB.x > TopLeftCornerA.x)
-	//{
-	//	OKVector2<float> RightSide = ProjectPointOntoLine(
-	//		TopLeftCornerA,
-	//		TopLeftCornerB,
-	//		OKVector2<float>(TopLeftCornerA.x + RectScaleA.x, TopLeftCornerA.y),
-	//		OKVector2<float>(TopLeftCornerA.x + RectScaleA.x, TopLeftCornerA.y + RectScaleA.y),
-	//		OKVector2<float>(0, 1)
-	//	);
+		NearPointA.y = LeftSide.y;
+	}
+	else if (RectCentreB.x > RectCentreA.x)
+	{
+		OKVector2<float> RightSide = ProjectPointOntoLine(
+			RectCentreA,
+			RectCentreB,
+			OKVector2<float>(RectCentreA.x + RectScaleA.x, RectCentreA.y),
+			OKVector2<float>(RectCentreA.x + RectScaleA.x, RectCentreA.y + RectScaleA.y),
+			OKVector2<float>(0, 1)
+		);
 
-	//	NearPointA.y = RightSide.y;
-	//}
+		NearPointA.y = RightSide.y;
+	}
 
-	//if (TopLeftCornerB.y < RectCentreA.y)
-	//{
-	//	OKVector2<float> TopSide = ProjectPointOntoLine(
-	//		TopLeftCornerA,
-	//		TopLeftCornerB,
-	//		OKVector2<float>(TopLeftCornerA.x, TopLeftCornerA.y),
-	//		OKVector2<float>(TopLeftCornerA.x + RectScaleA.x, TopLeftCornerA.y),
-	//		OKVector2<float>(1, 0)
-	//	);
+	if (RectCentreB.y < RectCentreA.y)
+	{
+		OKVector2<float> TopSide = ProjectPointOntoLine(
+			RectCentreA,
+			RectCentreB,
+			OKVector2<float>(RectCentreA.x, RectCentreA.y),
+			OKVector2<float>(RectCentreA.x + RectScaleA.x, RectCentreA.y),
+			OKVector2<float>(1, 0)
+		);
 
-	//	NearPointA.x = TopSide.x;
-	//}
-	//else if (TopLeftCornerB.y > RectCentreA.y)
-	//{
-	//	OKVector2<float> BottomSide = ProjectPointOntoLine(
-	//		TopLeftCornerA,
-	//		TopLeftCornerB,
-	//		OKVector2<float>(TopLeftCornerA.x, TopLeftCornerA.y + RectScaleA.y),
-	//		OKVector2<float>(TopLeftCornerA.x + RectScaleA.x, TopLeftCornerA.y + RectScaleA.y),
-	//		OKVector2<float>(1, 0)
-	//	);
+		NearPointA.x = TopSide.x;
+	}
+	else if (RectCentreB.y > RectCentreA.y)
+	{
+		OKVector2<float> BottomSide = ProjectPointOntoLine(
+			RectCentreA,
+			RectCentreB,
+			OKVector2<float>(RectCentreA.x, RectCentreA.y + RectScaleA.y),
+			OKVector2<float>(RectCentreA.x + RectScaleA.x, RectCentreA.y + RectScaleA.y),
+			OKVector2<float>(1, 0)
+		);
 
-	//	NearPointA.x = BottomSide.x;
-	//}
+		NearPointA.x = BottomSide.x;
+	}
 
-	//// DrawCircleV(NearPointA.ConvertToVec2(), 3, BLUE);
-	//DrawCircleV(NearPointB.ConvertToVec2(), 1.f, YELLOW);
-	//DrawCircleV(NearPointA.ConvertToVec2(), 1.f, YELLOW);
+	DrawCircleV(NearPointB.ConvertToVec2(), 1.f, YELLOW);
+	DrawCircleV(NearPointA.ConvertToVec2(), 1.f, YELLOW);
 
-	//// REFACTOR: Fix the size of the circle  
-	//// CircleColliderComponent circle_temp_A = CircleColliderComponent(NearPointA, 0.5f);
-	//// CircleColliderComponent circle_temp_B = CircleColliderComponent(NearPointB, 0.5f);
+	CollisionManifold t_tempMani = S_CircleToCircle(NearPointA, 0.5f, NearPointB, 0.5f);
 
-	return t_ColMani;// = CircleToCircle(&circle_temp_A, &circle_temp_B);
+	if (t_tempMani.m_HasCollision)
+	{
+		rectA->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
+		rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
+
+		if (rectA->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true && rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+		{
+			rectA->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectB);
+			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		if (rectA->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+		{
+			rectA->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectB);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		if (rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+		{
+			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		return t_tempMani;
+	}
+
+	return t_ColMani;
 }
 
 CollisionManifold CollisionManager::CircleToCircle(GameObjectEntity* circA, GameObjectEntity* circB)
@@ -412,6 +444,50 @@ CollisionManifold CollisionManager::CircleToRectangle(GameObjectEntity* circA, G
 
 	OKVector2<float> t_tempCircPositionA = circA->m_Transform.position + circA->GetComponent<CircleColliderComponent>()->m_Offset;
 	float t_tempCircRadius = circA->GetComponent<CircleColliderComponent>()->m_Radius;
+
+	// NOTE: Check if the object is just in the rectangle
+	#pragma region Check If In EachOther
+
+	if (t_tempCircPositionA.x >= t_tempRectPosition.x - t_tempRectHalfScale.x &&
+		t_tempCircPositionA.x <= t_tempRectPosition.x + t_tempRectScale.x - t_tempRectHalfScale.x &&
+		t_tempCircPositionA.y >= t_tempRectPosition.y - t_tempRectHalfScale.y &&
+		t_tempCircPositionA.y <= t_tempRectPosition.y + t_tempRectScale.y - t_tempRectHalfScale.y)
+	{
+		circA->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
+		rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
+
+		if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true && rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+		{
+			circA->GetComponent<CircleColliderComponent>()->TriggerQuery(rectB);
+			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(circA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+		{
+			circA->GetComponent<CircleColliderComponent>()->TriggerQuery(rectB);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		if (rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+		{
+			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(circA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		t_ColMani.m_HasCollision = true;
+		t_ColMani.m_CollisionNormal = t_tempCircPositionA - t_tempRectPosition;
+		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+		t_ColMani.m_ContactPointAmount = 1;
+		t_ColMani.m_PenetrationDepth = OKVector2<float>(t_tempCircPositionA - t_tempRectPosition).magnitude();
+		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+		return t_ColMani;
+	}
+
+	#pragma endregion
 
 	// NOTE: Top Line
 	#pragma region TOP LINE COLLISION DETECTION
@@ -594,47 +670,6 @@ CollisionManifold CollisionManager::CircleToRectangle(GameObjectEntity* circA, G
 	}
 	#pragma endregion
 
-
-	// NOTE: Check if the object is just in the rectangle
-	if (t_tempCircPositionA.x >= t_tempRectPosition.x - t_tempRectHalfScale.x &&
-		t_tempCircPositionA.x <= t_tempRectPosition.x + t_tempRectScale.x - t_tempRectHalfScale.x &&
-		t_tempCircPositionA.y >= t_tempRectPosition.y - t_tempRectHalfScale.y &&
-		t_tempCircPositionA.y <= t_tempRectPosition.y + t_tempRectScale.y - t_tempRectHalfScale.y)
-	{
-		circA->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
-		rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
-
-		if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true && rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
-		{
-			circA->GetComponent<CircleColliderComponent>()->TriggerQuery(rectB);
-			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(circA);
-			t_ColMani.m_HasCollision = true;
-			return t_ColMani;
-		}
-
-		if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
-		{
-			circA->GetComponent<CircleColliderComponent>()->TriggerQuery(rectB);
-			t_ColMani.m_HasCollision = true;
-			return t_ColMani;
-		}
-
-		if (rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
-		{
-			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(circA);
-			t_ColMani.m_HasCollision = true;
-			return t_ColMani;
-		}
-
-		t_ColMani.m_HasCollision = true;
-		t_ColMani.m_CollisionNormal = t_tempCircPositionA - t_tempRectPosition;
-		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
-		t_ColMani.m_ContactPointAmount = 1;
-		t_ColMani.m_PenetrationDepth = OKVector2<float>(t_tempCircPositionA - t_tempRectPosition).magnitude();
-		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
-		return t_ColMani;
-	}
-
 	return t_ColMani;
 }
 
@@ -642,30 +677,139 @@ CollisionManifold CollisionManager::CapsuleToCircle(GameObjectEntity* capsuleA, 
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
-	// NOTE: Capsule Position and Variable(s)
-	//OKVector2<float> tip_a = OKVector2<float>(capsuleA->m_Position.x, capsuleA->m_Position.y + (capsuleA->m_Height / 2.f) - (capsuleA->m_Width / 2.f));
-	//OKVector2<float> base_a = OKVector2<float>(capsuleA->m_Position.x, capsuleA->m_Position.y - (capsuleA->m_Height / 2.f) + (capsuleA->m_Width / 2.f));
+	const OKVector2<float> t_tempCapsulePositonA = capsuleA->m_Transform.position + capsuleA->GetComponent<CapsuleColliderComponent>()->m_Offset;
+	const float t_tempCapsuleWidthA = capsuleA->GetComponent<CapsuleColliderComponent>()->m_Width;
+	const float t_tempCapsuleHeightA = capsuleA->GetComponent<CapsuleColliderComponent>()->m_Height;
 
-	//float t_DistanceX = tip_a.x - base_a.x;
-	//float t_DistanceY = tip_a.y - base_a.y;
-	//float len = sqrt((t_DistanceX * t_DistanceX) + (t_DistanceY * t_DistanceY));
+	const OKVector2<float> t_tempCirclePositionB = circB->m_Transform.position + circB->GetComponent<CircleColliderComponent>()->m_Offset;
+	const float t_tempCircleRadiusB = circB->GetComponent<CircleColliderComponent>()->m_Radius;
 
-	//float dot = ((circB->m_Position.x - tip_a.x) * (base_a.x - tip_a.x)) + ((circB->m_Position.y - tip_a.y) * (base_a.y - tip_a.y)) / powf(len, 2);
+	// NOTE: Check Middle Rectangle
+	{
+		OKVector2<float> t_tempMiddleRectPosition;
+		t_tempMiddleRectPosition.x = capsuleA->m_Transform.position.x + capsuleA->GetComponent<CapsuleColliderComponent>()->m_Offset.x - (capsuleA->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f);
+		t_tempMiddleRectPosition.y = capsuleA->m_Transform.position.y + capsuleA->GetComponent<CapsuleColliderComponent>()->m_Offset.y - (capsuleA->GetComponent<CapsuleColliderComponent>()->m_Height / 4.f);
 
-	//// NOTE: Closest Point
-	//OKVector2<float> closest_point;
-	//closest_point.x = tip_a.x + (dot * (base_a.x - tip_a.x));
-	//closest_point.y = tip_a.y + (dot * (base_a.y - tip_a.y));
+		OKVector2<float> t_tempMiddleRectScale;
+		t_tempMiddleRectScale.x = capsuleA->GetComponent<CapsuleColliderComponent>()->m_Width;
+		t_tempMiddleRectScale.y = capsuleA->GetComponent<CapsuleColliderComponent>()->m_Height / 2.f;
 
-	//closest_point.x = Clamp(closest_point.x, base_a.x, tip_a.x);
-	//closest_point.y = Clamp(closest_point.y, base_a.y, tip_a.y);
+		t_ColMani = S_CircleToRectangle(t_tempCirclePositionB, t_tempCircleRadiusB, t_tempMiddleRectPosition, t_tempMiddleRectScale);
 
-	// NOTE: Create the circle based of the capsule components
-	//CircleColliderComponent circle_temp = CircleColliderComponent(closest_point, capsuleA->m_Width / 2.f);
+		if (t_ColMani.m_HasCollision)
+		{
+			capsuleA->GetComponent<CapsuleColliderComponent>()->m_HasCollided = true;
+			circB->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
 
-	// t_ColMani = CircleToCircle(&circle_temp, circB);
+			if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true && circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+			{
+				capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(circB);
+				circB->GetComponent<CircleColliderComponent>()->TriggerQuery(capsuleA);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
 
-	return t_ColMani;
+			if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true)
+			{
+				capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(circB);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			if (circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+			{
+				circB->GetComponent<CircleColliderComponent>()->TriggerQuery(capsuleA);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			return t_ColMani;
+		}
+	}
+
+	// NOTE: Check Top Circle
+	{
+		OKVector2<float> t_tempTopCirclePosition;
+		t_tempTopCirclePosition.x = capsuleA->m_Transform.position.x + capsuleA->GetComponent<CapsuleColliderComponent>()->m_Offset.x;
+		t_tempTopCirclePosition.y = (capsuleA->m_Transform.position.y + capsuleA->GetComponent<CapsuleColliderComponent>()->m_Height / 4.f) + capsuleA->GetComponent<CapsuleColliderComponent>()->m_Offset.y;
+
+		const float t_tempTopCircleRadius = capsuleA->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f;
+
+		t_ColMani = S_CircleToCircle(t_tempTopCirclePosition, t_tempTopCircleRadius, t_tempCirclePositionB, t_tempCircleRadiusB);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			capsuleA->GetComponent<CapsuleColliderComponent>()->m_HasCollided = true;
+			circB->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
+
+			if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true && circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+			{
+				capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(circB);
+				circB->GetComponent<CircleColliderComponent>()->TriggerQuery(capsuleA);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true)
+			{
+				capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(circB);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			if (circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+			{
+				circB->GetComponent<CircleColliderComponent>()->TriggerQuery(capsuleA);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			return t_ColMani;
+		}
+	}
+
+	// NOTE: Check Bottom Circle
+	{
+		OKVector2<float> t_tempBottomCirclePosition;
+		t_tempBottomCirclePosition.x = capsuleA->m_Transform.position.x + capsuleA->GetComponent<CapsuleColliderComponent>()->m_Offset.x;
+		t_tempBottomCirclePosition.y = (capsuleA->m_Transform.position.y - capsuleA->GetComponent<CapsuleColliderComponent>()->m_Height / 4.f) + capsuleA->GetComponent<CapsuleColliderComponent>()->m_Offset.y;
+
+		const float t_tempBottomCircleRadius = capsuleA->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f;
+
+		t_ColMani = S_CircleToCircle(t_tempBottomCirclePosition, t_tempBottomCircleRadius, t_tempCirclePositionB, t_tempCircleRadiusB);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			capsuleA->GetComponent<CapsuleColliderComponent>()->m_HasCollided = true;
+			circB->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
+
+			if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true && circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+			{
+				capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(circB);
+				circB->GetComponent<CircleColliderComponent>()->TriggerQuery(capsuleA);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true)
+			{
+				capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(circB);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			if (circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+			{
+				circB->GetComponent<CircleColliderComponent>()->TriggerQuery(capsuleA);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			return t_ColMani;
+		}
+	}
+
+	return CollisionManifold();
 }
 
 CollisionManifold CollisionManager::CapsuleToRectangle(GameObjectEntity* capsuleA, GameObjectEntity* rectB)
@@ -1411,6 +1555,259 @@ CollisionManifold CollisionManager::LineToCapsule(GameObjectEntity* lineA, GameO
 	return t_ColMani;
 }
 
+CollisionManifold CollisionManager::S_RectangleToRectangle(OKVector2<float> recPositionA, OKVector2<float> recScaleA, OKVector2<float> recPositionB, OKVector2<float> recScaleB)
+{
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	OKVector2<float> RectCentreA = recPositionA - (recScaleA / 2.f); // Centre A
+	OKVector2<float> RectScaleA = recScaleA;
+	OKVector2<float> RectScaleHalfA = RectScaleA / 2.f;
+	OKVector2<float> NearPointA = OKVector2<float>(0, 0);
+
+	OKVector2<float> RectCentreB = recPositionB - (recScaleB / 2.f); // Centre B
+	OKVector2<float> RectScaleB = recScaleB;
+	OKVector2<float> RectScaleHalfB = RectScaleB / 2.f;
+	OKVector2<float> NearPointB = OKVector2<float>(0, 0);
+
+	if (RectCentreA.x < RectCentreB.x)
+	{
+		OKVector2<float> LeftSide = ProjectPointOntoLine(
+			RectCentreB,
+			RectCentreA,
+			OKVector2<float>(RectCentreB.x, RectCentreB.y),
+			OKVector2<float>(RectCentreB.x, RectCentreB.y + RectScaleB.y),
+			OKVector2<float>(0, 1)
+		);
+
+		NearPointB.y = LeftSide.y;
+	}
+	else if (RectCentreA.x > RectCentreB.x)
+	{
+		OKVector2<float> RightSide = ProjectPointOntoLine(
+			RectCentreB,
+			RectCentreA,
+			OKVector2<float>(RectCentreB.x + RectScaleB.x, RectCentreB.y),
+			OKVector2<float>(RectCentreB.x + RectScaleB.x, RectCentreB.y + RectScaleB.y),
+			OKVector2<float>(0, 1)
+		);
+
+		NearPointB.y = RightSide.y;
+	}
+
+	if (RectCentreA.y < RectCentreB.y)
+	{
+		OKVector2<float> TopSide = ProjectPointOntoLine(
+			RectCentreB,
+			RectCentreA,
+			OKVector2<float>(RectCentreB.x, RectCentreB.y),
+			OKVector2<float>(RectCentreB.x + RectScaleB.x, RectCentreB.y),
+			OKVector2<float>(1, 0)
+		);
+
+		NearPointB.x = TopSide.x;
+	}
+	else if (RectCentreA.y > RectCentreB.y)
+	{
+		OKVector2<float> BottomSide = ProjectPointOntoLine(
+			RectCentreB,
+			RectCentreA,
+			OKVector2<float>(RectCentreB.x, RectCentreB.y + RectScaleB.y),
+			OKVector2<float>(RectCentreB.x + RectScaleB.x, RectCentreB.y + RectScaleB.y),
+			OKVector2<float>(1, 0)
+		);
+
+		NearPointB.x = BottomSide.x;
+	}
+
+	if (RectCentreB.x < RectCentreA.x)
+
+	{
+		OKVector2<float> LeftSide = ProjectPointOntoLine(
+			RectCentreA,
+			RectCentreB,
+			OKVector2<float>(RectCentreA.x, RectCentreA.y),
+			OKVector2<float>(RectCentreA.x, RectCentreA.y + RectScaleA.y),
+			OKVector2<float>(0, 1)
+		);
+
+		NearPointA.y = LeftSide.y;
+	}
+	else if (RectCentreB.x > RectCentreA.x)
+	{
+		OKVector2<float> RightSide = ProjectPointOntoLine(
+			RectCentreA,
+			RectCentreB,
+			OKVector2<float>(RectCentreA.x + RectScaleA.x, RectCentreA.y),
+			OKVector2<float>(RectCentreA.x + RectScaleA.x, RectCentreA.y + RectScaleA.y),
+			OKVector2<float>(0, 1)
+		);
+
+		NearPointA.y = RightSide.y;
+	}
+
+	if (RectCentreB.y < RectCentreA.y)
+	{
+		OKVector2<float> TopSide = ProjectPointOntoLine(
+			RectCentreA,
+			RectCentreB,
+			OKVector2<float>(RectCentreA.x, RectCentreA.y),
+			OKVector2<float>(RectCentreA.x + RectScaleA.x, RectCentreA.y),
+			OKVector2<float>(1, 0)
+		);
+
+		NearPointA.x = TopSide.x;
+	}
+	else if (RectCentreB.y > RectCentreA.y)
+	{
+		OKVector2<float> BottomSide = ProjectPointOntoLine(
+			RectCentreA,
+			RectCentreB,
+			OKVector2<float>(RectCentreA.x, RectCentreA.y + RectScaleA.y),
+			OKVector2<float>(RectCentreA.x + RectScaleA.x, RectCentreA.y + RectScaleA.y),
+			OKVector2<float>(1, 0)
+		);
+
+		NearPointA.x = BottomSide.x;
+	}
+
+	DrawCircleV(NearPointB.ConvertToVec2(), 1.f, YELLOW);
+	DrawCircleV(NearPointA.ConvertToVec2(), 1.f, YELLOW);
+
+	CollisionManifold t_tempMani = S_CircleToCircle(NearPointA, 0.5f, NearPointB, 0.5f);
+
+	if (t_tempMani.m_HasCollision)
+	{
+		return t_tempMani;
+	}
+
+	return t_ColMani;
+}
+
+CollisionManifold CollisionManager::S_RectangleToRectangle(float recXA, float recYA, float recWidthA, float recHeightA, float recXB, float recYB, float recWidthB, float recHeightB)
+{
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	OKVector2<float> RectCentreA = OKVector2<float>(recXA, recYA) - (OKVector2<float>(recWidthA, recHeightA) / 2.f); // Centre A
+	OKVector2<float> RectScaleA = OKVector2<float>(recWidthA, recHeightA);
+	OKVector2<float> RectScaleHalfA = RectScaleA / 2.f;
+	OKVector2<float> NearPointA = OKVector2<float>(0, 0);
+
+	OKVector2<float> RectCentreB = OKVector2<float>(recXB, recYB) - (OKVector2<float>(recWidthB, recHeightB) / 2.f); // Centre B
+	OKVector2<float> RectScaleB = OKVector2<float>(recWidthB, recHeightB);
+	OKVector2<float> RectScaleHalfB = RectScaleB / 2.f;
+	OKVector2<float> NearPointB = OKVector2<float>(0, 0);
+
+	if (RectCentreA.x < RectCentreB.x)
+	{
+		OKVector2<float> LeftSide = ProjectPointOntoLine(
+			RectCentreB,
+			RectCentreA,
+			OKVector2<float>(RectCentreB.x, RectCentreB.y),
+			OKVector2<float>(RectCentreB.x, RectCentreB.y + RectScaleB.y),
+			OKVector2<float>(0, 1)
+		);
+
+		NearPointB.y = LeftSide.y;
+	}
+	else if (RectCentreA.x > RectCentreB.x)
+	{
+		OKVector2<float> RightSide = ProjectPointOntoLine(
+			RectCentreB,
+			RectCentreA,
+			OKVector2<float>(RectCentreB.x + RectScaleB.x, RectCentreB.y),
+			OKVector2<float>(RectCentreB.x + RectScaleB.x, RectCentreB.y + RectScaleB.y),
+			OKVector2<float>(0, 1)
+		);
+
+		NearPointB.y = RightSide.y;
+	}
+
+	if (RectCentreA.y < RectCentreB.y)
+	{
+		OKVector2<float> TopSide = ProjectPointOntoLine(
+			RectCentreB,
+			RectCentreA,
+			OKVector2<float>(RectCentreB.x, RectCentreB.y),
+			OKVector2<float>(RectCentreB.x + RectScaleB.x, RectCentreB.y),
+			OKVector2<float>(1, 0)
+		);
+
+		NearPointB.x = TopSide.x;
+	}
+	else if (RectCentreA.y > RectCentreB.y)
+	{
+		OKVector2<float> BottomSide = ProjectPointOntoLine(
+			RectCentreB,
+			RectCentreA,
+			OKVector2<float>(RectCentreB.x, RectCentreB.y + RectScaleB.y),
+			OKVector2<float>(RectCentreB.x + RectScaleB.x, RectCentreB.y + RectScaleB.y),
+			OKVector2<float>(1, 0)
+		);
+
+		NearPointB.x = BottomSide.x;
+	}
+
+	if (RectCentreB.x < RectCentreA.x)
+
+	{
+		OKVector2<float> LeftSide = ProjectPointOntoLine(
+			RectCentreA,
+			RectCentreB,
+			OKVector2<float>(RectCentreA.x, RectCentreA.y),
+			OKVector2<float>(RectCentreA.x, RectCentreA.y + RectScaleA.y),
+			OKVector2<float>(0, 1)
+		);
+
+		NearPointA.y = LeftSide.y;
+	}
+	else if (RectCentreB.x > RectCentreA.x)
+	{
+		OKVector2<float> RightSide = ProjectPointOntoLine(
+			RectCentreA,
+			RectCentreB,
+			OKVector2<float>(RectCentreA.x + RectScaleA.x, RectCentreA.y),
+			OKVector2<float>(RectCentreA.x + RectScaleA.x, RectCentreA.y + RectScaleA.y),
+			OKVector2<float>(0, 1)
+		);
+
+		NearPointA.y = RightSide.y;
+	}
+
+	if (RectCentreB.y < RectCentreA.y)
+	{
+		OKVector2<float> TopSide = ProjectPointOntoLine(
+			RectCentreA,
+			RectCentreB,
+			OKVector2<float>(RectCentreA.x, RectCentreA.y),
+			OKVector2<float>(RectCentreA.x + RectScaleA.x, RectCentreA.y),
+			OKVector2<float>(1, 0)
+		);
+
+		NearPointA.x = TopSide.x;
+	}
+	else if (RectCentreB.y > RectCentreA.y)
+	{
+		OKVector2<float> BottomSide = ProjectPointOntoLine(
+			RectCentreA,
+			RectCentreB,
+			OKVector2<float>(RectCentreA.x, RectCentreA.y + RectScaleA.y),
+			OKVector2<float>(RectCentreA.x + RectScaleA.x, RectCentreA.y + RectScaleA.y),
+			OKVector2<float>(1, 0)
+		);
+
+		NearPointA.x = BottomSide.x;
+	}
+
+	CollisionManifold t_tempMani = S_CircleToCircle(NearPointA, 0.5f, NearPointB, 0.5f);
+
+	if (t_tempMani.m_HasCollision)
+	{
+		return t_tempMani;
+	}
+
+	return t_ColMani;
+}
+
 CollisionManifold CollisionManager::S_CircleToCircle(OKVector2<float> circPositionA, float circRadiusA, OKVector2<float> circPositionB, float circRadiusB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
@@ -1453,6 +1850,203 @@ CollisionManifold CollisionManager::S_CircleToCircle(float circXA, float circYA,
 	}
 
 	return t_ColMani;
+}
+
+CollisionManifold CollisionManager::S_CircleToRectangle(OKVector2<float> circPositionA, float circRadiusA, OKVector2<float> recPositionB, OKVector2<float> recScaleB)
+{
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	OKVector2<float> t_tempRectPosition = recPositionB;
+	OKVector2<float> t_tempRectScale = recScaleB;
+	OKVector2<float> t_tempRectHalfScale = t_tempRectScale / 2.f;
+
+	OKVector2<float> t_tempCircPositionA = circPositionA;
+	float t_tempCircRadius = circRadiusA;
+
+	// NOTE: Check if the object is just in the rectangle
+	#pragma region Check If In EachOther
+
+	if (t_tempCircPositionA.x >= t_tempRectPosition.x - t_tempRectHalfScale.x &&
+		t_tempCircPositionA.x <= t_tempRectPosition.x + t_tempRectScale.x - t_tempRectHalfScale.x &&
+		t_tempCircPositionA.y >= t_tempRectPosition.y - t_tempRectHalfScale.y &&
+		t_tempCircPositionA.y <= t_tempRectPosition.y + t_tempRectScale.y - t_tempRectHalfScale.y)
+	{
+		t_ColMani.m_HasCollision = true;
+		t_ColMani.m_CollisionNormal = t_tempCircPositionA - t_tempRectPosition;
+		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+		t_ColMani.m_ContactPointAmount = 1;
+		t_ColMani.m_PenetrationDepth = OKVector2<float>(t_tempCircPositionA - t_tempRectPosition).magnitude();
+		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+		return t_ColMani;
+	}
+
+	#pragma endregion
+
+	// NOTE: Top Line
+	#pragma region TOP LINE COLLISION DETECTION
+	{
+		OKVector2<float> tempTopPosStart = OKVector2<float>(t_tempRectPosition.x + t_tempRectHalfScale.x, t_tempRectPosition.y + t_tempRectHalfScale.y);
+		OKVector2<float> tempTopPosEnd = OKVector2<float>(t_tempRectPosition.x - t_tempRectHalfScale.x, t_tempRectPosition.y + t_tempRectHalfScale.y);
+		CollisionManifold t_TopLine = S_LineToCircle(tempTopPosStart, tempTopPosEnd, t_tempCircPositionA, t_tempCircRadius);
+
+		if (t_TopLine.m_HasCollision)
+		{
+			t_ColMani.m_HasCollision = true;
+			t_ColMani.m_CollisionNormal = t_tempCircPositionA - t_TopLine.m_CollisionPoints[0];
+			t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+			t_ColMani.m_ContactPointAmount = 1;
+			t_ColMani.m_PenetrationDepth = OKVector2<float>(t_tempCircPositionA - t_TopLine.m_CollisionPoints[0]).magnitude();
+			t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+			return t_ColMani;
+		}
+	}
+	#pragma endregion
+
+	// NOTE: Bottom Line
+#pragma region BOTTOM LINE COLLISION DETECTION
+	{
+		OKVector2<float> tempBottomPosStart = OKVector2<float>(t_tempRectPosition.x + t_tempRectHalfScale.x, t_tempRectPosition.y - t_tempRectHalfScale.y);
+		OKVector2<float> tempBottomPosEnd = OKVector2<float>(t_tempRectPosition.x - t_tempRectHalfScale.x, t_tempRectPosition.y - t_tempRectHalfScale.y);
+		CollisionManifold t_BottomLine = S_LineToCircle(tempBottomPosStart, tempBottomPosEnd, t_tempCircPositionA, t_tempCircRadius);
+
+		if (t_BottomLine.m_HasCollision)
+		{
+			circA->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
+			rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
+
+			if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true && rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+			{
+				circA->GetComponent<CircleColliderComponent>()->TriggerQuery(rectB);
+				rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(circA);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+			{
+				circA->GetComponent<CircleColliderComponent>()->TriggerQuery(rectB);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			if (rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+			{
+				rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(circA);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			t_ColMani.m_HasCollision = true;
+			t_ColMani.m_CollisionNormal = t_tempCircPositionA - t_BottomLine.m_CollisionPoints[0];
+			t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+			t_ColMani.m_ContactPointAmount = 1;
+			t_ColMani.m_PenetrationDepth = OKVector2<float>(t_tempCircPositionA - t_BottomLine.m_CollisionPoints[0]).magnitude();
+			t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+			return t_ColMani;
+		}
+	}
+#pragma endregion
+
+	// NOTE: Left Line
+#pragma region LEFT LINE COLLISION DETECTION
+	{
+		OKVector2<float> tempLeftPosStart = OKVector2<float>(t_tempRectPosition.x - t_tempRectHalfScale.x, t_tempRectPosition.y + t_tempRectHalfScale.y);
+		OKVector2<float> tempLeftPosEnd = OKVector2<float>(t_tempRectPosition.x - t_tempRectHalfScale.x, t_tempRectPosition.y - t_tempRectHalfScale.y);
+		CollisionManifold t_LeftLine = S_LineToCircle(tempLeftPosStart, tempLeftPosEnd, t_tempCircPositionA, t_tempCircRadius);
+
+		if (t_LeftLine.m_HasCollision)
+		{
+			circA->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
+			rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
+
+			if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true && rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+			{
+				circA->GetComponent<CircleColliderComponent>()->TriggerQuery(rectB);
+				rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(circA);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+			{
+				circA->GetComponent<CircleColliderComponent>()->TriggerQuery(rectB);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			if (rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+			{
+				rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(circA);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			t_ColMani.m_HasCollision = true;
+			t_ColMani.m_CollisionNormal = t_tempCircPositionA - t_LeftLine.m_CollisionPoints[0];
+			t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+			t_ColMani.m_ContactPointAmount = 1;
+			t_ColMani.m_PenetrationDepth = OKVector2<float>(t_tempCircPositionA - t_LeftLine.m_CollisionPoints[0]).magnitude();
+			t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+			return t_ColMani;
+		}
+	}
+#pragma endregion
+
+	// NOTE: Right Line
+#pragma region RIGHT LINE COLLISION DETECTION
+	{
+		OKVector2<float> tempRightPosStart = OKVector2<float>(t_tempRectPosition.x + t_tempRectHalfScale.x, t_tempRectPosition.y + t_tempRectHalfScale.y);
+		OKVector2<float> tempRightPosEnd = OKVector2<float>(t_tempRectPosition.x + t_tempRectHalfScale.x, t_tempRectPosition.y - t_tempRectHalfScale.y);
+		CollisionManifold t_RightLine = S_LineToCircle(tempRightPosStart, tempRightPosEnd, t_tempCircPositionA, t_tempCircRadius);
+
+		if (t_RightLine.m_HasCollision)
+		{
+			circA->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
+			rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
+
+			if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true && rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+			{
+				circA->GetComponent<CircleColliderComponent>()->TriggerQuery(rectB);
+				rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(circA);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+			{
+				circA->GetComponent<CircleColliderComponent>()->TriggerQuery(rectB);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			if (rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+			{
+				rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(circA);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			t_ColMani.m_HasCollision = true;
+			t_ColMani.m_CollisionNormal = t_tempCircPositionA - t_RightLine.m_CollisionPoints[0];
+			t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
+			t_ColMani.m_ContactPointAmount = 1;
+			t_ColMani.m_PenetrationDepth = OKVector2<float>(t_tempCircPositionA - t_RightLine.m_CollisionPoints[0]).magnitude();
+			t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+			return t_ColMani;
+
+		}
+	}
+#pragma endregion
+
+	return t_ColMani;
+
+
+
+
+
+
+
+	return CollisionManifold();
 }
 
 CollisionManifold CollisionManager::S_PointToPoint(OKVector2<float> pointPositionA, OKVector2<float> pointPositionB)

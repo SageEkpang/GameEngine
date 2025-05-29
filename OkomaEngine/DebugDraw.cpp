@@ -28,8 +28,30 @@ namespace DebugDraw
 
 		void DebugCapsule(GameObjectEntity* gameObject)
 		{
+			if (gameObject->HasComponent<CapsuleColliderComponent>())
+			{
+				DrawCircleLines(
+				(int)(gameObject->m_Transform.position.x + gameObject->GetComponent<CapsuleColliderComponent>()->m_Offset.x), 
+				(int)(gameObject->m_Transform.position.y + gameObject->GetComponent<CapsuleColliderComponent>()->m_Height / 4.f) + gameObject->GetComponent<CapsuleColliderComponent>()->m_Offset.y,
+				(int)(gameObject->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f), 
+				GREEN
+				);
 
-
+				DrawRectangleLines(
+				(int)(gameObject->m_Transform.position.x + gameObject->GetComponent<CapsuleColliderComponent>()->m_Offset.x) - (int)(gameObject->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f),
+				(int)(gameObject->m_Transform.position.y + gameObject->GetComponent<CapsuleColliderComponent>()->m_Offset.y) - (int)(gameObject->GetComponent<CapsuleColliderComponent>()->m_Height / 4.f),
+				(int)gameObject->GetComponent<CapsuleColliderComponent>()->m_Width,
+				(int)gameObject->GetComponent<CapsuleColliderComponent>()->m_Height / 2.f,
+				GREEN
+				);
+				
+				DrawCircleLines(
+				(int)(gameObject->m_Transform.position.x + gameObject->GetComponent<CapsuleColliderComponent>()->m_Offset.x),
+				(int)(gameObject->m_Transform.position.y - gameObject->GetComponent<CapsuleColliderComponent>()->m_Height / 4.f) + gameObject->GetComponent<CapsuleColliderComponent>()->m_Offset.y,
+				(int)(gameObject->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f), 
+				GREEN
+				);
+			}
 		}
 
 		void DebugPoint(GameObjectEntity* gameObject)

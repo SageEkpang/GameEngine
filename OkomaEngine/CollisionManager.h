@@ -21,12 +21,12 @@ class PointColliderComponent;
 // TODO: Make sure to add the collision offset to the position of the transform when doing the collider calculations
 enum Collider_Type_Collisions
 {
-    COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_RECTANGLE, // TODO
+    COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_RECTANGLE, // DONE
 
     COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_CIRCLE, // DONE
     COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_RECTANGLE, // DONE
 
-    COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CIRCLE, // NEED TO WORK ON
+    COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CIRCLE, // DONE
     COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_RECTANGLE, // NEED TO WORK ON
     COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CAPSULE, // NEED TO WORK ON
 
@@ -66,23 +66,13 @@ private:
     std::map<col_type_pair, Collider_Type_Collisions> m_CollisionMapping;
 
     // NOTE: This is for the Rectangle Collision Code
-    OKVector2<float> ProjectPointOntoLine(OKVector2<float> point, OKVector2<float> positionReference, OKVector2<float> lineStart, OKVector2<float> lineEnd, OKVector2<float> offsetLine);
+    static OKVector2<float> ProjectPointOntoLine(OKVector2<float> point, OKVector2<float> positionReference, OKVector2<float> lineStart, OKVector2<float> lineEnd, OKVector2<float> offsetLine);
     bool Multiply(float* out, const float* matA, int aRows, int aCols, const float* matB, int bRows, int bCols);
 
     // SAT / OBB Testing
     Interval2D GetOrientedRectangleInterval(GameObjectEntity* orRectA, OKVector2<float>& axis);
     Interval2D GetRectangleInterval(GameObjectEntity* rectA, OKVector2<float>& axis);
     bool OverlapOnAxis(GameObjectEntity* rectA, GameObjectEntity* orRectB, OKVector2<float> axis);
-
-
-private: // PRIVATE FUNCTION(s)
-
-    // Closest point checks functions here, need to make them
-
-
-
-
-
 
 public:
 
