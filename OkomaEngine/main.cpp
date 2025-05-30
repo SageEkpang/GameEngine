@@ -53,14 +53,14 @@ int main()
 	rlDisableBackfaceCulling();
 
 	GameObjectEntity m_Tester;
-	m_Tester.m_Transform.position = OKVector2<float>(0, 0);
-	m_Tester.AddComponent<RectangleColliderComponent>();
-	m_Tester.GetComponent<RectangleColliderComponent>()->Construct(OKVector2<float>(100, 100));
+	m_Tester.m_Transform.position = OKVector2<float>(100, 0);
+	m_Tester.AddComponent<CapsuleColliderComponent>();
+	m_Tester.GetComponent<CapsuleColliderComponent>()->Construct(50, 100);
 
 	GameObjectEntity m_Object2;
 	m_Object2.m_Transform.position = OKVector2<float>(0, 0);
 	m_Object2.AddComponent<CapsuleColliderComponent>();
-	m_Object2.GetComponent<CapsuleColliderComponent>()->Construct(100, 500);
+	m_Object2.GetComponent<CapsuleColliderComponent>()->Construct(50, 100);
 
 	CollisionManager m_ColMani;
 	CollisionManifold m_Result;
@@ -84,7 +84,6 @@ int main()
 			if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 			{
 				m_Object2.m_Transform.position = OKVector2<float>(GetMouseX() - camera.offset.x, GetMouseY() - camera.offset.y);
-				// m_Object2.m_Transform.position = OKVector2<float>(GetMouseX() - camera.offset.x, GetMouseY() - camera.offset.y);
 			}
 
 			if (m_Result.m_HasCollision)
@@ -96,7 +95,7 @@ int main()
 				DrawText("Not Collided", 10, 100, 40, RED);
 			}
 
-			DebugDraw::Shape::DebugRectangle(&m_Tester);
+			DebugDraw::Shape::DebugCapsule(&m_Tester);
 			DebugDraw::Shape::DebugCapsule(&m_Object2);
 			
 

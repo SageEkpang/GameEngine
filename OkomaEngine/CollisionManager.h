@@ -21,31 +21,31 @@ class PointColliderComponent;
 // TODO: Check that the current ones implemented work
 enum Collider_Type_Collisions
 {
-    COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_RECTANGLE, // DONE
+    COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_RECTANGLE,
 
-    COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_CIRCLE, // DONE
-    COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_RECTANGLE, // DONE
+    COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_CIRCLE,
+    COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_RECTANGLE,
 
-    COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CIRCLE, // DONE
-    COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_RECTANGLE, // DONE
-    COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CAPSULE, // DONE
+    COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CIRCLE,
+    COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_RECTANGLE,
+    COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CAPSULE,
 
     COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_ORIENTED, // NEED TO WORK ON
     COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_RECTANGLE, // NEED TO WORK ON
     COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_CIRCLE, // NEED TO WORK ON
     COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_CAPSULE, // NEED TO WORK ON
 
-    COLLIDER_TYPE_COLLISIONS_POINT_TO_POINT, // DONE
-    COLLIDER_TYPE_COLLISIONS_POINT_TO_LINE, // DONE
-    COLLIDER_TYPE_COLLISIONS_POINT_TO_CIRCLE, // Done
-    COLLIDER_TYPE_COLLISIONS_POINT_TO_RECTANGLE, // Done
-    COLLIDER_TYPE_COLLISIONS_POINT_TO_CAPSULE, // Done
+    COLLIDER_TYPE_COLLISIONS_POINT_TO_POINT,
+    COLLIDER_TYPE_COLLISIONS_POINT_TO_LINE,
+    COLLIDER_TYPE_COLLISIONS_POINT_TO_CIRCLE,
+    COLLIDER_TYPE_COLLISIONS_POINT_TO_RECTANGLE,
+    COLLIDER_TYPE_COLLISIONS_POINT_TO_CAPSULE,
     COLLIDER_TYPE_COLLISIONS_POINT_TO_ORIENTED, // NEED TO WORK ON
 
-    COLLIDER_TYPE_COLLISIONS_LINE_TO_LINE, // DONE
-    COLLIDER_TYPE_COLLISIONS_LINE_TO_CIRCLE, // DONE
-    COLLIDER_TYPE_COLLISIONS_LINE_TO_RECTANGLE, // DONE
-    COLLIDER_TYPE_COLLISIONS_LINE_TO_CAPSULE, // DONE
+    COLLIDER_TYPE_COLLISIONS_LINE_TO_LINE,
+    COLLIDER_TYPE_COLLISIONS_LINE_TO_CIRCLE,
+    COLLIDER_TYPE_COLLISIONS_LINE_TO_RECTANGLE,
+    COLLIDER_TYPE_COLLISIONS_LINE_TO_CAPSULE,
     COLLIDER_TYPE_COLLISIONS_LINE_TO_ORIENTED // NEED TO WORK ON
 };
 
@@ -169,8 +169,8 @@ public: // EXTRA COLLISION FUNCTION(s) (ALTERNATIVES)
     static CollisionManifold S_PointToRectangle(OKVector2<float> pointPositionA, OKVector2<float> recPositionB, OKVector2<float> recScaleB);
     static CollisionManifold S_PointToRectangle(float pointXA, float pointYA, float recXB, float recYB, float recWidthB, float recHeightB);
 
-    static CollisionManifold S_PointToCapsule(OKVector2<float> pointPositionA, float pointRadiusA, OKVector2<float> capPositionB, float capWidthB, float capHeightB);
-    static CollisionManifold S_PointToCapsule(float pointXA, float pointYA, float pointRadiusA, float capXB, float capYB, float capWidthB, float capHeightB);
+    static CollisionManifold S_PointToCapsule(OKVector2<float> pointPositionA, OKVector2<float> capPositionB, float capWidthB, float capHeightB);
+    static CollisionManifold S_PointToCapsule(float pointXA, float pointYA, float capXB, float capYB, float capWidthB, float capHeightB);
 
     static CollisionManifold S_PointToOrientedRectangle(OKVector2<float> pointPositionA, float pointRadiusA, OKVector2<float> orRecPositionB, OKVector2<float> orRecScaleB, float rotationB);
     static CollisionManifold S_PointToOrientedRectangle(float pointXA, float pointYA, float pointRadiusA, float orRecXB, float orRecYB, float orRecWidthB, float orRecHeightB, float rotationB);

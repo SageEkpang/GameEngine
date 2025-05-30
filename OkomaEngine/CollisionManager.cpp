@@ -948,7 +948,6 @@ CollisionManifold CollisionManager::CapsuleToRectangle(GameObjectEntity* capsule
 	return CollisionManifold();
 }
 
-// Need to check this
 CollisionManifold CollisionManager::CapsuleToCapsule(GameObjectEntity* capsuleA, GameObjectEntity* capsuleB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
@@ -987,11 +986,8 @@ CollisionManifold CollisionManager::CapsuleToCapsule(GameObjectEntity* capsuleA,
 	closest_point_B.x = Clamp(closest_point_B.x, base_b.x, tip_b.x);
 	closest_point_B.y = Clamp(closest_point_B.y, base_b.y, tip_b.y);
 
-	//DrawCircleV(closest_point_A.ConvertToVec2(), 10.f, RED);
-	//DrawCircleV(closest_point_B.ConvertToVec2(), 10.f, PURPLE);
-
-	t_ColMani = S_CircleToCircle(closest_point_A, capsuleA->GetComponent<CapsuleColliderComponent>()->m_Width, closest_point_B, capsuleB->GetComponent<CapsuleColliderComponent>()->m_Width);
-
+	t_ColMani = S_CircleToCircle(closest_point_A, capsuleA->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f, closest_point_B, capsuleB->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f);
+	
 	if (t_ColMani.m_HasCollision)
 	{
 		capsuleA->GetComponent<CapsuleColliderComponent>()->m_HasCollided = true;
@@ -1022,7 +1018,7 @@ CollisionManifold CollisionManager::CapsuleToCapsule(GameObjectEntity* capsuleA,
 		return t_ColMani;
 	}
 
-	return t_ColMani = CollisionManifold();
+	return CollisionManifold();
 }
 
 CollisionManifold CollisionManager::OrientedRectangleToOrientedRectangle(GameObjectEntity* OrRectA, GameObjectEntity* OrRectB)
@@ -1373,6 +1369,9 @@ CollisionManifold CollisionManager::PointToRectangle(GameObjectEntity* pointA, G
 CollisionManifold CollisionManager::PointToCapsule(GameObjectEntity* pointA, GameObjectEntity* capsuleB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
+
+	capsuleB->GetComponent<CapsuleColliderComponent>()->m_HasCollided = false;
+	pointA->GetComponent<PointColliderComponent>()->m_HasCollided = false;
 
 	const OKVector2<float> t_tempPointPositionA = pointA->m_Transform.position + pointA->GetComponent<PointColliderComponent>()->m_Offset;
 
@@ -2373,6 +2372,322 @@ CollisionManifold CollisionManager::S_CircleToRectangle(float circXA, float circ
 	return t_ColMani;
 }
 
+CollisionManifold CollisionManager::S_CapsuleToCircle(OKVector2<float> capPositionA, float capWidthA, float capHeightA, OKVector2<float> circPositionB, float circRadiusB)
+{
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	const OKVector2<float> t_tempCirclePositionB = circPositionB;
+	const float t_tempCircleRadiusB = circRadiusB;
+
+	// NOTE: Check Middle Rectangle
+	{
+		OKVector2<float> t_tempMiddleRectPosition;
+		t_tempMiddleRectPosition.x = capPositionA.x - (capWidthA / 2.f);
+		t_tempMiddleRectPosition.y = capPositionA.y - (capHeightA / 4.f);
+
+		OKVector2<float> t_tempMiddleRectScale;
+		t_tempMiddleRectScale.x = capWidthA;
+		t_tempMiddleRectScale.y = capHeightA / 2.f;
+
+		t_ColMani = S_CircleToRectangle(t_tempCirclePositionB, t_tempCircleRadiusB, t_tempMiddleRectPosition, t_tempMiddleRectScale);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	// NOTE: Check Top Circle
+	{
+		OKVector2<float> t_tempTopCirclePosition;
+		t_tempTopCirclePosition.x = capPositionA.x;
+		t_tempTopCirclePosition.y = (capPositionA.y + capHeightA / 4.f);
+
+		const float t_tempTopCircleRadius = capWidthA / 2.f;
+
+		t_ColMani = S_CircleToCircle(t_tempTopCirclePosition, t_tempTopCircleRadius, t_tempCirclePositionB, t_tempCircleRadiusB);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	// NOTE: Check Bottom Circle
+	{
+		OKVector2<float> t_tempBottomCirclePosition;
+		t_tempBottomCirclePosition.x = circPositionB.x;
+		t_tempBottomCirclePosition.y = (circPositionB.y - capHeightA / 4.f);
+
+		const float t_tempBottomCircleRadius = capWidthA / 2.f;
+
+		t_ColMani = S_CircleToCircle(t_tempBottomCirclePosition, t_tempBottomCircleRadius, t_tempCirclePositionB, t_tempCircleRadiusB);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	return CollisionManifold();
+}
+
+CollisionManifold CollisionManager::S_CapsuleToCircle(float capXA, float capYA, float capWidthA, float capHeightA, float circXB, float circYB, float circRadiusB)
+{
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	const OKVector2<float> t_tempCirclePositionB = OKVector2<float>(circXB, circYB);
+	const float t_tempCircleRadiusB = circRadiusB;
+
+	// NOTE: Check Middle Rectangle
+	{
+		OKVector2<float> t_tempMiddleRectPosition;
+		t_tempMiddleRectPosition.x = capXA - (capWidthA / 2.f);
+		t_tempMiddleRectPosition.y = capYA - (capHeightA / 4.f);
+
+		OKVector2<float> t_tempMiddleRectScale;
+		t_tempMiddleRectScale.x = capWidthA;
+		t_tempMiddleRectScale.y = capHeightA / 2.f;
+
+		t_ColMani = S_CircleToRectangle(t_tempCirclePositionB, t_tempCircleRadiusB, t_tempMiddleRectPosition, t_tempMiddleRectScale);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	// NOTE: Check Top Circle
+	{
+		OKVector2<float> t_tempTopCirclePosition;
+		t_tempTopCirclePosition.x = capXA;
+		t_tempTopCirclePosition.y = capYA + capHeightA / 4.f;
+
+		const float t_tempTopCircleRadius = capWidthA / 2.f;
+
+		t_ColMani = S_CircleToCircle(t_tempTopCirclePosition, t_tempTopCircleRadius, t_tempCirclePositionB, t_tempCircleRadiusB);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	// NOTE: Check Bottom Circle
+	{
+		OKVector2<float> t_tempBottomCirclePosition;
+		t_tempBottomCirclePosition.x = circXB;
+		t_tempBottomCirclePosition.y = circYB - capHeightA / 4.f;
+
+		const float t_tempBottomCircleRadius = capWidthA / 2.f;
+
+		t_ColMani = S_CircleToCircle(t_tempBottomCirclePosition, t_tempBottomCircleRadius, t_tempCirclePositionB, t_tempCircleRadiusB);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	return CollisionManifold();
+}
+
+CollisionManifold CollisionManager::S_CapsuleToRectangle(OKVector2<float> capPositionA, float capWidthA, float capHeightA, OKVector2<float> recPositionB, OKVector2<float> recScaleB)
+{
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	const OKVector2<float> t_tempRectPositionB = recPositionB;
+	const OKVector2<float> t_tempRectScaleB = recScaleB;
+
+	// NOTE: Check Middle Rectangle
+	{
+		OKVector2<float> t_tempMiddleRectPosition;
+		t_tempMiddleRectPosition.x = capPositionA.x - (capWidthA / 2.f);
+		t_tempMiddleRectPosition.y = capPositionA.y - (capHeightA / 4.f);
+
+		OKVector2<float> t_tempMiddleRectScale;
+		t_tempMiddleRectScale.x = capWidthA;
+		t_tempMiddleRectScale.y = capHeightA / 2.f;
+
+		t_ColMani = S_RectangleToRectangle(t_tempRectPositionB, t_tempRectScaleB, t_tempMiddleRectPosition, t_tempMiddleRectScale);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	// NOTE: Check Top Circle
+	{
+		OKVector2<float> t_tempTopCirclePosition;
+		t_tempTopCirclePosition.x = capPositionA.x;
+		t_tempTopCirclePosition.y = (capPositionA.y + capHeightA / 4.f);
+
+		const float t_tempTopCircleRadius = capWidthA / 2.f;
+
+		t_ColMani = S_CircleToRectangle(t_tempTopCirclePosition, t_tempTopCircleRadius, t_tempRectPositionB, t_tempRectScaleB);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	// NOTE: Check Bottom Circle
+	{
+		OKVector2<float> t_tempBottomCirclePosition;
+		t_tempBottomCirclePosition.x = capPositionA.x;
+		t_tempBottomCirclePosition.y = (capPositionA.y - capHeightA / 4.f);
+
+		const float t_tempBottomCircleRadius = capWidthA / 2.f;
+
+		t_ColMani = S_CircleToRectangle(t_tempBottomCirclePosition, t_tempBottomCircleRadius, t_tempRectPositionB, t_tempRectScaleB);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	return CollisionManifold();
+}
+
+CollisionManifold CollisionManager::S_CapsuleToRectangle(float capXA, float capYA, float capWidthA, float capHeightA, float recXB, float recYB, float recWidthB, float recHeightB)
+{
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	const OKVector2<float> t_tempRectPositionB = OKVector2<float>(recXB, recYB);
+	const OKVector2<float> t_tempRectScaleB = OKVector2<float>(recWidthB, recHeightB);
+
+	// NOTE: Check Middle Rectangle
+	{
+		OKVector2<float> t_tempMiddleRectPosition;
+		t_tempMiddleRectPosition.x = capXA - (capWidthA / 2.f);
+		t_tempMiddleRectPosition.y = capYA - (capHeightA / 4.f);
+
+		OKVector2<float> t_tempMiddleRectScale;
+		t_tempMiddleRectScale.x = capWidthA;
+		t_tempMiddleRectScale.y = capHeightA / 2.f;
+
+		t_ColMani = S_RectangleToRectangle(t_tempRectPositionB, t_tempRectScaleB, t_tempMiddleRectPosition, t_tempMiddleRectScale);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	// NOTE: Check Top Circle
+	{
+		OKVector2<float> t_tempTopCirclePosition;
+		t_tempTopCirclePosition.x = capXA;
+		t_tempTopCirclePosition.y = (capYA + capHeightA / 4.f);
+
+		const float t_tempTopCircleRadius = capWidthA / 2.f;
+
+		t_ColMani = S_CircleToRectangle(t_tempTopCirclePosition, t_tempTopCircleRadius, t_tempRectPositionB, t_tempRectScaleB);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	// NOTE: Check Bottom Circle
+	{
+		OKVector2<float> t_tempBottomCirclePosition;
+		t_tempBottomCirclePosition.x = capXA;
+		t_tempBottomCirclePosition.y = (capYA - capHeightA / 4.f);
+
+		const float t_tempBottomCircleRadius = capWidthA / 2.f;
+
+		t_ColMani = S_CircleToRectangle(t_tempBottomCirclePosition, t_tempBottomCircleRadius, t_tempRectPositionB, t_tempRectScaleB);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	return CollisionManifold();
+}
+
+CollisionManifold CollisionManager::S_CapsuleToCapsule(OKVector2<float> capPositionA, float capWidthA, float capHeightA, OKVector2<float> capPositionB, float capWidthB, float capHeightB)
+{
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	// Capsule (A)
+	// NOTE: Capsule Position and Variable(s)
+	OKVector2<float> tip_a = OKVector2<float>(capPositionA.x, capPositionA.y + (capHeightA / 2.f) - (capWidthA / 2.f));
+	OKVector2<float> base_a = OKVector2<float>(capPositionA.x, capPositionA.y - (capHeightA / 2.f) + (capWidthA / 2.f));
+	float t_DistanceXA = tip_a.x - base_a.x;
+	float t_DistanceYA = tip_a.y - base_a.y;
+	float lenA = sqrt((t_DistanceXA * t_DistanceXA) + (t_DistanceYA * t_DistanceYA));
+	float dotA = ((capPositionB.x - tip_a.x) * (base_a.x - tip_a.x)) + ((capPositionB.y - tip_a.y) * (base_a.y - tip_a.y)) / powf(lenA, 2);
+
+	// Capsule (B)
+	OKVector2<float> tip_b = OKVector2<float>(capPositionB.x, capPositionB.y + (capHeightB / 2.f) - (capWidthB / 2.f));
+	OKVector2<float> base_b = OKVector2<float>(capPositionB.x, capPositionB.y - (capHeightB / 2.f) + (capWidthB / 2.f));
+	float t_DistanceXB = tip_b.x - base_b.x;
+	float t_DistanceYB = tip_b.y - base_b.y;
+	float lenB = sqrt((t_DistanceXB * t_DistanceXB) + (t_DistanceYB * t_DistanceYB));
+	float dotB = ((capPositionA.x - tip_b.x) * (base_b.x - tip_b.x)) + ((capPositionA.y - tip_b.y) * (base_b.y - tip_b.y)) / powf(lenB, 2);
+
+	// NOTE: Closest Point (A)
+	OKVector2<float> closest_point_A;
+	closest_point_A.x = tip_a.x + (dotA * (base_a.x - tip_a.x)) / 2;
+	closest_point_A.y = tip_a.y + (dotA * (base_a.y - tip_a.y)) / 2;
+	closest_point_A.x = Clamp(closest_point_A.x, base_a.x, tip_a.x);
+	closest_point_A.y = Clamp(closest_point_A.y, base_a.y, tip_a.y);
+
+	// NOTE: Closest Point (B)
+	OKVector2<float> closest_point_B;
+	closest_point_B.x = tip_b.x + (dotB * (base_b.x - tip_b.x)) / 2;
+	closest_point_B.y = tip_b.y + (dotB * (base_b.y - tip_b.y)) / 2;
+	closest_point_B.x = Clamp(closest_point_B.x, base_b.x, tip_b.x);
+	closest_point_B.y = Clamp(closest_point_B.y, base_b.y, tip_b.y);
+
+	return t_ColMani = S_CircleToCircle(closest_point_A, capWidthA / 2.f, closest_point_B, capWidthB / 2.f);
+}
+
+CollisionManifold CollisionManager::S_CapsuleToCapsule(float capXA, float capYA, float capWidthA, float capHeightA, float capXB, float capYB, float capWidthB, float capHeightB)
+{
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	// Capsule (A)
+	// NOTE: Capsule Position and Variable(s)
+	OKVector2<float> tip_a = OKVector2<float>(capXA, capYA + (capHeightA / 2.f) - (capWidthA / 2.f));
+	OKVector2<float> base_a = OKVector2<float>(capXA, capYA - (capHeightA / 2.f) + (capWidthA / 2.f));
+	float t_DistanceXA = tip_a.x - base_a.x;
+	float t_DistanceYA = tip_a.y - base_a.y;
+	float lenA = sqrt((t_DistanceXA * t_DistanceXA) + (t_DistanceYA * t_DistanceYA));
+	float dotA = ((capXB - tip_a.x) * (base_a.x - tip_a.x)) + ((capYB - tip_a.y) * (base_a.y - tip_a.y)) / powf(lenA, 2);
+
+	// Capsule (B)
+	OKVector2<float> tip_b = OKVector2<float>(capXB, capYB + (capHeightB / 2.f) - (capWidthB / 2.f));
+	OKVector2<float> base_b = OKVector2<float>(capXB, capYB - (capHeightB / 2.f) + (capWidthB / 2.f));
+	float t_DistanceXB = tip_b.x - base_b.x;
+	float t_DistanceYB = tip_b.y - base_b.y;
+	float lenB = sqrt((t_DistanceXB * t_DistanceXB) + (t_DistanceYB * t_DistanceYB));
+	float dotB = ((capXA - tip_b.x) * (base_b.x - tip_b.x)) + ((capYA - tip_b.y) * (base_b.y - tip_b.y)) / powf(lenB, 2);
+
+	// NOTE: Closest Point (A)
+	OKVector2<float> closest_point_A;
+	closest_point_A.x = tip_a.x + (dotA * (base_a.x - tip_a.x)) / 2;
+	closest_point_A.y = tip_a.y + (dotA * (base_a.y - tip_a.y)) / 2;
+	closest_point_A.x = Clamp(closest_point_A.x, base_a.x, tip_a.x);
+	closest_point_A.y = Clamp(closest_point_A.y, base_a.y, tip_a.y);
+
+	// NOTE: Closest Point (B)
+	OKVector2<float> closest_point_B;
+	closest_point_B.x = tip_b.x + (dotB * (base_b.x - tip_b.x)) / 2;
+	closest_point_B.y = tip_b.y + (dotB * (base_b.y - tip_b.y)) / 2;
+	closest_point_B.x = Clamp(closest_point_B.x, base_b.x, tip_b.x);
+	closest_point_B.y = Clamp(closest_point_B.y, base_b.y, tip_b.y);
+
+	return t_ColMani = S_CircleToCircle(closest_point_A, capWidthA / 2.f, closest_point_B, capWidthB / 2.f);
+}
+
 CollisionManifold CollisionManager::S_PointToPoint(OKVector2<float> pointPositionA, OKVector2<float> pointPositionB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
@@ -2601,6 +2916,124 @@ CollisionManifold CollisionManager::S_PointToRectangle(float pointXA, float poin
 	}
 
 	return t_ColMani;
+}
+
+CollisionManifold CollisionManager::S_PointToCapsule(OKVector2<float> pointPositionA, OKVector2<float> capPositionB, float capWidthB, float capHeightB)
+{
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	const OKVector2<float> t_tempPointPositionA = pointPositionA;
+
+	// NOTE: Check Middle Rectangle
+	{
+		OKVector2<float> t_tempMiddleRectPosition;
+		t_tempMiddleRectPosition.x = capPositionB.x - (capWidthB / 2.f);
+		t_tempMiddleRectPosition.y = capPositionB.y - (capHeightB / 4.f);
+
+		OKVector2<float> t_tempMiddleRectScale;
+		t_tempMiddleRectScale.x = capWidthB;
+		t_tempMiddleRectScale.y = capHeightB / 2.f;
+
+		t_ColMani = S_PointToRectangle(t_tempPointPositionA, t_tempMiddleRectPosition, t_tempMiddleRectScale);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	// NOTE: Check Top Circle
+	{
+		OKVector2<float> t_tempTopCirclePosition;
+		t_tempTopCirclePosition.x = capPositionB.x;
+		t_tempTopCirclePosition.y = (capPositionB.y + capHeightB / 4.f);
+
+		const float t_tempTopCircleRadius = capWidthB / 2.f;
+
+		t_ColMani = S_PointToCircle(t_tempPointPositionA, t_tempTopCirclePosition, t_tempTopCircleRadius);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	// NOTE: Check Bottom Circle
+	{
+		OKVector2<float> t_tempBottomCirclePosition;
+		t_tempBottomCirclePosition.x = capPositionB.x;
+		t_tempBottomCirclePosition.y = (capPositionB.y - capHeightB / 4.f);
+
+		const float t_tempBottomCircleRadius = capWidthB / 2.f;
+
+		t_ColMani = S_PointToCircle(t_tempPointPositionA, t_tempBottomCirclePosition, t_tempBottomCircleRadius);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	return CollisionManifold();
+}
+
+CollisionManifold CollisionManager::S_PointToCapsule(float pointXA, float pointYA, float capXB, float capYB, float capWidthB, float capHeightB)
+{
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	const OKVector2<float> t_tempPointPositionA = OKVector2<float>(pointXA, pointYA);
+
+	// NOTE: Check Middle Rectangle
+	{
+		OKVector2<float> t_tempMiddleRectPosition;
+		t_tempMiddleRectPosition.x = capXB - (capWidthB / 2.f);
+		t_tempMiddleRectPosition.y = capYB - (capHeightB / 4.f);
+
+		OKVector2<float> t_tempMiddleRectScale;
+		t_tempMiddleRectScale.x = capWidthB;
+		t_tempMiddleRectScale.y = capHeightB / 2.f;
+
+		t_ColMani = S_PointToRectangle(t_tempPointPositionA, t_tempMiddleRectPosition, t_tempMiddleRectScale);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	// NOTE: Check Top Circle
+	{
+		OKVector2<float> t_tempTopCirclePosition;
+		t_tempTopCirclePosition.x = capXB;
+		t_tempTopCirclePosition.y = (capYB + capHeightB / 4.f);
+
+		const float t_tempTopCircleRadius = capWidthB / 2.f;
+
+		t_ColMani = S_PointToCircle(t_tempPointPositionA, t_tempTopCirclePosition, t_tempTopCircleRadius);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	// NOTE: Check Bottom Circle
+	{
+		OKVector2<float> t_tempBottomCirclePosition;
+		t_tempBottomCirclePosition.x = capXB;
+		t_tempBottomCirclePosition.y = (capYB - capHeightB / 4.f);
+
+		const float t_tempBottomCircleRadius = capWidthB / 2.f;
+
+		t_ColMani = S_PointToCircle(t_tempPointPositionA, t_tempBottomCirclePosition, t_tempBottomCircleRadius);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	return CollisionManifold();
 }
 
 CollisionManifold CollisionManager::S_LineToLine(OKVector2<float> lineStartPositionA, OKVector2<float> lineEndPositionA, OKVector2<float> lineStartPositionB, OKVector2<float> lineEndPositionB)
@@ -2901,4 +3334,124 @@ CollisionManifold CollisionManager::S_LineToRectangle(float lineStartXA, float l
 	}
 
 	return t_ColMani;
+}
+
+CollisionManifold CollisionManager::S_LineToCapsule(OKVector2<float> lineStartPositionA, OKVector2<float> lineEndPositionA, OKVector2<float> capPositionB, float capWidthB, float capHeightB)
+{
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	const OKVector2<float> t_tempLineStartA = lineStartPositionA;
+	const OKVector2<float> t_tempLineEndA = lineEndPositionA;
+
+	// NOTE: Check Middle Rectangle
+	{
+		OKVector2<float> t_tempMiddleRectPosition;
+		t_tempMiddleRectPosition.x = capPositionB.x - (capWidthB / 2.f);
+		t_tempMiddleRectPosition.y = capPositionB.y - (capHeightB / 4.f);
+
+		OKVector2<float> t_tempMiddleRectScale;
+		t_tempMiddleRectScale.x = capWidthB;
+		t_tempMiddleRectScale.y = capHeightB / 2.f;
+
+		t_ColMani = S_LineToRectangle(t_tempLineStartA, t_tempLineEndA, t_tempMiddleRectPosition, t_tempMiddleRectScale);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	// NOTE: Check Top Circle
+	{
+		OKVector2<float> t_tempTopCirclePosition;
+		t_tempTopCirclePosition.x = capPositionB.x;
+		t_tempTopCirclePosition.y = (capPositionB.y + capHeightB / 4.f);
+
+		const float t_tempTopCircleRadius = capWidthB / 2.f;
+
+		t_ColMani = S_LineToCircle(t_tempLineStartA, t_tempLineEndA, t_tempTopCirclePosition, t_tempTopCircleRadius);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	// NOTE: Check Bottom Circle
+	{
+		OKVector2<float> t_tempBottomCirclePosition;
+		t_tempBottomCirclePosition.x = capPositionB.x;
+		t_tempBottomCirclePosition.y = (capPositionB.y - capHeightB / 4.f);
+
+		const float t_tempBottomCircleRadius = capWidthB / 2.f;
+
+		t_ColMani = S_LineToCircle(t_tempLineStartA, t_tempLineEndA, t_tempBottomCirclePosition, t_tempBottomCircleRadius);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	return CollisionManifold();
+}
+
+CollisionManifold CollisionManager::S_LineToCapsule(float lineStartXA, float lineStartYA, float lineEndXA, float lineEndYA, float capXB, float capYB, float capWidthB, float capHeightB)
+{
+	CollisionManifold t_ColMani = CollisionManifold();
+
+	const OKVector2<float> t_tempLineStartA = OKVector2<float>(lineStartXA, lineStartYA);
+	const OKVector2<float> t_tempLineEndA = OKVector2<float>(lineEndXA, lineEndYA);
+
+	// NOTE: Check Middle Rectangle
+	{
+		OKVector2<float> t_tempMiddleRectPosition;
+		t_tempMiddleRectPosition.x = capXB - (capWidthB / 2.f);
+		t_tempMiddleRectPosition.y = capYB - (capHeightB / 4.f);
+
+		OKVector2<float> t_tempMiddleRectScale;
+		t_tempMiddleRectScale.x = capWidthB;
+		t_tempMiddleRectScale.y = capHeightB / 2.f;
+
+		t_ColMani = S_LineToRectangle(t_tempLineStartA, t_tempLineEndA, t_tempMiddleRectPosition, t_tempMiddleRectScale);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	// NOTE: Check Top Circle
+	{
+		OKVector2<float> t_tempTopCirclePosition;
+		t_tempTopCirclePosition.x = capXB;
+		t_tempTopCirclePosition.y = (capYB + capHeightB / 4.f);
+
+		const float t_tempTopCircleRadius = capWidthB / 2.f;
+
+		t_ColMani = S_LineToCircle(t_tempLineStartA, t_tempLineEndA, t_tempTopCirclePosition, t_tempTopCircleRadius);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	// NOTE: Check Bottom Circle
+	{
+		OKVector2<float> t_tempBottomCirclePosition;
+		t_tempBottomCirclePosition.x = capXB;
+		t_tempBottomCirclePosition.y = (capYB - capHeightB / 4.f);
+
+		const float t_tempBottomCircleRadius = capWidthB / 2.f;
+
+		t_ColMani = S_LineToCircle(t_tempLineStartA, t_tempLineEndA, t_tempBottomCirclePosition, t_tempBottomCircleRadius);
+
+		if (t_ColMani.m_HasCollision)
+		{
+			return t_ColMani;
+		}
+	}
+
+	return CollisionManifold();
 }
