@@ -18,6 +18,26 @@ namespace DebugDraw
 			}
 		}
 
+		void DebugOrientedRectangle(GameObjectEntity* gameObject)
+		{
+			if (gameObject->HasComponent<OrientedRectangleColliderComponent>())
+			{
+				Rectangle t_tempRec = {
+					(gameObject->m_Transform.position.x + gameObject->GetComponent<OrientedRectangleColliderComponent>()->m_Offset.x),
+					(gameObject->m_Transform.position.y + gameObject->GetComponent<OrientedRectangleColliderComponent>()->m_Offset.y),
+					gameObject->GetComponent<OrientedRectangleColliderComponent>()->m_Scale.x,
+					gameObject->GetComponent<OrientedRectangleColliderComponent>()->m_Scale.y
+				};
+
+				DrawRectanglePro(
+				t_tempRec, 
+				OKVector2<float>(t_tempRec.width / 2.f, t_tempRec.height / 2.f).ConvertToVec2(), 
+				gameObject->GetComponent<OrientedRectangleColliderComponent>()->m_Rotation,
+				GREEN
+				);
+			}
+		}
+
 		void DebugCircle(GameObjectEntity* gameObject)
 		{
 			if (gameObject->HasComponent<CircleColliderComponent>())

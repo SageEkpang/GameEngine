@@ -11,6 +11,7 @@ class GameObjectEntity;
 
 #include "GameObjectEntity.h"
 #include "RectangleColliderComponent.h"
+#include "OrientedRectangleColliderComponent.h"
 #include "CircleColliderComponent.h"
 #include "CapsuleColliderComponent.h"
 
@@ -27,6 +28,7 @@ namespace DebugDraw
 	namespace Shape
 	{
 		void DebugRectangle(GameObjectEntity* gameObject);
+		void DebugOrientedRectangle(GameObjectEntity* gameObject);
 		void DebugCircle(GameObjectEntity* gameObject);
 		void DebugCapsule(GameObjectEntity* gameObject);
 

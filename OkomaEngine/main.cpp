@@ -53,14 +53,12 @@ int main()
 	rlDisableBackfaceCulling();
 
 	GameObjectEntity m_Tester;
-	m_Tester.m_Transform.position = OKVector2<float>(100, 0);
-	m_Tester.AddComponent<CapsuleColliderComponent>();
-	m_Tester.GetComponent<CapsuleColliderComponent>()->Construct(50, 100);
+	m_Tester.m_Transform.position = OKVector2<float>(0, 0);
+	m_Tester.AddComponent<OrientedRectangleColliderComponent>()->Construct(OKVector2<float>(500, 500), 45);
 
 	GameObjectEntity m_Object2;
-	m_Object2.m_Transform.position = OKVector2<float>(0, 0);
-	m_Object2.AddComponent<CapsuleColliderComponent>();
-	m_Object2.GetComponent<CapsuleColliderComponent>()->Construct(50, 100);
+	m_Object2.m_Transform.position = OKVector2<float>(100, 100);
+	m_Object2.AddComponent<LineColliderComponent>()->Construct(OKVector2<float>(100, 100), OKVector2<float>(500, 500));
 
 	CollisionManager m_ColMani;
 	CollisionManifold m_Result;
@@ -81,10 +79,18 @@ int main()
 			// NOTE: Text Here ------
 			m_Result = m_ColMani.CheckCollisions(&m_Tester, &m_Object2);
 
+			// CollisionManager::S_CircleToRectangle(m_Object2.m_Transform.position, 50, m_Tester.m_Transform.position, OKVector2<float>(50, 100)).m_HasCollision;
+
 			if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 			{
-				m_Object2.m_Transform.position = OKVector2<float>(GetMouseX() - camera.offset.x, GetMouseY() - camera.offset.y);
+				// m_Tester.GetComponent<OrientedRectangleColliderComponent>()->m_Rotation += 0.1;
+				// m_Object2.m_Transform.position = OKVector2<float>(GetMouseX() - camera.offset.x, GetMouseY() - camera.offset.y);
 			}
+
+
+
+
+
 
 			if (m_Result.m_HasCollision)
 			{
@@ -95,12 +101,10 @@ int main()
 				DrawText("Not Collided", 10, 100, 40, RED);
 			}
 
-			DebugDraw::Shape::DebugCapsule(&m_Tester);
-			DebugDraw::Shape::DebugCapsule(&m_Object2);
+			DebugDraw::Shape::DebugOrientedRectangle(&m_Tester);
+			DebugDraw::Shape::DebugLines(&m_Object2);
 			
-
 			rlPopMatrix();
-
 
 			rlPushMatrix();
 			rlScalef(1.0f, -1.0f, 1.0f);
@@ -111,7 +115,7 @@ int main()
 			// m_Tester.GetComponent<ParticleEffectComponent>()->Update(GetFrameTime());
 			// m_Tester.GetComponent<ParticleEffectComponent>()->Draw();
 
-			// DrawCircle(0, 0, 3, GREEN);
+			DrawCircle(0, 0, 3, RED);
 		
 			rlPopMatrix();
 

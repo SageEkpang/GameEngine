@@ -61,7 +61,7 @@ public:
 
 	// HELPER FUNCTION(s)
 	template<std::derived_from<ComponentEntity> T>
-	void AddComponent();
+	T* AddComponent();
 
 	template<std::derived_from<ComponentEntity> T>
 	void RemoveComponent();
@@ -85,7 +85,7 @@ public:
 /// </summary>
 /// <typeparam name="T"></typeparam>
 template<std::derived_from<ComponentEntity> T>
-inline void GameObjectEntity::AddComponent()
+inline T* GameObjectEntity::AddComponent()
 {
 	try
 	{
@@ -99,10 +99,13 @@ inline void GameObjectEntity::AddComponent()
 	catch (...)
 	{
 		printf("Max Component count has been reached");
-		return;
+		return nullptr;
 	}
 	
 	m_Components[std::type_index(typeid(T))] = new T();
+
+	auto t_Index = m_Components.find(std::type_index(typeid(T)));
+	return t_Index == m_Components.end() ? nullptr : static_cast<T*>(t_Index->second);
 }
 
 /// <summary>

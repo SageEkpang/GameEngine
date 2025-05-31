@@ -2,21 +2,14 @@
 
 GameObjectEntity::GameObjectEntity()
 {
-	m_Components.clear();
+	// m_Transform.position = OKVector2<float>(0.f, 0.f);
+	m_Transform.scale = OKVector2<float>(1.f, 1.f);
+	//m_Transform.rotation = 0.f;
+	//m_Components.clear();
 }
 
 GameObjectEntity::~GameObjectEntity()
 {
-	//std::unordered_map<std::type_index, ComponentEntity*>::iterator itr;
-
-	//for (itr = m_Components.begin(); itr != m_Components.end(); ++itr)
-	//{
-	//	if ((*itr).second != nullptr)
-	//	{
-	//		delete (*itr).second;
-	//	}
-	//}
-
 	if (!m_Components.empty())
 	{
 		for (auto& [ComponentType, Component] : m_Components)

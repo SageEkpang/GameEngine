@@ -32,7 +32,7 @@ enum Collider_Type_Collisions
 
     COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_ORIENTED, // NEED TO WORK ON
     COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_RECTANGLE, // NEED TO WORK ON
-    COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_CIRCLE, // NEED TO WORK ON
+    COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_CIRCLE,
     COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_CAPSULE, // NEED TO WORK ON
 
     COLLIDER_TYPE_COLLISIONS_POINT_TO_POINT,
@@ -40,7 +40,7 @@ enum Collider_Type_Collisions
     COLLIDER_TYPE_COLLISIONS_POINT_TO_CIRCLE,
     COLLIDER_TYPE_COLLISIONS_POINT_TO_RECTANGLE,
     COLLIDER_TYPE_COLLISIONS_POINT_TO_CAPSULE,
-    COLLIDER_TYPE_COLLISIONS_POINT_TO_ORIENTED, // NEED TO WORK ON
+    COLLIDER_TYPE_COLLISIONS_POINT_TO_ORIENTED,
 
     COLLIDER_TYPE_COLLISIONS_LINE_TO_LINE,
     COLLIDER_TYPE_COLLISIONS_LINE_TO_CIRCLE,
@@ -67,12 +67,12 @@ private:
 
     // NOTE: This is for the Rectangle Collision Code
     static OKVector2<float> ProjectPointOntoLine(OKVector2<float> point, OKVector2<float> positionReference, OKVector2<float> lineStart, OKVector2<float> lineEnd, OKVector2<float> offsetLine);
-    bool Multiply(float* out, const float* matA, int aRows, int aCols, const float* matB, int bRows, int bCols);
+    static bool Multiply(float* out, const float* matA, int aRows, int aCols, const float* matB, int bRows, int bCols);
 
     // SAT / OBB Testing
-    Interval2D GetOrientedRectangleInterval(GameObjectEntity* orRectA, OKVector2<float>& axis);
-    Interval2D GetRectangleInterval(GameObjectEntity* rectA, OKVector2<float>& axis);
-    bool OverlapOnAxis(GameObjectEntity* rectA, GameObjectEntity* orRectB, OKVector2<float> axis);
+    static Interval2D GetOrientedRectangleInterval(GameObjectEntity* orRectA, OKVector2<float>& axis);
+    static Interval2D GetRectangleInterval(GameObjectEntity* rectA, OKVector2<float>& axis);
+    static bool OverlapOnAxis(GameObjectEntity* rectA, GameObjectEntity* orRectB, OKVector2<float> axis);
 
 public:
 
