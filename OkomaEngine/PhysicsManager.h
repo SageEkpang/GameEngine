@@ -1,6 +1,7 @@
 #ifndef PHYSICS_MANAGER_H
 #define PHYSICS_MANAGER_H
 
+#include "GameObjectEntity.h"
 #include "CollisionManifold.h"
 #include "CollisionManager.h"
 #include "CollisionResolutionManager.h"
@@ -17,8 +18,7 @@ private: // PRIVATE MANAGER VARIABLE(s)
 
 private: // PRIVATE VECTOR VARIABLE(s)
 
-	// TODO: Need to change this to "entity" list
-	std::vector<int> m_PhysicsObjects;
+	std::vector<GameObjectEntity*> m_PhysicsObjects;
 
 public:
 

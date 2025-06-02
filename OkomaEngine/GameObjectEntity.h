@@ -31,6 +31,8 @@
 
 #include "CameraComponent.h"
 
+#include <queue>
+
 unsigned int constexpr MAX_COMPONENTS = 8u;
 
 class GameObjectEntity

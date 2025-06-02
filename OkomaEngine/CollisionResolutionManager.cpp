@@ -10,21 +10,21 @@ CollisionResolutionManager::~CollisionResolutionManager()
 
 }
 
-void CollisionResolutionManager::ResolveCollision(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float CoefRest, float penetration, OKVector2<float> collisionNormal, float deltaTime)
+void CollisionResolutionManager::ResolveCollision(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float coefRest, CollisionManifold collisionManifold)
 {
 	// NOTE: Move the object out of the other object first and then apply the force to the object
-	ResolveVelocity(rigidbodyA, rigidbodyB, CoefRest, deltaTime, collisionNormal);
-	ResolveInterpenetration(rigidbodyA, rigidbodyB, CoefRest, collisionNormal);
+	ResolveInterpenetration(rigidbodyA, rigidbodyB, collisionManifold.m_PenetrationDepth, collisionManifold.m_CollisionNormal);
+	ResolveVelocity(rigidbodyA, rigidbodyB, coefRest, collisionManifold.m_CollisionNormal);
 }
 
-void CollisionResolutionManager::ResolveVelocity(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float CoefRest, float deltaTime, OKVector2<float> collisionNormal)
+void CollisionResolutionManager::ResolveVelocity(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float coefRest, OKVector2<float> collisionNormal)
 {
 	OKVector2<float> t_SeperatingVelocity = CalculateSeperatingVelocity(rigidbodyA, rigidbodyB, collisionNormal);
 
 	// If there is no need for seperating velocity, then we do not need to run the function
 	if (t_SeperatingVelocity > OKVector2<float>(0, 0)) { return; }
 
-	OKVector2<float> t_NewSeperatingVelocity = t_SeperatingVelocity * CoefRest;
+	OKVector2<float> t_NewSeperatingVelocity = t_SeperatingVelocity * coefRest;
 
 	OKVector2<float> t_AccumulatedVelocity = rigidbodyA->GetAcceleration();
 	t_AccumulatedVelocity -= rigidbodyB->GetAcceleration();
@@ -33,7 +33,7 @@ void CollisionResolutionManager::ResolveVelocity(Rigidbody2DComponent* rigidbody
 
 	if (t_AccumulatedSeperatingVelocity < OKVector2<float>(0, 0))
 	{
-		t_NewSeperatingVelocity += CoefRest * t_AccumulatedSeperatingVelocity;
+		t_NewSeperatingVelocity += coefRest * t_AccumulatedSeperatingVelocity;
 
 		if (t_NewSeperatingVelocity < OKVector2<float>(0, 0))
 		{
@@ -52,12 +52,12 @@ void CollisionResolutionManager::ResolveVelocity(Rigidbody2DComponent* rigidbody
 
 	if (rigidbodyA->GetRigidbodyMovementType() == RIGIDBODY_MOVEMENT_TYPE_DYNAMIC)
 	{
-		rigidbodyA->ApplyImpulse(t_ImpulsePerMass * rigidbodyA->GetInverseMass() * 2);
+		rigidbodyA->ApplyImpulse(t_ImpulsePerMass * rigidbodyA->GetInverseMass());
 	}
 
 	if (rigidbodyB->GetRigidbodyMovementType() == RIGIDBODY_MOVEMENT_TYPE_DYNAMIC)
 	{
-		rigidbodyB->ApplyImpulse(t_ImpulsePerMass * -rigidbodyB->GetInverseMass() * 2);
+		rigidbodyB->ApplyImpulse(t_ImpulsePerMass * -rigidbodyB->GetInverseMass());
 	}
 }
 
