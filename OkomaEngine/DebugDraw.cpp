@@ -4,6 +4,17 @@ namespace DebugDraw
 {
 	namespace Shape
 	{
+		void DebugCollider(GameObjectEntity* gameObject)
+		{
+			if (gameObject->HasComponent<RectangleColliderComponent>()) { DebugRectangle(gameObject); return; }
+			if (gameObject->HasComponent<OrientedRectangleColliderComponent>()) { DebugOrientedRectangle(gameObject); return; }
+			if (gameObject->HasComponent<CircleColliderComponent>()) { DebugCircle(gameObject); return; }
+			if (gameObject->HasComponent<CapsuleColliderComponent>()) { DebugCapsule(gameObject); return; }
+			if (gameObject->HasComponent<PointColliderComponent>()) { DebugPoint(gameObject); return; }
+			if (gameObject->HasComponent<LineColliderComponent>()) { DebugLines(gameObject); return; }
+			if (gameObject->HasComponent<ComplexColliderComponent>()) { DebugComplexShape(gameObject); return; }
+		}
+
 		void DebugRectangle(GameObjectEntity* gameObject)
 		{
 			if (gameObject->HasComponent<RectangleColliderComponent>())

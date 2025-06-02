@@ -34,7 +34,7 @@ public:
 	void Construct(OKVector2<float> scale, float rotation);
 	void Construct(float width, float height, float rotation);
 
-	~OrientedRectangleColliderComponent();
+	~OrientedRectangleColliderComponent() override;
 
 	// GETTER FUNCTION(s) // NOT NEEDED
 

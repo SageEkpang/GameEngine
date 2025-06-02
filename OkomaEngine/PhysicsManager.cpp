@@ -8,15 +8,6 @@ PhysicsManager::PhysicsManager()
 PhysicsManager::~PhysicsManager()
 {
 	std::vector<GameObjectEntity*>::iterator itr;
-
-	for (itr = m_PhysicsObjects.begin(); itr != m_PhysicsObjects.end(); ++itr)
-	{
-		
-
-
-	}
-
-
 }
 
 void PhysicsManager::Update(const float deltaTime)
@@ -41,8 +32,8 @@ void PhysicsManager::Update(const float deltaTime)
 				// NOTE: Resolve the Collisions
 				m_CollisionResolutionManager.ResolveCollision
 				(
-					t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>(),
-					t_PhysicsObjects[j]->GetComponent<Rigidbody2DComponent>(),
+					t_PhysicsObjects[i],
+					t_PhysicsObjects[j],
 					float(0.1f),
 					m_CollisionManifold
 				);
@@ -55,7 +46,7 @@ void PhysicsManager::Update(const float deltaTime)
 	{
 		for (auto& v : t_PhysicsObjects)
 		{
-			// NOTE: Check if there has been a collision
+			// NOTE: Check if there has been a collision]
 			if (v->FindChildComponent<ColliderEntity>()->m_HasCollided)
 			{
 				// NOTE: Check if any of the colliders are any trigger areas
@@ -65,18 +56,24 @@ void PhysicsManager::Update(const float deltaTime)
 					continue;
 				}
 
-				// NOTE: If the game object is not a trigger area, simulate the required physics for it 
-				v->GetComponent<Rigidbody2DComponent>()->SimulateDrag(false);
-				v->GetComponent<Rigidbody2DComponent>()->SimulateLift(false);
+				if (v->HasComponent<Rigidbody2DComponent>())
+				{
+					// NOTE: If the game object is not a trigger area, simulate the required physics for it 
+					v->GetComponent<Rigidbody2DComponent>()->SimulateDrag(false);
+					v->GetComponent<Rigidbody2DComponent>()->SimulateLift(false);
 
-				v->GetComponent<Rigidbody2DComponent>()->SetFriction(0.5f);
-				v->GetComponent<Rigidbody2DComponent>()->SimulateFriction(true);
+					v->GetComponent<Rigidbody2DComponent>()->SetFriction(0.5f);
+					v->GetComponent<Rigidbody2DComponent>()->SimulateFriction(true);
+				}
 			}
 			else
 			{
-				v->GetComponent<Rigidbody2DComponent>()->SimulateDrag(true);
-				v->GetComponent<Rigidbody2DComponent>()->SimulateLift(true);
-				v->GetComponent<Rigidbody2DComponent>()->SimulateFriction(false);
+				if (v->HasComponent<Rigidbody2DComponent>())
+				{
+					v->GetComponent<Rigidbody2DComponent>()->SimulateDrag(true);
+					v->GetComponent<Rigidbody2DComponent>()->SimulateLift(true);
+					v->GetComponent<Rigidbody2DComponent>()->SimulateFriction(false);
+				}
 			}
 
 			v->Update(deltaTime);
@@ -91,14 +88,18 @@ void PhysicsManager::Draw()
 		for (auto& v : m_PhysicsObjects)
 		{
 			// NOTE: Check if the Physics Components has a collider to show, if not...SKIP
-			if (v->FindChildComponent<ColliderEntity>() != nullptr) { continue; }
+			if (v->FindChildComponent<ColliderEntity>() == nullptr) { continue; }
 
-			
+			// NOTE: Draw the Shape Collider
+			DebugDraw::Shape::DebugCollider(v);
 
-
-
-
-
+			// NOTE: Draw the Different Physics Components
+			//DebugDraw::Physics::DebugGravityLine(v->GetComponent<Rigidbody2DComponent>()->GetCurrentGravity());
+			//DebugDraw::Physics::DebugDragLine(v->GetComponent<Rigidbody2DComponent>()->GetCurrentDrag());
+			//DebugDraw::Physics::DebugLiftLine(v->GetComponent<Rigidbody2DComponent>()->GetCurrentLift());
+			//DebugDraw::Physics::DebugFrictionLine(v->GetComponent<Rigidbody2DComponent>()->GetCurrentFriction());
+			//DebugDraw::Physics::DebugVelocityLine(v->GetComponent<Rigidbody2DComponent>()->GetVelocity());
+			//DebugDraw::Physics::DebugVelocityLine(v->GetComponent<Rigidbody2DComponent>()->GetDirection());
 		}
 	}
 }

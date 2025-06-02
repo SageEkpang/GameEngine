@@ -26,7 +26,7 @@ public:
 	void Construct(float x, float y, float radius);
 	void Construct(float radius);
 	
-	~CircleColliderComponent();
+	~CircleColliderComponent() override;
 
 	// GETTER FUNCTION(s) // NOT NEEDED
 

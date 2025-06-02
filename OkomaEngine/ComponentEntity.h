@@ -5,20 +5,24 @@
 #include <iostream>
 #include <optional>
 
+class GameObjectEntity;
+
 // NOTE: INTERFACE
 class ComponentEntity
 {
+public:
+
+	GameObjectEntity* m_Owner = nullptr;
+
 protected: // PROTECTED VARIABLE(s)
 
 	unsigned short m_ID;
 
 public: // PUBLIC FUNCTION(s)
 
-	// static constexpr auto m_Type = static_cast<std::size_t>(type);
-
 	// CLASS FUNCTION(s)
 	ComponentEntity() : m_ID(0) {};
-	virtual ~ComponentEntity() {}
+	virtual ~ComponentEntity() { m_Owner = nullptr; }
 
 	// BASE FUNCTION(s)
 	virtual void Update(const float deltaTime) { }

@@ -132,8 +132,8 @@ public: // PUBLIC FUNCTION(s)
     // SETTER FUNCTION(s)
 
         // NOTE: BASE(s)
-        inline void SetPosition(OKVector2<float> position) { m_Position = position; }
-        inline void SetPosition(float x, float y) { m_Position = OKVector2<float>(x, y); }
+       inline void SetPosition(OKVector2<float> position) { m_Position = position; }
+       inline void SetPosition(float x, float y) { m_Position = OKVector2<float>(x, y); }
 
         // NOTE: PHYSICS FUNCTION(s) 
         inline void SetMass(float mass) { m_Mass = mass; }

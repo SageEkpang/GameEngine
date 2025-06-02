@@ -27,7 +27,7 @@ public:
 	void Construct(float startX, float startY, OKVector2<float> lineEndPosition);
 	void Construct(float startX, float startY, float endX, float endY);
 
-	~LineColliderComponent();
+	~LineColliderComponent() override;
 
 	// GETTER FUNCTION(s) // NOT NEEDED
 

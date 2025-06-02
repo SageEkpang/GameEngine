@@ -105,6 +105,15 @@
     <Filter Include="Components\UIComponents\Source">
       <UniqueIdentifier>{e68fd4f2-670e-4347-9ed6-09a0006f5790}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Components\InputComponents">
+      <UniqueIdentifier>{7070d46a-6502-4ef7-bae2-6778dfa7819f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\InputComponents\Header">
+      <UniqueIdentifier>{d5db3d1c-ea9e-4909-bc29-783e8a5356f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\InputComponents\Source">
+      <UniqueIdentifier>{bba0e871-ac14-4e1f-8700-07337b5e0fb5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -202,6 +211,9 @@
     </ClCompile>
     <ClCompile Include="PlayerGameObject.cpp">
       <Filter>GameObjects\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="InputComponent.cpp">
+      <Filter>Components\InputComponents\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -309,6 +321,9 @@
     </ClInclude>
     <ClInclude Include="PlayerGameObject.h">
       <Filter>GameObjects\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="InputComponent.h">
+      <Filter>Components\InputComponents\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

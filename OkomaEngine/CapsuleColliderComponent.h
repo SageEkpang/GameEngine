@@ -38,7 +38,7 @@ public:
 	void Construct(OKVector2<float> scale);
 	void Construct(float width, float height);
 
-	~CapsuleColliderComponent();
+	~CapsuleColliderComponent() override;
 
 	// GETTER FUNCTION(s) // NOT NEEDED
 

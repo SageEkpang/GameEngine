@@ -1,21 +1,15 @@
 #include "Rigidbody2DComponent.h"
 
-Rigidbody2DComponent::Rigidbody2DComponent()
-{
-
-}
-
-Rigidbody2DComponent::Rigidbody2DComponent(OKVector2<float> position, float mass, RigidbodyMovementType rigidbodyMovementType)
-    : PhysicsEntity(position, mass)
-{
-    // if (transform->rotation != 0) { m_RigidbodyShapeType = RigidbodyShapeType::RIGIDBODY_ORIENTED_RECTANGLE; }
-
-    m_RigidbodyMovementType = rigidbodyMovementType;
-}
-
 Rigidbody2DComponent::~Rigidbody2DComponent()
 {
 
+}
+
+void Rigidbody2DComponent::Construct(OKVector2<float> position, float mass, RigidbodyMovementType rigidbodyMovementType)
+{
+    m_Position = position;
+    m_Mass = mass;
+    m_RigidbodyMovementType = rigidbodyMovementType;
 }
 
 void Rigidbody2DComponent::Update(const float deltaTime)
@@ -28,7 +22,7 @@ void Rigidbody2DComponent::Update(const float deltaTime)
         m_AngularVelocity += m_Torque * (1.0f / momentOfInteria) * deltaTime;
     }
 
-    m_AngularVelocity;
+    // m_AngularVelocity;
     //Mat22 m(PI / 2.0f);
     //OKVector2<float> r = m.xCol;
 

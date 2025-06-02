@@ -107,6 +107,9 @@ inline T* GameObjectEntity::AddComponent()
 	m_Components[std::type_index(typeid(T))] = new T();
 
 	auto t_Index = m_Components.find(std::type_index(typeid(T)));
+	t_Index->second->m_Owner = this;
+	// t_Index->second->m_ID;
+
 	return t_Index == m_Components.end() ? nullptr : static_cast<T*>(t_Index->second);
 }
 

@@ -42,7 +42,7 @@ public:
 	void Construct(const char* fileName, OKVector2<float> offset);
 	void Construct(const char* fileName, OKVector2<float> offset, float sizeOffset);
 
-	~ComplexColliderComponent();
+	~ComplexColliderComponent() override;
 
 	// BASE FUNCTION(s)
 	float PolygonArea();

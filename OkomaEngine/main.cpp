@@ -54,17 +54,28 @@ int main()
 
 	PhysicsManager m_PhyMana;
 
+	// Oriented Rectangle
 	GameObjectEntity m_Tester;
 	m_Tester.m_Transform.position = OKVector2<float>(0, 0);
+
 	m_Tester.AddComponent<OrientedRectangleColliderComponent>()->Construct(OKVector2<float>(100, 100), 0);
-	m_PhyMana.AddPhysicsObject(&m_Tester);
+	m_Tester.AddComponent<Rigidbody2DComponent>()->Construct(OKVector2<float>(0, 0), 10.f);
 
-	GameObjectEntity m_Object2;
-	m_Object2.m_Transform.position = OKVector2<float>(100, 100);
-	m_Object2.AddComponent<RectangleColliderComponent>()->Construct(OKVector2<float>(50, 50));
 	m_PhyMana.AddPhysicsObject(&m_Tester);
-
 	
+	// Rectangle Object
+	//GameObjectEntity m_Object2;
+	//m_Object2.m_Transform.position = OKVector2<float>(100, 100);
+	//m_Object2.AddComponent<RectangleColliderComponent>()->Construct(OKVector2<float>(50, 50));
+	//m_PhyMana.AddPhysicsObject(&m_Object2);
+	//
+	//// Circle Collider Object
+	//GameObjectEntity m_Object3;
+	//m_Object3.m_Transform.position = OKVector2<float>(500, 100);
+	//m_Object3.AddComponent<CircleColliderComponent>()->Construct(10);
+	//m_PhyMana.AddPhysicsObject(&m_Object3);
+	
+
 	// SetTargetFPS(60);
 	while (!WindowShouldClose())
 	{
@@ -76,46 +87,41 @@ int main()
 
 			BeginMode2D(camera);
 
+
+
+
 			rlPushMatrix();
 			rlScalef(1.0f, 1.0f, 1.0f);
-			// NOTE: Text Here ------
+			// NOTE: Text Here -------
+
 
 			m_PhyMana.Update(GetFrameTime());
 
-			if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-			{
-				// m_Tester.GetComponent<OrientedRectangleColliderComponent>()->m_Rotation += 0.1;
-				// m_Object2.m_Transform.position = OKVector2<float>(GetMouseX() - camera.offset.x, GetMouseY() - camera.offset.y);
-				//,m_Object2.GetComponent<LineColliderComponent>()->m_LineStartPosition = OKVector2<float>(GetMouseX() - camera.offset.x, GetMouseY() - camera.offset.y);
-			}
 
 
-			//if (m_Result.m_HasCollision)
-			//{
-			//	DrawText("Collided", 10, 100, 40, GREEN);
-			//}
-			//else
-			//{
-			//	DrawText("Not Collided", 10, 100, 40, RED);
-			//}
-
-			DebugDraw::Shape::DebugOrientedRectangle(&m_Tester);
-			DebugDraw::Shape::DebugRectangle(&m_Object2);
-			
 			rlPopMatrix();
+
+
+
+
+
 
 			rlPushMatrix();
 			rlScalef(1.0f, -1.0f, 1.0f);
-			// NOTE: Draw Here ------
+			// NOTE: Draw Here --------
 
 
-
-			// m_Tester.GetComponent<ParticleEffectComponent>()->Update(GetFrameTime());
-			// m_Tester.GetComponent<ParticleEffectComponent>()->Draw();
+			m_PhyMana.Draw();
 
 			DrawCircle(0, 0, 3, RED);
 		
+
 			rlPopMatrix();
+
+
+
+
+
 
 			EndMode2D();
 		EndDrawing();

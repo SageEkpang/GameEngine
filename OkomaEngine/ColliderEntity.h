@@ -57,7 +57,7 @@ public: // PUBLIC FUNCTION(s)
     ColliderEntity();
 
     // DESTRUCTOR
-    ~ColliderEntity();
+    virtual ~ColliderEntity();
 
 
     void TriggerQuery(GameObjectEntity* gameObject);

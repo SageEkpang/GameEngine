@@ -73,16 +73,14 @@ public:
 
 public:
 
-    // CLASS FUNCTION(s)
+    // CLASS FUNCTION(s) (General)
+    Rigidbody2DComponent() = default;
 
-    Rigidbody2DComponent();
-
-    // RECTANGLE
-    /// @brief Rectangle Rigidbody Constructor
-    Rigidbody2DComponent(OKVector2<float> position, float mass = 1.f, RigidbodyMovementType rigidbodyMovementType = RigidbodyMovementType::RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
-
-    // DESTRUCTOR
     ~Rigidbody2DComponent() override;
+
+    // CLASS FUNCTION(s) (Components)
+    void Construct(OKVector2<float> position, float mass = 1.f, RigidbodyMovementType rigidbodyMovementType = RigidbodyMovementType::RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
+
 
     // BASE FUNCTION(s)
     void Update(const float deltaTime) override;

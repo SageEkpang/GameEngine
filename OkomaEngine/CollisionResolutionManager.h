@@ -6,6 +6,8 @@
 #include "Rigidbody2DComponent.h"
 #include "CollisionManifold.h"
 
+#include "GameObjectEntity.h"
+
 class CollisionResolutionManager
 {
 public:
@@ -15,13 +17,13 @@ public:
 	~CollisionResolutionManager();
 
 	// BASE FUNCTION(s)
-	void ResolveCollision(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float coefRest, CollisionManifold collisionManifold);
+	void ResolveCollision(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float coefRest, CollisionManifold collisionManifold);
 
 private:
 
-	OKVector2<float> CalculateSeperatingVelocity(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, OKVector2<float> contactNormal);
-	void ResolveVelocity(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float coefRest, OKVector2<float> collisionNormal);
-	void ResolveInterpenetration(Rigidbody2DComponent* rigidbodyA, Rigidbody2DComponent* rigidbodyB, float penetration, OKVector2<float> collisionNormal);
+	OKVector2<float> CalculateSeperatingVelocity(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, OKVector2<float> contactNormal);
+	void ResolveVelocity(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float coefRest, OKVector2<float> collisionNormal);
+	void ResolveInterpenetration(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float penetration, OKVector2<float> collisionNormal);
 
 };
 

@@ -27,6 +27,8 @@ namespace DebugDraw
 {
 	namespace Shape
 	{
+		void DebugCollider(GameObjectEntity* gameObject);
+
 		void DebugRectangle(GameObjectEntity* gameObject);
 		void DebugOrientedRectangle(GameObjectEntity* gameObject);
 		void DebugCircle(GameObjectEntity* gameObject);
