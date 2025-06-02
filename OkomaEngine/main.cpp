@@ -59,25 +59,22 @@ int main()
 	// Oriented Rectangle
 	GameObjectEntity m_Tester;
 	m_Tester.m_Transform.position = OKVector2<float>(0, -100);
-
-	m_Tester.AddComponent<RectangleColliderComponent>()->Construct(OKVector2<float>(500, 100));
+	m_Tester.AddComponent<RectangleColliderComponent>()->Construct(OKVector2<float>(200, 100));
 	m_Tester.AddComponent<Rigidbody2DComponent>()->Construct(10.f, RigidbodyMovementType::RIGIDBODY_MOVEMENT_TYPE_STATIC);
 
 	m_PhyMana.AddPhysicsObject(&m_Tester);
-	
+
+
 	// Rectangle Object
 	GameObjectEntity m_Object2;
-	m_Object2.m_Transform.position = OKVector2<float>(100, 100);
-
-	int thing = 10;
-
-	m_Object2.AddComponent<RectangleColliderComponent>()->Construct(OKVector2<float>(50, 50));
+	m_Object2.m_Transform.position = OKVector2<float>(0, 100);
+	m_Object2.AddComponent<RectangleColliderComponent>()->Construct(OKVector2<float>(50, 100));
 	m_Object2.AddComponent<Rigidbody2DComponent>()->Construct(10.f);
 
 	m_Object2.AddComponent<InputComponent>()->AddInputMapping(KEY_SPACE, InputType::INPUT_TYPE_KEY_PRESSED,
 	[&m_Object2] {
 
-			m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseY(100);
+		m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseY(100);
 	});
 
 	m_PhyMana.AddPhysicsObject(&m_Object2);

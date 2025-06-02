@@ -13,8 +13,8 @@ CollisionResolutionManager::~CollisionResolutionManager()
 void CollisionResolutionManager::ResolveCollision(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float coefRest, CollisionManifold collisionManifold)
 {
 	// NOTE: Move the object out of the other object first and then apply the force to the object
-	ResolveInterpenetration(rigidbodyA, rigidbodyB, collisionManifold.m_PenetrationDepth, collisionManifold.m_CollisionNormal);
 	ResolveVelocity(rigidbodyA, rigidbodyB, coefRest, collisionManifold.m_CollisionNormal);
+	ResolveInterpenetration(rigidbodyA, rigidbodyB, collisionManifold.m_PenetrationDepth, collisionManifold.m_CollisionNormal);
 }
 
 void CollisionResolutionManager::ResolveVelocity(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float coefRest, OKVector2<float> collisionNormal)
@@ -24,7 +24,7 @@ void CollisionResolutionManager::ResolveVelocity(GameObjectEntity* rigidbodyA, G
 	// If there is no need for seperating velocity, then we do not need to run the function
 	if (t_SeperatingVelocity > OKVector2<float>(0, 0)) { return; }
 
-	OKVector2<float> t_NewSeperatingVelocity = t_SeperatingVelocity * coefRest;
+	OKVector2<float> t_NewSeperatingVelocity = t_SeperatingVelocity * coefRest * -1;
 
 	OKVector2<float> t_AccumulatedVelocity = rigidbodyA->GetComponent<Rigidbody2DComponent>()->m_Acceleration;
 	t_AccumulatedVelocity -= rigidbodyB->GetComponent<Rigidbody2DComponent>()->m_Acceleration;
@@ -80,14 +80,12 @@ void CollisionResolutionManager::ResolveInterpenetration(GameObjectEntity* rigid
 	// NOTE:
 	if (rigidbodyA->GetComponent<Rigidbody2DComponent>()->GetRigidbodyMovementType() == RIGIDBODY_MOVEMENT_TYPE_DYNAMIC)
 	{
-		OKVector2<float> t_PositionAltA = rigidbodyA->m_Transform.position + t_MoveOutA;
-		rigidbodyA->m_Transform.position = t_PositionAltA;
+		rigidbodyA->m_Transform.position += t_MoveOutA;
 	}
 
 	if (rigidbodyB->GetComponent<Rigidbody2DComponent>()->GetRigidbodyMovementType() == RIGIDBODY_MOVEMENT_TYPE_DYNAMIC)
 	{
-		OKVector2<float> t_PositionAltB = rigidbodyB->m_Transform.position + t_MoveOutB;
-		rigidbodyB->m_Transform.position = t_PositionAltB;
+		rigidbodyB->m_Transform.position += t_MoveOutB;
 	}
 }
 
@@ -95,5 +93,5 @@ OKVector2<float> CollisionResolutionManager::CalculateSeperatingVelocity(GameObj
 {
 	OKVector2<float> t_RelativeVelocity = rigidbodyA->GetComponent<Rigidbody2DComponent>()->m_Velocity;
 	t_RelativeVelocity -= rigidbodyB->GetComponent<Rigidbody2DComponent>()->m_Velocity;
-	return t_RelativeVelocity * contactNormal;
+	return t_RelativeVelocity;
 }
