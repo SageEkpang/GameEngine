@@ -54,11 +54,11 @@ int main()
 
 	GameObjectEntity m_Tester;
 	m_Tester.m_Transform.position = OKVector2<float>(0, 0);
-	m_Tester.AddComponent<OrientedRectangleColliderComponent>()->Construct(OKVector2<float>(500, 500), 45);
+	m_Tester.AddComponent<OrientedRectangleColliderComponent>()->Construct(OKVector2<float>(100, 100), 0);
 
 	GameObjectEntity m_Object2;
 	m_Object2.m_Transform.position = OKVector2<float>(100, 100);
-	m_Object2.AddComponent<LineColliderComponent>()->Construct(OKVector2<float>(100, 100), OKVector2<float>(500, 500));
+	m_Object2.AddComponent<RectangleColliderComponent>()->Construct(OKVector2<float>(50, 50));
 
 	CollisionManager m_ColMani;
 	CollisionManifold m_Result;
@@ -77,19 +77,15 @@ int main()
 			rlPushMatrix();
 			rlScalef(1.0f, 1.0f, 1.0f);
 			// NOTE: Text Here ------
-			m_Result = m_ColMani.CheckCollisions(&m_Tester, &m_Object2);
 
-			// CollisionManager::S_CircleToRectangle(m_Object2.m_Transform.position, 50, m_Tester.m_Transform.position, OKVector2<float>(50, 100)).m_HasCollision;
+			m_Result = m_ColMani.CheckCollisions(&m_Tester, &m_Object2);
 
 			if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 			{
 				// m_Tester.GetComponent<OrientedRectangleColliderComponent>()->m_Rotation += 0.1;
-				// m_Object2.m_Transform.position = OKVector2<float>(GetMouseX() - camera.offset.x, GetMouseY() - camera.offset.y);
+				m_Object2.m_Transform.position = OKVector2<float>(GetMouseX() - camera.offset.x, GetMouseY() - camera.offset.y);
+				//,m_Object2.GetComponent<LineColliderComponent>()->m_LineStartPosition = OKVector2<float>(GetMouseX() - camera.offset.x, GetMouseY() - camera.offset.y);
 			}
-
-
-
-
 
 
 			if (m_Result.m_HasCollision)
@@ -102,7 +98,7 @@ int main()
 			}
 
 			DebugDraw::Shape::DebugOrientedRectangle(&m_Tester);
-			DebugDraw::Shape::DebugLines(&m_Object2);
+			DebugDraw::Shape::DebugRectangle(&m_Object2);
 			
 			rlPopMatrix();
 

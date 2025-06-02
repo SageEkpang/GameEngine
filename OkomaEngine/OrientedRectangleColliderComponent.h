@@ -11,6 +11,7 @@ public:
 
 	OKVector2<float> m_Offset;
 	OKVector2<float> m_Scale;
+	OKVector2<float> m_RotationPoints[4];
 	float m_Rotation;
 
 public:

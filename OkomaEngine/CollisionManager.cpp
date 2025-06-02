@@ -52,10 +52,15 @@ Interval2D CollisionManager::GetOrientedRectangleInterval(GameObjectEntity* orRe
 {
 	OKVector2<float> t_tempPosition = orRectA->m_Transform.position;
 	OKVector2<float> t_tempScale = orRectA->GetComponent<OrientedRectangleColliderComponent>()->m_Scale;
-	float t_tempRotation = orRectA->m_Transform.rotation;
+	float t_tempRotation = orRectA->GetComponent<OrientedRectangleColliderComponent>()->m_Rotation;
 
-	OKVector2<float> MaxB = t_tempPosition + t_tempScale;
-	OKVector2<float> MinB = t_tempPosition - t_tempScale;
+	OKVector2<float> MaxB;
+	MaxB.x = t_tempPosition.x + (t_tempScale.x / 2.f);
+	MaxB.y = t_tempPosition.y + (t_tempScale.y / 2.f);
+
+	OKVector2<float> MinB;
+	MinB.x = t_tempPosition.x - (t_tempScale.x / 2.f);
+	MinB.y = t_tempPosition.y - (t_tempScale.y / 2.f);
 
 	OKVector2<float> verts[] = {
 		MinB, MaxB,
@@ -96,8 +101,13 @@ Interval2D CollisionManager::GetRectangleInterval(GameObjectEntity* rectA, OKVec
 	OKVector2<float> t_tempPosition = rectA->m_Transform.position;
 	OKVector2<float> t_tempScale = rectA->GetComponent<RectangleColliderComponent>()->m_Scale;
 
-	OKVector2<float> Max = t_tempPosition + t_tempScale;
-	OKVector2<float> Min = t_tempPosition - t_tempScale;
+	OKVector2<float> Max;
+	Max.x = t_tempPosition.x + (t_tempScale.x / 2.f);
+	Max.y = t_tempPosition.y + (t_tempScale.y / 2.f);
+
+	OKVector2<float> Min;
+	Min.x = t_tempPosition.x - (t_tempScale.x / 2.f);
+	Min.y = t_tempPosition.y - (t_tempScale.y / 2.f);
 
 	OKVector2<float> verts[] =
 	{
@@ -202,7 +212,7 @@ CollisionManifold CollisionManager::CheckCollisions(GameObjectEntity* gameObject
 		case COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CIRCLE: return t_ColMani = CapsuleToCircle(tempA, tempB); break;
 
 		case COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_ORIENTED: return t_ColMani = OrientedRectangleToOrientedRectangle(tempA, tempB); break;
-		case COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_RECTANGLE: return t_ColMani = OrientedRectangleToRectangle(tempA, tempA); break;
+		case COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_RECTANGLE: return t_ColMani = OrientedRectangleToRectangle(tempA, tempB); break;
 		case COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_CIRCLE: return t_ColMani = OrientedRectangleToCircle(tempA, tempB); break;
 		case COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_CAPSULE: return t_ColMani = OrientedRectangleToCapsule(tempA, tempB); break;
 
@@ -1039,42 +1049,71 @@ CollisionManifold CollisionManager::OrientedRectangleToOrientedRectangle(GameObj
 	return t_ColMani;
 }
 
-CollisionManifold CollisionManager::OrientedRectangleToRectangle(GameObjectEntity* OrRectA, GameObjectEntity* rectB) // rect2 = OrRectA
+CollisionManifold CollisionManager::OrientedRectangleToRectangle(GameObjectEntity* OrRectA, GameObjectEntity* rectB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
-	//OKVector2<float> AxisToTest[]{
-	//	OKVector2<float>(1, 0), OKVector2<float>(0, 1),
-	//	OKVector2<float>(0, 0), OKVector2<float>(0, 0)
-	//};
+	OrRectA->GetComponent<OrientedRectangleColliderComponent>()->m_HasCollided = false;
+	rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = false;
 
-	//float theta = DEG2RAD * OrRectA->m_Rotation;
+	OKVector2<float> t_tempRectanglePosition = rectB->m_Transform.position + rectB->GetComponent<RectangleColliderComponent>()->m_Offset;
+	OKVector2<float> t_tempRectangleScale = rectB->m_Transform.scale + rectB->GetComponent<RectangleColliderComponent>()->m_Scale;
 
-	//float zRotation2x2[] = {
-	//	std::cosf(theta), std::sinf(theta),
-	//	-std::sinf(theta), std::cosf(theta)
-	//};
+	OKVector2<float> t_tempOrRectPosition = OrRectA->m_Transform.position + OrRectA->GetComponent<OrientedRectangleColliderComponent>()->m_Offset;
+	OKVector2<float> t_tempOrRectScale = OrRectA->m_Transform.scale * OrRectA->GetComponent<OrientedRectangleColliderComponent>()->m_Scale;
 
-	//OKVector2<float> axis = OKVector2<float>(OrRectA->m_Scale.x / 2, 0).normalise();
-	//Multiply(AxisToTest[2].asArray(), axis.asArray(), 1, 2, zRotation2x2, 2, 2);
+	OKVector2<float> Rad = t_tempRectanglePosition - t_tempOrRectPosition;
 
-	//axis = OKVector2<float>(0, OrRectA->m_Scale.y / 2).normalise();
-	//Multiply(AxisToTest[3].asArray(), axis.asArray(), 1, 2, zRotation2x2, 2, 2);
+	OKVector2<float> t_TestingAxis[] = {
+		OKVector2<float>(1.f, 0.f), OKVector2<float>(0.f, 1.f),
+		OKVector2<float>(0.f, 0.f), OKVector2<float>(0.f, 0.f)
+	};
 
-	//for (int i = 0; i < 4; ++i)
-	//{
-	//	if (!OverlapOnAxis(rectB, OrRectA, AxisToTest[i]))
-	//	{
-	//		return t_ColMani;
-	//	}
-	//}
+	float theta = OrRectA->GetComponent<OrientedRectangleColliderComponent>()->m_Rotation * DEG2RAD;
 
-	//t_ColMani.m_HasCollision = true;
-	//t_ColMani.m_CollisionNormal = OrRectA->m_Transform.position - rectB->m_Transform.position;
-	//t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionNormal.normalise();
-	//t_ColMani.m_ContactPointAmount = 1;
-	//t_ColMani.m_PenetrationDepth = OKVector2<float>(OrRectA->m_Transform.position - rectB->m_Transform.position).magnitude();
-	//t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
+	float zRotation2x2[] = {
+	std::cosf(theta), std::sinf(theta),
+	-std::sinf(theta), std::cosf(theta)
+	};
+
+	OKVector2<float> t_tempAxis = OKVector2<float>(t_tempOrRectScale.x, 0).normalise();
+	Multiply(t_TestingAxis[2].asArray(), t_tempAxis.asArray(), 1, 2, zRotation2x2, 2, 2);
+
+	t_tempAxis = OKVector2<float>(0.f, t_tempOrRectScale.y).normalise();
+	Multiply(t_TestingAxis[3].asArray(), t_tempAxis.asArray(), 1, 2, zRotation2x2, 2, 2);
+
+	for (int i = 0; i < 4; ++i) {
+		if (!OverlapOnAxis(rectB, OrRectA, t_TestingAxis[i])) 
+		{
+			return CollisionManifold(); // No collision has taken place
+		}
+	}
+
+	// NOTE: Collision Has Taken Place
+	OrRectA->GetComponent<OrientedRectangleColliderComponent>()->m_HasCollided = true;
+	rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
+
+	if (OrRectA->GetComponent<OrientedRectangleColliderComponent>()->m_IsTrigger == true && rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+	{
+		OrRectA->GetComponent<OrientedRectangleColliderComponent>()->TriggerQuery(rectB);
+		rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(OrRectA);
+		t_ColMani.m_HasCollision = true;
+		return t_ColMani;
+	}
+
+	if (OrRectA->GetComponent<OrientedRectangleColliderComponent>()->m_IsTrigger == true)
+	{
+		OrRectA->GetComponent<OrientedRectangleColliderComponent>()->TriggerQuery(rectB);
+		t_ColMani.m_HasCollision = true;
+		return t_ColMani;
+	}
+
+	if (rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+	{
+		rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(OrRectA);
+		t_ColMani.m_HasCollision = true;
+		return t_ColMani;
+	}
 
 	return t_ColMani;
 }
@@ -1138,47 +1177,60 @@ CollisionManifold CollisionManager::OrientedRectangleToCircle(GameObjectEntity* 
 
 CollisionManifold CollisionManager::OrientedRectangleToCapsule(GameObjectEntity* OrRectA, GameObjectEntity* capsuleB)
 {
-	CollisionManifold t_ColMani = CollisionManifold();
+	//CollisionManifold t_ColMani = CollisionManifold();
 
-	// NEAREST POINT FOR CAPSULE
-	// Circles
-	// NOTE: Capsule Position and Variable(s)
-	//OKVector2<float> tip_a = OKVector2<float>(capsuleB->m_Position.x, capsuleB->m_Position.y + (capsuleB->m_Height / 2.f) - (capsuleB->m_Width / 2.f));
-	//OKVector2<float> base_a = OKVector2<float>(capsuleB->m_Position.x, capsuleB->m_Position.y - (capsuleB->m_Height / 2.f) + (capsuleB->m_Width / 2.f));
+	//OrRectA->GetComponent<OrientedRectangleColliderComponent>()->m_HasCollided = false;
+	//capsuleB->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
 
-	//float t_DistanceX = tip_a.x - base_a.x;
-	//float t_DistanceY = tip_a.y - base_a.y;
-	//float len = sqrt((t_DistanceX * t_DistanceX) + (t_DistanceY * t_DistanceY));
+	//OKVector2<float> t_tempCirclePosition = circB->m_Transform.position + circB->GetComponent<CircleColliderComponent>()->m_Offset;
 
-	//float dot = (((OrRectA->m_Position.x + (OrRectA->m_Scale.x / 2)) - tip_a.x) * (base_a.x - tip_a.x)) + ((OrRectA->m_Position.y + (OrRectA->m_Scale.y / 2) - tip_a.y) * (base_a.y - tip_a.y)) / powf(len, 2);
+	//OKVector2<float> t_tempOrRectPosition = OrRectA->m_Transform.position + OrRectA->GetComponent<OrientedRectangleColliderComponent>()->m_Offset;
+	//OKVector2<float> t_tempOrRectScale = OrRectA->m_Transform.scale * OrRectA->GetComponent<OrientedRectangleColliderComponent>()->m_Scale;
 
-	//// NOTE: Closest Point
-	//OKVector2<float> closest_point;
-	//closest_point.x = tip_a.x + (dot * (base_a.x - tip_a.x) / 2);
-	//closest_point.y = tip_a.y + (dot * (base_a.y - tip_a.y) / 2);
+	//OKVector2<float> Rad = t_tempCirclePosition - t_tempOrRectPosition;
 
-	//closest_point.x = Clamp(closest_point.x, base_a.x, tip_a.x);
-	//closest_point.y = Clamp(closest_point.y, base_a.y, tip_a.y);
-
-	//// NOTE: Create the circle based of the capsule components
-	////CircleColliderComponent circle_temp = CircleColliderComponent(closest_point, capsuleB->m_Width / 2);
-
-	//// ROTATED BOX TO CIRCLE
-	//// OKVector2<float> Rad = circle_temp.m_Position - OrRectA->m_Position;
-	//float theta = -DEG2RAD * OrRectA->m_Rotation;
+	//float theta = -DEG2RAD * OrRectA->GetComponent<OrientedRectangleColliderComponent>()->m_Rotation;
 
 	//float zRotation2x2[] = {
-	//	std::cosf(theta), std::sinf(theta),
+	//	std::cosf(theta), std::sinf(theta),  
 	//	-std::sinf(theta), std::cosf(theta)
 	//};
 
-	// Multiply(Rad.asArray(), OKVector2<float>(Rad.x, Rad.y).asArray(), 1, 2, zRotation2x2, 2, 2);
+	//Multiply(Rad.asArray(), OKVector2<float>(Rad.x, Rad.y).asArray(), 1, 2, zRotation2x2, 2, 2);
 
-	//CircleColliderComponent circle_temp_or = CircleColliderComponent(Rad + (OrRectA->m_Scale / 2), circle_temp.m_Radius);
-	// RectangleColliderComponent rectangle_temp = RectangleColliderComponent(OKVector2<float>(0, 0), OrRectA->m_Scale);
+	//t_ColMani = S_CircleToRectangle(Rad + (OrRectA->m_Transform.scale / 2.f), circB->GetComponent<CircleColliderComponent>()->m_Radius, OKVector2<float>(0.f, 0.f), t_tempOrRectScale);
 
-	return t_ColMani;
-	// return t_ColMani = CircleToRectangle(&circle_temp_or, &rectangle_temp);
+	//if (t_ColMani.m_HasCollision)
+	//{
+	//	OrRectA->GetComponent<OrientedRectangleColliderComponent>()->m_HasCollided = true;
+	//	circB->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
+
+	//	if (OrRectA->GetComponent<OrientedRectangleColliderComponent>()->m_IsTrigger == true && circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+	//	{
+	//		OrRectA->GetComponent<OrientedRectangleColliderComponent>()->TriggerQuery(circB);
+	//		circB->GetComponent<CircleColliderComponent>()->TriggerQuery(OrRectA);
+	//		t_ColMani.m_HasCollision = true;
+	//		return t_ColMani;
+	//	}
+
+	//	if (OrRectA->GetComponent<OrientedRectangleColliderComponent>()->m_IsTrigger == true)
+	//	{
+	//		OrRectA->GetComponent<OrientedRectangleColliderComponent>()->TriggerQuery(circB);
+	//		t_ColMani.m_HasCollision = true;
+	//		return t_ColMani;
+	//	}
+
+	//	if (circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+	//	{
+	//		circB->GetComponent<CircleColliderComponent>()->TriggerQuery(OrRectA);
+	//		t_ColMani.m_HasCollision = true;
+	//		return t_ColMani;
+	//	}
+
+	//	return t_ColMani;
+	//}
+
+	//return t_ColMani;
 }
 
 CollisionManifold CollisionManager::PointToPoint(GameObjectEntity* pointA, GameObjectEntity* pointB)
@@ -1810,76 +1862,46 @@ CollisionManifold CollisionManager::LineToOrientedRectangle(GameObjectEntity* li
 
 	OKVector2<float> t_tempOrRectPosition = OrRectB->m_Transform.position + OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_Offset;
 	OKVector2<float> t_tempOrRectScale = OrRectB->m_Transform.scale * OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_Scale;
-	float t_tempOrRectRotation = OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_Rotation;
+
+	double t_tempOrRectRotation = OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_Rotation * DEG2RAD;
 	OKVector2<float> t_tempOrRectHalfExtents = t_tempOrRectScale / 2.f;
 
 	// NOTE: Point Generation
+	#pragma region NewPointsCalculations
+
+	OKVector2<float> t_AnglePointOne;
 	OKVector2<float> t_tempPointOne = OKVector2<float>(t_tempOrRectPosition.x - t_tempOrRectHalfExtents.x, t_tempOrRectPosition.y + t_tempOrRectHalfExtents.y); // Top Left
+	t_AnglePointOne.x = t_tempPointOne.x * cosf(t_tempOrRectRotation) - t_tempPointOne.y * sinf(t_tempOrRectRotation);
+	t_AnglePointOne.y = t_tempPointOne.x * sinf(t_tempOrRectRotation) + t_tempPointOne.y * cosf(t_tempOrRectRotation);
+
+	OKVector2<float> t_AnglePointTwo;
 	OKVector2<float> t_tempPointTwo = OKVector2<float>(t_tempOrRectPosition.x + t_tempOrRectHalfExtents.x, t_tempOrRectPosition.y + t_tempOrRectHalfExtents.y); // Top Right
+	t_AnglePointTwo.x = t_tempPointTwo.x * cosf(t_tempOrRectRotation) - t_tempPointTwo.y * sinf(t_tempOrRectRotation);
+	t_AnglePointTwo.y = t_tempPointTwo.x * sinf(t_tempOrRectRotation) + t_tempPointTwo.y * cosf(t_tempOrRectRotation);
+	
+	OKVector2<float> t_AnglePointThree;
 	OKVector2<float> t_tempPointThree = OKVector2<float>(t_tempOrRectPosition.x - t_tempOrRectHalfExtents.x, t_tempOrRectPosition.y - t_tempOrRectHalfExtents.y); // Bottom Left
+	t_AnglePointThree.x = t_tempPointThree.x * cosf(t_tempOrRectRotation) - t_tempPointThree.y * sinf(t_tempOrRectRotation);
+	t_AnglePointThree.y = t_tempPointThree.x * sinf(t_tempOrRectRotation) + t_tempPointThree.y * cosf(t_tempOrRectRotation);
+	
+	OKVector2<float> t_AnglePointFour;
 	OKVector2<float> t_tempPointFour = OKVector2<float>(t_tempOrRectPosition.x + t_tempOrRectHalfExtents.x, t_tempOrRectPosition.y - t_tempOrRectHalfExtents.y); // Bottom Right
+	t_AnglePointFour.x = t_tempPointFour.x * cosf(t_tempOrRectRotation) - t_tempPointFour.y * sinf(t_tempOrRectRotation);
+	t_AnglePointFour.y = t_tempPointFour.x * sinf(t_tempOrRectRotation) + t_tempPointFour.y * cosf(t_tempOrRectRotation);
+	
+	#pragma endregion
 
-	{
-		OKVector2<float> t_AnglePointOne;
-		t_AnglePointOne.x = t_tempPointOne.x * cos(t_tempOrRectRotation) - t_tempPointOne.y * sin(t_tempOrRectRotation);
-		t_AnglePointOne.y = t_tempPointOne.x * sin(t_tempOrRectRotation) + t_tempPointOne.y * cos(t_tempOrRectRotation);
-		DrawCircleV(t_AnglePointOne.ConvertToVec2(), 5.f, ORANGE);
-	}
-
-	{
-		OKVector2<float> t_AnglePointTwo;
-		t_AnglePointTwo.x = t_tempPointTwo.x * cos(t_tempOrRectRotation) - t_tempPointTwo.y * sin(t_tempOrRectRotation);
-		t_AnglePointTwo.y = t_tempPointTwo.x * sin(t_tempOrRectRotation) + t_tempPointTwo.y * cos(t_tempOrRectRotation);
-		DrawCircleV(t_AnglePointTwo.ConvertToVec2(), 5.f, ORANGE);
-	}
-
-	{
-		OKVector2<float> t_AnglePointThree;
-		t_AnglePointThree.x = t_tempPointThree.x * cos(t_tempOrRectRotation) - t_tempPointThree.y * sin(t_tempOrRectRotation);
-		t_AnglePointThree.y = t_tempPointThree.x * sin(t_tempOrRectRotation) + t_tempPointThree.y * cos(t_tempOrRectRotation);
-		DrawCircleV(t_AnglePointThree.ConvertToVec2(), 5.f, ORANGE);
-	}
-
-	{
-		OKVector2<float> t_AnglePointFour;
-		t_AnglePointFour.x = t_tempPointFour.x * cos(t_tempOrRectRotation) - t_tempPointFour.y * sin(t_tempOrRectRotation);
-		t_AnglePointFour.y = t_tempPointFour.x * sin(t_tempOrRectRotation) + t_tempPointFour.y * cos(t_tempOrRectRotation);
-		DrawCircleV(t_AnglePointFour.ConvertToVec2(), 5.f, ORANGE);
-	}
-
-
-	//DrawCircleV(t_tempPointTwo.ConvertToVec2(), 2.f, ORANGE);
-	//DrawCircleV(t_tempPointThree.ConvertToVec2(), 2.f, ORANGE);
-	//DrawCircleV(t_tempPointFour.ConvertToVec2(), 2.f, ORANGE);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	// Top left & Top Right
+	t_ColMani = S_LineToLine(t_tempLineStart, t_tempLineEnd, t_AnglePointOne + t_tempOrRectScale, t_AnglePointTwo + t_tempOrRectScale);
+	DrawLineV(t_AnglePointOne.ConvertToVec2(), t_AnglePointTwo.ConvertToVec2(), GREEN);
 	if (t_ColMani.m_HasCollision)
 	{
-		OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_HasCollided = true;
-		lineA->GetComponent<LineColliderComponent>()->m_HasCollided = true;
+		lineA->GetComponent<LineColliderComponent>()->m_HasCollided = false;
+		OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_HasCollided = false;
 
-		if (OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_IsTrigger == true && lineA->GetComponent<LineColliderComponent>()->m_IsTrigger == true)
+		if (lineA->GetComponent<LineColliderComponent>()->m_IsTrigger == true && OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_IsTrigger == true)
 		{
-			OrRectB->GetComponent<OrientedRectangleColliderComponent>()->TriggerQuery(lineA);
 			lineA->GetComponent<LineColliderComponent>()->TriggerQuery(OrRectB);
-			t_ColMani.m_HasCollision = true;
-			return t_ColMani;
-		}
-
-		if (OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_IsTrigger == true)
-		{
 			OrRectB->GetComponent<OrientedRectangleColliderComponent>()->TriggerQuery(lineA);
 			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
@@ -1892,10 +1914,116 @@ CollisionManifold CollisionManager::LineToOrientedRectangle(GameObjectEntity* li
 			return t_ColMani;
 		}
 
+		if (OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_IsTrigger == true)
+		{
+			OrRectB->GetComponent<OrientedRectangleColliderComponent>()->TriggerQuery(lineA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		return t_ColMani;
+	}
+	
+	// Top Right & Bottom Right
+	t_ColMani = S_LineToLine(t_tempLineStart, t_tempLineEnd, t_AnglePointTwo + t_tempOrRectScale, t_AnglePointFour + t_tempOrRectScale);
+	DrawLineV(t_AnglePointTwo.ConvertToVec2(), t_AnglePointFour.ConvertToVec2(), GREEN);
+	if (t_ColMani.m_HasCollision)
+	{
+		lineA->GetComponent<LineColliderComponent>()->m_HasCollided = false;
+		OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_HasCollided = false;
+
+		if (lineA->GetComponent<LineColliderComponent>()->m_IsTrigger == true && OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_IsTrigger == true)
+		{
+			lineA->GetComponent<LineColliderComponent>()->TriggerQuery(OrRectB);
+			OrRectB->GetComponent<OrientedRectangleColliderComponent>()->TriggerQuery(lineA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		if (lineA->GetComponent<LineColliderComponent>()->m_IsTrigger == true)
+		{
+			lineA->GetComponent<LineColliderComponent>()->TriggerQuery(OrRectB);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		if (OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_IsTrigger == true)
+		{
+			OrRectB->GetComponent<OrientedRectangleColliderComponent>()->TriggerQuery(lineA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
 		return t_ColMani;
 	}
 
-	return t_ColMani;
+	// Bottom Right & Bottom Left
+	t_ColMani = S_LineToLine(t_tempLineStart, t_tempLineEnd, t_AnglePointFour + t_tempOrRectScale, t_AnglePointThree + t_tempOrRectScale);
+	DrawLineV(t_AnglePointFour.ConvertToVec2(), t_AnglePointThree.ConvertToVec2(), GREEN);
+	if (t_ColMani.m_HasCollision)
+	{
+		lineA->GetComponent<LineColliderComponent>()->m_HasCollided = false;
+		OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_HasCollided = false;
+
+		if (lineA->GetComponent<LineColliderComponent>()->m_IsTrigger == true && OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_IsTrigger == true)
+		{
+			lineA->GetComponent<LineColliderComponent>()->TriggerQuery(OrRectB);
+			OrRectB->GetComponent<OrientedRectangleColliderComponent>()->TriggerQuery(lineA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		if (lineA->GetComponent<LineColliderComponent>()->m_IsTrigger == true)
+		{
+			lineA->GetComponent<LineColliderComponent>()->TriggerQuery(OrRectB);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		if (OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_IsTrigger == true)
+		{
+			OrRectB->GetComponent<OrientedRectangleColliderComponent>()->TriggerQuery(lineA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		return t_ColMani;
+	}
+
+	// Bottom Left & Top Left
+	t_ColMani = S_LineToLine(t_tempLineStart, t_tempLineEnd, t_AnglePointThree + t_tempOrRectScale, t_AnglePointOne + t_tempOrRectScale);
+	DrawLineV(t_AnglePointThree.ConvertToVec2(), t_AnglePointOne.ConvertToVec2(), GREEN);
+	if (t_ColMani.m_HasCollision)
+	{
+		lineA->GetComponent<LineColliderComponent>()->m_HasCollided = false;
+		OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_HasCollided = false;
+
+		if (lineA->GetComponent<LineColliderComponent>()->m_IsTrigger == true && OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_IsTrigger == true)
+		{
+			lineA->GetComponent<LineColliderComponent>()->TriggerQuery(OrRectB);
+			OrRectB->GetComponent<OrientedRectangleColliderComponent>()->TriggerQuery(lineA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		if (lineA->GetComponent<LineColliderComponent>()->m_IsTrigger == true)
+		{
+			lineA->GetComponent<LineColliderComponent>()->TriggerQuery(OrRectB);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		if (OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_IsTrigger == true)
+		{
+			OrRectB->GetComponent<OrientedRectangleColliderComponent>()->TriggerQuery(lineA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		return t_ColMani;
+	}
+
+	return CollisionManifold();
 }
 
 CollisionManifold CollisionManager::LineToCapsule(GameObjectEntity* lineA, GameObjectEntity* capsuleB)

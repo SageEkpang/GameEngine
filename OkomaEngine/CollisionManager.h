@@ -18,7 +18,6 @@ class CapsuleColliderComponent;
 class ComplexColliderComponent;
 class PointColliderComponent;
 
-// TODO: Check that the current ones implemented work
 enum Collider_Type_Collisions
 {
     COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_RECTANGLE,
@@ -46,7 +45,7 @@ enum Collider_Type_Collisions
     COLLIDER_TYPE_COLLISIONS_LINE_TO_CIRCLE,
     COLLIDER_TYPE_COLLISIONS_LINE_TO_RECTANGLE,
     COLLIDER_TYPE_COLLISIONS_LINE_TO_CAPSULE,
-    COLLIDER_TYPE_COLLISIONS_LINE_TO_ORIENTED // NEED TO WORK ON
+    COLLIDER_TYPE_COLLISIONS_LINE_TO_ORIENTED
 };
 
 struct Interval2D
