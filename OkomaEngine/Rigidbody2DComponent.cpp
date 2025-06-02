@@ -5,9 +5,8 @@ Rigidbody2DComponent::~Rigidbody2DComponent()
 
 }
 
-void Rigidbody2DComponent::Construct(OKVector2<float> position, float mass, RigidbodyMovementType rigidbodyMovementType)
+void Rigidbody2DComponent::Construct(float mass, RigidbodyMovementType rigidbodyMovementType)
 {
-    m_Position = position;
     m_Mass = mass;
     m_RigidbodyMovementType = rigidbodyMovementType;
 }

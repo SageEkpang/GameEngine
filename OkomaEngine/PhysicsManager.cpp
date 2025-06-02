@@ -62,7 +62,7 @@ void PhysicsManager::Update(const float deltaTime)
 					v->GetComponent<Rigidbody2DComponent>()->SimulateDrag(false);
 					v->GetComponent<Rigidbody2DComponent>()->SimulateLift(false);
 
-					v->GetComponent<Rigidbody2DComponent>()->SetFriction(0.5f);
+					v->GetComponent<Rigidbody2DComponent>()->m_Friction = 0.5f;
 					v->GetComponent<Rigidbody2DComponent>()->SimulateFriction(true);
 				}
 			}

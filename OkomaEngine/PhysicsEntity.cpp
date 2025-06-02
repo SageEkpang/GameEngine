@@ -1,14 +1,9 @@
 #include "PhysicsEntity.h"
+#include "GameObjectEntity.h"
 
 PhysicsEntity::PhysicsEntity()
 {
 
-}
-
-PhysicsEntity::PhysicsEntity(OKVector2<float> position, float mass)
-{
-    m_Position = position;
-    m_Mass = mass;
 }
 
 PhysicsEntity::~PhysicsEntity()
@@ -39,12 +34,12 @@ void PhysicsEntity::CalculateAcceleration(const float deltaTime)
     m_Acceleration += m_NetForce;
 
     // NOTE: Work out Velocity Calculation
-    OKVector2<float> t_Position = m_Position;
+    OKVector2<float> t_Position = m_Owner->m_Transform.position;
     m_Velocity += m_Acceleration * deltaTime;
 
     // NOTE: Augment Position by Velocity
     t_Position += m_Velocity * deltaTime;
-    m_Position = t_Position;
+    m_Owner->m_Transform.position = t_Position;
 }
 
 OKVector2<float> PhysicsEntity::ApplyGravity()

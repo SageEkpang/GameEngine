@@ -26,8 +26,8 @@ void CollisionResolutionManager::ResolveVelocity(GameObjectEntity* rigidbodyA, G
 
 	OKVector2<float> t_NewSeperatingVelocity = t_SeperatingVelocity * coefRest;
 
-	OKVector2<float> t_AccumulatedVelocity = rigidbodyA->GetComponent<Rigidbody2DComponent>()->GetAcceleration();
-	t_AccumulatedVelocity -= rigidbodyB->GetComponent<Rigidbody2DComponent>()->GetAcceleration();
+	OKVector2<float> t_AccumulatedVelocity = rigidbodyA->GetComponent<Rigidbody2DComponent>()->m_Acceleration;
+	t_AccumulatedVelocity -= rigidbodyB->GetComponent<Rigidbody2DComponent>()->m_Acceleration;
 
 	OKVector2<float> t_AccumulatedSeperatingVelocity = t_AccumulatedVelocity * collisionNormal; // Delta time may not need to be here
 
@@ -93,7 +93,7 @@ void CollisionResolutionManager::ResolveInterpenetration(GameObjectEntity* rigid
 
 OKVector2<float> CollisionResolutionManager::CalculateSeperatingVelocity(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, OKVector2<float> contactNormal)
 {
-	OKVector2<float> t_RelativeVelocity = rigidbodyA->GetComponent<Rigidbody2DComponent>()->GetVelocity();
-	t_RelativeVelocity -= rigidbodyB->GetComponent<Rigidbody2DComponent>()->GetVelocity();
+	OKVector2<float> t_RelativeVelocity = rigidbodyA->GetComponent<Rigidbody2DComponent>()->m_Velocity;
+	t_RelativeVelocity -= rigidbodyB->GetComponent<Rigidbody2DComponent>()->m_Velocity;
 	return t_RelativeVelocity * contactNormal;
 }

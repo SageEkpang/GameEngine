@@ -4,6 +4,7 @@
 #include "ComponentEntity.h"
 #include <iostream>
 #include <unordered_map>
+#include <functional>
 #include "raylib.h"
 
 enum class InputType : std::int8_t
@@ -28,7 +29,7 @@ struct InputAction
 {
 	std::int8_t key;
 	InputType type;
-	void(*actionLambda)();
+	std::function<void()> actionLambda;
 };
 
 class InputComponent : public ComponentEntity
@@ -47,7 +48,7 @@ public: // PUBLIC FUNCTION(s)
 	void Update(const float deltaTime) override;
 
 	// HELPER FUNCTION(s) 
-	void AddInputMapping(std::int8_t key, InputType type, void (*input_action_lambda)() = nullptr);
+	void AddInputMapping(std::int8_t key, InputType type, std::function<void()> input_action_lambda);
 
 };
 

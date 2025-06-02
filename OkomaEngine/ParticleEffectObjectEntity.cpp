@@ -1,7 +1,6 @@
 #include "ParticleEffectObjectEntity.h"
 
 ParticleEffectObjectEntity::ParticleEffectObjectEntity(OKVector2<float> position, float mass)
-	: PhysicsEntity(position, mass)
 {
 	m_StartDelay = nullptr;
 	m_StartLifeTime = nullptr;
@@ -9,6 +8,7 @@ ParticleEffectObjectEntity::ParticleEffectObjectEntity(OKVector2<float> position
 	m_StartSpeed = nullptr;
 	m_Theta = 0.f;
 
+	m_Position = position;
 	m_Scale = OKVector2<float>(1.f, 1.f);
 	m_Rotation = 0.f;
 

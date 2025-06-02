@@ -79,7 +79,7 @@ public:
     ~Rigidbody2DComponent() override;
 
     // CLASS FUNCTION(s) (Components)
-    void Construct(OKVector2<float> position, float mass = 1.f, RigidbodyMovementType rigidbodyMovementType = RigidbodyMovementType::RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
+    void Construct(float mass = 1.f, RigidbodyMovementType rigidbodyMovementType = RigidbodyMovementType::RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
 
 
     // BASE FUNCTION(s)

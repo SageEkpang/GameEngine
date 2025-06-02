@@ -36,7 +36,7 @@ void InputComponent::Update(const float deltaTime)
 	}
 }
 
-void InputComponent::AddInputMapping(std::int8_t key, InputType type, void(*input_action_lambda)())
+void InputComponent::AddInputMapping(std::int8_t key, InputType type, std::function<void()> input_action_lambda)
 {
 	InputAction t_tempAction;
 	t_tempAction.key = key;

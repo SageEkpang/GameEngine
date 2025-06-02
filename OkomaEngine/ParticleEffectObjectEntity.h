@@ -15,6 +15,7 @@ public:
 	float* m_StartSpeed;
 	float m_Theta;
 
+	OKVector2<float> m_Position;
 	OKVector2<float> m_Scale;
 	float m_Rotation;
 
