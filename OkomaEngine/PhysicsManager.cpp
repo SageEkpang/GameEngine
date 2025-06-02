@@ -44,9 +44,7 @@ void PhysicsManager::Update(const float deltaTime)
 					t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>(),
 					t_PhysicsObjects[j]->GetComponent<Rigidbody2DComponent>(),
 					float(0.1f),
-					m_CollisionManifold.m_PenetrationDepth,
-					m_CollisionManifold.m_CollisionNormal,
-					0
+					m_CollisionManifold
 				);
 			}
 		}
@@ -88,5 +86,19 @@ void PhysicsManager::Update(const float deltaTime)
 
 void PhysicsManager::Draw()
 {
+	if (!m_PhysicsObjects.empty())
+	{
+		for (auto& v : m_PhysicsObjects)
+		{
+			// NOTE: Check if the Physics Components has a collider to show, if not...SKIP
+			if (v->FindChildComponent<ColliderEntity>() != nullptr) { continue; }
 
+			
+
+
+
+
+
+		}
+	}
 }

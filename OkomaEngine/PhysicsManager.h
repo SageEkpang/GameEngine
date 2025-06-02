@@ -6,6 +6,7 @@
 #include "CollisionManager.h"
 #include "CollisionResolutionManager.h"
 #include "PhysicsMaterialCoefficientManager.h"
+#include "DebugDraw.h"
 
 class PhysicsManager
 {
@@ -29,6 +30,10 @@ public:
 	// BASE FUNCTION(s)
 	void Update(const float deltaTime);
 	void Draw();
+
+	// HELPER FUNCTION(s)
+	inline void AddPhysicsObject(GameObjectEntity* gameObject) { m_PhysicsObjects.push_back(gameObject); }
+	//inline void RemovePhysicsObject(GameObjectEntity* gameObject) { }
 
 };
 

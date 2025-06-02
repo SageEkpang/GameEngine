@@ -6,7 +6,7 @@
 #include "OKMaths.h"
 #include "DebugDraw.h"
 
-#include "CollisionManager.h"
+#include "PhysicsManager.h"
 
 #include <iostream>
 
@@ -52,16 +52,18 @@ int main()
 
 	rlDisableBackfaceCulling();
 
+	PhysicsManager m_PhyMana;
+
 	GameObjectEntity m_Tester;
 	m_Tester.m_Transform.position = OKVector2<float>(0, 0);
 	m_Tester.AddComponent<OrientedRectangleColliderComponent>()->Construct(OKVector2<float>(100, 100), 0);
+	m_PhyMana.AddPhysicsObject(&m_Tester);
 
 	GameObjectEntity m_Object2;
 	m_Object2.m_Transform.position = OKVector2<float>(100, 100);
 	m_Object2.AddComponent<RectangleColliderComponent>()->Construct(OKVector2<float>(50, 50));
+	m_PhyMana.AddPhysicsObject(&m_Tester);
 
-	CollisionManager m_ColMani;
-	CollisionManifold m_Result;
 	
 	// SetTargetFPS(60);
 	while (!WindowShouldClose())
@@ -78,24 +80,24 @@ int main()
 			rlScalef(1.0f, 1.0f, 1.0f);
 			// NOTE: Text Here ------
 
-			m_Result = m_ColMani.CheckCollisions(&m_Tester, &m_Object2);
+			m_PhyMana.Update(GetFrameTime());
 
 			if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 			{
 				// m_Tester.GetComponent<OrientedRectangleColliderComponent>()->m_Rotation += 0.1;
-				m_Object2.m_Transform.position = OKVector2<float>(GetMouseX() - camera.offset.x, GetMouseY() - camera.offset.y);
+				// m_Object2.m_Transform.position = OKVector2<float>(GetMouseX() - camera.offset.x, GetMouseY() - camera.offset.y);
 				//,m_Object2.GetComponent<LineColliderComponent>()->m_LineStartPosition = OKVector2<float>(GetMouseX() - camera.offset.x, GetMouseY() - camera.offset.y);
 			}
 
 
-			if (m_Result.m_HasCollision)
-			{
-				DrawText("Collided", 10, 100, 40, GREEN);
-			}
-			else
-			{
-				DrawText("Not Collided", 10, 100, 40, RED);
-			}
+			//if (m_Result.m_HasCollision)
+			//{
+			//	DrawText("Collided", 10, 100, 40, GREEN);
+			//}
+			//else
+			//{
+			//	DrawText("Not Collided", 10, 100, 40, RED);
+			//}
 
 			DebugDraw::Shape::DebugOrientedRectangle(&m_Tester);
 			DebugDraw::Shape::DebugRectangle(&m_Object2);

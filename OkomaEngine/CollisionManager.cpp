@@ -1177,7 +1177,7 @@ CollisionManifold CollisionManager::OrientedRectangleToCircle(GameObjectEntity* 
 
 CollisionManifold CollisionManager::OrientedRectangleToCapsule(GameObjectEntity* OrRectA, GameObjectEntity* capsuleB)
 {
-	//CollisionManifold t_ColMani = CollisionManifold();
+	CollisionManifold t_ColMani = CollisionManifold();
 
 	//OrRectA->GetComponent<OrientedRectangleColliderComponent>()->m_HasCollided = false;
 	//capsuleB->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
@@ -1230,7 +1230,7 @@ CollisionManifold CollisionManager::OrientedRectangleToCapsule(GameObjectEntity*
 	//	return t_ColMani;
 	//}
 
-	//return t_ColMani;
+	return t_ColMani;
 }
 
 CollisionManifold CollisionManager::PointToPoint(GameObjectEntity* pointA, GameObjectEntity* pointB)
@@ -1704,8 +1704,6 @@ CollisionManifold CollisionManager::LineToLine(GameObjectEntity* lineA, GameObje
 		float intersectionX = x1 + (uA * (x2 - x1));
 		float intersectionY = y1 + (uA * (y2 - y1));
 
-		DrawCircle(intersectionX, intersectionY, 5.f, PURPLE);
-
 		t_ColMani.m_HasCollision = true;
 		t_ColMani.m_CollisionPoints[0] = OKVector2<float>(intersectionX, intersectionY);
 		t_ColMani.m_CollisionNormal = t_ColMani.m_CollisionPoints[0];
@@ -1863,10 +1861,10 @@ CollisionManifold CollisionManager::LineToOrientedRectangle(GameObjectEntity* li
 	OKVector2<float> t_tempOrRectPosition = OrRectB->m_Transform.position + OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_Offset;
 	OKVector2<float> t_tempOrRectScale = OrRectB->m_Transform.scale * OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_Scale;
 
-	double t_tempOrRectRotation = OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_Rotation * DEG2RAD;
+	float t_tempOrRectRotation = OrRectB->GetComponent<OrientedRectangleColliderComponent>()->m_Rotation * DEG2RAD;
 	OKVector2<float> t_tempOrRectHalfExtents = t_tempOrRectScale / 2.f;
 
-	// NOTE: Point Generation
+	// NOTE: Point Generationb
 	#pragma region NewPointsCalculations
 
 	OKVector2<float> t_AnglePointOne;
@@ -3460,8 +3458,6 @@ CollisionManifold CollisionManager::S_LineToCircle(OKVector2<float> lineStartPos
 
 	float closestX = t_tempLineStartA.x + (dot * (t_tempLineEndA.x - t_tempLineStartA.x));
 	float closestY = t_tempLineStartA.y + (dot * (t_tempLineEndA.y - t_tempLineStartA.y));
-
-	DrawCircle(closestX, closestY, 2.f, BLUE);
 
 	CollisionManifold onSegment = S_PointToLine(OKVector2<float>(closestX, closestY), t_tempLineStartA, t_tempLineEndA);
 
