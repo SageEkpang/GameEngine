@@ -33,6 +33,7 @@ void PhysicsManager::Update(const float deltaTime)
 	{
 		for (auto& v : m_PhysicsObjects)
 		{
+			// trigger stuff
 			if (true)
 			{
 
