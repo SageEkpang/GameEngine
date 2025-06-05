@@ -32,6 +32,8 @@ struct InputAction
 	std::function<void()> actionLambda;
 };
 
+// Need an event que for this 
+
 class InputComponent : public ComponentEntity
 {
 private: // PRIVATE VARIABLE(s)

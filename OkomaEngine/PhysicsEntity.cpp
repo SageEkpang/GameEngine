@@ -3,7 +3,7 @@
 
 PhysicsEntity::PhysicsEntity()
 {
-
+    m_Velocity = OKVector2<float>();
 }
 
 PhysicsEntity::~PhysicsEntity()
@@ -17,9 +17,9 @@ void PhysicsEntity::Update(const float deltaTime)
 
     // NOTE: Apply Physics Forces to Particle
     if (m_SimulateGravity) { m_NetForce += ApplyGravity(); }
-    if (m_SimulateDrag) { m_NetForce += ApplyDrag(); }
-    if (m_SimulateLift) { m_NetForce += ApplyLift(); }
-    if (m_SimulateFriction) { m_NetForce += ApplyFriction(); }
+    // if (m_SimulateDrag) { m_NetForce += ApplyDrag(); }
+    //if (m_SimulateLift)// { m_NetForce += ApplyLift(); }
+    // if (m_SimulateFriction) { m_NetForce += ApplyFriction(); }
 
     // NOTE: Force Calculation
     CalculateAcceleration(deltaTime);
@@ -53,6 +53,7 @@ OKVector2<float> PhysicsEntity::ApplyGravity()
 OKVector2<float> PhysicsEntity::ApplyDrag()
 {
     // NOTE: Drag is apparently only a force to be applied left and right
+    // if (m_Velocity.x <= 0.f) { return OKVector2<float>(0.f, 0.f); }
     if (m_Velocity.x == 0.f) { return OKVector2<float>(0.f, 0.f); }
 
     OKVector2<float> t_CopyVelocity = m_Velocity;
@@ -65,7 +66,7 @@ OKVector2<float> PhysicsEntity::ApplyDrag()
     // NOTE: Intergrate Drag
     pm_CalculatedDrag = t_CopyVelocity.negate();
     pm_CalculatedDrag = pm_CalculatedDrag.normalise() * t_Drag;
-    pm_CalculatedDrag = OKVector2<float>(pm_CalculatedDrag.x, t_CopyVelocity.y);
+    pm_CalculatedDrag = OKVector2<float>(pm_CalculatedDrag.x * -1, t_CopyVelocity.y);
 
     return pm_CalculatedDrag;
 }
@@ -88,20 +89,20 @@ OKVector2<float> PhysicsEntity::ApplyLift()
     return pm_CalculatedLift;
 }
 
+// NOTE: This would have to do with collision response
+// FORMULA: Dynamic Friction = Dynamic Friction Coefficient * Normal Reaction Between the 2 Surfaces
+// Ff = uKR
 OKVector2<float> PhysicsEntity::ApplyFriction()
 {
-    // NOTE: This would have to do with collision response
-    // FORMULA: Dynamic Friction = Dynamic Friction Coefficient * Normal Reaction Between the 2 Surfaces
-    // Ff = uKR
-
-    if (m_Velocity == OKVector2<float>(0.f, 0.f)) { return OKVector2<float>(0.f, 0.f); }
+    if (m_Velocity.x == 0.f) { return OKVector2<float>(0.f, 0.f); }
 
     OKVector2<float> t_CopyVelocity = m_Velocity;
     OKVector2<float> t_CalculatedFriction = t_CopyVelocity.pow(2) * m_Friction;
     float t_Friction = t_CalculatedFriction.magnitude();
 
-    pm_CalculatedFriction = t_CopyVelocity;
-    pm_CalculatedFriction = pm_CalculatedFriction.normalise() * t_Friction;
+    pm_CalculatedFriction = t_CopyVelocity.negate();
+    pm_CalculatedFriction = pm_CalculatedFriction * t_Friction;
+    pm_CalculatedFriction = OKVector2<float>(pm_CalculatedFriction.x, t_CopyVelocity.y);
 
     return pm_CalculatedFriction;
 }

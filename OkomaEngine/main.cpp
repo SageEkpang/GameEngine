@@ -59,7 +59,7 @@ int main()
 	// Oriented Rectangle
 	GameObjectEntity m_Tester;
 	m_Tester.m_Transform.position = OKVector2<float>(0, -100);
-	m_Tester.AddComponent<RectangleColliderComponent>()->Construct(OKVector2<float>(200, 100));
+	m_Tester.AddComponent<RectangleColliderComponent>()->Construct(OKVector2<float>(700, 100));
 	m_Tester.AddComponent<Rigidbody2DComponent>()->Construct(10.f, RigidbodyMovementType::RIGIDBODY_MOVEMENT_TYPE_STATIC);
 
 	m_PhyMana.AddPhysicsObject(&m_Tester);
@@ -71,11 +71,29 @@ int main()
 	m_Object2.AddComponent<RectangleColliderComponent>()->Construct(OKVector2<float>(50, 100));
 	m_Object2.AddComponent<Rigidbody2DComponent>()->Construct(10.f);
 
-	m_Object2.AddComponent<InputComponent>()->AddInputMapping(KEY_SPACE, InputType::INPUT_TYPE_KEY_PRESSED,
-	[&m_Object2] {
+	m_Object2.AddComponent<InputComponent>();
 
-		m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseY(100);
-	});
+
+
+	//m_Object2.GetComponent<InputComponent>()->AddInputMapping(KEY_SPACE, InputType::INPUT_TYPE_KEY_PRESSED,
+	//[&m_Object2] {
+
+	//	m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseY(100);
+	//});
+
+	//m_Object2.GetComponent<InputComponent>()->AddInputMapping(KEY_A, InputType::INPUT_TYPE_KEY_HELD,
+	//[&m_Object2] {
+
+	//	m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(-1000 * GetFrameTime());
+	//});
+
+	//m_Object2.GetComponent<InputComponent>()->AddInputMapping(KEY_D, InputType::INPUT_TYPE_KEY_HELD,
+	//[&m_Object2] {
+
+	//	m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(1000 * GetFrameTime());
+	//});
+
+
 
 	m_PhyMana.AddPhysicsObject(&m_Object2);
 	
@@ -102,6 +120,9 @@ int main()
 			rlScalef(1.0f, 1.0f, 1.0f);
 			// NOTE: Text Here -------
 
+			DrawText(TextFormat("Position: %f", m_Object2.m_Transform.position.y), 0, 0, 40, GREEN);
+
+
 
 			rlPopMatrix();
 
@@ -113,6 +134,25 @@ int main()
 			rlPushMatrix();
 			rlScalef(1.0f, -1.0f, 1.0f);
 			// NOTE: Draw Here --------
+
+			// m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseY(100);
+
+			if (IsKeyPressed(KEY_SPACE))
+			{
+				m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseY(100);
+			}
+
+			if (IsKeyDown(KEY_A))
+			{
+				m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(-1000 * GetFrameTime());
+
+			}
+
+			if (IsKeyDown(KEY_D))
+			{
+				m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(1000 * GetFrameTime());
+
+			}
 
 
 			m_PhyMana.Update(GetFrameTime());

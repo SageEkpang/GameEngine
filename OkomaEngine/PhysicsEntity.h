@@ -34,7 +34,7 @@ public: // PROTECTED VARIABLE(s)
     OKVector2<float> m_Velocity{};
 
     // NOTE: Coefficient of Drag
-    mutable float m_Drag{ 1.f };
+    mutable float m_Drag{ 0.2f };
     mutable float m_DragFluidDensity{ 1.4f };
     mutable float m_DragCrossSectionalArea{ 1.f };
 

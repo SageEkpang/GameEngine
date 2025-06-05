@@ -353,7 +353,7 @@ CollisionManifold CollisionManager::RectangleToRectangle(GameObjectEntity* rectA
 		NearPointA.x = BottomSide.x;
 	}
 
-	CollisionManifold t_tempMani = S_CircleToCircle(NearPointA, 0.1f, NearPointB, 0.1f);
+	CollisionManifold t_tempMani = S_CircleToCircle(NearPointA, 0.5f, NearPointB, 0.5f);
 
 	if (t_tempMani.m_HasCollision)
 	{
@@ -2418,7 +2418,7 @@ CollisionManifold CollisionManager::S_CircleToCircle(OKVector2<float> circPositi
 	{
 		t_ColMani.m_HasCollision = true;
 		t_ColMani.m_CollisionNormal = distance.normalise();
-		t_ColMani.m_PenetrationDepth = distance.magnitude();
+		t_ColMani.m_PenetrationDepth = distance.magnitude() / radii_sum;
 		t_ColMani.m_ContactPointAmount = 1;
 		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
 

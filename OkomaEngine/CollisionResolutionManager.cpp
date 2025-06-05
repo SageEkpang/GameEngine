@@ -13,8 +13,8 @@ CollisionResolutionManager::~CollisionResolutionManager()
 void CollisionResolutionManager::ResolveCollision(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float coefRest, CollisionManifold collisionManifold)
 {
 	// NOTE: Move the object out of the other object first and then apply the force to the object
-	ResolveVelocity(rigidbodyA, rigidbodyB, coefRest, collisionManifold.m_CollisionNormal);
 	ResolveInterpenetration(rigidbodyA, rigidbodyB, collisionManifold.m_PenetrationDepth, collisionManifold.m_CollisionNormal);
+	ResolveVelocity(rigidbodyA, rigidbodyB, coefRest, collisionManifold.m_CollisionNormal);
 }
 
 void CollisionResolutionManager::ResolveVelocity(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float coefRest, OKVector2<float> collisionNormal)
@@ -93,5 +93,5 @@ OKVector2<float> CollisionResolutionManager::CalculateSeperatingVelocity(GameObj
 {
 	OKVector2<float> t_RelativeVelocity = rigidbodyA->GetComponent<Rigidbody2DComponent>()->m_Velocity;
 	t_RelativeVelocity -= rigidbodyB->GetComponent<Rigidbody2DComponent>()->m_Velocity;
-	return t_RelativeVelocity;
+	return t_RelativeVelocity * contactNormal;
 }
