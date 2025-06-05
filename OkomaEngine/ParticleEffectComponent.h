@@ -120,7 +120,6 @@ private:
 public:
 
 	// TRANSFORM VARIABLE(s)
-	OKTransform2<float> m_Transform;
 	OKVector2<float> m_EmitterPositionOffset;
 
 	// BASE VARIABLE(s)

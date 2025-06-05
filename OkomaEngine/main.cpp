@@ -58,20 +58,24 @@ int main()
 
 	// Oriented Rectangle
 	GameObjectEntity m_Tester;
-	m_Tester.m_Transform.position = OKVector2<float>(0, -100);
-	m_Tester.AddComponent<RectangleColliderComponent>()->Construct(OKVector2<float>(700, 100));
-	m_Tester.AddComponent<Rigidbody2DComponent>()->Construct(10.f, RigidbodyMovementType::RIGIDBODY_MOVEMENT_TYPE_STATIC);
 
-	m_PhyMana.AddPhysicsObject(&m_Tester);
+	m_Tester.m_Transform.position = OKVector2<float>(0, 0);
+	m_Tester.AddComponent<ParticleEffectComponent>()->Construct(OKVector2<float>(0.f, 0.f), 1000u);
+	m_Tester.GetComponent<ParticleEffectComponent>()->PrefabFire();
+
+	//m_Tester.AddComponent<RectangleColliderComponent>()->Construct(OKVector2<float>(700, 100));
+	//m_Tester.AddComponent<Rigidbody2DComponent>()->Construct(10.f, RigidbodyMovementType::RIGIDBODY_MOVEMENT_TYPE_STATIC);
+
+	// m_PhyMana.AddPhysicsObject(&m_Tester);
 
 
 	// Rectangle Object
-	GameObjectEntity m_Object2;
-	m_Object2.m_Transform.position = OKVector2<float>(0, 100);
-	m_Object2.AddComponent<RectangleColliderComponent>()->Construct(OKVector2<float>(50, 100));
-	m_Object2.AddComponent<Rigidbody2DComponent>()->Construct(10.f);
+	//GameObjectEntity m_Object2;
+	//m_Object2.m_Transform.position = OKVector2<float>(0, 100);
+	//m_Object2.AddComponent<RectangleColliderComponent>()->Construct(OKVector2<float>(50, 100));
+	//m_Object2.AddComponent<Rigidbody2DComponent>()->Construct(30.f);
 
-	m_Object2.AddComponent<InputComponent>();
+	//m_Object2.AddComponent<InputComponent>();
 
 
 
@@ -95,7 +99,7 @@ int main()
 
 
 
-	m_PhyMana.AddPhysicsObject(&m_Object2);
+	// m_PhyMana.AddPhysicsObject(&m_Object2);
 	
 	// Circle Collider Object
 	//GameObjectEntity m_Object3;
@@ -120,7 +124,8 @@ int main()
 			rlScalef(1.0f, 1.0f, 1.0f);
 			// NOTE: Text Here -------
 
-			DrawText(TextFormat("Position: %f", m_Object2.m_Transform.position.y), 0, 0, 40, GREEN);
+			// DrawText(TextFormat("Position: %f", m_Object2.m_Transform.position.y), 0, 0, 40, GREEN);
+
 
 
 
@@ -135,28 +140,31 @@ int main()
 			rlScalef(1.0f, -1.0f, 1.0f);
 			// NOTE: Draw Here --------
 
+			m_Tester.Update(GetFrameTime());
+			m_Tester.Draw();
+
 			// m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseY(100);
 
-			if (IsKeyPressed(KEY_SPACE))
-			{
-				m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseY(100);
-			}
+			//if (IsKeyPressed(KEY_SPACE))
+			//{
+			//	m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseY(200);
+			//}
 
-			if (IsKeyDown(KEY_A))
-			{
-				m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(-1000 * GetFrameTime());
+			//if (IsKeyDown(KEY_A))
+			//{
+			//	m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(-1000 * GetFrameTime());
 
-			}
+			//}
 
-			if (IsKeyDown(KEY_D))
-			{
-				m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(1000 * GetFrameTime());
+			//if (IsKeyDown(KEY_D))
+			//{
+			//	m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(1000 * GetFrameTime());
 
-			}
+			//}
 
 
-			m_PhyMana.Update(GetFrameTime());
-			m_PhyMana.Draw();
+			//m_PhyMana.Update(GetFrameTime());
+			//m_PhyMana.Draw();
 
 			DrawCircle(0, 0, 3, RED);
 		

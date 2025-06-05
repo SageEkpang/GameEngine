@@ -39,9 +39,9 @@ void GameObjectEntity::Draw()
 {
 	//if (!m_Components.empty())
 	//{
-	//	for (auto& c : m_Components)
+	//	for (auto& [ComponentType, Component] : m_Components)
 	//	{
-	//		// c->Draw();
+	//		Component->Draw();
 	//	}
 	//}
 }

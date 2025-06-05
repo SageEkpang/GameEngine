@@ -11,7 +11,6 @@ void ParticleEffectComponent::Construct(OKVector2<float> position, unsigned int 
 	m_MinVelocityBySize = 0.f;
 
 	// NOTE: Set Transform
-	m_Transform = OKTransform2<float>(position, OKVector2<float>(1.f, 1.f), 0);
 	m_EmitterPositionOffset = OKVector2<float>();
 
 	// NOTE: Fill Vector and reserve the set size for the particles
@@ -118,7 +117,7 @@ void ParticleEffectComponent::Construct(OKVector2<float> position, unsigned int 
 	m_EndingSizeByVelocity = m_StartSize;
 
 	// NOTE: Init Default Particle
-	m_DefaultParticle = ParticleEffectObjectEntity(position, mass);
+	m_DefaultParticle = ParticleEffectObjectEntity(m_Owner->m_Transform.position, mass);
 	m_DefaultParticle.SimulateGravity(m_SimulateGravity);
 	m_DefaultParticle.m_Gravity = m_Gravity;
 
@@ -366,7 +365,7 @@ void ParticleEffectComponent::ProcessParticleToSimulatingParticles()
 		(*itr).SimulateGravity(m_SimulateGravity);
 		(*itr).m_Gravity = m_Gravity;
 
-		(this->*m_CheckParticleSpawnFunctionPtr)(m_Transform, *itr);
+		(this->*m_CheckParticleSpawnFunctionPtr)(m_Owner->m_Transform, *itr);
 		(this->*m_CheckParticleActionFunctionPtr)(*itr);
 		++m_ParticleIndexIncrement;
 	}
@@ -726,7 +725,7 @@ void ParticleEffectComponent::ProcessActionSpray(ParticleEffectObjectEntity& par
 {
 	// NOTE: Calculating position from the origin
 
-	const OKVector2<float> centre_position = m_Transform.position + m_EmitterPositionOffset;
+	const OKVector2<float> centre_position = m_Owner->m_Transform.position + m_EmitterPositionOffset;
 	OKVector2<float> CalulatedPosition = particle_system_object.m_Position - centre_position;
 	OKVector2<float> Direction = CalulatedPosition;
 
