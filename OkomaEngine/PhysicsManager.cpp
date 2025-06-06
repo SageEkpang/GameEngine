@@ -37,10 +37,6 @@ void PhysicsManager::Update(const float deltaTime)
 					float(0.9f),
 					m_CollisionManifold
 				);
-
-
-
-
 			}
 		}
 	}

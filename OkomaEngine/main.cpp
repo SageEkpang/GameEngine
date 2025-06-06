@@ -46,9 +46,8 @@ int main()
 
 	#pragma endregion
 
-	Camera2D camera = { 0 };
-
 	// Move the origin to the center of the screen
+	Camera2D camera = { 0 };
 	camera.offset = Vector2{ SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f };
 	camera.zoom = 1.0f;
 
@@ -57,55 +56,20 @@ int main()
 	PhysicsManager m_PhyMana;
 
 	// Oriented Rectangle
-	GameObjectEntity m_Tester;
+	GameObjectEntity m_Floor;
+	m_Floor.m_Transform.position = OKVector2<float>(0, 0);
 
-	m_Tester.m_Transform.position = OKVector2<float>(0, 0);
-	m_Tester.AddComponent<ParticleEffectComponent>()->Construct(OKVector2<float>(0.f, 0.f), 1000u);
-	m_Tester.GetComponent<ParticleEffectComponent>()->PrefabFire();
-
-	//m_Tester.AddComponent<RectangleColliderComponent>()->Construct(OKVector2<float>(700, 100));
-	//m_Tester.AddComponent<Rigidbody2DComponent>()->Construct(10.f, RigidbodyMovementType::RIGIDBODY_MOVEMENT_TYPE_STATIC);
-
-	// m_PhyMana.AddPhysicsObject(&m_Tester);
-
+	m_Floor.AddComponent<ParticleEffectComponent>()->Construct(1000u);
+	m_Floor.GetComponent<ParticleEffectComponent>()->PrefabFire();
+	// m_Floor.AddComponent<Rigidbody2DComponent>()->Construct(10.f, RigidbodyMovementType::RIGIDBODY_MOVEMENT_TYPE_STATIC);
+	// m_PhyMana.AddPhysicsObject(&m_Floor);
 
 	// Rectangle Object
 	//GameObjectEntity m_Object2;
-	//m_Object2.m_Transform.position = OKVector2<float>(0, 100);
-	//m_Object2.AddComponent<RectangleColliderComponent>()->Construct(OKVector2<float>(50, 100));
+	//m_Object2.m_Transform.position = OKVector2<float>(10, 10);
+	//m_Object2.AddComponent<CapsuleColliderComponent>()->Construct(OKVector2<float>(50.f, 100.f));
 	//m_Object2.AddComponent<Rigidbody2DComponent>()->Construct(30.f);
-
-	//m_Object2.AddComponent<InputComponent>();
-
-
-
-	//m_Object2.GetComponent<InputComponent>()->AddInputMapping(KEY_SPACE, InputType::INPUT_TYPE_KEY_PRESSED,
-	//[&m_Object2] {
-
-	//	m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseY(100);
-	//});
-
-	//m_Object2.GetComponent<InputComponent>()->AddInputMapping(KEY_A, InputType::INPUT_TYPE_KEY_HELD,
-	//[&m_Object2] {
-
-	//	m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(-1000 * GetFrameTime());
-	//});
-
-	//m_Object2.GetComponent<InputComponent>()->AddInputMapping(KEY_D, InputType::INPUT_TYPE_KEY_HELD,
-	//[&m_Object2] {
-
-	//	m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(1000 * GetFrameTime());
-	//});
-
-
-
-	// m_PhyMana.AddPhysicsObject(&m_Object2);
-	
-	// Circle Collider Object
-	//GameObjectEntity m_Object3;
-	//m_Object3.m_Transform.position = OKVector2<float>(500, 100);
-	//m_Object3.AddComponent<CircleColliderComponent>()->Construct(10);
-	//m_PhyMana.AddPhysicsObject(&m_Object3);
+	//m_PhyMana.AddPhysicsObject(&m_Object2);
 	
 
 	// SetTargetFPS(60);
@@ -136,46 +100,27 @@ int main()
 
 
 
+
 			rlPushMatrix();
 			rlScalef(1.0f, -1.0f, 1.0f);
 			// NOTE: Draw Here --------
 
-			m_Tester.Update(GetFrameTime());
-			m_Tester.Draw();
-
-			// m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseY(100);
-
-			//if (IsKeyPressed(KEY_SPACE))
-			//{
-			//	m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseY(200);
-			//}
-
-			//if (IsKeyDown(KEY_A))
-			//{
-			//	m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(-1000 * GetFrameTime());
-
-			//}
-
-			//if (IsKeyDown(KEY_D))
-			//{
-			//	m_Object2.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(1000 * GetFrameTime());
-
-			//}
 
 
-			//m_PhyMana.Update(GetFrameTime());
-			//m_PhyMana.Draw();
+
+			m_Floor.GetComponent<ParticleEffectComponent>()->Update(GetFrameTime());
+			m_Floor.GetComponent<ParticleEffectComponent>()->Draw();
+
+
+			// m_PhyMana.Update(GetFrameTime());
+			// m_PhyMana.Draw();
 
 			DrawCircle(0, 0, 3, RED);
 		
 
+
+
 			rlPopMatrix();
-
-
-
-
-
-
 			EndMode2D();
 		EndDrawing();
 	}

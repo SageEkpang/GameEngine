@@ -1,7 +1,7 @@
 #include "ParticleEffectComponent.h"
 #include "GameObjectEntity.h"
 
-void ParticleEffectComponent::Construct(OKVector2<float> position, unsigned int maxParticleCount, ParticleEmitterType particleEmitterType, ParticleSpawnArea particleSpawnArea, ParticleAction particleAction, float mass, bool isLooping, float simulationSpeed, bool simulateGravity)
+void ParticleEffectComponent::Construct(unsigned int maxParticleCount, ParticleEmitterType particleEmitterType, ParticleSpawnArea particleSpawnArea, ParticleAction particleAction, float mass, bool isLooping, float simulationSpeed, bool simulateGravity)
 {
 	// NOTE: Init Velocity Variables
 	m_MaxVelocityByColour = 0.f;
@@ -147,7 +147,7 @@ void ParticleEffectComponent::Construct(OKVector2<float> position, unsigned int 
 	m_DefaultParticle.m_EndingColourOverLifeTime = &m_EndingColourOverLifeTime;
 
 #pragma endregion
-	//ParticleEffectComponent::ParticleEffectComponent(position, maxParticleCount, particleEmitterType, particleSpawnArea, particleAction, mass, isLooping, simulationSpeed, simulateGravity);
+
 }
 
 ParticleEffectComponent::~ParticleEffectComponent()

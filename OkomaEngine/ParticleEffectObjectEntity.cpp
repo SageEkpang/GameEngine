@@ -64,6 +64,8 @@ ParticleEffectObjectEntity::~ParticleEffectObjectEntity()
 void ParticleEffectObjectEntity::Update(float deltaTime)
 {
 	PhysicsEntity::Update(deltaTime);
+
+
 }
 
 void ParticleEffectObjectEntity::Draw()
