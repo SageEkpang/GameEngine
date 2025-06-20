@@ -9,6 +9,7 @@ void Rigidbody2DComponent::Construct(float mass, RigidbodyMovementType rigidbody
 {
     m_Mass = mass;
     m_RigidbodyMovementType = rigidbodyMovementType;
+
 }
 
 void Rigidbody2DComponent::Update(const float deltaTime)

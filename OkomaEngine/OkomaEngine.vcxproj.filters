@@ -114,6 +114,15 @@
     <Filter Include="Components\InputComponents\Source">
       <UniqueIdentifier>{bba0e871-ac14-4e1f-8700-07337b5e0fb5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Components\AudioComponent">
+      <UniqueIdentifier>{79d5a438-aac5-4351-ba4f-b9421852156e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\AudioComponent\Header">
+      <UniqueIdentifier>{6127af20-415c-452a-9941-55006b06acdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\AudioComponent\Source">
+      <UniqueIdentifier>{f8273d4c-d7de-4c25-a23f-ee4707016342}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -156,9 +165,6 @@
       <Filter>BaseClasses\Source</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsManager.cpp">
-      <Filter>Managers\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsMaterialCoefficientManager.cpp">
       <Filter>Managers\Source</Filter>
     </ClCompile>
     <ClCompile Include="CapsuleColliderComponent.cpp">
@@ -215,6 +221,12 @@
     <ClCompile Include="InputComponent.cpp">
       <Filter>Components\InputComponents\Source</Filter>
     </ClCompile>
+    <ClCompile Include="AudioComponent.cpp">
+      <Filter>Components\AudioComponent\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>Managers\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OKVector2.h">
@@ -266,9 +278,6 @@
       <Filter>BaseClasses\Header</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsManager.h">
-      <Filter>Managers\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsMaterialCoefficientManager.h">
       <Filter>Managers\Header</Filter>
     </ClInclude>
     <ClInclude Include="CapsuleColliderComponent.h">
@@ -324,6 +333,12 @@
     </ClInclude>
     <ClInclude Include="InputComponent.h">
       <Filter>Components\InputComponents\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioComponent.h">
+      <Filter>Components\AudioComponent\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>Managers\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

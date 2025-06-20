@@ -35,6 +35,9 @@ void PhysicsManager::Update(const float deltaTime)
 				// NOTE: Checks if the physics components actually have rigid bodies on them
 				if (!t_PhysicsObjects[i]->HasComponent<Rigidbody2DComponent>() || !t_PhysicsObjects[j]->HasComponent<Rigidbody2DComponent>()) { continue; }
 
+
+
+
 				// NOTE: Resolve the Collisions between two game objects when they have a collider and a physics component on them
 				m_CollisionResolutionManager.ResolveCollision
 				(
@@ -74,7 +77,7 @@ void PhysicsManager::Update(const float deltaTime)
 					t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateDrag(false);
 					t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateLift(false);
 
-					t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->m_Friction = 0.5f;
+					t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->m_Friction = t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->m_FrictionMaterial;
 					t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateFriction(true);
 				}
 			}

@@ -3,6 +3,8 @@
 
 // NOTE: Header File(S)
 #include "HeaderManager.h"
+#include <map>
+#include <utility>
 
 // NOTE: Parent Class
 #include "PhysicsEntity.h"
@@ -53,7 +55,17 @@ struct Mat22
 // TODO: Split these into different rigidbody classes
 class Rigidbody2DComponent : public PhysicsEntity
 {
+private:
+
+    float m_PhysicsMaterialMultiplier = 1.f;
+
 public:
+
+    // PHYSICS MATERIAL VARIABLE(s)
+    float m_FrictionMaterial = 0.5f;
+
+    // BOUNCE MATERIAL VARIABLE(s)
+    float m_PhysicsMaterial = 0.9f;
 
     // RIGIDBODY SHAPE VARIABLE(s)
 

@@ -135,6 +135,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AudioComponent.cpp" />
+    <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="ButtonComponent.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="CapsuleColliderComponent.cpp" />
@@ -161,7 +163,6 @@
     <ClCompile Include="ParticleEffectComponent.cpp" />
     <ClCompile Include="ParticleEffectObjectEntity.cpp" />
     <ClCompile Include="PhysicsManager.cpp" />
-    <ClCompile Include="PhysicsMaterialCoefficientManager.cpp" />
     <ClCompile Include="PlayerGameObject.cpp" />
     <ClCompile Include="PointColliderComponent.cpp" />
     <ClCompile Include="RectangleColliderComponent.cpp" />
@@ -170,6 +171,8 @@
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AudioComponent.h" />
+    <ClInclude Include="AudioManager.h" />
     <ClInclude Include="ButtonComponent.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="CapsuleColliderComponent.h" />
@@ -197,7 +200,6 @@
     <ClInclude Include="ParticleEffectComponent.h" />
     <ClInclude Include="ParticleEffectObjectEntity.h" />
     <ClInclude Include="PhysicsManager.h" />
-    <ClInclude Include="PhysicsMaterialCoefficientManager.h" />
     <ClInclude Include="PlayerGameObject.h" />
     <ClInclude Include="PointColliderComponent.h" />
     <ClInclude Include="RectangleColliderComponent.h" />

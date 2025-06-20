@@ -5,7 +5,6 @@
 #include "CollisionManifold.h"
 #include "CollisionManager.h"
 #include "CollisionResolutionManager.h"
-#include "PhysicsMaterialCoefficientManager.h"
 #include "DebugDraw.h"
 
 class PhysicsManager
@@ -15,7 +14,6 @@ private: // PRIVATE MANAGER VARIABLE(s)
 	CollisionManifold m_CollisionManifold;
 	CollisionManager m_ColliderManager;
 	CollisionResolutionManager m_CollisionResolutionManager;
-	PhysicsMaterialCoefficientManager m_PhysicsMaterialCoefficientManager;
 
 private: // PRIVATE VECTOR VARIABLE(s)
 

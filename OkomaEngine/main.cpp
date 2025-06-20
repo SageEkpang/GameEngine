@@ -10,8 +10,6 @@
 
 #include <iostream>
 
-
-
 int main()
 {
 	// NOTE: Check the window has actually been inited
@@ -58,14 +56,8 @@ int main()
 	// Oriented Rectangle
 	GameObjectEntity m_Floor;
 	m_Floor.m_Transform.position = OKVector2<float>(0, 0);
-
-	m_Floor.AddComponent<ParticleEffectComponent>()->Construct(1000u);
-	m_Floor.GetComponent<ParticleEffectComponent>()->PrefabFire();
-
-	//m_Floor.AddComponent<Rigidbody2DComponent>()->Construct(1);
-	//m_Floor.GetComponent<Rigidbody2DComponent>()->m_Gravity = OKVector2<float>(0, 10);
-
-	m_Floor.AddComponent<CircleColliderComponent>()->Construct(50.f);
+	m_Floor.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_STATIC);
+	m_Floor.AddComponent<RectangleColliderComponent>()->Construct(300.f, 50.f);
 	m_PhyMana.AddPhysicsObject(&m_Floor);
 
 
@@ -101,11 +93,6 @@ int main()
 			rlPushMatrix();
 			rlScalef(1.0f, -1.0f, 1.0f);
 			// NOTE: Draw Here --------
-
-
-
-			m_Floor.Update(GetFrameTime());
-			m_Floor.Draw();
 
 			m_PhyMana.Update(GetFrameTime());
 			m_PhyMana.Draw();
