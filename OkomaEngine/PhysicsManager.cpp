@@ -99,7 +99,13 @@ void PhysicsManager::Update(const float deltaTime)
 			// NOTE: Delete the physics object if no physics component can be found on the game object
 			if ((*itr)->FindChildComponent<PhysicsEntity>()  == nullptr)
 			{
-				delete *itr;
+				// NOTE: swap the current index to the start
+				if (itr != m_PhysicsObjects.begin())
+				{
+					std::swap(*m_PhysicsObjects.end(), *itr);
+				}
+
+				m_PhysicsObjects.erase(m_PhysicsObjects.end());
 			}
 			else
 			{
@@ -107,6 +113,9 @@ void PhysicsManager::Update(const float deltaTime)
 				++itr;
 			}
 		}
+
+
+
 	}
 }
 

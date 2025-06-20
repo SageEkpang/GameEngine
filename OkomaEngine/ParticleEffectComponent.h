@@ -27,7 +27,6 @@ enum ParticleSpawnArea
 	PARTICLE_SPAWN_AREA_CUSTOM
 };
 
-// TODO: Change this to the prefab actions instead of action functions
 enum ParticleAction
 {
 	PARTICLE_ACTION_NONE,

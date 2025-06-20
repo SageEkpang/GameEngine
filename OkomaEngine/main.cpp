@@ -62,8 +62,11 @@ int main()
 	m_Floor.AddComponent<ParticleEffectComponent>()->Construct(1000u);
 	m_Floor.GetComponent<ParticleEffectComponent>()->PrefabSmoke();
 
+	m_Floor.AddComponent<Rigidbody2DComponent>()->Construct(10);
+	m_Floor.GetComponent<Rigidbody2DComponent>()->m_Gravity = OKVector2<float>(0, 100);
 
-
+	m_Floor.AddComponent<CircleColliderComponent>()->Construct(100.f);
+	m_PhyMana.AddPhysicsObject(&m_Floor);
 
 
 	// SetTargetFPS(60);
