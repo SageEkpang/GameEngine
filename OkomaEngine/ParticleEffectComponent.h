@@ -251,7 +251,7 @@ private: // PRIVATE FUNCTION(s)
 public:
 
 	// CLASS FUNCTION(s)
-	ParticleEffectComponent() = default;
+	ParticleEffectComponent();
 	void Construct(unsigned int maxParticleCount, ParticleEmitterType particleEmitterType = PARTICLE_EMITTER_TYPE_SINGLE, ParticleSpawnArea particleSpawnArea = PARTICLE_SPAWN_AREA_NONE, ParticleAction particleAction = PARTICLE_ACTION_NONE, float mass = 1.f, bool isLooping = false, float simulationSpeed = 1.f, bool simulateGravity = false);
 	
 	~ParticleEffectComponent();

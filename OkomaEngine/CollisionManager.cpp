@@ -1384,7 +1384,7 @@ CollisionManifold CollisionManager::LineToCircle(GameObjectEntity* lineA, GameOb
 	distY = closestY - t_tempCircPositionB.y;
 	float distance = sqrt((distX * distX) + (distY * distY));
 
-	DrawCircle(closestX, closestY, 2.f, ORANGE);
+	DrawCircle((int)closestX, (int)closestY, 2.f, ORANGE);
 
 	if (distance <= t_tempCircRadiusB)
 	{

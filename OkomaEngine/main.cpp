@@ -60,17 +60,11 @@ int main()
 	m_Floor.m_Transform.position = OKVector2<float>(0, 0);
 
 	m_Floor.AddComponent<ParticleEffectComponent>()->Construct(1000u);
-	m_Floor.GetComponent<ParticleEffectComponent>()->PrefabFire();
-	// m_Floor.AddComponent<Rigidbody2DComponent>()->Construct(10.f, RigidbodyMovementType::RIGIDBODY_MOVEMENT_TYPE_STATIC);
-	// m_PhyMana.AddPhysicsObject(&m_Floor);
+	m_Floor.GetComponent<ParticleEffectComponent>()->PrefabSmoke();
 
-	// Rectangle Object
-	//GameObjectEntity m_Object2;
-	//m_Object2.m_Transform.position = OKVector2<float>(10, 10);
-	//m_Object2.AddComponent<CapsuleColliderComponent>()->Construct(OKVector2<float>(50.f, 100.f));
-	//m_Object2.AddComponent<Rigidbody2DComponent>()->Construct(30.f);
-	//m_PhyMana.AddPhysicsObject(&m_Object2);
-	
+
+
+
 
 	// SetTargetFPS(60);
 	while (!WindowShouldClose())
@@ -107,9 +101,11 @@ int main()
 
 
 
+			m_Floor.Update(GetFrameTime());
+			m_Floor.Draw();
 
-			m_Floor.GetComponent<ParticleEffectComponent>()->Update(GetFrameTime());
-			m_Floor.GetComponent<ParticleEffectComponent>()->Draw();
+			// m_Floor.GetComponent<ParticleEffectComponent>()->Update(GetFrameTime());
+			// m_Floor.GetComponent<ParticleEffectComponent>()->Draw();
 
 
 			// m_PhyMana.Update(GetFrameTime());

@@ -18,7 +18,7 @@ void PhysicsEntity::Update(const float deltaTime)
     // NOTE: Apply Physics Forces to Particle
     if (m_SimulateGravity) { m_NetForce += ApplyGravity(); }
     // if (m_SimulateDrag) { m_NetForce += ApplyDrag(); }
-    //if (m_SimulateLift)// { m_NetForce += ApplyLift(); }
+    // if (m_SimulateLift)// { m_NetForce += ApplyLift(); }
     // if (m_SimulateFriction) { m_NetForce += ApplyFriction(); }
 
     // NOTE: Force Calculation

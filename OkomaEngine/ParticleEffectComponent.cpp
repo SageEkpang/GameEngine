@@ -1,6 +1,11 @@
 #include "ParticleEffectComponent.h"
 #include "GameObjectEntity.h"
 
+ParticleEffectComponent::ParticleEffectComponent()
+{
+
+}
+
 void ParticleEffectComponent::Construct(unsigned int maxParticleCount, ParticleEmitterType particleEmitterType, ParticleSpawnArea particleSpawnArea, ParticleAction particleAction, float mass, bool isLooping, float simulationSpeed, bool simulateGravity)
 {
 	// NOTE: Init Velocity Variables
@@ -118,7 +123,7 @@ void ParticleEffectComponent::Construct(unsigned int maxParticleCount, ParticleE
 
 	// NOTE: Init Default Particle
 	m_DefaultParticle = ParticleEffectObjectEntity(m_Owner->m_Transform.position, mass);
-	m_DefaultParticle.SimulateGravity(m_SimulateGravity);
+	m_DefaultParticle.m_SimulateGravity = m_SimulateGravity;
 	m_DefaultParticle.m_Gravity = m_Gravity;
 
 	m_DefaultParticle.m_Scale = (m_StartSize.x, m_StartSize.y);
@@ -334,12 +339,13 @@ void ParticleEffectComponent::PrefabBloodLeak()
 	AssignParticleEmitterType(PARTICLE_EMITTER_TYPE_SINGLE);
 	AssignParticleAction(PARTICLE_ACTION_BURST_OUT);
 	AssignParticleSpawnAreaNone();
+
 	m_IsLooping = true;
 	m_EmissionRateOverTime = 500u;
 	m_StartSpeed = 0.5f;
 	m_StartLifeTime = 1.0f;
 	m_SimulateGravity = true;
-	m_Gravity = OKVector2 <float>(0, 2000);
+	m_Gravity = OKVector2<float>(0, 2000);
 
 	AssignColourOverLifeTime(OKVector4<unsigned int>(255, 0, 0, 255), OKVector4<unsigned int>(255, 0, 0, 0));
 	AssignResizeOverLifeTime(OKVector2<float>(20.f, 20.f), OKVector2<float>(5.f, 5.f));
@@ -362,8 +368,9 @@ void ParticleEffectComponent::ProcessParticleToSimulatingParticles()
 
 		// NOTE: Set Variables for the Particle
 		(*itr).m_CurrentLifeTime = m_StartLifeTime;
-		(*itr).SimulateGravity(m_SimulateGravity);
+		(*itr).m_SimulateGravity = m_SimulateGravity;
 		(*itr).m_Gravity = m_Gravity;
+		(*itr).m_Mass = 1.f;
 
 		(this->*m_CheckParticleSpawnFunctionPtr)(m_Owner->m_Transform, *itr);
 		(this->*m_CheckParticleActionFunctionPtr)(*itr);

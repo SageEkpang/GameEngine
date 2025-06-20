@@ -2,6 +2,16 @@
 
 ParticleEffectObjectEntity::ParticleEffectObjectEntity(OKVector2<float> position, float mass)
 {
+	// NOTE: Force Variable
+	m_Mass = 1.f;
+
+	m_Gravity = OKVector2<float>(0, 0);
+	m_NetForce = OKVector2<float>(0, 0);
+	m_Acceleration = OKVector2<float>(0, 0);
+	m_Velocity = OKVector2<float>(0, 0);
+
+
+	// NOTE: Particle Effect Object Entity
 	m_StartDelay = nullptr;
 	m_StartLifeTime = nullptr;
 	m_CurrentLifeTime = 0.f;
@@ -63,12 +73,35 @@ ParticleEffectObjectEntity::~ParticleEffectObjectEntity()
 
 void ParticleEffectObjectEntity::Update(float deltaTime)
 {
-	PhysicsEntity::Update(deltaTime);
+	// NOTE: Return if the Mass is zero, Mass == 0 can cause wrong force calculations
+	if (m_Mass == 0) return;
 
+	if (m_SimulateGravity == true)
+	{
+		// NOTE: Gravity Calculation: G = M *  (-1) -> For the inverse of Y-Axis
+		OKVector2<float> t_tempGrav = m_Gravity * m_Mass * -1;
+		t_tempGrav.negate();
 
+		m_NetForce += t_tempGrav;
+	}
+
+	// NOTE: Force Calculation
+	CalculateAcceleration(deltaTime);
+
+	m_NetForce.zero();
+	m_Acceleration.zero();
 }
 
-void ParticleEffectObjectEntity::Draw()
-{
-	PhysicsEntity::Draw();
+void ParticleEffectObjectEntity::CalculateAcceleration(const float deltaTime)
+{   
+	// NOTE: Add Force to Acceleration
+	m_Acceleration += m_NetForce;
+
+	// NOTE: Work out Velocity Calculation
+	OKVector2<float> t_Position = m_Position;
+	m_Velocity += m_Acceleration * deltaTime;
+
+	// NOTE: Augment Position by Velocity
+	t_Position += m_Velocity * deltaTime;
+	m_Position = t_Position;
 }

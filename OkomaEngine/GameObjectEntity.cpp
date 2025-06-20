@@ -37,13 +37,13 @@ void GameObjectEntity::Update(const float deltaTime)
 
 void GameObjectEntity::Draw()
 {
-	//if (!m_Components.empty())
-	//{
-	//	for (auto& [ComponentType, Component] : m_Components)
-	//	{
-	//		Component->Draw();
-	//	}
-	//}
+	if (!m_Components.empty())
+	{
+		for (auto& [ComponentType, Component] : m_Components)
+		{
+			Component->Draw();
+		}
+	}
 }
 
 

@@ -2,13 +2,15 @@
 
 PhysicsManager::PhysicsManager()
 {
-
+	m_PhysicsObjects.clear();
 }
 
 PhysicsManager::~PhysicsManager()
 {
 	std::vector<GameObjectEntity*>::iterator itr;
 }
+
+//TODO_GLOBAL: Need like a level structure or structure that adds the objects if they have a physics entity on them, when a level structure is added, that is when that happens
 
 void PhysicsManager::Update(const float deltaTime)
 {
@@ -20,7 +22,11 @@ void PhysicsManager::Update(const float deltaTime)
 	{
 		for (unsigned int j = 0; j < t_PhysicsObjects.size(); ++j)
 		{
+			// NOTE: Check if the indexs are not the same
 			if (i == j) { continue; }
+
+			// NOTE: Check if the physics component does have a collider on it, if not, we do not want to do anything with it
+			if (t_PhysicsObjects[i]->FindChildComponent<ComponentEntity>() == nullptr || t_PhysicsObjects[j]->FindChildComponent<ComponentEntity>() == nullptr) { continue; }
 
 			// NOTE: Check Collisions between the two physics components
 			m_CollisionManifold = m_ColliderManager.CheckCollisions(t_PhysicsObjects[i], t_PhysicsObjects[j]);
@@ -29,7 +35,7 @@ void PhysicsManager::Update(const float deltaTime)
 				// NOTE: Checks if the physics components actually have rigid bodies on them
 				if (!t_PhysicsObjects[i]->HasComponent<Rigidbody2DComponent>() || !t_PhysicsObjects[j]->HasComponent<Rigidbody2DComponent>()) { continue; }
 
-				// NOTE: Resolve the Collisions
+				// NOTE: Resolve the Collisions between two game objects when they have a collider and a physics component on them
 				m_CollisionResolutionManager.ResolveCollision
 				(
 					t_PhysicsObjects[i],
@@ -44,39 +50,62 @@ void PhysicsManager::Update(const float deltaTime)
 	// NOTE: Physics Code
 	if (!t_PhysicsObjects.empty())
 	{
-		for (auto& v : t_PhysicsObjects)
+		for (int i = 0; i < t_PhysicsObjects.size(); ++i)
 		{
+			// NOTE: Check if there is a physics entity on the entity, if not, then continue and add to the physics index
+			if (t_PhysicsObjects[i]->FindChildComponent<PhysicsEntity>() == nullptr)
+			{
+				continue;
+			}
+
 			// NOTE: Check if there has been a collision]
-			if (v->FindChildComponent<ColliderEntity>()->m_HasCollided)
+			if (t_PhysicsObjects[i]->FindChildComponent<ColliderEntity>()->m_HasCollided)
 			{
 				// NOTE: Check if any of the colliders are any trigger areas
-				if (v->FindChildComponent<ColliderEntity>()->m_IsTrigger == true)
+				if (t_PhysicsObjects[i]->FindChildComponent<ColliderEntity>()->m_IsTrigger == true)
 				{
-					v->FindChildComponent<ColliderEntity>()->TriggerQueryExecute();
+					t_PhysicsObjects[i]->FindChildComponent<ColliderEntity>()->TriggerQueryExecute();
 					continue;
 				}
 
-				if (v->HasComponent<Rigidbody2DComponent>())
+				if (t_PhysicsObjects[i]->HasComponent<Rigidbody2DComponent>())
 				{
 					// NOTE: If the game object is not a trigger area, simulate the required physics for it 
-					v->GetComponent<Rigidbody2DComponent>()->SimulateDrag(false);
-					v->GetComponent<Rigidbody2DComponent>()->SimulateLift(false);
+					t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateDrag(false);
+					t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateLift(false);
 
-					v->GetComponent<Rigidbody2DComponent>()->m_Friction = 0.5f;
-					v->GetComponent<Rigidbody2DComponent>()->SimulateFriction(true);
+					t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->m_Friction = 0.5f;
+					t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateFriction(true);
 				}
 			}
 			else
 			{
-				if (v->HasComponent<Rigidbody2DComponent>())
+				if (t_PhysicsObjects[i]->HasComponent<Rigidbody2DComponent>())
 				{
-					v->GetComponent<Rigidbody2DComponent>()->SimulateDrag(true);
-					v->GetComponent<Rigidbody2DComponent>()->SimulateLift(true);
-					v->GetComponent<Rigidbody2DComponent>()->SimulateFriction(false);
+					t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateDrag(true);
+					t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateLift(true);
+					t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateFriction(false);
 				}
 			}
 
-			v->Update(deltaTime);
+			// NOTE: Update the physics objects
+			t_PhysicsObjects[i]->Update(deltaTime);
+		}
+
+		// NOTE: Gain a list of indexes to remove the physics entity from the physics list,
+		// if any game object does not have a physics component any more
+		for (auto itr = m_PhysicsObjects.begin(); itr != m_PhysicsObjects.end();)
+		{
+			// NOTE: Delete the physics object if no physics component can be found on the game object
+			if ((*itr)->FindChildComponent<PhysicsEntity>()  == nullptr)
+			{
+				delete *itr;
+			}
+			else
+			{
+				// NOTE: if it does have the component, move to the next itr position
+				++itr;
+			}
 		}
 	}
 }

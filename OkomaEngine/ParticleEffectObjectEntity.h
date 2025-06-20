@@ -1,14 +1,26 @@
 #ifndef PARTICLE_EFFECT_OBJECT_ENTITY_H
 #define PARTICLE_EFFECT_OBJECT_ENTITY_H
 
-#include "PhysicsEntity.h"
+#include "HeaderManager.h"
 #include "OKVector4.h"
+#include "OKVector2.h"
+#include "GravityConstants.h"
 
-class ParticleEffectObjectEntity : public PhysicsEntity
+class ParticleEffectObjectEntity
 {
 public:
 
-	// NOTE: Both
+	// NOTE: Force Effect
+	float m_Mass;
+	mutable OKVector2<float> m_Gravity; 
+
+	OKVector2<float> m_NetForce{};
+	OKVector2<float> m_Acceleration{};
+	OKVector2<float> m_Velocity{};
+
+	bool m_SimulateGravity = false;
+
+	// NOTE: Particle Effect Object Specific Variables
 	float* m_StartDelay; // NOTE: In Seconds
 	float* m_StartLifeTime;
 	float m_CurrentLifeTime;
@@ -50,8 +62,23 @@ public:
 
 
 	// BASE FUNCTION(s)
-	void Update(const float deltaTime) override;
-	void Draw() override;
+	void Update(const float deltaTime);
+	void Draw() { };
+
+	// PHYSICS FUNCTION(s)
+	void ApplyImpulse(OKVector2<float> impulse) { m_Velocity += impulse; }
+	void ApplyImpulse(float x, float y) { m_Velocity += OKVector2<float>(x, y); };
+
+	void ApplyImpulseX(float impulseX) { m_Velocity += OKVector2<float>(impulseX, 0.0f); }
+	void ApplyImpulseY(float impulseY) { m_Velocity += OKVector2<float>(0.0f, impulseY); }
+
+	void ApplyForce(OKVector2<float> force) { m_NetForce += force; }
+	void ApplyForce(float x, float y) { m_NetForce += OKVector2<float>(x, y); }
+
+	void ApplyAcceleration(OKVector2<float> acceleration) { m_Acceleration += acceleration; }
+	void ApplyAcceleration(float x, float y) { m_Acceleration += OKVector2<float>(x, y); }
+
+	void CalculateAcceleration(const float deltaTime);
 
 	// GETTER FUNCTION(s) : NOTE NEEDED 
 

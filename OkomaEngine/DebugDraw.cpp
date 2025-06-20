@@ -63,8 +63,8 @@ namespace DebugDraw
 			{
 				DrawCircleLines(
 				(int)(gameObject->m_Transform.position.x + gameObject->GetComponent<CapsuleColliderComponent>()->m_Offset.x), 
-				(int)(gameObject->m_Transform.position.y + gameObject->GetComponent<CapsuleColliderComponent>()->m_Height / 4.f) + gameObject->GetComponent<CapsuleColliderComponent>()->m_Offset.y,
-				(int)(gameObject->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f), 
+				(int)(gameObject->m_Transform.position.y + gameObject->GetComponent<CapsuleColliderComponent>()->m_Height / 4.f) + (int)gameObject->GetComponent<CapsuleColliderComponent>()->m_Offset.y,
+				(gameObject->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f), 
 				GREEN
 				);
 
@@ -72,14 +72,14 @@ namespace DebugDraw
 				(int)(gameObject->m_Transform.position.x + gameObject->GetComponent<CapsuleColliderComponent>()->m_Offset.x) - (int)(gameObject->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f),
 				(int)(gameObject->m_Transform.position.y + gameObject->GetComponent<CapsuleColliderComponent>()->m_Offset.y) - (int)(gameObject->GetComponent<CapsuleColliderComponent>()->m_Height / 4.f),
 				(int)gameObject->GetComponent<CapsuleColliderComponent>()->m_Width,
-				(int)gameObject->GetComponent<CapsuleColliderComponent>()->m_Height / 2.f,
+				(int)gameObject->GetComponent<CapsuleColliderComponent>()->m_Height / 2,
 				GREEN
 				);
 				
 				DrawCircleLines(
 				(int)(gameObject->m_Transform.position.x + gameObject->GetComponent<CapsuleColliderComponent>()->m_Offset.x),
-				(int)(gameObject->m_Transform.position.y - gameObject->GetComponent<CapsuleColliderComponent>()->m_Height / 4.f) + gameObject->GetComponent<CapsuleColliderComponent>()->m_Offset.y,
-				(int)(gameObject->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f), 
+				(int)(gameObject->m_Transform.position.y - gameObject->GetComponent<CapsuleColliderComponent>()->m_Height / 4.f) + (int)gameObject->GetComponent<CapsuleColliderComponent>()->m_Offset.y,
+				(gameObject->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f), 
 				GREEN
 				);
 			}
