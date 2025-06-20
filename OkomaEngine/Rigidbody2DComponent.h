@@ -1,5 +1,5 @@
-#ifndef RIGIDBODY_H
-#define RIGIDBODY_H
+#ifndef RIGIDBODY_2D_COMPONENT_H
+#define RIGIDBODY_2D_COMPONENT_H
 
 // NOTE: Header File(S)
 #include "HeaderManager.h"

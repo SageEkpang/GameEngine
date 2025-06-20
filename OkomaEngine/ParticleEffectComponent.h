@@ -1,5 +1,5 @@
-#ifndef PARTICLE_EFFECT_H
-#define PARTICLE_EFFECT_H
+#ifndef PARTICLE_EFFECT_COMPONENT_H
+#define PARTICLE_EFFECT_COMPONENT_H
 
 #include "PhysicsEntity.h"
 #include "ParticleEffectObjectEntity.h"
@@ -261,6 +261,8 @@ public:
 	void Draw();
 
 	// HELPER FUNCTION(s)
+		
+		// TODO: Put some parameters into the function
 
 		// NOTE: Prefab Particle Effects
 		void PrefabFire();
