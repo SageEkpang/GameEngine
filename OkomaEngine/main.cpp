@@ -60,12 +60,12 @@ int main()
 	m_Floor.m_Transform.position = OKVector2<float>(0, 0);
 
 	m_Floor.AddComponent<ParticleEffectComponent>()->Construct(1000u);
-	m_Floor.GetComponent<ParticleEffectComponent>()->PrefabSmoke();
+	m_Floor.GetComponent<ParticleEffectComponent>()->PrefabFire();
 
-	m_Floor.AddComponent<Rigidbody2DComponent>()->Construct(10);
-	m_Floor.GetComponent<Rigidbody2DComponent>()->m_Gravity = OKVector2<float>(0, 100);
+	//m_Floor.AddComponent<Rigidbody2DComponent>()->Construct(1);
+	//m_Floor.GetComponent<Rigidbody2DComponent>()->m_Gravity = OKVector2<float>(0, 10);
 
-	m_Floor.AddComponent<CircleColliderComponent>()->Construct(100.f);
+	m_Floor.AddComponent<CircleColliderComponent>()->Construct(50.f);
 	m_PhyMana.AddPhysicsObject(&m_Floor);
 
 
@@ -107,12 +107,9 @@ int main()
 			m_Floor.Update(GetFrameTime());
 			m_Floor.Draw();
 
-			// m_Floor.GetComponent<ParticleEffectComponent>()->Update(GetFrameTime());
-			// m_Floor.GetComponent<ParticleEffectComponent>()->Draw();
+			m_PhyMana.Update(GetFrameTime());
+			m_PhyMana.Draw();
 
-
-			// m_PhyMana.Update(GetFrameTime());
-			// m_PhyMana.Draw();
 
 			DrawCircle(0, 0, 3, RED);
 		

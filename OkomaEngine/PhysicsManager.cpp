@@ -94,25 +94,25 @@ void PhysicsManager::Update(const float deltaTime)
 
 		// NOTE: Gain a list of indexes to remove the physics entity from the physics list,
 		// if any game object does not have a physics component any more
-		for (auto itr = m_PhysicsObjects.begin(); itr != m_PhysicsObjects.end();)
-		{
-			// NOTE: Delete the physics object if no physics component can be found on the game object
-			if ((*itr)->FindChildComponent<PhysicsEntity>()  == nullptr)
-			{
-				// NOTE: swap the current index to the start
-				if (itr != m_PhysicsObjects.begin())
-				{
-					std::swap(*m_PhysicsObjects.end(), *itr);
-				}
+		//for (auto itr = m_PhysicsObjects.begin(); itr != m_PhysicsObjects.end();)
+		//{
+		//	// NOTE: Delete the physics object if no physics component can be found on the game object
+		//	if ((*itr)->FindChildComponent<PhysicsEntity>()  == nullptr)
+		//	{
+		//		// NOTE: swap the current index to the start
+		//		if (itr != m_PhysicsObjects.begin())
+		//		{
+		//			std::swap(*m_PhysicsObjects.end(), *itr);
+		//		}
 
-				m_PhysicsObjects.erase(m_PhysicsObjects.end());
-			}
-			else
-			{
-				// NOTE: if it does have the component, move to the next itr position
-				++itr;
-			}
-		}
+		//		m_PhysicsObjects.erase(m_PhysicsObjects.end());
+		//	}
+		//	else
+		//	{
+		//		// NOTE: if it does have the component, move to the next itr position
+		//		++itr;
+		//	}
+		//}
 
 
 
