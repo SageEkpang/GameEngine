@@ -60,7 +60,6 @@ int main()
 	m_Floor.AddComponent<RectangleColliderComponent>()->Construct(300.f, 50.f);
 	m_PhyMana.AddPhysicsObject(&m_Floor);
 
-
 	// SetTargetFPS(60);
 	while (!WindowShouldClose())
 	{
