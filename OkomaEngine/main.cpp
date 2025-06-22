@@ -46,8 +46,7 @@ int main()
 
 	// Move the origin to the center of the screen
 	Camera2D camera = { 0 };
-	camera.offset = Vector2{ SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f };
-	camera.zoom = 1.0f;
+
 
 	rlDisableBackfaceCulling();
 
@@ -83,6 +82,9 @@ int main()
 		// DRAW
 		BeginDrawing();
 			ClearBackground(BLACK);
+
+			camera.offset = Vector2{ GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
+			camera.zoom = 1.0f;
 
 			BeginMode2D(camera);
 
