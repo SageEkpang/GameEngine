@@ -4,6 +4,8 @@
 // GAME OBJECTS(s)
 // #include "GameObject.h"
 
+// TODO#_GLOBAL: This will be used for the registration system  for the ECS when it is fully implemented
+
 class GameObjectManager
 {
 private:

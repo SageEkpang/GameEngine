@@ -53,12 +53,27 @@ int main()
 
 	PhysicsManager m_PhyMana;
 
-	// Oriented Rectangle
+	// Tester Rectangle
+	GameObjectEntity RectangleObject;
+	RectangleObject.m_Transform.position = OKVector2<float>(100, 0);
+	RectangleObject.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
+	RectangleObject.AddComponent<RectangleColliderComponent>()->Construct(50.f, 50.f);
+	m_PhyMana.AddPhysicsObject(&RectangleObject);
+
+	// Tester Circle
+	GameObjectEntity CircleObject;
+	CircleObject.m_Transform.position = OKVector2<float>(0, 1);
+	CircleObject.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
+	CircleObject.AddComponent<CircleColliderComponent>()->Construct(50.f);
+	m_PhyMana.AddPhysicsObject(&CircleObject);
+
+	// Floor Rectangle
 	GameObjectEntity m_Floor;
-	m_Floor.m_Transform.position = OKVector2<float>(0, 0);
+	m_Floor.m_Transform.position = OKVector2<float>(0, -200);
 	m_Floor.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_STATIC);
 	m_Floor.AddComponent<RectangleColliderComponent>()->Construct(300.f, 50.f);
 	m_PhyMana.AddPhysicsObject(&m_Floor);
+
 
 	// SetTargetFPS(60);
 	while (!WindowShouldClose())

@@ -166,6 +166,7 @@
     <ClCompile Include="PlayerGameObject.cpp" />
     <ClCompile Include="PointColliderComponent.cpp" />
     <ClCompile Include="RectangleColliderComponent.cpp" />
+    <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Rigidbody2DComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -203,6 +204,7 @@
     <ClInclude Include="PlayerGameObject.h" />
     <ClInclude Include="PointColliderComponent.h" />
     <ClInclude Include="RectangleColliderComponent.h" />
+    <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="Rigidbody2DComponent.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Timer.h" />

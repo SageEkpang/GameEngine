@@ -114,14 +114,23 @@
     <Filter Include="Components\InputComponents\Source">
       <UniqueIdentifier>{bba0e871-ac14-4e1f-8700-07337b5e0fb5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Components\AudioComponent">
+    <Filter Include="Components\AudioComponents">
       <UniqueIdentifier>{79d5a438-aac5-4351-ba4f-b9421852156e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Components\AudioComponent\Header">
+    <Filter Include="Components\AudioComponents\Header">
       <UniqueIdentifier>{6127af20-415c-452a-9941-55006b06acdc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Components\AudioComponent\Source">
+    <Filter Include="Components\AudioComponents\Source">
       <UniqueIdentifier>{f8273d4c-d7de-4c25-a23f-ee4707016342}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\RenderComponents">
+      <UniqueIdentifier>{22b2ca96-717a-4522-aa9b-206de3753c54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\RenderComponents\Header">
+      <UniqueIdentifier>{3faa0c56-b229-44d4-8156-adb5a969c54b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\RenderComponents\Source">
+      <UniqueIdentifier>{c147badd-0ed5-49af-ab61-5ba22364ae8c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -222,10 +231,13 @@
       <Filter>Components\InputComponents\Source</Filter>
     </ClCompile>
     <ClCompile Include="AudioComponent.cpp">
-      <Filter>Components\AudioComponent\Source</Filter>
+      <Filter>Components\AudioComponents\Source</Filter>
     </ClCompile>
     <ClCompile Include="AudioManager.cpp">
       <Filter>Managers\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderComponent.cpp">
+      <Filter>Components\RenderComponents\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -335,10 +347,13 @@
       <Filter>Components\InputComponents\Header</Filter>
     </ClInclude>
     <ClInclude Include="AudioComponent.h">
-      <Filter>Components\AudioComponent\Header</Filter>
+      <Filter>Components\AudioComponents\Header</Filter>
     </ClInclude>
     <ClInclude Include="AudioManager.h">
       <Filter>Managers\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderComponent.h">
+      <Filter>Components\RenderComponents\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

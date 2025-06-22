@@ -21,7 +21,7 @@ protected: // PROTECTED VARIABLE(s)
 public: // PUBLIC FUNCTION(s)
 
 	// CLASS FUNCTION(s)
-	ComponentEntity() : m_ID(0) {};
+	ComponentEntity() : m_ID(0) { }
 	virtual ~ComponentEntity() { m_Owner = nullptr; }
 
 	// BASE FUNCTION(s)
