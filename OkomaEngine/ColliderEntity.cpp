@@ -12,10 +12,11 @@ ColliderEntity::~ColliderEntity()
 {
 	if (!m_ObjectList.empty())
 	{
+		// TODO: Check this does not actually call delete from the actual item
 		std::unordered_set<GameObjectEntity*>::iterator itr;
 		for (itr = m_ObjectList.begin(); itr != m_ObjectList.end(); ++itr)
 		{
-			delete *itr;
+			m_ObjectList.erase(itr);
 		}
 
 		m_ObjectList.clear();

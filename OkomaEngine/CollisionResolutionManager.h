@@ -21,7 +21,7 @@ public:
 
 private:
 
-	OKVector2<float> CalculateSeperatingVelocity(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, OKVector2<float> contactNormal);
+	OKVector2<float> CalculateSeperatingVelocity(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB);
 	void ResolveVelocity(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float coefRest, OKVector2<float> collisionNormal);
 	void ResolveInterpenetration(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float penetration, OKVector2<float> collisionNormal);
 

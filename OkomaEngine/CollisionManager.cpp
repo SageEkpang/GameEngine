@@ -394,10 +394,27 @@ CollisionManifold CollisionManager::CircleToCircle(GameObjectEntity* circA, Game
 	circA->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
 	circB->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
 
-	OKVector2<float> distance = (circA->m_Transform.position + circA->GetComponent<CircleColliderComponent>()->m_Offset) - (circB->m_Transform.position + circB->GetComponent<CircleColliderComponent>()->m_Offset);
-	float radii_sum = circA->GetComponent<CircleColliderComponent>()->m_Radius + circB->GetComponent<CircleColliderComponent>()->m_Radius; 
+	// NOTE: Variable Help Dec
+	OKVector2<float> CircAPosition = circA->m_Transform.position + circA->GetComponent<CircleColliderComponent>()->m_Offset;
+	OKVector2<float> CircBPosition = circB->m_Transform.position + circB->GetComponent<CircleColliderComponent>()->m_Offset;
 
-	if (distance.magnitude() <= radii_sum)
+	float CircARadius = circA->GetComponent<CircleColliderComponent>()->m_Radius;
+	float CircBRadius = circB->GetComponent<CircleColliderComponent>()->m_Radius;
+
+	// NOTE: Distance and Radii Calculation
+	OKVector2<float> distance = CircAPosition - CircBPosition;
+	float radii_sum = CircARadius + CircBRadius;
+
+	// NOTE: Get the closest point from each circle
+	OKVector2<float> CircClosestPointA = (distance.normalise() * CircARadius * -1) + CircAPosition;
+	OKVector2<float> CircClosestPointB = (distance.normalise() * CircBRadius) + CircBPosition;
+
+	// NOTE: New Calculation using Nearest Points
+	OKVector2<float> t_NewDistance = CircClosestPointA - CircClosestPointB;
+	float t_NewRadii = 0.5f + 0.5f;
+
+	// NOTE: Calculating the Circle Distance
+	if (t_NewDistance.magnitude() <= t_NewRadii)
 	{
 		circA->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
 		circB->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
@@ -425,8 +442,8 @@ CollisionManifold CollisionManager::CircleToCircle(GameObjectEntity* circA, Game
 		}
 
 		t_ColMani.m_HasCollision = true;
-		t_ColMani.m_CollisionNormal = distance.normalise();
-		t_ColMani.m_PenetrationDepth = distance.magnitude() - radii_sum;
+		t_ColMani.m_CollisionNormal = t_NewDistance.normalise();
+		t_ColMani.m_PenetrationDepth = (float)t_NewRadii - t_NewDistance.magnitude();
 		t_ColMani.m_ContactPointAmount = 1;
 		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
 
@@ -447,8 +464,8 @@ CollisionManifold CollisionManager::CircleToRectangle(GameObjectEntity* circA, G
 	OKVector2<float> t_tempRectScale = rectB->GetComponent<RectangleColliderComponent>()->m_Scale;
 	OKVector2<float> t_tempRectHalfScale = t_tempRectScale / 2.f;
 
-	OKVector2<float> t_tempCircPositionA = circA->m_Transform.position + circA->GetComponent<CircleColliderComponent>()->m_Offset;
-	float t_tempCircRadius = circA->GetComponent<CircleColliderComponent>()->m_Radius;
+	OKVector2<float> t_CircPositionA = circA->m_Transform.position + circA->GetComponent<CircleColliderComponent>()->m_Offset;
+	float t_CircARadius = circA->GetComponent<CircleColliderComponent>()->m_Radius;
 
 	OKVector2<float> RectCentre = (rectB->m_Transform.position + rectB->GetComponent<RectangleColliderComponent>()->m_Offset);
 	OKVector2<float> RectScale = rectB->GetComponent<RectangleColliderComponent>()->m_Scale;
@@ -456,11 +473,11 @@ CollisionManifold CollisionManager::CircleToRectangle(GameObjectEntity* circA, G
 
 	OKVector2<float> NearPoint = OKVector2<float>(0, 0);
 
-	if (circA->m_Transform.position.x < TopLeftCorner.x)
+	if (t_CircPositionA.x < TopLeftCorner.x)
 	{
 		OKVector2<float> LeftSide = ProjectPointOntoLine(
 			TopLeftCorner,
-			circA->m_Transform.position,
+			t_CircPositionA,
 			OKVector2<float>(TopLeftCorner.x, TopLeftCorner.y),
 			OKVector2<float>(TopLeftCorner.x, TopLeftCorner.y + RectScale.y),
 			OKVector2<float>(0, 1)
@@ -468,11 +485,11 @@ CollisionManifold CollisionManager::CircleToRectangle(GameObjectEntity* circA, G
 
 		NearPoint.y = LeftSide.y;
 	}
-	else if (circA->m_Transform.position.x > TopLeftCorner.x)
+	else if (t_CircPositionA.x > TopLeftCorner.x)
 	{
 		OKVector2<float> RightSide = ProjectPointOntoLine(
 			TopLeftCorner,
-			circA->m_Transform.position,
+			t_CircPositionA,
 			OKVector2<float>(TopLeftCorner.x + RectScale.x, TopLeftCorner.y),
 			OKVector2<float>(TopLeftCorner.x + RectScale.x, TopLeftCorner.y + RectScale.y),
 			OKVector2<float>(0, 1)
@@ -481,11 +498,11 @@ CollisionManifold CollisionManager::CircleToRectangle(GameObjectEntity* circA, G
 		NearPoint.y = RightSide.y;
 	}
 
-	if (circA->m_Transform.position.y < RectCentre.y)
+	if (t_CircPositionA.y < RectCentre.y)
 	{
 		OKVector2<float> TopSide = ProjectPointOntoLine(
 			TopLeftCorner,
-			circA->m_Transform.position,
+			t_CircPositionA,
 			OKVector2<float>(TopLeftCorner.x, TopLeftCorner.y),
 			OKVector2<float>(TopLeftCorner.x + RectScale.x, TopLeftCorner.y),
 			OKVector2<float>(1, 0)
@@ -493,11 +510,11 @@ CollisionManifold CollisionManager::CircleToRectangle(GameObjectEntity* circA, G
 
 		NearPoint.x = TopSide.x;
 	}
-	else if (circA->m_Transform.position.y > RectCentre.y)
+	else if (t_CircPositionA.y > RectCentre.y)
 	{
 		OKVector2<float> BottomSide = ProjectPointOntoLine(
 			TopLeftCorner,
-			circA->m_Transform.position,
+			t_CircPositionA,
 			OKVector2<float>(TopLeftCorner.x, TopLeftCorner.y + RectScale.y),
 			OKVector2<float>(TopLeftCorner.x + RectScale.x, TopLeftCorner.y + RectScale.y),
 			OKVector2<float>(1, 0)
@@ -506,7 +523,43 @@ CollisionManifold CollisionManager::CircleToRectangle(GameObjectEntity* circA, G
 		NearPoint.x = BottomSide.x;
 	}
 
-	return S_CircleToCircle(circA->m_Transform.position, circA->GetComponent<CircleColliderComponent>()->m_Radius, NearPoint, 1.f);
+	// NOTE: Calculate closest point from the rectangle to the circle and use that as the collision calculation
+	OKVector2<float> distance = t_CircPositionA - NearPoint;
+	OKVector2<float> CircClosestPointA = (distance.normalise() * t_CircARadius * -1) + t_CircPositionA;
+
+	CollisionManifold t_tempMani = S_CircleToCircle(CircClosestPointA, 0.5f, NearPoint, 0.5f);
+
+	if (t_tempMani.m_HasCollision)
+	{
+		circA->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
+		rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
+
+		if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true && rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+		{
+			circA->GetComponent<CircleColliderComponent>()->TriggerQuery(rectB);
+			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(circA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+		{
+			circA->GetComponent<CircleColliderComponent>()->TriggerQuery(rectB);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		if (rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+		{
+			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(circA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		return t_tempMani;
+	}
+
+	return t_ColMani;
 }
 
 CollisionManifold CollisionManager::CapsuleToCircle(GameObjectEntity* capsuleA, GameObjectEntity* circB)
@@ -2033,12 +2086,10 @@ CollisionManifold CollisionManager::S_CircleToCircle(OKVector2<float> circPositi
 	if (distance.magnitude() <= radii_sum)
 	{
 		t_ColMani.m_HasCollision = true;
-		t_ColMani.m_CollisionNormal = distance.normalise() * -1;// / radii_sum;
-		t_ColMani.m_PenetrationDepth = distance.magnitude() - radii_sum;
+		t_ColMani.m_CollisionNormal = distance.normalise();
+		t_ColMani.m_PenetrationDepth = radii_sum - distance.magnitude();
 		t_ColMani.m_ContactPointAmount = 1;
 		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
-
-		DrawCircleV(circPositionB.ConvertToVec2(), 1.f, YELLOW);
 
 		return t_ColMani;
 	}

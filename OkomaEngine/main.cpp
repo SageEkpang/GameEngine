@@ -53,25 +53,34 @@ int main()
 	PhysicsManager m_PhyMana;
 
 	// Tester Rectangle
-	GameObjectEntity RectangleObject;
-	RectangleObject.m_Transform.position = OKVector2<float>(100, 0);
-	RectangleObject.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
-	RectangleObject.AddComponent<RectangleColliderComponent>()->Construct(50.f, 50.f);
-	m_PhyMana.AddPhysicsObject(&RectangleObject);
+	//GameObjectEntity RectangleObject;
+	//RectangleObject.m_Transform.position = OKVector2<float>(100, 0);
+	//RectangleObject.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
+	//RectangleObject.AddComponent<RectangleColliderComponent>()->Construct(50.f, 50.f);
+	//m_PhyMana.AddPhysicsObject(&RectangleObject);
 
 	// Tester Circle
-	GameObjectEntity CircleObject;
-	CircleObject.m_Transform.position = OKVector2<float>(0, 1);
-	CircleObject.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
-	CircleObject.AddComponent<CircleColliderComponent>()->Construct(50.f);
-	m_PhyMana.AddPhysicsObject(&CircleObject);
+	//GameObjectEntity CircleObject;
+	//CircleObject.m_Transform.position = OKVector2<float>(0, 1);
+	//CircleObject.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
+	//CircleObject.AddComponent<CircleColliderComponent>()->Construct(50.f);
+	//m_PhyMana.AddPhysicsObject(&CircleObject);
+
+	// Tester Circle 2
+	GameObjectEntity CircleObjectTwo;
+	CircleObjectTwo.m_Transform.position = OKVector2<float>(0, 200);
+	CircleObjectTwo.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
+	CircleObjectTwo.AddComponent<CircleColliderComponent>()->Construct(30.f);
+	m_PhyMana.AddPhysicsObject(&CircleObjectTwo);
 
 	// Floor Rectangle
 	GameObjectEntity m_Floor;
-	m_Floor.m_Transform.position = OKVector2<float>(0, -200);
-	m_Floor.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_STATIC);
-	m_Floor.AddComponent<RectangleColliderComponent>()->Construct(300.f, 50.f);
+	m_Floor.m_Transform.position = OKVector2<float>(0.f, -200.f);
+	m_Floor.AddComponent<Rigidbody2DComponent>()->Construct(FLT_MAX, RIGIDBODY_MOVEMENT_TYPE_STATIC);
+	m_Floor.AddComponent<RectangleColliderComponent>()->Construct(500.f, 50.f);
 	m_PhyMana.AddPhysicsObject(&m_Floor);
+
+	// NOTE: Plinko
 
 
 	// SetTargetFPS(60);
