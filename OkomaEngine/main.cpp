@@ -7,6 +7,7 @@
 #include "DebugDraw.h"
 
 #include "PhysicsManager.h"
+#include "OKTime.h"
 
 #include <iostream>
 
@@ -44,6 +45,7 @@ int main()
 
 	#pragma endregion
 
+
 	// Move the origin to the center of the screen
 	Camera2D camera = { 0 };
 
@@ -68,25 +70,37 @@ int main()
 
 	// Tester Circle 2
 	GameObjectEntity CircleObjectTwo;
-	CircleObjectTwo.m_Transform.position = OKVector2<float>(0, 200);
+	CircleObjectTwo.m_Transform.position = OKVector2<float>(20, 200);
 	CircleObjectTwo.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
-	CircleObjectTwo.AddComponent<CircleColliderComponent>()->Construct(30.f);
+	CircleObjectTwo.AddComponent<CapsuleColliderComponent>()->Construct(40.0f, 80.0f);
 	m_PhyMana.AddPhysicsObject(&CircleObjectTwo);
+
 
 	// Floor Rectangle
 	GameObjectEntity m_Floor;
 	m_Floor.m_Transform.position = OKVector2<float>(0.f, -200.f);
 	m_Floor.AddComponent<Rigidbody2DComponent>()->Construct(FLT_MAX, RIGIDBODY_MOVEMENT_TYPE_STATIC);
-	m_Floor.AddComponent<RectangleColliderComponent>()->Construct(500.f, 50.f);
+	m_Floor.AddComponent<CapsuleColliderComponent>()->Construct(50.f, 100.f);
 	m_PhyMana.AddPhysicsObject(&m_Floor);
 
 	// NOTE: Plinko
 
 
-	// SetTargetFPS(60);
+	// NOTE: Time Init
+	#pragma region Time SetUp
+
+	float t_StartTime = 0.0f;
+	t_StartTime = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now()).time_since_epoch().count() / 1000000.f;
+	OKTime::m_TimeScale = FPS_15;
+
+	#pragma endregion
+
 	while (!WindowShouldClose())
 	{
 		// UPDATE
+
+		auto startTime = std::chrono::high_resolution_clock::now();
+
 
 		// DRAW
 		BeginDrawing();
@@ -119,17 +133,24 @@ int main()
 			rlScalef(1.0f, -1.0f, 1.0f);
 			// NOTE: Draw Here --------
 
-			m_PhyMana.Update(GetFrameTime());
+
+			m_PhyMana.Update(OKTime::m_DeltaTime);
 			m_PhyMana.Draw();
 
+			auto endTime = std::chrono::high_resolution_clock::now();
+			auto start = std::chrono::time_point_cast<std::chrono::microseconds>(startTime).time_since_epoch().count();
+			auto end = std::chrono::time_point_cast<std::chrono::microseconds>(endTime).time_since_epoch().count();
 
-			DrawCircle(0, 0, 3, RED);
-		
+			OKTime::m_UnscaledDeltaTime = (float)(end - start) / 1000.f;
+			OKTime::m_DeltaTime = OKTime::m_UnscaledDeltaTime * OKTime::m_TimeScale;
 
-
+			OKTime::m_RealTimeSinceStartUp = end / 1000000.f - t_StartTime;
+			OKTime::m_Time = OKTime::m_RealTimeSinceStartUp * OKTime::m_TimeScale;
+			OKTime::m_FrameCount++;
 
 			rlPopMatrix();
 			EndMode2D();
+
 		EndDrawing();
 	}
 

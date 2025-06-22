@@ -239,6 +239,9 @@
     <ClCompile Include="RenderComponent.cpp">
       <Filter>Components\RenderComponents\Source</Filter>
     </ClCompile>
+    <ClCompile Include="OKTime.cpp">
+      <Filter>Helper\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OKVector2.h">
@@ -354,6 +357,9 @@
     </ClInclude>
     <ClInclude Include="RenderComponent.h">
       <Filter>Components\RenderComponents\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="OKTime.h">
+      <Filter>Helper\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

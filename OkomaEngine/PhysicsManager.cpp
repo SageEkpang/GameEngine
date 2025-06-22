@@ -36,7 +36,7 @@ void PhysicsManager::Update(const float deltaTime)
 				if (!t_PhysicsObjects[i]->HasComponent<Rigidbody2DComponent>() || !t_PhysicsObjects[j]->HasComponent<Rigidbody2DComponent>()) { continue; }
 
 				// NOTE: Temp bounce variable for the Coef of Rest
-				float t_BounceAmount = 0.9f;
+				float t_BounceAmount = 0.0f;
 
 				// NOTE: Assign a Coefficient of Restituion via the Physics Material on whatever object is static
 				// FURTHER_NOTE: If both items are static, it will not matter
@@ -51,7 +51,7 @@ void PhysicsManager::Update(const float deltaTime)
 				(
 					t_PhysicsObjects[i],
 					t_PhysicsObjects[j],
-					float(0.3f),
+					float(t_BounceAmount),
 					m_CollisionManifold
 				);
 			}

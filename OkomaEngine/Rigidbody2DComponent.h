@@ -65,7 +65,7 @@ public:
     float m_FrictionMaterial = 0.5f;
 
     // BOUNCE MATERIAL VARIABLE(s)
-    float m_PhysicsMaterial = 0.9f;
+    float m_PhysicsMaterial = 0.0f;
 
     // RIGIDBODY SHAPE VARIABLE(s)
 
