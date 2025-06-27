@@ -2,7 +2,7 @@
 #include "WindowConstants.h"
 #include "Timer.h"
 #include "TimeStepConstants.h"
-#include "GameObjectEntity.h"
+
 #include "OKMaths.h"
 #include "DebugDraw.h"
 
@@ -11,10 +11,12 @@
 
 #include <iostream>
 
+
+#include "SceneManager.h"
+
 int main()
 {
-	// NOTE: Check the window has actually been inited
-
+	// NOTE: Check the window has been inited
 	#pragma region Window SetUp
 
 	try
@@ -30,9 +32,9 @@ int main()
 
 	#pragma endregion
 
+	// NOTE: Check the Audio has been inited
 	#pragma region Audio SetUp
 
-	// NOTE: Check the Audio has actually been inited
 	try
 	{
 		InitAudioDevice();
@@ -45,98 +47,47 @@ int main()
 
 	#pragma endregion
 
-	rlDisableBackfaceCulling();
-
-	// Move the origin to the center of the screen
-	Camera2D camera = { 0 };
-
-	PhysicsManager m_PhyMana;
-	m_PhyMana.SetDrawColliders(true);
-
-	// Tester Rectangle
-	//GameObjectEntity RectangleObject;
-	//RectangleObject.m_Transform.position = OKVector2<float>(100, 0);
-	//RectangleObject.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
-	//RectangleObject.AddComponent<RectangleColliderComponent>()->Construct(50.f, 50.f);
-	//m_PhyMana.AddPhysicsObject(&RectangleObject);
-
-	// Tester Circle
-	//GameObjectEntity CircleObject;
-	//CircleObject.m_Transform.position = OKVector2<float>(0, 1);
-	//CircleObject.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
-	//CircleObject.AddComponent<CircleColliderComponent>()->Construct(50.f);
-	//m_PhyMana.AddPhysicsObject(&CircleObject);
-
-	// Tester Circle 2
-	GameObjectEntity CircleObjectTwo;
-	CircleObjectTwo.m_Transform.position = OKVector2<float>(20, 200);
-	CircleObjectTwo.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
-	CircleObjectTwo.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(100.f);
-	CircleObjectTwo.AddComponent<RectangleColliderComponent>()->Construct(40.0f, 40.0f);
-	m_PhyMana.AddPhysicsObject(&CircleObjectTwo);
-
-
-	// Floor Rectangle
-	GameObjectEntity m_Floor;
-	m_Floor.m_Transform.position = OKVector2<float>(0.f, -200.f);
-	m_Floor.AddComponent<Rigidbody2DComponent>()->Construct(FLT_MAX, RIGIDBODY_MOVEMENT_TYPE_STATIC);
-	m_Floor.AddComponent<RectangleColliderComponent>()->Construct(500.f, 50.f);
-	m_PhyMana.AddPhysicsObject(&m_Floor);
-
-	// NOTE: Plinko
-
-
 	// NOTE: Time Init
+	float g_StartTime = 0.0f;
 	#pragma region Time SetUp
 
-	float t_StartTime = 0.0f;
-	t_StartTime = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now()).time_since_epoch().count() / 1000000.f;
+	g_StartTime = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now()).time_since_epoch().count() / 1000000.f;
 	OKTime::m_TimeScale = 1;
 
 	#pragma endregion
 
+	// NOTE: Check the Scene Manager has been inited
+	SceneManager* g_SceneManager = new SceneManager();
+	#pragma region Scene Manager SetUp
+
+	try
+	{
+		if (g_SceneManager == nullptr)
+		{
+			throw;
+		}
+	}
+	catch (...)
+	{
+		std::cerr << "Set up for Scene Manager has Failed" << std::endl;
+	}
+
+
+
+
+	#pragma endregion
+
+	rlDisableBackfaceCulling();
+
 	// SetTargetFPS(60);
+	// NOTE: Plinko
 	while (!WindowShouldClose())
 	{
 		// NOTE: Start of Delta Time
 		auto startTime = std::chrono::high_resolution_clock::now();
 
-		BeginDrawing();
-			ClearBackground(BLACK);
-
-		// UPDATE
-
-			camera.offset = Vector2{ GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
-			camera.zoom = 1.0f;
-
-
-		// DRAW
-
-			BeginMode2D(camera);
-
-
-			rlPushMatrix();
-			rlScalef(1.0f, 1.0f, 1.0f);
-			// NOTE: Text Here -------
-
-			// DrawText(TextFormat("Position: %f", m_Object2.m_Transform.position.y), 0, 0, 40, GREEN);
-
-			rlPopMatrix();
-
-
-
-			rlPushMatrix();
-			rlScalef(1.0f, -1.0f, 1.0f);
-			// NOTE: Draw Here --------
-
-			// m_PhyMana.Update(OKTime::m_DeltaTime);
-			m_PhyMana.Update(GetFrameTime());
-			m_PhyMana.Draw();
-
-			rlPopMatrix();
-			EndMode2D();
-
-		EndDrawing();
+		g_SceneManager->Update(GetFrameTime());
+		g_SceneManager->Draw();
 
 		// NOTE: End of Delta Time
 		auto endTime = std::chrono::high_resolution_clock::now();
@@ -148,13 +99,15 @@ int main()
 		OKTime::m_UnscaledDeltaTime = (float)(end - start) / 1000000.f;
 		OKTime::m_DeltaTime = OKTime::m_UnscaledDeltaTime * OKTime::m_TimeScale;
 
-		OKTime::m_RealTimeSinceStartUp = end / 1000000.f - t_StartTime;
+		OKTime::m_RealTimeSinceStartUp = end / 1000000.f - g_StartTime;
 		OKTime::m_Time = OKTime::m_RealTimeSinceStartUp * OKTime::m_TimeScale;
 		OKTime::m_FrameCount++;
 
-		printf("DeltaTime: %f\n", OKTime::GetDeltaTime());
-		printf("FrameTime: %f\n\n", GetFrameTime());
+		//printf("DeltaTime: %f\n", OKTime::GetDeltaTime());
+		//printf("FrameTime: %f\n\n", GetFrameTime());
 	}
+
+	delete g_SceneManager;
 
 	CloseAudioDevice();
 	CloseWindow();

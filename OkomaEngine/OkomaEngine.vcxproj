@@ -169,7 +169,9 @@
     <ClCompile Include="RectangleColliderComponent.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Rigidbody2DComponent.cpp" />
-    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneEntity.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -208,7 +210,9 @@
     <ClInclude Include="RectangleColliderComponent.h" />
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="Rigidbody2DComponent.h" />
-    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneEntity.h" />
+    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="TestScene.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TimeStepConstants.h" />
     <ClInclude Include="WindowConstants.h" />

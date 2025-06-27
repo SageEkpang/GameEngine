@@ -143,9 +143,6 @@
     <ClCompile Include="OKTransform2.cpp">
       <Filter>Structs\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Scenes\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Helper\Source</Filter>
     </ClCompile>
@@ -242,6 +239,15 @@
     <ClCompile Include="OKTime.cpp">
       <Filter>Helper\Source</Filter>
     </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Managers\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneEntity.cpp">
+      <Filter>BaseClasses\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScene.cpp">
+      <Filter>Scenes\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OKVector2.h">
@@ -258,9 +264,6 @@
     </ClInclude>
     <ClInclude Include="WindowConstants.h">
       <Filter>Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Scenes\Header</Filter>
     </ClInclude>
     <ClInclude Include="HeaderManager.h">
       <Filter>Helper\Header</Filter>
@@ -360,6 +363,15 @@
     </ClInclude>
     <ClInclude Include="OKTime.h">
       <Filter>Helper\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Managers\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneEntity.h">
+      <Filter>BaseClasses\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.h">
+      <Filter>Scenes\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
