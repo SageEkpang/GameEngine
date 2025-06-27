@@ -19,7 +19,6 @@ protected: // PROTECTED VARIABLE(s)
 	std::string m_Name;
 	Camera2D m_Camera;
 
-
 public:
 
 	// CLASS FUNCTION(s)

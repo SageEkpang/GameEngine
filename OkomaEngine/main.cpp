@@ -2,17 +2,10 @@
 #include "WindowConstants.h"
 #include "Timer.h"
 #include "TimeStepConstants.h"
-
-#include "OKMaths.h"
-#include "DebugDraw.h"
-
-#include "PhysicsManager.h"
 #include "OKTime.h"
+#include "SceneManager.h"
 
 #include <iostream>
-
-
-#include "SceneManager.h"
 
 int main()
 {

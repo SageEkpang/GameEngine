@@ -5,6 +5,9 @@
 SceneManager::SceneManager()
 {
 	// NOTE: Settup up Scene Manager
+	// m_Scenes[0] = MakeScene<TestScene>();
+	m_Scenes[0] = MakeScene<TestScene>();
+
 	NewScene<TestScene>();
 }
 
@@ -16,19 +19,28 @@ SceneManager::~SceneManager()
 
 void SceneManager::Update(const float deltaTime)
 {
+	// NOTE: Do the transition for the screen
+	#pragma region Transition Timer Processing
 
+	if (m_TransitionTimer > 0) 
+	{ 
+		m_TransitionTimer -= deltaTime; return; 
+	}
+	else if (m_TransitionTimer < 0)
+	{ 
+		// NOTE: Reset the Transition Time
+		m_TransitionTimer = 0.f;
 
+		// NOTE: 
+		delete m_CurrentScene;
+		m_CurrentScene = m_Scenes[0]();
+		m_CurrentScene->m_Owner = this;
+		m_Transitioning = false;
+	}
 
+	#pragma endregion
 
-
-
-
-
-
-
-
-
-
+	// NOTE: Update the current screen
 	m_CurrentScene->Update(deltaTime);
 }
 

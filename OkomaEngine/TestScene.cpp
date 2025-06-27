@@ -43,6 +43,11 @@ void TestScene::Update(const float deltaTime)
 {
 	m_PhyMana.Update(deltaTime);
 
+	if (IsKeyPressed(KEY_SPACE))
+	{
+		// m_Owner->ChangeScene<TestScene>(5.f);
+		m_Owner->ChangeScene<TestScene>(1.f);
+	}
 
 }
 
