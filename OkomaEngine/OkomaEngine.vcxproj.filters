@@ -248,6 +248,9 @@
     <ClCompile Include="TestScene.cpp">
       <Filter>Scenes\Source</Filter>
     </ClCompile>
+    <ClCompile Include="DefaultScene.cpp">
+      <Filter>Scenes\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OKVector2.h">
@@ -371,6 +374,9 @@
       <Filter>BaseClasses\Header</Filter>
     </ClInclude>
     <ClInclude Include="TestScene.h">
+      <Filter>Scenes\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultScene.h">
       <Filter>Scenes\Header</Filter>
     </ClInclude>
   </ItemGroup>

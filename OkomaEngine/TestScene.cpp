@@ -3,7 +3,7 @@
 
 TestScene::TestScene()
 {
-	m_Name = "Test Scene";
+	m_Name = "TestScene";
 	m_PhyMana.SetDrawColliders(true);
 	m_PhyMana.SetDrawDebugVelocity(true);
 
@@ -45,10 +45,9 @@ void TestScene::Update(const float deltaTime)
 
 	if (IsKeyPressed(KEY_SPACE))
 	{
-		// m_Owner->ChangeScene<TestScene>(5.f);
-		m_Owner->ChangeScene<TestScene>(1.f);
+		m_Owner->ResetScene();
+		// m_Owner->ChangeScene("DefaultScene", 2.f);
 	}
-
 }
 
 void TestScene::Draw()

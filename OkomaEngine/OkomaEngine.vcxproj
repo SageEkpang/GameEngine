@@ -148,6 +148,7 @@
     <ClCompile Include="ComplexColliderComponent.cpp" />
     <ClCompile Include="ComponentEntity.cpp" />
     <ClCompile Include="DebugDraw.cpp" />
+    <ClCompile Include="DefaultScene.cpp" />
     <ClCompile Include="GameObjectEntity.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="InputComponent.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="ComplexColliderComponent.h" />
     <ClInclude Include="ComponentEntity.h" />
     <ClInclude Include="DebugDraw.h" />
+    <ClInclude Include="DefaultScene.h" />
     <ClInclude Include="GameObjectEntity.h" />
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="GravityConstants.h" />
