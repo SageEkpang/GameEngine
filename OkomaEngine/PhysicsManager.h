@@ -19,6 +19,16 @@ private: // PRIVATE VECTOR VARIABLE(s)
 
 	std::vector<GameObjectEntity*> m_PhysicsObjects;
 
+	// NOTE: Drawing Debug Information 
+	bool m_DrawDebugColliders = false;
+
+	bool m_DrawDebugGravity = false;
+	bool m_DrawDebugDrag = false;
+	bool m_DrawDebugLift = false;
+	bool m_DrawDebugFriction = false;
+	bool m_DrawDebugVelocity = false;
+	bool m_DrawDebugDirection = false;
+
 public:
 
 	// CLASS FUNCTION(s)
@@ -31,7 +41,21 @@ public:
 
 	// HELPER FUNCTION(s)
 	inline void AddPhysicsObject(GameObjectEntity* gameObject) { m_PhysicsObjects.push_back(gameObject); }
-	//inline void RemovePhysicsObject(GameObjectEntity* gameObject) { }
+
+
+	// GETTER FUNCTION(s)
+
+
+	// SETTER FUNCTION(s)
+	inline void SetDrawColliders(bool drawDebug) { m_DrawDebugColliders = drawDebug; }
+
+	// TODO: Add line multipliers to these
+	inline void SetDrawDebugVelocity(bool drawDebug) { m_DrawDebugVelocity = drawDebug; }
+	inline void SetDrawDebugDirection(bool drawDebug) { m_DrawDebugDirection = drawDebug; }
+	inline void SetDrawDebugGravity(bool drawDebug) { m_DrawDebugGravity = drawDebug; }
+	inline void SetDrawDebugDrag(bool drawDebug) { m_DrawDebugDrag = drawDebug; }
+	inline void SetDrawDebugLift(bool drawDebug) { m_DrawDebugLift = drawDebug; }
+	inline void SetDrawDebugFriction(bool drawDebug) { m_DrawDebugFriction = drawDebug; }
 
 };
 

@@ -41,12 +41,12 @@ namespace DebugDraw
 
 	namespace Physics
 	{
-		void DebugGravityLine(OKVector2<float> gravity);
-		void DebugVelocityLine(OKVector2<float> velocity);
-		void DebugDirectionLine(OKVector2<float> direction, float lengthMultiplier = 1.f);
-		void DebugLiftLine(OKVector2<float> lift);
-		void DebugDragLine(OKVector2<float> drag);
-		void DebugFrictionLine(OKVector2<float> friction);
+		void DebugGravityLine(GameObjectEntity* gameObject);
+		void DebugVelocityLine(GameObjectEntity* gameObject);
+		void DebugDirectionLine(GameObjectEntity* gameObject);
+		void DebugLiftLine(GameObjectEntity* gameObject);
+		void DebugDragLine(GameObjectEntity* gameObject);
+		void DebugFrictionLine(GameObjectEntity* gameObject);
 	}
 };
 

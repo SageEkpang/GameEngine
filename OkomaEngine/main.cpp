@@ -45,14 +45,13 @@ int main()
 
 	#pragma endregion
 
+	rlDisableBackfaceCulling();
 
 	// Move the origin to the center of the screen
 	Camera2D camera = { 0 };
 
-
-	rlDisableBackfaceCulling();
-
 	PhysicsManager m_PhyMana;
+	m_PhyMana.SetDrawColliders(true);
 
 	// Tester Rectangle
 	//GameObjectEntity RectangleObject;
@@ -72,6 +71,7 @@ int main()
 	GameObjectEntity CircleObjectTwo;
 	CircleObjectTwo.m_Transform.position = OKVector2<float>(20, 200);
 	CircleObjectTwo.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
+	CircleObjectTwo.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(100.f);
 	CircleObjectTwo.AddComponent<RectangleColliderComponent>()->Construct(40.0f, 40.0f);
 	m_PhyMana.AddPhysicsObject(&CircleObjectTwo);
 
@@ -130,7 +130,7 @@ int main()
 			// NOTE: Draw Here --------
 
 			// m_PhyMana.Update(OKTime::m_DeltaTime);
-			m_PhyMana.Update(FPS_60);
+			m_PhyMana.Update(GetFrameTime());
 			m_PhyMana.Draw();
 
 			rlPopMatrix();

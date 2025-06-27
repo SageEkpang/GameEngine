@@ -133,19 +133,20 @@ void PhysicsManager::Draw()
 	{
 		for (auto& v : m_PhysicsObjects)
 		{
-			// NOTE: Check if the Physics Components has a collider to show, if not...SKIP
-			if (v->FindChildComponent<ColliderEntity>() == nullptr) { continue; }
-
 			// NOTE: Draw the Shape Collider
-			DebugDraw::Shape::DebugCollider(v);
+			if (m_DrawDebugColliders == true && v->FindChildComponent<ColliderEntity>() != nullptr) { DebugDraw::Shape::DebugCollider(v); }
 
-			// NOTE: Draw the Different Physics Components
-			//DebugDraw::Physics::DebugGravityLine(v->GetComponent<Rigidbody2DComponent>()->GetCurrentGravity());
-			//DebugDraw::Physics::DebugDragLine(v->GetComponent<Rigidbody2DComponent>()->GetCurrentDrag());
-			//DebugDraw::Physics::DebugLiftLine(v->GetComponent<Rigidbody2DComponent>()->GetCurrentLift());
-			//DebugDraw::Physics::DebugFrictionLine(v->GetComponent<Rigidbody2DComponent>()->GetCurrentFriction());
-			//DebugDraw::Physics::DebugVelocityLine(v->GetComponent<Rigidbody2DComponent>()->GetVelocity());
-			//DebugDraw::Physics::DebugVelocityLine(v->GetComponent<Rigidbody2DComponent>()->GetDirection());
+			// NOTE: Skip iterations if no derived physics entities are in the component list
+			if (v->FindChildComponent<PhysicsEntity>() == nullptr) { continue; }
+
+			// NOTE: Draw Physics Lines
+			if (m_DrawDebugVelocity == true) { DebugDraw::Physics::DebugVelocityLine(v); }
+			if (m_DrawDebugDirection == true) { DebugDraw::Physics::DebugDirectionLine(v); }
+
+			if (m_DrawDebugGravity == true) { DebugDraw::Physics::DebugGravityLine(v); }
+			if (m_DrawDebugFriction == true) { DebugDraw::Physics::DebugFrictionLine(v); }
+			if (m_DrawDebugDrag == true) { DebugDraw::Physics::DebugDragLine(v); }
+			if (m_DrawDebugLift == true) { DebugDraw::Physics::DebugLiftLine(v); }
 		}
 	}
 }

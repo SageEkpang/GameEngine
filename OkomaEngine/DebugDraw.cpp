@@ -109,43 +109,53 @@ namespace DebugDraw
 
 	namespace Physics
 	{
-		void DebugGravityLine(OKVector2<float> gravity)
+		void DebugGravityLine(GameObjectEntity* gameObject)
 		{
-			// Vector2 t_GravityVec = Vector2Add(gravity.ConvertToVec2(), m_Position.ConvertToVec2());
-			// DrawLineV(m_Position.ConvertToVec2(), t_GravityVec, PURPLE);
+			if (!gameObject->HasComponent<Rigidbody2DComponent>()) { return; }
+			OKVector2<float> t_CurrentGravity = gameObject->GetComponent<Rigidbody2DComponent>()->GetCurrentGravity().normalise();
+			OKVector2<float> t_NewGravity = (t_CurrentGravity * 10.f) + gameObject->m_Transform.position;
+			DrawLineV(gameObject->m_Transform.position.ConvertToVec2(), t_NewGravity.ConvertToVec2(), PURPLE);
 		}
 
-		void DebugVelocityLine(OKVector2<float> velocity)
+		void DebugVelocityLine(GameObjectEntity* gameObject)
 		{
-			// Vector2 t_VecEnd = Vector2Multiply(m_Velocity.normalise().ConvertToVec2(), Vector2{ m_Velocity.magnitude(), m_Velocity.magnitude() });
-			//    t_VecEnd = Vector2Add(t_VecEnd, m_Position.ConvertToVec2());
-			//    DrawLineV(m_Position.ConvertToVec2(), t_VecEnd, GREEN);
-
-		}
-
-		void DebugDirectionLine(OKVector2<float> direction, float lengthMultiplier)
-		{
-
+			if (!gameObject->HasComponent<Rigidbody2DComponent>()) { return; }
+			OKVector2<float> t_CurrentVelocity = gameObject->GetComponent<Rigidbody2DComponent>()->m_Velocity;
+			OKVector2<float> t_NewVelocity = (t_CurrentVelocity / 10.f) + gameObject->m_Transform.position;
+			DrawLineV(gameObject->m_Transform.position.ConvertToVec2(), t_NewVelocity.ConvertToVec2(), GREEN);
 
 		}
 
-		void DebugLiftLine(OKVector2<float> lift)
+		void DebugDirectionLine(GameObjectEntity* gameObject)
 		{
-
-
+			if (!gameObject->HasComponent<Rigidbody2DComponent>()) { return; }
+			OKVector2<float> t_CurrentDirection = gameObject->GetComponent<Rigidbody2DComponent>()->m_Velocity.normalise();
+			OKVector2<float> t_NewDirection = (t_CurrentDirection * 10.f) + gameObject->m_Transform.position;
+			DrawLineV(gameObject->m_Transform.position.ConvertToVec2(), t_NewDirection.ConvertToVec2(), RED);
 		}
 
-		void DebugDragLine(OKVector2<float> drag)
+		void DebugLiftLine(GameObjectEntity* gameObject)
 		{
-			//    Vector2 t_DragVec = Vector2Add(pm_CalculatedDrag.ConvertToVec2(), m_Transform->position.ConvertToVec2());
-			//    DrawLineV(m_Transform->position.ConvertToVec2(), t_DragVec, BLUE);
-
+			if (!gameObject->HasComponent<Rigidbody2DComponent>()) { return; }
+			OKVector2<float> t_CurrentLift = gameObject->GetComponent<Rigidbody2DComponent>()->GetCurrentLift();
+			OKVector2<float> t_NewLift = (t_CurrentLift * 10.f) + gameObject->m_Transform.position;
+			DrawLineV(gameObject->m_Transform.position.ConvertToVec2(), t_NewLift.ConvertToVec2(), BLUE);
 		}
 
-		void DebugFrictionLine(OKVector2<float> friction)
+		void DebugDragLine(GameObjectEntity* gameObject)
 		{
+			if (!gameObject->HasComponent<Rigidbody2DComponent>()) { return; }
+			OKVector2<float> t_CurrentDrag = gameObject->GetComponent<Rigidbody2DComponent>()->GetCurrentDrag();
+			OKVector2<float> t_NewDrag = (t_CurrentDrag * 10.f) + gameObject->m_Transform.position;
+			DrawLineV(gameObject->m_Transform.position.ConvertToVec2(), t_NewDrag.ConvertToVec2(), YELLOW);
+		}
 
-
+		void DebugFrictionLine(GameObjectEntity* gameObject)
+		{
+			if (!gameObject->HasComponent<Rigidbody2DComponent>()) { return; }
+			OKVector2<float> t_CurrentFriction = gameObject->GetComponent<Rigidbody2DComponent>()->GetCurrentFriction();
+			OKVector2<float> t_NewFriction = (t_CurrentFriction * 10.f) + gameObject->m_Transform.position;
+			DrawLineV(gameObject->m_Transform.position.ConvertToVec2(), t_NewFriction.ConvertToVec2(), ORANGE);
 		}
 	}
 };
