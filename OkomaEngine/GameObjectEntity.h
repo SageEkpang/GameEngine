@@ -34,6 +34,7 @@
 #include "CameraComponent.h"
 
 #include <queue>
+#include <list>
 
 unsigned int constexpr MAX_COMPONENTS = 8u;
 
@@ -53,6 +54,10 @@ public:
 	// NOTE: BASE VARIABLE(s)
 	OKTransform2<float> m_Transform;
 
+	// TODO: Find out how to make this work
+	GameObjectEntity* m_Parent;
+	std::list<GameObjectEntity*> m_Children;
+
 public:
 
 	// CLASS FUNCTION(s)
@@ -62,6 +67,41 @@ public:
 	// BASE FUNCTION(s)
 	void Update(const float deltaTime);
 	void Draw();
+
+
+	// PARENT & CHILDREN FUNCTION(s)
+
+		// PARENT FUNCTION(s)
+
+		// NOTE: Set the Parent
+		inline void Parent(GameObjectEntity* parent) { m_Parent = parent; }
+
+		// NOTE: Get the Parent of the current game object, if not null
+		inline GameObjectEntity* const GetParent() 
+		{ 
+			if (m_Parent == nullptr) { return nullptr; }
+			return m_Parent; 
+		}
+
+		// NOTE: Get the Grand Parent of the current parent, if not null
+		inline GameObjectEntity* const GetGrandParent()
+		{
+			if (m_Parent->m_Parent == nullptr) { return nullptr; }
+			return m_Parent->m_Parent;
+		}
+
+
+		// CHILD FUNCTION(s)
+
+		// NOTE: Set the Child
+		inline void Child(GameObjectEntity* child) { m_Children.push_back(child); }
+
+		// NOTE: By default it will get the first child on the parent
+		GameObjectEntity* GetChild(int index = 0);
+
+		// NOTE: Get the amount of childern are in the list
+		inline int GetChildCount() const { return (int)m_Children.size(); }
+
 
 	// HELPER FUNCTION(s)
 	template<std::derived_from<ComponentEntity> T>

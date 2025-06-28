@@ -3,12 +3,14 @@
 GameObjectManager::GameObjectManager()
 {
     // TODO: Find Camera index and set the index
+    m_PhysicsManager.SetDrawColliders(true);
 
 
 }
 
 GameObjectManager::~GameObjectManager()
 {
+    Destroy();
 }
 
 void GameObjectManager::Process(float deltaTime)
@@ -21,41 +23,37 @@ void GameObjectManager::Showcase()
     ShowcaseGameObject();
 }
 
-//void GameObjectManager::AddGameObject(GameObject gameObject)
-//{
-//    // m_GameObjects.push_back(&gameObject);
-//}
+void GameObjectManager::AddGameObject(GameObjectEntity* gameObject)
+{
+    // NOTE: Checks if the game object has a physics component on it, so it can simulate physics
+    if (gameObject->HasComponent<Rigidbody2DComponent>()) { m_PhysicsManager.AddPhysicsObject(gameObject); return; }
+
+
+
+
+
+}
+
+void GameObjectManager::RemoveGameObject(GameObjectEntity* gameObject)
+{
+    // NOTE: If the game object is null, then do not even go into this loop
+    // if (gameObject == nullptr) { return; }
+
+}
 
 void GameObjectManager::Destroy()
 {
-    // GAME OBJECT DESTRUCTION
-    //if (!m_GameObjects.empty())
-    //{
-    //    std::vector<GameObject*>::iterator itr;
-    //    for (itr = m_GameObjects.begin(); itr != m_GameObjects.end(); ++itr)
-    //    {
-    //        *itr = nullptr;
-    //        delete* itr;
-    //    }
-    //    m_GameObjects.clear();
-    //}
+    
 }
-
 
 // PRIVATE FUNCTION(s)
 void GameObjectManager::ProcessGameObject(float deltaTime)
 {
-    //for (size_t i = 0; i < m_GameObjects.size(); ++i)
-    //{
-    //    m_GameObjects[i]->Update(deltaTime);
-    //}
+    m_PhysicsManager.Update(deltaTime);
 }
 
 void GameObjectManager::ShowcaseGameObject()
 {
-    //for (size_t i = 0; i < m_GameObjects.size(); ++i)
-    //{
-    //    m_GameObjects[i]->Draw();
-    //}
+    m_PhysicsManager.Draw();
 }
 

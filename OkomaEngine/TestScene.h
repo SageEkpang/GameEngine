@@ -11,9 +11,9 @@ class TestScene : public SceneEntity
 {
 private:
 
+	GameObjectEntity PlayerCamera;
 	GameObjectEntity CircleObjectTwo;
 	GameObjectEntity m_Floor;
-	PhysicsManager m_PhyMana;
 
 public:
 

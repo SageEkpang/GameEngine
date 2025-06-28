@@ -2,16 +2,20 @@
 #define GAME_OBJECT_MANAGER_H
 
 // GAME OBJECTS(s)
-// #include "GameObject.h"
+#include "PhysicsManager.h"
+#include "GameObjectEntity.h"
+#include <vector>
 
-// TODO_GLOBAL: This will be used for the registration system  for the ECS when it is fully implemented
+// CHANGE TODO_GLOBAL: This will be used for the registration system  for the ECS when it is fully implemented
+//
 
 class GameObjectManager
 {
 private:
 
     // PRIVATE VARIABLE(s)
-    // std::vector<GameObject*> m_GameObjects;
+    PhysicsManager m_PhysicsManager;
+    std::vector<GameObjectEntity*> m_GameObjects;
 
     // PRIVATE FUNCTION(s)
     void ProcessGameObject(float deltaTime); // Update / Process Game Object
@@ -40,7 +44,8 @@ public:
     void Showcase();
 
     // SETTER FUNCTION(s)
-    // void AddGameObject(GameObject gameObject); // Add GameObject to Specific Screen, (Takes in Game Object, Takes in Screen it coresponds to)
+    void AddGameObject(GameObjectEntity* gameObject);
+    void RemoveGameObject(GameObjectEntity* gameObject);
 
 };
 

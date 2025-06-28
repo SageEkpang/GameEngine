@@ -2,10 +2,15 @@
 
 GameObjectEntity::GameObjectEntity()
 {
-	// m_Transform.position = OKVector2<float>(0.f, 0.f);
+	// NOTE: Parent and Children Variable(s)
+	m_Parent = nullptr;
+	m_Children.clear();
+
+	// NOTE: Transform Variable(s)
+	m_Transform.position = OKVector2<float>(0.f, 0.f);
 	m_Transform.scale = OKVector2<float>(1.f, 1.f);
-	//m_Transform.rotation = 0.f;
-	//m_Components.clear();
+	m_Transform.rotation = 0.f;
+	m_Components.clear();
 }
 
 GameObjectEntity::~GameObjectEntity()
@@ -21,7 +26,9 @@ GameObjectEntity::~GameObjectEntity()
 		}
 	}
 
-	 m_Components.clear();
+	m_Parent = nullptr;
+	m_Children.clear();
+	m_Components.clear();
 }
 
 void GameObjectEntity::Update(const float deltaTime)
@@ -46,4 +53,18 @@ void GameObjectEntity::Draw()
 	}
 }
 
+GameObjectEntity* GameObjectEntity::GetChild(int index)
+{
+	// NOTE: Check if the index is bigger than the current amount of children in said list
+	if (index + 1 > m_Children.size()) { return nullptr; }
+
+	// NOTE: Set the iterator to the Beginning on the list
+	std::list<GameObjectEntity*>::iterator itr = m_Children.begin();
+
+	// NOTE: Iterate until we reach the index we want
+	for (int i = 0; i < index; ++i) { ++itr; }
+
+	// NOTE: Return the index that was found
+	return *itr;
+}
 
