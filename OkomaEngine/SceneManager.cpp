@@ -70,7 +70,7 @@ void SceneManager::Draw()
 		// NOTE: Draw A flat Colour for the background
 		ClearBackground(BLACK); // SKYBLUE
 
-		BeginMode2D(m_CurrentScene->GetCamera());
+		BeginMode2D(*m_CurrentScene->GetCamera());
 
 			// NOTE: Due to the y-axis being flipped, need to flip this back to pos-y up
 			rlPushMatrix();

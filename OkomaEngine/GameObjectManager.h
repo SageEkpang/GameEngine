@@ -2,7 +2,9 @@
 #define GAME_OBJECT_MANAGER_H
 
 // GAME OBJECTS(s)
+#include "AudioManager.h"
 #include "PhysicsManager.h"
+#include "RenderManager.h"
 #include "GameObjectEntity.h"
 #include <vector>
 
@@ -15,7 +17,7 @@ private:
 
     // PRIVATE VARIABLE(s)
     PhysicsManager m_PhysicsManager;
-    std::vector<GameObjectEntity*> m_GameObjects;
+    RenderManager m_RenderManager;
 
     // PRIVATE FUNCTION(s)
     void ProcessGameObject(float deltaTime); // Update / Process Game Object

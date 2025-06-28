@@ -251,6 +251,9 @@
     <ClCompile Include="DefaultScene.cpp">
       <Filter>Scenes\Source</Filter>
     </ClCompile>
+    <ClCompile Include="RenderManager.cpp">
+      <Filter>Managers\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OKVector2.h">
@@ -378,6 +381,9 @@
     </ClInclude>
     <ClInclude Include="DefaultScene.h">
       <Filter>Scenes\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderManager.h">
+      <Filter>Managers\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

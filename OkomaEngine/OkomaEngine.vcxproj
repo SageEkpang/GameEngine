@@ -169,6 +169,7 @@
     <ClCompile Include="PointColliderComponent.cpp" />
     <ClCompile Include="RectangleColliderComponent.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
+    <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="Rigidbody2DComponent.cpp" />
     <ClCompile Include="SceneEntity.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="PointColliderComponent.h" />
     <ClInclude Include="RectangleColliderComponent.h" />
     <ClInclude Include="RenderComponent.h" />
+    <ClInclude Include="RenderManager.h" />
     <ClInclude Include="Rigidbody2DComponent.h" />
     <ClInclude Include="SceneEntity.h" />
     <ClInclude Include="SceneManager.h" />

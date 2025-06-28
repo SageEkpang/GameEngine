@@ -33,6 +33,15 @@ GameObjectEntity::~GameObjectEntity()
 
 void GameObjectEntity::Update(const float deltaTime)
 {
+	// NOTE: Transform / Parent	
+	//if (m_Parent != nullptr)
+	//{
+	//	m_Transform.position += this->m_Parent->m_Transform.position;
+	//	m_Transform.scale += this->m_Parent->m_Transform.scale;
+	//	m_Transform.rotation += this->m_Parent->m_Transform.rotation;
+	//}
+
+	// NOTE: Update the Components
 	if (!m_Components.empty())
 	{
 		for (auto& [ComponentType, Component] : m_Components)
@@ -44,6 +53,7 @@ void GameObjectEntity::Update(const float deltaTime)
 
 void GameObjectEntity::Draw()
 {
+	// NOTE: Draw the Components
 	if (!m_Components.empty())
 	{
 		for (auto& [ComponentType, Component] : m_Components)

@@ -49,14 +49,15 @@ private:
 	// COMPONENT ARRAY(s)
 	std::unordered_map<std::type_index, ComponentEntity*> m_Components;
 
+	// TODO: Find out how to make this work
+	GameObjectEntity* m_Parent;
+	std::list<GameObjectEntity*> m_Children;
+
 public:
 
 	// NOTE: BASE VARIABLE(s)
 	OKTransform2<float> m_Transform;
 
-	// TODO: Find out how to make this work
-	GameObjectEntity* m_Parent;
-	std::list<GameObjectEntity*> m_Children;
 
 public:
 
