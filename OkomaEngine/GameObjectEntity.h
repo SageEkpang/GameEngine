@@ -28,6 +28,7 @@
 
 #include "ParticleEffectComponent.h"
 #include "Rigidbody2DComponent.h"
+#include "RenderComponent.h"
 
 #include "InputComponent.h"
 #include "CameraComponent.h"

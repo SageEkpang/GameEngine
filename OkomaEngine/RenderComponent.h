@@ -9,7 +9,11 @@ class RenderComponent : public ComponentEntity
 {
 private:
 
+	Texture2D m_Image;
+	int m_Width;
+	int m_Height;
 
+	bool m_IsAnimation = false;
 
 public:
 
@@ -19,7 +23,7 @@ public:
 
 
 	// CLASS FUNCTION(s) (Components)
-	void Construct();
+	void Construct(Texture2D image, int width, int height);
 
 
 	// BASE FUNCTION(s)
