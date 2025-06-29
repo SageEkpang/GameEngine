@@ -5,7 +5,7 @@ GameObjectManager::GameObjectManager()
     // TODO: Find Camera index and set the index
     m_PhysicsManager.SetDrawColliders(true);
     m_PhysicsManager.SetDrawDebugVelocity(false);
-
+    CameraVector.clear();
 
 }
 
@@ -30,10 +30,11 @@ void GameObjectManager::AddGameObject(GameObjectEntity* gameObject)
     // NOTE: Checks if the game object has a physics component on it, so it can simulate physics
     if (gameObject->HasComponent<Rigidbody2DComponent>()) { m_PhysicsManager.AddPhysicsObject(gameObject); }
     if (gameObject->HasComponent<RenderComponent>()) { m_RenderManager.AddRenderObject(gameObject); }
-
-    if (gameObject->HasComponent<CameraComponent>()) { m_CurrentCamera; }
-
-
+    if (gameObject->HasComponent<CameraComponent>()) 
+    { 
+        m_CurrentCamera = &gameObject->GetComponent<CameraComponent>()->m_Camera; 
+        CameraVector.push_back(gameObject);
+    }
 
 }
 
@@ -46,7 +47,7 @@ void GameObjectManager::RemoveGameObject(GameObjectEntity* gameObject)
 
 void GameObjectManager::Destroy()
 {
-    
+    m_CurrentCamera = nullptr;
 }
 
 // PRIVATE FUNCTION(s)
@@ -54,6 +55,11 @@ void GameObjectManager::ProcessGameObject(float deltaTime)
 {
     m_RenderManager.Update(deltaTime);
     m_PhysicsManager.Update(deltaTime);
+
+    for (auto& v : CameraVector)
+    {
+        v->Update(deltaTime);
+    }
 }
 
 void GameObjectManager::ShowcaseGameObject()

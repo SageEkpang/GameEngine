@@ -18,6 +18,7 @@ private:
     // PRIVATE VARIABLE(s)
     PhysicsManager m_PhysicsManager;
     RenderManager m_RenderManager;
+    std::vector<GameObjectEntity*> CameraVector;
     Camera2D* m_CurrentCamera = nullptr;
 
     // PRIVATE FUNCTION(s)

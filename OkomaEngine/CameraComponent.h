@@ -20,15 +20,17 @@ public: // PUBLIC ACCESS VARIABLE(s)
 
 public: // PUBLIC FUNCTION(s)
 
-    // CLASS FUNCTION(s) (Components)
-    CameraComponent();
-
-
-
     // CLASS FUNCTION(s) (General)
-    /// @brief Default Destructor for Class
+    CameraComponent();
     ~CameraComponent();
 
+    // CLASS FUNCTION(s) (Components)
+    void Construct();
+    void Construct(float offsetX, float offsetY);
+    void Construct(OKVector2<float> offset);
+    void Construct(OKVector2<float> offset, OKVector2<float> target);
+    void Construct(OKVector2<float> offset, float targetX, float targetY);
+    void Construct(OKVector2<float> offset, OKVector2<float> target, float zoom);
 
 
     // BASE FUNCTION(s)

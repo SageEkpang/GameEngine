@@ -7,28 +7,27 @@ TestScene::TestScene()
 
 	CircleObjectTwo.m_Transform.position = OKVector2<float>(20, 200);
 	CircleObjectTwo.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
-	CircleObjectTwo.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(100);
 	CircleObjectTwo.AddComponent<RenderComponent>()->Construct(50.f, 50.f);
 	CircleObjectTwo.AddComponent<RectangleColliderComponent>()->Construct(50, 50);
+	CircleObjectTwo.AddComponent<CameraComponent>()->Construct();
 	AddObject(&CircleObjectTwo);
 
-	Area.m_Transform.position = OKVector2<float>(400.f, -200.f);
-	Area.AddComponent<Rigidbody2DComponent>();
-	Area.AddComponent<RectangleColliderComponent>()->Construct(200.f, 200.f);
-	Area.GetComponent<RectangleColliderComponent>()->m_IsTrigger = true;
+	//Area.m_Transform.position = OKVector2<float>(400.f, -200.f);
+	//Area.AddComponent<Rigidbody2DComponent>();
+	//Area.AddComponent<RectangleColliderComponent>()->Construct(200.f, 200.f);
+	//Area.GetComponent<RectangleColliderComponent>()->m_IsTrigger = true;
 
-	Area.GetComponent<RectangleColliderComponent>()->TriggerStayedExecute(
-	[&]() 
-	{
-		Area.GetComponent<RectangleColliderComponent>()->GetTriggerObject()->GetComponent<Rigidbody2DComponent>()->ApplyForceY(1000.f);
-	});
+	//Area.GetComponent<RectangleColliderComponent>()->TriggerStayedExecute(
+	//[&]() 
+	//{
+	//	Area.GetComponent<RectangleColliderComponent>()->GetTriggerObject()->GetComponent<Rigidbody2DComponent>()->ApplyForceY(1000.f);
+	//});
 
-	AddObject(&Area);
+	//AddObject(&Area);
 
-	//PlayerCamera.m_Transform.position = OKVector2<float>(20, 0);
-	//PlayerCamera.AddComponent<CameraComponent>();
-	//PlayerCamera.Parent(&CircleObjectTwo);
-	//AddObject(&PlayerCamera);
+
+
+
 
 	m_Floor.m_Transform.position = OKVector2<float>(0.f, -200.f);
 	m_Floor.AddComponent<Rigidbody2DComponent>()->Construct(FLT_MAX, RIGIDBODY_MOVEMENT_TYPE_STATIC);
