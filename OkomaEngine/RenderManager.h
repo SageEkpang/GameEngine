@@ -2,6 +2,7 @@
 #define RENDER_MANAGER_H
 
 #include "GameObjectEntity.h"
+#include <unordered_map>
 
 class RenderManager
 {
@@ -10,6 +11,9 @@ private:
 	std::vector<GameObjectEntity*> m_RenderObjects;
 
 public:
+
+	typedef std::map<std::string, Texture2D> SavedTextureMap;
+	static SavedTextureMap m_SavedTextures;
 
 	// CLASS FUNCTION(s)
 	RenderManager();

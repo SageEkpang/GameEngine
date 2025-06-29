@@ -1,7 +1,14 @@
 #include "RenderManager.h"
 
+RenderManager::SavedTextureMap RenderManager::m_SavedTextures = 
+{ 
+	
+};
+
 RenderManager::RenderManager()
 {
+	RenderManager::m_SavedTextures["Blank"] = LoadTexture("Resources/Images/Blank.png");
+	RenderManager::m_SavedTextures["NULL"] = LoadTexture("Resources/Images/NULL.png");
 	m_RenderObjects.clear();
 }
 
@@ -13,7 +20,6 @@ RenderManager::~RenderManager()
 void RenderManager::Update(const float deltaTime)
 {
 	
-
 }
 
 void RenderManager::Draw()

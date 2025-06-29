@@ -1,8 +1,7 @@
-#ifndef OKVECTER4_H
+#ifndef OKVECTOR4_H
 #define OKVECTOR4_H
 
 #include "HeaderManager.h"
-
 #include <limits>
 
 template<typename T>

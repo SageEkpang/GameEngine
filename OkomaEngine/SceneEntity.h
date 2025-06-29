@@ -30,7 +30,6 @@ public:
 	{
 		m_Name = " ";
 		m_Camera = new Camera2D();
-		m_Camera = { 0 };
 		m_Camera->offset = Vector2{ GetScreenWidth() / 2.f, GetScreenHeight() / 2.f };
 		m_Camera->zoom = 1.f;
 	}
@@ -48,7 +47,11 @@ public:
 
 	// GETTER FUNCTION(s)
 	inline std::string GetName() const { return m_Name; }
-	inline Camera2D* GetCamera() const { return m_Camera; }
+	inline Camera2D* GetCamera() 
+	{ 
+		if (m_GameObjectManager.GetCurrentCamera() == nullptr) { return m_Camera; }
+		return m_GameObjectManager.GetCurrentCamera();
+	}
 
 	// SETTER FUNCTION(s)
 	inline void SpawnObject(GameObjectEntity* object) { m_GameObjectManager.AddGameObject(object); }

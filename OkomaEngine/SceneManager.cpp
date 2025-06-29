@@ -68,7 +68,7 @@ void SceneManager::Draw()
 	BeginDrawing();
 
 		// NOTE: Draw A flat Colour for the background
-		ClearBackground(BLACK); // SKYBLUE
+		ClearBackground(SKYBLUE); // SKYBLUE
 
 		BeginMode2D(*m_CurrentScene->GetCamera());
 

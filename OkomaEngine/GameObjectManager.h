@@ -18,6 +18,7 @@ private:
     // PRIVATE VARIABLE(s)
     PhysicsManager m_PhysicsManager;
     RenderManager m_RenderManager;
+    Camera2D* m_CurrentCamera = nullptr;
 
     // PRIVATE FUNCTION(s)
     void ProcessGameObject(float deltaTime); // Update / Process Game Object
@@ -45,9 +46,17 @@ public:
     /// @brief Default Draw function for Class
     void Showcase();
 
-    // SETTER FUNCTION(s)
+    // HELPER FUNCTION(s)
     void AddGameObject(GameObjectEntity* gameObject);
     void RemoveGameObject(GameObjectEntity* gameObject);
+
+
+    // GETTER FUNCTION(s)
+    inline Camera2D* GetCurrentCamera() { return m_CurrentCamera; }
+
+
+
+    // SETTER FUNCTION(s)
 
 };
 
