@@ -16,6 +16,19 @@ TestScene::TestScene()
 	Area.AddComponent<Rigidbody2DComponent>();
 	Area.AddComponent<RectangleColliderComponent>()->Construct(200.f, 200.f);
 	Area.GetComponent<RectangleColliderComponent>()->m_IsTrigger = true;
+	Area.GetComponent<RectangleColliderComponent>()->TriggerEnteredExecute(
+	[&]() 
+	{
+		printf("adka;skd;lakd\n");
+		//auto itr = Area.GetComponent<RectangleColliderComponent>()->GetObjects().begin();
+		//(*itr)->GetComponent<Rigidbody2DComponent>()->ApplyImpulseY(100.f);
+		//// NOTE: Do stuff to the objects
+		//for (auto itr = Area.GetComponent<RectangleColliderComponent>()->GetObjects().begin(); itr != Area.GetComponent<RectangleColliderComponent>()->GetObjects().end(); ++itr)
+		//{
+		//	(*itr)->GetComponent<Rigidbody2DComponent>()->ApplyImpulseY(100.f);
+		//}
+	});
+
 	AddObject(&Area);
 
 	//PlayerCamera.m_Transform.position = OKVector2<float>(20, 0);
@@ -51,8 +64,7 @@ void TestScene::Draw()
 {
 	SceneEntity::Draw();
 
-	printf("%d\n", Area.GetComponent<RectangleColliderComponent>()->GetObjectCount());
-	// printf("%d\n", Area.GetComponent<RectangleColliderComponent>()->m_HasCollided);
+
 
 
 

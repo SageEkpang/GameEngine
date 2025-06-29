@@ -4,6 +4,7 @@
 #include "ComponentEntity.h"
 #include <iostream>
 #include <unordered_set>
+#include <functional>
 
 class GameObjectEntity;
 
@@ -32,9 +33,9 @@ class ColliderEntity : public ComponentEntity
 {
 private: // PRIVATE VARIABLE(s)
 
-    void (*m_TriggerEnteredLambda)() = nullptr;
-    void (*m_TriggerStayedLambda)() = nullptr;
-    void (*m_TriggerExitedLambda)() = nullptr;
+    std::function<void()> m_TriggerEnteredLambda = nullptr;
+    std::function<void()> m_TriggerStayedLambda = nullptr;
+    std::function<void()> m_TriggerExitedLambda = nullptr;
 
     std::unordered_set<GameObjectEntity*> m_ObjectList;
 
@@ -42,8 +43,10 @@ public: // PUBLIC VARIABLE(s)
 
     // BASE VARIABLE(s)
     bool m_HasCollided = false;
-    bool m_IsActivated;
     bool m_IsTrigger;
+
+    bool m_IsActivated;
+    bool m_Quered = false;
 
     // TRIGGER AREA VARIABLE(s)
     TriggerAreaState m_TriggerState;
@@ -55,19 +58,21 @@ public: // PUBLIC FUNCTION(s)
 
     // CLASS FUNCTION(s)
     ColliderEntity();
-
-    // DESTRUCTOR
     virtual ~ColliderEntity();
 
+    // HELPER FUNCTION(s)
+    void TriggerQuery(GameObjectEntity* gameObject);
+    void TriggerEnteredExecute(std::function<void()> func = nullptr);
+    void TriggerStayedExecute(std::function<void()> func = nullptr);
+    void TriggerExitedExecute(std::function<void()> func = nullptr);
+    void TriggerQueryExecute();
+
+    // GETTER FUNCTION(s)
+    inline std::unordered_set<GameObjectEntity*> GetObjects() { return m_ObjectList; }
     inline int GetObjectCount() { return (int)m_ObjectList.size(); }
 
-    void TriggerQuery(GameObjectEntity* gameObject);
+    // SETTER FUNCTION(s)
 
-    void TriggerEnteredExecute(void(*func)() = nullptr);
-    void TriggerStayedExecute(void(*func)() = nullptr);
-    void TriggerExitedExecute(void(*func)() = nullptr);
-
-    void TriggerQueryExecute();
 };
 
 #endif
