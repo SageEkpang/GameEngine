@@ -30,6 +30,11 @@ void GameObjectManager::AddGameObject(GameObjectEntity* gameObject)
     // NOTE: Checks if the game object has a physics component on it, so it can simulate physics
     if (gameObject->HasComponent<Rigidbody2DComponent>()) { m_PhysicsManager.AddPhysicsObject(gameObject); }
     if (gameObject->HasComponent<RenderComponent>()) { m_RenderManager.AddRenderObject(gameObject); }
+
+    if (gameObject->HasComponent<CameraComponent>()) { m_CurrentCamera; }
+
+
+
 }
 
 void GameObjectManager::RemoveGameObject(GameObjectEntity* gameObject)

@@ -16,17 +16,11 @@ TestScene::TestScene()
 	Area.AddComponent<Rigidbody2DComponent>();
 	Area.AddComponent<RectangleColliderComponent>()->Construct(200.f, 200.f);
 	Area.GetComponent<RectangleColliderComponent>()->m_IsTrigger = true;
-	Area.GetComponent<RectangleColliderComponent>()->TriggerEnteredExecute(
+
+	Area.GetComponent<RectangleColliderComponent>()->TriggerStayedExecute(
 	[&]() 
 	{
-		printf("adka;skd;lakd\n");
-		//auto itr = Area.GetComponent<RectangleColliderComponent>()->GetObjects().begin();
-		//(*itr)->GetComponent<Rigidbody2DComponent>()->ApplyImpulseY(100.f);
-		//// NOTE: Do stuff to the objects
-		//for (auto itr = Area.GetComponent<RectangleColliderComponent>()->GetObjects().begin(); itr != Area.GetComponent<RectangleColliderComponent>()->GetObjects().end(); ++itr)
-		//{
-		//	(*itr)->GetComponent<Rigidbody2DComponent>()->ApplyImpulseY(100.f);
-		//}
+		Area.GetComponent<RectangleColliderComponent>()->GetTriggerObject()->GetComponent<Rigidbody2DComponent>()->ApplyForceY(1000.f);
 	});
 
 	AddObject(&Area);

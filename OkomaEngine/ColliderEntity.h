@@ -3,8 +3,8 @@
 
 #include "ComponentEntity.h"
 #include <iostream>
-#include <unordered_set>
 #include <functional>
+#include <unordered_set>
 
 class GameObjectEntity;
 
@@ -38,6 +38,7 @@ private: // PRIVATE VARIABLE(s)
     std::function<void()> m_TriggerExitedLambda = nullptr;
 
     std::unordered_set<GameObjectEntity*> m_ObjectList;
+    std::unordered_set<GameObjectEntity*>::iterator m_ObjectItr;
 
 public: // PUBLIC VARIABLE(s)
 
@@ -68,7 +69,8 @@ public: // PUBLIC FUNCTION(s)
     void TriggerQueryExecute();
 
     // GETTER FUNCTION(s)
-    inline std::unordered_set<GameObjectEntity*> GetObjects() { return m_ObjectList; }
+    auto GetTriggerObject() { return (*m_ObjectItr); }
+    inline std::unordered_set<GameObjectEntity*> &GetObjects() { return m_ObjectList; }
     inline int GetObjectCount() { return (int)m_ObjectList.size(); }
 
     // SETTER FUNCTION(s)

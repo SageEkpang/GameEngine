@@ -88,6 +88,9 @@ public: // PUBLIC FUNCTION(s)
     void ApplyForce(OKVector2<float> force) { m_NetForce += force; }
     void ApplyForce(float x, float y) { m_NetForce += OKVector2<float>(x, y); }
 
+    void ApplyForceX(float forceX) { m_NetForce += OKVector2<float>(forceX, 0.0f); }
+    void ApplyForceY(float forceY) { m_NetForce += OKVector2<float>(0.0f, forceY); }
+
     void ApplyAcceleration(OKVector2<float> acceleration) { m_Acceleration += acceleration; }
     void ApplyAcceleration(float x, float y) { m_Acceleration += OKVector2<float>(x, y); }
 

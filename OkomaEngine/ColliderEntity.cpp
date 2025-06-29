@@ -72,17 +72,34 @@ void ColliderEntity::TriggerQueryExecute()
 	{
 		case TriggerAreaState::TRIGGER_AREA_STATE_ENTERED: 
 			if (m_TriggerEnteredLambda != nullptr) 
-			{ m_TriggerEnteredLambda(); } 
+			{ 
+				for (m_ObjectItr = m_ObjectList.begin(); m_ObjectItr != m_ObjectList.end(); ++m_ObjectItr)
+				{
+					m_TriggerEnteredLambda();
+				}
+			} 
 			m_TriggerState = TriggerAreaState::TRIGGER_AREA_STATE_NONE;
 			break;
 
 		case TriggerAreaState::TRIGGER_AREA_STATE_STAYED: 
-			if (m_TriggerStayedLambda != nullptr) { m_TriggerStayedLambda(); } 
+			if (m_TriggerStayedLambda != nullptr)
+			{ 
+				for (m_ObjectItr = m_ObjectList.begin(); m_ObjectItr != m_ObjectList.end(); ++m_ObjectItr)
+				{
+					m_TriggerStayedLambda();
+				}
+			} 
 			m_TriggerState = TriggerAreaState::TRIGGER_AREA_STATE_NONE;
 			break;
 
 		case TriggerAreaState::TRIGGER_AREA_STATE_EXITED: 
-			if (m_TriggerExitedLambda != nullptr) { m_TriggerExitedLambda(); }
+			if (m_TriggerExitedLambda != nullptr) 
+			{
+				for (m_ObjectItr = m_ObjectList.begin(); m_ObjectItr != m_ObjectList.end(); ++m_ObjectItr)
+				{
+					m_TriggerExitedLambda(); 
+				}
+			}
 			m_TriggerState = TriggerAreaState::TRIGGER_AREA_STATE_NONE;
 			break;
 
