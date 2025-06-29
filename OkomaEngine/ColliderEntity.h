@@ -41,7 +41,7 @@ private: // PRIVATE VARIABLE(s)
 public: // PUBLIC VARIABLE(s)
 
     // BASE VARIABLE(s)
-    bool m_HasCollided;
+    bool m_HasCollided = false;
     bool m_IsActivated;
     bool m_IsTrigger;
 
@@ -59,6 +59,7 @@ public: // PUBLIC FUNCTION(s)
     // DESTRUCTOR
     virtual ~ColliderEntity();
 
+    inline int GetObjectCount() { return (int)m_ObjectList.size(); }
 
     void TriggerQuery(GameObjectEntity* gameObject);
 

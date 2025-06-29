@@ -12,6 +12,7 @@ class TestScene : public SceneEntity
 private:
 
 	GameObjectEntity PlayerCamera;
+	GameObjectEntity Area;
 	GameObjectEntity CircleObjectTwo;
 	GameObjectEntity m_Floor;
 

@@ -13,11 +13,11 @@ ColliderEntity::~ColliderEntity()
 	if (!m_ObjectList.empty())
 	{
 		// TODO: Check this does not actually call delete from the actual item
-		std::unordered_set<GameObjectEntity*>::iterator itr;
-		for (itr = m_ObjectList.begin(); itr != m_ObjectList.end(); ++itr)
-		{
-			m_ObjectList.erase(itr);
-		}
+		//std::unordered_set<GameObjectEntity*>::iterator itr;
+		//for (itr = m_ObjectList.begin(); itr != m_ObjectList.end(); ++itr)
+		//{
+		//	m_ObjectList.erase(itr);
+		//}
 
 		m_ObjectList.clear();
 	}
@@ -30,7 +30,7 @@ void ColliderEntity::TriggerQuery(GameObjectEntity* gameObject)
 	if (m_IsActivated == false) { return; }
 
 	// NOTE: Game Object has entered trigger
-	if (m_ObjectList.find(gameObject) == m_ObjectList.end())
+	if (m_ObjectList.find(gameObject) == m_ObjectList.end() && gameObject->FindChildComponent<ColliderEntity>()->m_HasCollided == true)
 	{
 		m_TriggerState = TriggerAreaState::TRIGGER_AREA_STATE_ENTERED;
 		m_ObjectList.insert(gameObject);
@@ -39,7 +39,7 @@ void ColliderEntity::TriggerQuery(GameObjectEntity* gameObject)
 
 	// NOTE: Check if the Object List is there
 	if (m_ObjectList.empty()) { return; }
-	
+
 	// NOTE: Game Object has stayed in the trigger
 	if (m_ObjectList.find(gameObject) != m_ObjectList.end() && gameObject->FindChildComponent<ColliderEntity>()->m_HasCollided == true)
 	{

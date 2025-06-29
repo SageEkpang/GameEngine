@@ -21,6 +21,7 @@ public:
 	float m_Height;
 
 	bool m_IsAnimation = false;
+
 	OKVector4<unsigned int> m_ColourTint = OKVector4<unsigned int>(255u, 255u, 255u, 255u);
 
 public:
