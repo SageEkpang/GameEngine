@@ -23,7 +23,7 @@ enum Collider_Type_Collisions
     // Physics Collider (Work on this )
     COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_RECTANGLE, // Done
     COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_CIRCLE, // Done
-    COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_RECTANGLE, // Done
+    COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_CIRCLE, // Done
 
     COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CIRCLE, // Done
     COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_RECTANGLE, // Done
@@ -87,12 +87,12 @@ public:
 
     // COLLIDER FUNCTION(s)
 
-    // RECTANGLE
-    static CollisionManifold RectangleToRectangle(GameObjectEntity* rectA, GameObjectEntity* rectB);
-
     // CIRCLE
     static CollisionManifold CircleToCircle(GameObjectEntity* circA, GameObjectEntity* circB);
-    static CollisionManifold CircleToRectangle(GameObjectEntity* circA, GameObjectEntity* rectB);
+
+    // RECTANGLE
+    static CollisionManifold RectangleToRectangle(GameObjectEntity* rectA, GameObjectEntity* rectB);
+    static CollisionManifold RectangleToCircle(GameObjectEntity* circA, GameObjectEntity* rectB);
 
     // CAPSULE
     static CollisionManifold CapsuleToCircle(GameObjectEntity* capsuleA, GameObjectEntity* circB);

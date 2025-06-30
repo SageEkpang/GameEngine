@@ -147,7 +147,7 @@ CollisionManager::CollisionManager()
 	m_CollisionMapping[std::make_pair(std::type_index(typeid(RectangleColliderComponent)), std::type_index(typeid(RectangleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_RECTANGLE;
 
 	m_CollisionMapping[std::make_pair(std::type_index(typeid(CircleColliderComponent)), std::type_index(typeid(CircleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_CIRCLE;
-	m_CollisionMapping[std::make_pair(std::type_index(typeid(CircleColliderComponent)), std::type_index(typeid(RectangleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_RECTANGLE;
+	m_CollisionMapping[std::make_pair(std::type_index(typeid(RectangleColliderComponent)), std::type_index(typeid(CircleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_CIRCLE;
 
 	m_CollisionMapping[std::make_pair(std::type_index(typeid(CapsuleColliderComponent)), std::type_index(typeid(CapsuleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CAPSULE;
 	m_CollisionMapping[std::make_pair(std::type_index(typeid(CapsuleColliderComponent)), std::type_index(typeid(RectangleColliderComponent)))] = COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_RECTANGLE;
@@ -202,10 +202,10 @@ CollisionManifold CollisionManager::CheckCollisions(GameObjectEntity* gameObject
 
 	switch (m_CollisionMapping[collision_made_pair])
 	{
-		case COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_RECTANGLE: return t_ColMani = RectangleToRectangle(tempA, tempB); break;
-
 		case COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_CIRCLE: return t_ColMani = CircleToCircle(tempA, tempB); break;
-		case COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_RECTANGLE: return t_ColMani = CircleToRectangle(tempA, tempB); break;
+
+		case COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_RECTANGLE: return t_ColMani = RectangleToRectangle(tempA, tempB); break;
+		case COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_CIRCLE: return t_ColMani = RectangleToCircle(tempA, tempB); break;
 
 		case COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CAPSULE: return t_ColMani = CapsuleToCapsule(tempA, tempB); break;
 		case COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_RECTANGLE: return t_ColMani = CapsuleToRectangle(tempA, tempB); break;
@@ -352,8 +352,6 @@ CollisionManifold CollisionManager::RectangleToRectangle(GameObjectEntity* rectA
 
 	CollisionManifold t_tempMani = S_CircleToCircle(NearPointA, 0.5f, NearPointB, 0.5f);
 
-	DrawCircleV(NearPointA.ConvertToVec2(), 10.f, YELLOW);
-
 	if (t_tempMani.m_HasCollision == true)
 	{
 		rectA->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
@@ -494,22 +492,22 @@ CollisionManifold CollisionManager::CircleToCircle(GameObjectEntity* circA, Game
 	return t_ColMani;
 }
 
-CollisionManifold CollisionManager::CircleToRectangle(GameObjectEntity* circA, GameObjectEntity* rectB)
+CollisionManifold CollisionManager::RectangleToCircle(GameObjectEntity* rectA, GameObjectEntity* circB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
 
-	circA->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
-	rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = false;
+	circB->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
+	rectA->GetComponent<RectangleColliderComponent>()->m_HasCollided = false;
 
-	OKVector2<float> t_tempRectPosition = (rectB->m_Transform.position + rectB->GetComponent<RectangleColliderComponent>()->m_Offset);
-	OKVector2<float> t_tempRectScale = rectB->GetComponent<RectangleColliderComponent>()->m_Scale;
+	OKVector2<float> t_tempRectPosition = (rectA->m_Transform.position + rectA->GetComponent<RectangleColliderComponent>()->m_Offset);
+	OKVector2<float> t_tempRectScale = rectA->GetComponent<RectangleColliderComponent>()->m_Scale;
 	OKVector2<float> t_tempRectHalfScale = t_tempRectScale / 2.f;
 
-	OKVector2<float> t_CircPositionA = circA->m_Transform.position + circA->GetComponent<CircleColliderComponent>()->m_Offset;
-	float t_CircARadius = circA->GetComponent<CircleColliderComponent>()->m_Radius;
+	OKVector2<float> t_CircPositionA = circB->m_Transform.position + circB->GetComponent<CircleColliderComponent>()->m_Offset;
+	float t_CircARadius = circB->GetComponent<CircleColliderComponent>()->m_Radius;
 
-	OKVector2<float> RectCentre = (rectB->m_Transform.position + rectB->GetComponent<RectangleColliderComponent>()->m_Offset);
-	OKVector2<float> RectScale = rectB->GetComponent<RectangleColliderComponent>()->m_Scale;
+	OKVector2<float> RectCentre = (rectA->m_Transform.position + rectA->GetComponent<RectangleColliderComponent>()->m_Offset);
+	OKVector2<float> RectScale = rectA->GetComponent<RectangleColliderComponent>()->m_Scale;
 	OKVector2<float> TopLeftCorner = RectCentre - (RectScale / 2.f);
 
 	OKVector2<float> NearPoint = OKVector2<float>(0, 0);
@@ -572,27 +570,27 @@ CollisionManifold CollisionManager::CircleToRectangle(GameObjectEntity* circA, G
 
 	if (t_tempMani.m_HasCollision == true)
 	{
-		circA->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
-		rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
+		circB->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
+		rectA->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
 
-		if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true && rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+		if (circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true && rectA->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
 		{
-			circA->GetComponent<CircleColliderComponent>()->TriggerQuery(rectB);
-			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(circA);
+			circB->GetComponent<CircleColliderComponent>()->TriggerQuery(rectA);
+			rectA->GetComponent<RectangleColliderComponent>()->TriggerQuery(circB);
 			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
 
-		if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+		if (circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
 		{
-			circA->GetComponent<CircleColliderComponent>()->TriggerQuery(rectB);
+			circB->GetComponent<CircleColliderComponent>()->TriggerQuery(rectA);
 			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
 
-		if (rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+		if (rectA->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
 		{
-			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(circA);
+			rectA->GetComponent<RectangleColliderComponent>()->TriggerQuery(circB);
 			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
@@ -601,23 +599,23 @@ CollisionManifold CollisionManager::CircleToRectangle(GameObjectEntity* circA, G
 	}
 	else
 	{
-		circA->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
-		rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = false;
+		circB->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
+		rectA->GetComponent<RectangleColliderComponent>()->m_HasCollided = false;
 
-		if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true && rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+		if (circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true && rectA->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
 		{
-			circA->GetComponent<CircleColliderComponent>()->TriggerQuery(rectB);
-			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(circA);
+			circB->GetComponent<CircleColliderComponent>()->TriggerQuery(rectA);
+			rectA->GetComponent<RectangleColliderComponent>()->TriggerQuery(circB);
 		}
 
-		if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+		if (circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
 		{
-			circA->GetComponent<CircleColliderComponent>()->TriggerQuery(rectB);
+			circB->GetComponent<CircleColliderComponent>()->TriggerQuery(rectA);
 		}
 
-		if (rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+		if (rectA->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
 		{
-			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(circA);
+			rectA->GetComponent<RectangleColliderComponent>()->TriggerQuery(circB);
 		}
 
 		return t_tempMani;
@@ -1690,8 +1688,6 @@ CollisionManifold CollisionManager::LineToCircle(GameObjectEntity* lineA, GameOb
 	distY = closestY - t_tempCircPositionB.y;
 	float distance = sqrt((distX * distX) + (distY * distY));
 
-	DrawCircle((int)closestX, (int)closestY, 2.f, ORANGE);
-
 	if (distance <= t_tempCircRadiusB)
 	{
 		lineA->GetComponent<LineColliderComponent>()->m_HasCollided = true;
@@ -1808,7 +1804,7 @@ CollisionManifold CollisionManager::LineToOrientedRectangle(GameObjectEntity* li
 
 	// Top left & Top Right
 	t_ColMani = S_LineToLine(t_tempLineStart, t_tempLineEnd, t_AnglePointOne + t_tempOrRectScale, t_AnglePointTwo + t_tempOrRectScale);
-	DrawLineV(t_AnglePointOne.ConvertToVec2(), t_AnglePointTwo.ConvertToVec2(), GREEN);
+
 	if (t_ColMani.m_HasCollision)
 	{
 		lineA->GetComponent<LineColliderComponent>()->m_HasCollided = false;
@@ -1841,7 +1837,7 @@ CollisionManifold CollisionManager::LineToOrientedRectangle(GameObjectEntity* li
 	
 	// Top Right & Bottom Right
 	t_ColMani = S_LineToLine(t_tempLineStart, t_tempLineEnd, t_AnglePointTwo + t_tempOrRectScale, t_AnglePointFour + t_tempOrRectScale);
-	DrawLineV(t_AnglePointTwo.ConvertToVec2(), t_AnglePointFour.ConvertToVec2(), GREEN);
+
 	if (t_ColMani.m_HasCollision)
 	{
 		lineA->GetComponent<LineColliderComponent>()->m_HasCollided = false;
@@ -1874,7 +1870,7 @@ CollisionManifold CollisionManager::LineToOrientedRectangle(GameObjectEntity* li
 
 	// Bottom Right & Bottom Left
 	t_ColMani = S_LineToLine(t_tempLineStart, t_tempLineEnd, t_AnglePointFour + t_tempOrRectScale, t_AnglePointThree + t_tempOrRectScale);
-	DrawLineV(t_AnglePointFour.ConvertToVec2(), t_AnglePointThree.ConvertToVec2(), GREEN);
+	
 	if (t_ColMani.m_HasCollision)
 	{
 		lineA->GetComponent<LineColliderComponent>()->m_HasCollided = false;
@@ -1907,7 +1903,7 @@ CollisionManifold CollisionManager::LineToOrientedRectangle(GameObjectEntity* li
 
 	// Bottom Left & Top Left
 	t_ColMani = S_LineToLine(t_tempLineStart, t_tempLineEnd, t_AnglePointThree + t_tempOrRectScale, t_AnglePointOne + t_tempOrRectScale);
-	DrawLineV(t_AnglePointThree.ConvertToVec2(), t_AnglePointOne.ConvertToVec2(), GREEN);
+	
 	if (t_ColMani.m_HasCollision)
 	{
 		lineA->GetComponent<LineColliderComponent>()->m_HasCollided = false;
@@ -2190,9 +2186,6 @@ CollisionManifold CollisionManager::S_RectangleToRectangle(OKVector2<float> recP
 
 		NearPointA.x = BottomSide.x;
 	}
-
-	DrawCircleV(NearPointB.ConvertToVec2(), 1.f, YELLOW);
-	DrawCircleV(NearPointA.ConvertToVec2(), 1.f, YELLOW);
 
 	CollisionManifold t_tempMani = S_CircleToCircle(NearPointA, 0.5f, NearPointB, 0.5f);
 
