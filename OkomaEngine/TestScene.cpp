@@ -6,30 +6,30 @@ TestScene::TestScene()
 	m_Name = "TestScene";
 
 	{
-		m_CircleObjectTwo.m_Transform.position = OKVector2<float>(-20, 200);
+		m_CircleObjectTwo.m_Transform.position = OKVector2<float>(-20, 500);
 		m_CircleObjectTwo.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
-		m_CircleObjectTwo.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(-10);
+		m_CircleObjectTwo.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(10);
 		m_CircleObjectTwo.AddComponent<RenderComponent>()->Construct(50.f, 50.f);
 		m_CircleObjectTwo.AddComponent<CircleColliderComponent>()->Construct(50);
-		//AddObject(&m_CircleObjectTwo);
+		// AddObject(&m_CircleObjectTwo);
 	}
 
 	{
 		m_ExtraObject.m_Transform.position = OKVector2<float>(0, 0);
 		m_ExtraObject.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
-		m_ExtraObject.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(100);
-		m_ExtraObject.AddComponent<RenderComponent>()->Construct(10.f, 10.f);
-		m_ExtraObject.AddComponent<CircleColliderComponent>()->Construct(40);
+		m_ExtraObject.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(10);
+		m_ExtraObject.AddComponent<RenderComponent>()->Construct(40.f, 40.f);
+		m_ExtraObject.AddComponent<RectangleColliderComponent>()->Construct(40, 40);
 		AddObject(&m_ExtraObject);
 	}
 
 	{
-		//m_OtherObject.m_Transform.position = OKVector2<float>(0, 200);
-		//m_OtherObject.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
-		//m_OtherObject.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(10);
-		//m_OtherObject.AddComponent<RenderComponent>()->Construct(10.f, 10.f);
-		//m_OtherObject.AddComponent<CircleColliderComponent>()->Construct(30);
-		// AddObject(&m_OtherObject);
+		m_OtherObject.m_Transform.position = OKVector2<float>(200, 0);
+		m_OtherObject.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_STATIC);
+		m_OtherObject.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(10);
+		m_OtherObject.AddComponent<RenderComponent>()->Construct(30.f, 30.f);
+		m_OtherObject.AddComponent<RectangleColliderComponent>()->Construct(30, 30);
+		AddObject(&m_OtherObject);
 	}
 
 	m_Floor.m_Transform.position = OKVector2<float>(0.f, -200.f);

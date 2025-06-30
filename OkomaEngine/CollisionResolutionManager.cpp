@@ -42,7 +42,7 @@ void CollisionResolutionManager::ResolveCollision(GameObjectEntity* rigidbodyA, 
 	{
 		// NOTE: Seperate the 2 objects away from each other if they are still interpentrating
 		if (collisionManifold.m_PenetrationDepth != 0) { rigidbodyA->m_Transform.position += t_MoveOutA; }
-
+		
 		// NOTE: If velocity along the normal is greater than 0, we want to resolve the collision
 		if (t_VelocityAlongNormal > 0) { return; }
 		float impulseX = impMag * collisionManifold.m_CollisionNormal.x;
@@ -55,6 +55,7 @@ void CollisionResolutionManager::ResolveCollision(GameObjectEntity* rigidbodyA, 
 
 	if (rigidbodyB->GetComponent<Rigidbody2DComponent>()->GetRigidbodyMovementType() == RIGIDBODY_MOVEMENT_TYPE_DYNAMIC)
 	{
+		// NOTE: Seperate the 2 objects away from each other if they are still interpentrating
 		if (collisionManifold.m_PenetrationDepth != 0) { rigidbodyB->m_Transform.position += t_MoveOutB; }
 		
 		// NOTE: If velocity along the normal is greater than 0, we want to resolve the collision
