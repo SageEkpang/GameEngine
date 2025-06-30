@@ -352,6 +352,8 @@ CollisionManifold CollisionManager::RectangleToRectangle(GameObjectEntity* rectA
 
 	CollisionManifold t_tempMani = S_CircleToCircle(NearPointA, 0.5f, NearPointB, 0.5f);
 
+	DrawCircleV(NearPointA.ConvertToVec2(), 10.f, YELLOW);
+
 	if (t_tempMani.m_HasCollision == true)
 	{
 		rectA->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
@@ -2334,11 +2336,19 @@ CollisionManifold CollisionManager::S_CircleToCircle(OKVector2<float> circPositi
 	OKVector2<float> distance = circPositionA - circPositionB;
 	float radii_sum = circRadiusA + circRadiusB;
 
-	if (distance.magnitude() <= radii_sum)
+	// NOTE: Get the closest point from each circle
+	OKVector2<float> CircClosestPointA = (distance.normalise() * circRadiusA * -1) + circPositionA;
+	OKVector2<float> CircClosestPointB = (distance.normalise() * circRadiusB) + circPositionB;
+
+	// NOTE: New Calculation using Nearest Points
+	OKVector2<float> t_NewDistance = CircClosestPointA - CircClosestPointB;
+	float t_NewRadii = 0.5f + 0.5f;
+
+	if (t_NewDistance.magnitude() <= t_NewRadii)
 	{
 		t_ColMani.m_HasCollision = true;
-		t_ColMani.m_CollisionNormal = distance.normalise();
-		t_ColMani.m_PenetrationDepth = radii_sum - distance.magnitude();
+		t_ColMani.m_CollisionNormal = t_NewDistance.normalise();
+		t_ColMani.m_PenetrationDepth = t_NewRadii - t_NewDistance.magnitude();
 		t_ColMani.m_ContactPointAmount = 1;
 		t_ColMani.m_CollisionPoints[0] = t_ColMani.m_CollisionNormal;
 
