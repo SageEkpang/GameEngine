@@ -97,24 +97,6 @@ int main()
 		// NOTE: Tick the timer from the last frame
 		m_Timer->Tick();
 
-
-
-		//// NOTE: Start of Delta Time
-		//auto startTime = std::chrono::high_resolution_clock::now();
-		//// NOTE: End of Delta Time
-		//auto endTime = std::chrono::high_resolution_clock::now();
-
-		//// NOTE: Delta Time Assinging
-		//auto start = std::chrono::time_point_cast<std::chrono::microseconds>(startTime).time_since_epoch().count();
-		//auto end = std::chrono::time_point_cast<std::chrono::microseconds>(endTime).time_since_epoch().count();
-
-		//OKTime::m_UnscaledDeltaTime = (float)(end - start) / 1000000.f;
-		//OKTime::m_DeltaTime = OKTime::m_UnscaledDeltaTime * OKTime::m_TimeScale;
-
-		//OKTime::m_RealTimeSinceStartUp = end / 1000000.f - g_StartTime;
-		//OKTime::m_Time = OKTime::m_RealTimeSinceStartUp * OKTime::m_TimeScale;
-		//OKTime::m_FrameCount++;
-
 		//printf("DeltaTime: %f\n", OKTime::GetDeltaTime());
 		printf("FrameTime: %f\n\n", GetFrameTime());
 	}
