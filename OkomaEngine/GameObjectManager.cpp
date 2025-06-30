@@ -4,7 +4,8 @@ GameObjectManager::GameObjectManager()
 {
     // TODO: Find Camera index and set the index
     m_PhysicsManager.SetDrawColliders(true);
-    m_PhysicsManager.SetDrawDebugVelocity(false);
+    m_PhysicsManager.SetDrawDebugVelocity(true);
+    // m_PhysicsManager.SetDrawDebugGravity(true);
     CameraVector.clear();
 
 }

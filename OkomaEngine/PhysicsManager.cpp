@@ -36,15 +36,15 @@ void PhysicsManager::Update(const float deltaTime)
 				if (!t_PhysicsObjects[i]->HasComponent<Rigidbody2DComponent>() || !t_PhysicsObjects[j]->HasComponent<Rigidbody2DComponent>()) { continue; }
 
 				// NOTE: Temp bounce variable for the Coef of Rest
-				float t_BounceAmount = 0.0f;
+				float t_BounceAmount = 0.5f;
 
 				// NOTE: Assign a Coefficient of Restituion via the Physics Material on whatever object is static
 				// FURTHER_NOTE: If both items are static, it will not matter
-				if (t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->m_RigidbodyMovementType == RIGIDBODY_MOVEMENT_TYPE_STATIC)
-				{ t_BounceAmount = t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->m_PhysicsMaterial; }
+				// if (t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->m_RigidbodyMovementType == RIGIDBODY_MOVEMENT_TYPE_STATIC)
+				// { t_BounceAmount = t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->m_PhysicsMaterial; }
 
-				if (t_PhysicsObjects[j]->GetComponent<Rigidbody2DComponent>()->m_RigidbodyMovementType == RIGIDBODY_MOVEMENT_TYPE_STATIC)
-				{ t_BounceAmount = t_PhysicsObjects[j]->GetComponent<Rigidbody2DComponent>()->m_PhysicsMaterial; }
+				// if (t_PhysicsObjects[j]->GetComponent<Rigidbody2DComponent>()->m_RigidbodyMovementType == RIGIDBODY_MOVEMENT_TYPE_STATIC)
+				// { t_BounceAmount = t_PhysicsObjects[j]->GetComponent<Rigidbody2DComponent>()->m_PhysicsMaterial; }
 
 				// NOTE: Resolve the Collisions between two game objects when they have a collider and a physics component on them
 				m_CollisionResolutionManager.ResolveCollision
@@ -52,8 +52,7 @@ void PhysicsManager::Update(const float deltaTime)
 					t_PhysicsObjects[i],
 					t_PhysicsObjects[j],
 					float(t_BounceAmount),
-					m_CollisionManifold,
-					deltaTime
+					m_CollisionManifold
 				);
 			}
 		}
@@ -65,41 +64,41 @@ void PhysicsManager::Update(const float deltaTime)
 		for (int i = 0; i < t_PhysicsObjects.size(); ++i)
 		{
 			// NOTE: Check if there is a physics entity on the entity, if not, then continue and add to the physics index
-			if (t_PhysicsObjects[i]->FindChildComponent<PhysicsEntity>() == nullptr) 
-			{ 
-				continue; 
-			}
+			//if (t_PhysicsObjects[i]->FindChildComponent<PhysicsEntity>() == nullptr) 
+			//{ 
+			//	continue; 
+			//}
 
-			// NOTE: Check if any of the colliders are any trigger areas
-			if (t_PhysicsObjects[i]->FindChildComponent<ColliderEntity>()->m_IsTrigger == true)
-			{
-				t_PhysicsObjects[i]->FindChildComponent<ColliderEntity>()->TriggerQueryExecute();
-				continue;
-			}
+			//// NOTE: Check if any of the colliders are any trigger areas
+			//if (t_PhysicsObjects[i]->FindChildComponent<ColliderEntity>()->m_IsTrigger == true)
+			//{
+			//	t_PhysicsObjects[i]->FindChildComponent<ColliderEntity>()->TriggerQueryExecute();
+			//	continue;
+			//}
 
-			// NOTE: Check if there has been a collision]
-			if (t_PhysicsObjects[i]->FindChildComponent<ColliderEntity>()->m_HasCollided)
-			{
+			//// NOTE: Check if there has been a collision]
+			//if (t_PhysicsObjects[i]->FindChildComponent<ColliderEntity>()->m_HasCollided)
+			//{
 
-				//if (t_PhysicsObjects[i]->HasComponent<Rigidbody2DComponent>())
-				//{
-				//	// NOTE: If the game object is not a trigger area, simulate the required physics for it 
-				//	t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateDrag(false);
-				//	t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateLift(false);
+			//	//if (t_PhysicsObjects[i]->HasComponent<Rigidbody2DComponent>())
+			//	//{
+			//	//	// NOTE: If the game object is not a trigger area, simulate the required physics for it 
+			//	//	t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateDrag(false);
+			//	//	t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateLift(false);
 
-				//	t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->m_Friction = t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->m_FrictionMaterial;
-				//	t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateFriction(true);
-				//}
-			}
-			else
-			{
-				//if (t_PhysicsObjects[i]->HasComponent<Rigidbody2DComponent>())
-				//{
-				//	t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateDrag(true);
-				//	t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateLift(true);
-				//	t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateFriction(false);
-				//}
-			}
+			//	//	t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->m_Friction = t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->m_FrictionMaterial;
+			//	//	t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateFriction(true);
+			//	//}
+			//}
+			//else
+			//{
+			//	//if (t_PhysicsObjects[i]->HasComponent<Rigidbody2DComponent>())
+			//	//{
+			//	//	t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateDrag(true);
+			//	//	t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateLift(true);
+			//	//	t_PhysicsObjects[i]->GetComponent<Rigidbody2DComponent>()->SimulateFriction(false);
+			//	//}
+			//}
 
 			// NOTE: Update the physics objects
 			t_PhysicsObjects[i]->Update(deltaTime);
