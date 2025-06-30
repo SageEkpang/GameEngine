@@ -76,8 +76,6 @@ void SceneManager::Draw()
 			rlPushMatrix();
 			rlScalef(1.0f, -1.0f, 1.0f);
 
-			DrawText("thing", 100, 100, 40, GREEN);
-
 			// NOTE: Draw the current scene from the list of scenes
 			m_CurrentScene->Draw();
 

@@ -5,29 +5,30 @@ TestScene::TestScene()
 {
 	m_Name = "TestScene";
 
-	CircleObjectTwo.m_Transform.position = OKVector2<float>(20, 200);
-	CircleObjectTwo.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
-	CircleObjectTwo.AddComponent<RenderComponent>()->Construct(50.f, 50.f);
-	CircleObjectTwo.AddComponent<RectangleColliderComponent>()->Construct(50, 50);
-	CircleObjectTwo.AddComponent<CameraComponent>()->Construct();
-	AddObject(&CircleObjectTwo);
+	{
+		m_CircleObjectTwo.m_Transform.position = OKVector2<float>(20, 20);
+		m_CircleObjectTwo.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
+		m_CircleObjectTwo.AddComponent<RenderComponent>()->Construct(50.f, 50.f);
+		m_CircleObjectTwo.AddComponent<RectangleColliderComponent>()->Construct(50, 50);
+		AddObject(&m_CircleObjectTwo);
+	}
 
-	//Area.m_Transform.position = OKVector2<float>(400.f, -200.f);
-	//Area.AddComponent<Rigidbody2DComponent>();
-	//Area.AddComponent<RectangleColliderComponent>()->Construct(200.f, 200.f);
-	//Area.GetComponent<RectangleColliderComponent>()->m_IsTrigger = true;
+	{
+		m_ExtraObject.m_Transform.position = OKVector2<float>(200, 0);
+		m_ExtraObject.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
+		m_ExtraObject.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(-100);
+		m_ExtraObject.AddComponent<RenderComponent>()->Construct(10.f, 10.f);
+		m_ExtraObject.AddComponent<CircleColliderComponent>()->Construct(40);
+		AddObject(&m_ExtraObject);
+	}
 
-	//Area.GetComponent<RectangleColliderComponent>()->TriggerStayedExecute(
-	//[&]() 
-	//{
-	//	Area.GetComponent<RectangleColliderComponent>()->GetTriggerObject()->GetComponent<Rigidbody2DComponent>()->ApplyForceY(1000.f);
-	//});
-
-	//AddObject(&Area);
-
-
-
-
+	{
+		m_OtherObject.m_Transform.position = OKVector2<float>(1, 200);
+		m_OtherObject.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
+		m_OtherObject.AddComponent<RenderComponent>()->Construct(10.f, 10.f);
+		m_OtherObject.AddComponent<CircleColliderComponent>()->Construct(10);
+		AddObject(&m_OtherObject);
+	}
 
 	m_Floor.m_Transform.position = OKVector2<float>(0.f, -200.f);
 	m_Floor.AddComponent<Rigidbody2DComponent>()->Construct(FLT_MAX, RIGIDBODY_MOVEMENT_TYPE_STATIC);
@@ -56,9 +57,5 @@ void TestScene::Update(const float deltaTime)
 void TestScene::Draw()
 {
 	SceneEntity::Draw();
-
-
-
-
 
 }

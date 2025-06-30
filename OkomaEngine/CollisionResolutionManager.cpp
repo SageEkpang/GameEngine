@@ -10,17 +10,17 @@ CollisionResolutionManager::~CollisionResolutionManager()
 
 }
 
-void CollisionResolutionManager::ResolveCollision(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float coefRest, CollisionManifold collisionManifold)
+void CollisionResolutionManager::ResolveCollision(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float coefRest, CollisionManifold collisionManifold, float deltaTime)
 {
 	// NOTE: Move the object out of the other object first and then apply the force to the object
-	ResolveInterpenetration(rigidbodyA, rigidbodyB, collisionManifold.m_PenetrationDepth, collisionManifold.m_CollisionNormal);
-	ResolveVelocity(rigidbodyA, rigidbodyB, coefRest, collisionManifold.m_CollisionNormal);
+	ResolveInterpenetration(rigidbodyA, rigidbodyB, collisionManifold.m_PenetrationDepth, collisionManifold.m_CollisionNormal, deltaTime);
+	// ResolveVelocity(rigidbodyA, rigidbodyB, coefRest, collisionManifold.m_CollisionNormal);
 }
 
 // FIX THIS: Bouncing is not working
-void CollisionResolutionManager::ResolveVelocity(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float coefRest, OKVector2<float> collisionNormal)
+void CollisionResolutionManager::ResolveVelocity(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float coefRest, OKVector2<float> collisionNormal, float deltaTime)
 {
-	OKVector2<float> t_SeperatingVelocity = CalculateSeperatingVelocity(rigidbodyA, rigidbodyB);
+	OKVector2<float> t_SeperatingVelocity = CalculateSeperatingVelocity(rigidbodyA, rigidbodyB, deltaTime);
 
 	// If there is no need for seperating velocity, then we do not need to run the function
 	if (t_SeperatingVelocity > OKVector2<float>(0, 0)) { return; }
@@ -53,20 +53,20 @@ void CollisionResolutionManager::ResolveVelocity(GameObjectEntity* rigidbodyA, G
 
 	// NOTE: Seperating the Object from its velocity
 	if (rigidbodyA->GetComponent<Rigidbody2DComponent>()->GetRigidbodyMovementType() == RIGIDBODY_MOVEMENT_TYPE_DYNAMIC)
-	{ rigidbodyA->GetComponent<Rigidbody2DComponent>()->ApplyImpulse(t_ImpulsePerMass * rigidbodyA->GetComponent<Rigidbody2DComponent>()->GetInverseMass()); }
+	{ rigidbodyA->GetComponent<Rigidbody2DComponent>()->ApplyImpulse(t_ImpulsePerMass * rigidbodyA->GetComponent<Rigidbody2DComponent>()->GetInverseMass() * deltaTime); }
 
 	if (rigidbodyB->GetComponent<Rigidbody2DComponent>()->GetRigidbodyMovementType() == RIGIDBODY_MOVEMENT_TYPE_DYNAMIC)
-	{ rigidbodyB->GetComponent<Rigidbody2DComponent>()->ApplyImpulse(t_ImpulsePerMass * -rigidbodyB->GetComponent<Rigidbody2DComponent>()->GetInverseMass()); }
+	{ rigidbodyB->GetComponent<Rigidbody2DComponent>()->ApplyImpulse(t_ImpulsePerMass * -rigidbodyB->GetComponent<Rigidbody2DComponent>()->GetInverseMass() * deltaTime); }
 }
 
 // NOTE: This Collision Function can only be for collisions that have no rotations to them
-void CollisionResolutionManager::ResolveInterpenetration(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float penetration, OKVector2<float> collisionNormal)
+void CollisionResolutionManager::ResolveInterpenetration(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float penetration, OKVector2<float> collisionNormal, float deltaTime)
 {
 	// No Penetration, so no need for it
 	if (penetration <= 0) { return; }
 
 	float t_TotalInverseMass = rigidbodyA->GetComponent<Rigidbody2DComponent>()->GetInverseMass() + rigidbodyB->GetComponent<Rigidbody2DComponent>()->GetInverseMass();
-
+	
 	// If infinite mass, return (more so for stationary / static objects)
 	if (t_TotalInverseMass == 0) { return; }
 
@@ -77,15 +77,19 @@ void CollisionResolutionManager::ResolveInterpenetration(GameObjectEntity* rigid
 
 	// NOTE: Move the Objects if 
 	if (rigidbodyA->GetComponent<Rigidbody2DComponent>()->GetRigidbodyMovementType() == RIGIDBODY_MOVEMENT_TYPE_DYNAMIC)
-	{ rigidbodyA->m_Transform.position += t_MoveOutA; }
+	{ 
+		rigidbodyA->m_Transform.position += t_MoveOutA * deltaTime; 
+	}
 
 	if (rigidbodyB->GetComponent<Rigidbody2DComponent>()->GetRigidbodyMovementType() == RIGIDBODY_MOVEMENT_TYPE_DYNAMIC)
-	{ rigidbodyB->m_Transform.position += t_MoveOutB; }
+	{ 
+		rigidbodyB->m_Transform.position += t_MoveOutB * deltaTime;
+	}
 }
 
-OKVector2<float> CollisionResolutionManager::CalculateSeperatingVelocity(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB)
+OKVector2<float> CollisionResolutionManager::CalculateSeperatingVelocity(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float deltaTime)
 {
 	OKVector2<float> t_RelativeVelocity = rigidbodyA->GetComponent<Rigidbody2DComponent>()->m_Velocity;
 	t_RelativeVelocity -= rigidbodyB->GetComponent<Rigidbody2DComponent>()->m_Velocity;
-	return t_RelativeVelocity;
+	return t_RelativeVelocity * deltaTime;
 }

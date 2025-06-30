@@ -11,9 +11,9 @@ class TestScene : public SceneEntity
 {
 private:
 
-	GameObjectEntity PlayerCamera;
-	GameObjectEntity Area;
-	GameObjectEntity CircleObjectTwo;
+	GameObjectEntity m_OtherObject;
+	GameObjectEntity m_CircleObjectTwo;
+	GameObjectEntity m_ExtraObject;
 	GameObjectEntity m_Floor;
 
 public:

@@ -568,7 +568,7 @@ CollisionManifold CollisionManager::CircleToRectangle(GameObjectEntity* circA, G
 
 	CollisionManifold t_tempMani = S_CircleToCircle(CircClosestPointA, 0.5f, NearPoint, 0.5f);
 
-	if (t_tempMani.m_HasCollision)
+	if (t_tempMani.m_HasCollision == true)
 	{
 		circA->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
 		rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
@@ -618,6 +618,7 @@ CollisionManifold CollisionManager::CircleToRectangle(GameObjectEntity* circA, G
 			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(circA);
 		}
 
+		return t_tempMani;
 	}
 
 	return t_ColMani;

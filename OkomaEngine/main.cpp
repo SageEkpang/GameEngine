@@ -72,32 +72,51 @@ int main()
 
 	rlDisableBackfaceCulling();
 
-	// SetTargetFPS(60);
+	Timer* m_Timer = new Timer();
+	float m_Accumulator = 0.f;
+	float m_SimpleCounter = 0.f;
+
 	// NOTE: Plinko
+	SetTargetFPS(60);
 	while (!WindowShouldClose())
 	{
-		// NOTE: Start of Delta Time
-		auto startTime = std::chrono::high_resolution_clock::now();
 
-		g_SceneManager->Update(GetFrameTime());
+		// NOTE: Fixing the Time step with a force accumulator
+		m_Accumulator += m_Timer->GetDeltaTime();
+		m_SimpleCounter += m_Timer->GetDeltaTime();
+
+		// NOTE: Make sure the framerate is right to the accumualtor
+		if (m_Accumulator >= FPS_60)
+		{
+			g_SceneManager->Update(FPS_60);
+			m_Accumulator -= FPS_60;
+		}
+		
 		g_SceneManager->Draw();
 
-		// NOTE: End of Delta Time
-		auto endTime = std::chrono::high_resolution_clock::now();
+		// NOTE: Tick the timer from the last frame
+		m_Timer->Tick();
 
-		// NOTE: Delta Time Assinging
-		auto start = std::chrono::time_point_cast<std::chrono::microseconds>(startTime).time_since_epoch().count();
-		auto end = std::chrono::time_point_cast<std::chrono::microseconds>(endTime).time_since_epoch().count();
 
-		OKTime::m_UnscaledDeltaTime = (float)(end - start) / 1000000.f;
-		OKTime::m_DeltaTime = OKTime::m_UnscaledDeltaTime * OKTime::m_TimeScale;
 
-		OKTime::m_RealTimeSinceStartUp = end / 1000000.f - g_StartTime;
-		OKTime::m_Time = OKTime::m_RealTimeSinceStartUp * OKTime::m_TimeScale;
-		OKTime::m_FrameCount++;
+		//// NOTE: Start of Delta Time
+		//auto startTime = std::chrono::high_resolution_clock::now();
+		//// NOTE: End of Delta Time
+		//auto endTime = std::chrono::high_resolution_clock::now();
+
+		//// NOTE: Delta Time Assinging
+		//auto start = std::chrono::time_point_cast<std::chrono::microseconds>(startTime).time_since_epoch().count();
+		//auto end = std::chrono::time_point_cast<std::chrono::microseconds>(endTime).time_since_epoch().count();
+
+		//OKTime::m_UnscaledDeltaTime = (float)(end - start) / 1000000.f;
+		//OKTime::m_DeltaTime = OKTime::m_UnscaledDeltaTime * OKTime::m_TimeScale;
+
+		//OKTime::m_RealTimeSinceStartUp = end / 1000000.f - g_StartTime;
+		//OKTime::m_Time = OKTime::m_RealTimeSinceStartUp * OKTime::m_TimeScale;
+		//OKTime::m_FrameCount++;
 
 		//printf("DeltaTime: %f\n", OKTime::GetDeltaTime());
-		//printf("FrameTime: %f\n\n", GetFrameTime());
+		printf("FrameTime: %f\n\n", GetFrameTime());
 	}
 
 	delete g_SceneManager;

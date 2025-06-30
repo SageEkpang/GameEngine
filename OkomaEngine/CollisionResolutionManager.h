@@ -17,13 +17,13 @@ public:
 	~CollisionResolutionManager();
 
 	// BASE FUNCTION(s)
-	void ResolveCollision(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float coefRest, CollisionManifold collisionManifold);
+	void ResolveCollision(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float coefRest, CollisionManifold collisionManifold, float deltaTime);
 
 private:
 
-	OKVector2<float> CalculateSeperatingVelocity(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB);
-	void ResolveVelocity(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float coefRest, OKVector2<float> collisionNormal);
-	void ResolveInterpenetration(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float penetration, OKVector2<float> collisionNormal);
+	OKVector2<float> CalculateSeperatingVelocity(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float deltaTime);
+	void ResolveVelocity(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float coefRest, OKVector2<float> collisionNormal, float deltaTime);
+	void ResolveInterpenetration(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float penetration, OKVector2<float> collisionNormal, float deltaTime);
 
 };
 

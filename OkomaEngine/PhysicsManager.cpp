@@ -52,7 +52,8 @@ void PhysicsManager::Update(const float deltaTime)
 					t_PhysicsObjects[i],
 					t_PhysicsObjects[j],
 					float(t_BounceAmount),
-					m_CollisionManifold
+					m_CollisionManifold,
+					deltaTime
 				);
 			}
 		}
