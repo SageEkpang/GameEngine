@@ -6,28 +6,26 @@ TestScene::TestScene()
 	m_Name = "TestScene";
 
 	{
-		m_CircleObjectTwo.m_Transform.position = OKVector2<float>(-200, 1);
+		m_CircleObjectTwo.m_Transform.position = OKVector2<float>(0, 0);
 		m_CircleObjectTwo.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
-		m_CircleObjectTwo.AddComponent<RenderComponent>()->Construct(50.f, 50.f);
-		m_CircleObjectTwo.AddComponent<RectangleColliderComponent>()->Construct(50, 50);
+		// m_CircleObjectTwo.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(100);
+		m_CircleObjectTwo.AddComponent<CircleColliderComponent>()->Construct(50);
 		AddObject(&m_CircleObjectTwo);
 	}
 
 	{
 		m_ExtraObject.m_Transform.position = OKVector2<float>(0, 0);
 		m_ExtraObject.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
-		m_ExtraObject.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(140);
-		m_ExtraObject.AddComponent<RenderComponent>()->Construct(40.f, 40.f);
-		m_ExtraObject.AddComponent<CircleColliderComponent>()->Construct(40);
-		AddObject(&m_ExtraObject);
+		m_ExtraObject.GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(100);
+		m_ExtraObject.AddComponent<CapsuleColliderComponent>()->Construct(40, 80);
+		// AddObject(&m_ExtraObject);
 	}
 
 	{
 		m_OtherObject.m_Transform.position = OKVector2<float>(200, 0);
-		m_OtherObject.AddComponent<Rigidbody2DComponent>()->Construct(FLT_MAX, RIGIDBODY_MOVEMENT_TYPE_STATIC);
-		m_OtherObject.AddComponent<RenderComponent>()->Construct(30.f, 30.f);
-		m_OtherObject.AddComponent<RectangleColliderComponent>()->Construct(50, 500);
-		AddObject(&m_OtherObject);
+		m_OtherObject.AddComponent<Rigidbody2DComponent>()->Construct(10.f, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
+		m_OtherObject.AddComponent<CapsuleColliderComponent>()->Construct(40, 80);
+		// AddObject(&m_OtherObject);
 	}
 
 	{

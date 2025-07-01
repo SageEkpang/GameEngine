@@ -562,11 +562,11 @@ CollisionManifold CollisionManager::RectangleToCircle(GameObjectEntity* rectA, G
 		NearPoint.x = BottomSide.x;
 	}
 
+
 	// NOTE: Calculate closest point from the rectangle to the circle and use that as the collision calculation
 	OKVector2<float> distance = t_CircPositionA - NearPoint;
-	OKVector2<float> CircClosestPointA = (distance.normalise() * t_CircARadius * -1) + t_CircPositionA;
-
-	CollisionManifold t_tempMani = S_CircleToCircle(CircClosestPointA, 0.5f, NearPoint, 0.5f);
+	OKVector2<float> CircClosestPoint = (distance.normalise() * t_CircARadius * -1) + t_CircPositionA;
+	CollisionManifold t_tempMani = S_CircleToCircle(CircClosestPoint, 0.5f, NearPoint, 0.5f);
 
 	if (t_tempMani.m_HasCollision == true)
 	{
@@ -653,7 +653,60 @@ CollisionManifold CollisionManager::CapsuleToCircle(GameObjectEntity* capsuleA, 
 	closest_point.x = Clamp(closest_point.x, base_a.x, tip_a.x);
 	closest_point.y = Clamp(closest_point.y, base_a.y, tip_a.y);
 
-	return t_ColMani  = S_CircleToCircle(closest_point, capsuleA->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f, circB->m_Transform.position, t_tempCircleRadiusB);
+	t_ColMani  = S_CircleToCircle(circB->m_Transform.position, t_tempCircleRadiusB, closest_point, capsuleA->GetComponent<CapsuleColliderComponent>()->m_Width / 2.f);
+
+	if (t_ColMani.m_HasCollision)
+	{
+		capsuleA->GetComponent<CapsuleColliderComponent>()->m_HasCollided = true;
+		circB->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
+
+		if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true && circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+		{
+			capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(circB);
+			circB->GetComponent<CircleColliderComponent>()->TriggerQuery(capsuleA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true)
+		{
+			capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(circB);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		if (circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+		{
+			circB->GetComponent<CircleColliderComponent>()->TriggerQuery(capsuleA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		return t_ColMani;
+	}
+	else
+	{
+		capsuleA->GetComponent<CapsuleColliderComponent>()->m_HasCollided = false;
+		circB->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
+
+		if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true && circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+		{
+			capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(circB);
+			circB->GetComponent<CircleColliderComponent>()->TriggerQuery(capsuleA);
+		}
+
+		if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true)
+		{
+			capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(circB);
+		}
+
+		if (circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+		{
+			circB->GetComponent<CircleColliderComponent>()->TriggerQuery(capsuleA);
+		}
+	}
+
+	return CollisionManifold();
 }
 
 CollisionManifold CollisionManager::CapsuleToRectangle(GameObjectEntity* capsuleA, GameObjectEntity* rectB)
@@ -685,7 +738,61 @@ CollisionManifold CollisionManager::CapsuleToRectangle(GameObjectEntity* capsule
 	closest_point.x = Clamp(closest_point.x, base_a.x, tip_a.x);
 	closest_point.y = Clamp(closest_point.y, base_a.y, tip_a.y);
 
-	return t_ColMani = S_CircleToRectangle(closest_point, capsuleA->GetComponent<CapsuleColliderComponent>()->m_Width * 0.5f, t_tempRectPositionB, t_tempRectScaleB);
+	t_ColMani = S_CircleToRectangle(closest_point, capsuleA->GetComponent<CapsuleColliderComponent>()->m_Width * 0.5f, t_tempRectPositionB, t_tempRectScaleB);
+
+
+	if (t_ColMani.m_HasCollision)
+	{
+		capsuleA->GetComponent<CapsuleColliderComponent>()->m_HasCollided = true;
+		rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
+
+		if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true && rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+		{
+			capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(rectB);
+			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(capsuleA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true)
+		{
+			capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(rectB);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		if (rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+		{
+			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(capsuleA);
+			t_ColMani.m_HasCollision = true;
+			return t_ColMani;
+		}
+
+		return t_ColMani;
+	}
+	else
+	{
+		capsuleA->GetComponent<CapsuleColliderComponent>()->m_HasCollided = false;
+		rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = false;
+
+		if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true && rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+		{
+			capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(rectB);
+			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(capsuleA);
+		}
+
+		if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true)
+		{
+			capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(rectB);
+		}
+
+		if (rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+		{
+			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(capsuleA);
+		}
+	}
+
+	return CollisionManifold();
 }
 
 CollisionManifold CollisionManager::CapsuleToCapsule(GameObjectEntity* capsuleA, GameObjectEntity* capsuleB)
@@ -756,6 +863,27 @@ CollisionManifold CollisionManager::CapsuleToCapsule(GameObjectEntity* capsuleA,
 		}
 
 		return t_ColMani;
+	}
+	else
+	{
+		capsuleA->GetComponent<CapsuleColliderComponent>()->m_HasCollided = false;
+		capsuleB->GetComponent<CapsuleColliderComponent>()->m_HasCollided = false;
+
+		if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true && capsuleB->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true)
+		{
+			capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(capsuleB);
+			capsuleB->GetComponent<CapsuleColliderComponent>()->TriggerQuery(capsuleA);
+		}
+
+		if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true)
+		{
+			capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(capsuleB);
+		}
+
+		if (capsuleB->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true)
+		{
+			capsuleB->GetComponent<CapsuleColliderComponent>()->TriggerQuery(capsuleA);
+		}
 	}
 
 	return CollisionManifold();
@@ -2435,7 +2563,7 @@ CollisionManifold CollisionManager::S_CircleToRectangle(OKVector2<float> circPos
 		NearPoint.x = BottomSide.x;
 	}
 
-	return S_CircleToCircle(t_tempCircPositionA, circRadiusA, NearPoint, 1.f);
+	return S_CircleToCircle(t_tempCircPositionA, circRadiusA, NearPoint, 0.5f);
 }
 
 CollisionManifold CollisionManager::S_CircleToRectangle(float circXA, float circYA, float circRadiusA, float recXB, float recYB, float recWidthB, float recHeightB)
