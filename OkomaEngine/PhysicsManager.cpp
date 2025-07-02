@@ -64,17 +64,14 @@ void PhysicsManager::Update(const float deltaTime)
 		for (int i = 0; i < t_PhysicsObjects.size(); ++i)
 		{
 			// NOTE: Check if there is a physics entity on the entity, if not, then continue and add to the physics index
-			//if (t_PhysicsObjects[i]->FindChildComponent<PhysicsEntity>() == nullptr) 
-			//{ 
-			//	continue; 
-			//}
+			if (t_PhysicsObjects[i]->FindChildComponent<PhysicsEntity>() == nullptr) { continue; }
 
-			//// NOTE: Check if any of the colliders are any trigger areas
-			//if (t_PhysicsObjects[i]->FindChildComponent<ColliderEntity>()->m_IsTrigger == true)
-			//{
-			//	t_PhysicsObjects[i]->FindChildComponent<ColliderEntity>()->TriggerQueryExecute();
-			//	continue;
-			//}
+			// NOTE: Check if any of the colliders are any trigger areas
+			if (t_PhysicsObjects[i]->FindChildComponent<ColliderEntity>()->m_IsTrigger == true)
+			{ 
+				t_PhysicsObjects[i]->FindChildComponent<ColliderEntity>()->TriggerQueryExecute();
+				continue;
+			}
 
 			//// NOTE: Check if there has been a collision]
 			//if (t_PhysicsObjects[i]->FindChildComponent<ColliderEntity>()->m_HasCollided)

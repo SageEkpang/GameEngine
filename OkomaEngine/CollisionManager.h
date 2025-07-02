@@ -18,6 +18,17 @@ class CapsuleColliderComponent;
 class ComplexColliderComponent;
 class PointColliderComponent;
 
+
+// TRIGGER STUFF
+/*
+    Rectangle to Rectangle -> Double Checks
+    Circle to Circle -> Double Checks
+    Circle to Rectangle -> Double Checks
+
+*/
+
+
+
 enum Collider_Type_Collisions
 {
     // Physics Collider (Work on this )

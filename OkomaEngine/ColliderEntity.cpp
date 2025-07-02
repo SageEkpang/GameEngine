@@ -12,15 +12,17 @@ ColliderEntity::~ColliderEntity()
 {
 	if (!m_ObjectList.empty()) { m_ObjectList.clear(); }
 
-	m_TriggerState = TriggerAreaState::TRIGGER_AREA_STATE_EXITED;
+	m_TriggerState = TriggerAreaState::TRIGGER_AREA_STATE_NONE;
 }
 
 void ColliderEntity::TriggerQuery(GameObjectEntity* gameObject)
 {
 	if (m_IsActivated == false) { return; }
+
 	if (m_Quered == false)
 	{
 		m_Quered = true;
+
 
 		// NOTE: Game Object has entered trigger
 		if (m_ObjectList.find(gameObject) == m_ObjectList.end() && gameObject->FindChildComponent<ColliderEntity>()->m_HasCollided == true)
@@ -47,6 +49,7 @@ void ColliderEntity::TriggerQuery(GameObjectEntity* gameObject)
 			m_ObjectList.erase(gameObject);
 			return;
 		}
+
 	}
 }
 
@@ -73,10 +76,7 @@ void ColliderEntity::TriggerQueryExecute()
 		case TriggerAreaState::TRIGGER_AREA_STATE_ENTERED: 
 			if (m_TriggerEnteredLambda != nullptr) 
 			{ 
-					m_TriggerEnteredLambda();
-				//for (m_ObjectItr = m_ObjectList.begin(); m_ObjectItr != m_ObjectList.end(); ++m_ObjectItr)
-				//{
-				//}
+				m_TriggerEnteredLambda();
 			} 
 			m_TriggerState = TriggerAreaState::TRIGGER_AREA_STATE_NONE;
 			break;
@@ -85,9 +85,6 @@ void ColliderEntity::TriggerQueryExecute()
 			if (m_TriggerStayedLambda != nullptr)
 			{ 
 				m_TriggerStayedLambda();
-				//for (m_ObjectItr = m_ObjectList.begin(); m_ObjectItr != m_ObjectList.end(); ++m_ObjectItr)
-				//{
-				//}
 			} 
 			m_TriggerState = TriggerAreaState::TRIGGER_AREA_STATE_NONE;
 			break;
@@ -96,14 +93,12 @@ void ColliderEntity::TriggerQueryExecute()
 			if (m_TriggerExitedLambda != nullptr) 
 			{
 				m_TriggerExitedLambda(); 
-				//for (m_ObjectItr = m_ObjectList.begin(); m_ObjectItr != m_ObjectList.end(); ++m_ObjectItr)
-				//{
-				//}
 			}
 			m_TriggerState = TriggerAreaState::TRIGGER_AREA_STATE_NONE;
 			break;
 
 		case TriggerAreaState::TRIGGER_AREA_STATE_NONE: 
+			m_TriggerState = TriggerAreaState::TRIGGER_AREA_STATE_NONE;
 			break;
 
 		default: 

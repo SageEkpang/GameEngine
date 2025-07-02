@@ -249,6 +249,78 @@ CollisionManifold CollisionManager::RectangleToRectangle(GameObjectEntity* rectA
 	OKVector2<float> RectScaleHalfB = RectScaleB / 2.f;
 	OKVector2<float> NearPointB = OKVector2<float>(0, 0);
 
+
+	// NOTE: Calculating the trigger area collision and the normal collision differs a bit due to the closest point checks
+	// NOTE: Need to seperate the collision checks to two different passes, the Trigger, this is why the trigger area code fires twice
+	// NOTE: The fix is to do the 2 different collisions separetly
+
+	#pragma region Trigger Area Collision
+
+	if (rectA->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true || rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+	{
+
+
+		// TODO: Finished this
+		if (true)
+		{
+			rectA->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
+			rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
+
+			if (rectA->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true && rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+			{
+				rectA->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectB);
+				rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectA);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			if (rectA->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+			{
+				rectA->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectB);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			if (rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+			{
+				rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectA);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			return t_ColMani;
+		}
+		else
+		{
+			rectA->GetComponent<RectangleColliderComponent>()->m_HasCollided = false;
+			rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = false;
+
+			if (rectA->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true && rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+			{
+				rectA->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectB);
+				rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectA);
+			}
+
+			if (rectA->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+			{
+				rectA->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectB);
+			}
+
+			if (rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
+			{
+				rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectA);
+			}
+		}
+
+		return t_ColMani;
+	}
+
+	#pragma endregion
+
+
+
+	#pragma region Physics Collision
+
 	if (RectCentreA.x < RectCentreB.x)
 	{
 		OKVector2<float> LeftSide = ProjectPointOntoLine(
@@ -337,6 +409,7 @@ CollisionManifold CollisionManager::RectangleToRectangle(GameObjectEntity* rectA
 
 		NearPointA.x = TopSide.x;
 	}
+	
 	else if (RectCentreB.y > RectCentreA.y)
 	{
 		OKVector2<float> BottomSide = ProjectPointOntoLine(
@@ -350,67 +423,15 @@ CollisionManifold CollisionManager::RectangleToRectangle(GameObjectEntity* rectA
 		NearPointA.x = BottomSide.x;
 	}
 
-	CollisionManifold t_tempMani = S_CircleToCircle(NearPointA, 0.5f, NearPointB, 0.5f);
+	return S_CircleToCircle(NearPointA, 0.5f, NearPointB, 0.5f);
 
-	if (t_tempMani.m_HasCollision == true)
-	{
-		rectA->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
-		rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
+	#pragma endregion
 
-		if (rectA->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true && rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
-		{
-			rectA->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectB);
-			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectA);
-			t_ColMani.m_HasCollision = true;
-			return t_ColMani;
-		}
-
-		if (rectA->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
-		{
-			rectA->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectB);
-			t_ColMani.m_HasCollision = true;
-			return t_ColMani;
-		}
-
-		if (rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
-		{
-			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectA);
-			t_ColMani.m_HasCollision = true;
-			return t_ColMani;
-		}
-
-		return t_tempMani;
-	}
-	else
-	{
-		rectA->GetComponent<RectangleColliderComponent>()->m_HasCollided = false;
-		rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = false;
-
-		if (rectA->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true && rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
-		{
-			rectA->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectB);
-			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectA);
-		}
-
-		if (rectA->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
-		{
-			rectA->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectB);
-		}
-
-		if (rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
-		{
-			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(rectA);
-		}
-	}
-
-	return t_ColMani;
 }
 
 CollisionManifold CollisionManager::CircleToCircle(GameObjectEntity* circA, GameObjectEntity* circB)
 {
 	CollisionManifold t_ColMani = CollisionManifold();
-	circA->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
-	circB->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
 
 	// NOTE: Variable Help Dec
 	OKVector2<float> CircAPosition = circA->m_Transform.position + circA->GetComponent<CircleColliderComponent>()->m_Offset;
@@ -431,34 +452,75 @@ CollisionManifold CollisionManager::CircleToCircle(GameObjectEntity* circA, Game
 	OKVector2<float> t_NewDistance = CircClosestPointA - CircClosestPointB;
 	float t_NewRadii = 0.5f + 0.5f;
 
+	
+	// NOTE: Calculating the trigger area collision and the normal collision differs a bit due to the closest point checks
+	// NOTE: Need to seperate the collision checks to two different passes, the Trigger, this is why the trigger area code fires twice
+	// NOTE: The fix is to do the 2 different collisions separetly
+
+	#pragma region Trigger Area Collision
+
+	if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true || circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+	{
+		if (distance.magnitude() <= radii_sum)
+		{
+			circA->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
+			circB->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
+
+			if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true && circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+			{
+				circA->GetComponent<CircleColliderComponent>()->TriggerQuery(circB);
+				circB->GetComponent<CircleColliderComponent>()->TriggerQuery(circA);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+			{
+				circA->GetComponent<CircleColliderComponent>()->TriggerQuery(circB);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+			if (circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+			{
+				circB->GetComponent<CircleColliderComponent>()->TriggerQuery(circA);
+				t_ColMani.m_HasCollision = true;
+				return t_ColMani;
+			}
+
+		}
+		else
+		{
+			circA->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
+			circB->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
+
+			if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true && circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+			{
+				circA->GetComponent<CircleColliderComponent>()->TriggerQuery(circB);
+				circB->GetComponent<CircleColliderComponent>()->TriggerQuery(circA);
+			}
+
+			if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+			{
+				circA->GetComponent<CircleColliderComponent>()->TriggerQuery(circB);
+			}
+
+			if (circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
+			{
+				circB->GetComponent<CircleColliderComponent>()->TriggerQuery(circA);
+			}
+		}
+
+		return t_ColMani;
+	}
+
+	#pragma endregion
+
+	#pragma region Physics Collision 
+
 	// NOTE: Calculating the Circle Distance
 	if (t_NewDistance.magnitude() <= t_NewRadii)
 	{
-		circA->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
-		circB->GetComponent<CircleColliderComponent>()->m_HasCollided = true;
-
-		if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true && circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
-		{
-			circA->GetComponent<CircleColliderComponent>()->TriggerQuery(circB);
-			circB->GetComponent<CircleColliderComponent>()->TriggerQuery(circA);
-			t_ColMani.m_HasCollision = true;
-			return t_ColMani;
-		}
-
-		if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
-		{
-			circA->GetComponent<CircleColliderComponent>()->TriggerQuery(circB);
-			t_ColMani.m_HasCollision = true;
-			return t_ColMani;
-		}
-
-		if (circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
-		{
-			circB->GetComponent<CircleColliderComponent>()->TriggerQuery(circA);
-			t_ColMani.m_HasCollision = true;
-			return t_ColMani;
-		}
-
 		t_ColMani.m_HasCollision = true;
 		t_ColMani.m_CollisionNormal = t_NewDistance.normalise();
 		t_ColMani.m_PenetrationDepth = (float)t_NewRadii - t_NewDistance.magnitude();
@@ -467,27 +529,8 @@ CollisionManifold CollisionManager::CircleToCircle(GameObjectEntity* circA, Game
 
 		return t_ColMani;
 	}
-	else
-	{
-		circA->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
-		circB->GetComponent<CircleColliderComponent>()->m_HasCollided = false;
 
-		if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true && circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
-		{
-			circA->GetComponent<CircleColliderComponent>()->TriggerQuery(circB);
-			circB->GetComponent<CircleColliderComponent>()->TriggerQuery(circA);
-		}
-
-		if (circA->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
-		{
-			circA->GetComponent<CircleColliderComponent>()->TriggerQuery(circB);
-		}
-
-		if (circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
-		{
-			circB->GetComponent<CircleColliderComponent>()->TriggerQuery(circA);
-		}
-	}
+	#pragma endregion
 
 	return t_ColMani;
 }
@@ -617,8 +660,6 @@ CollisionManifold CollisionManager::RectangleToCircle(GameObjectEntity* rectA, G
 		{
 			rectA->GetComponent<RectangleColliderComponent>()->TriggerQuery(circB);
 		}
-
-		return t_tempMani;
 	}
 
 	return t_ColMani;
@@ -664,6 +705,7 @@ CollisionManifold CollisionManager::CapsuleToCircle(GameObjectEntity* capsuleA, 
 		{
 			capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(circB);
 			circB->GetComponent<CircleColliderComponent>()->TriggerQuery(capsuleA);
+			t_ColMani = CollisionManifold();
 			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
@@ -671,6 +713,7 @@ CollisionManifold CollisionManager::CapsuleToCircle(GameObjectEntity* capsuleA, 
 		if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true)
 		{
 			capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(circB);
+			t_ColMani = CollisionManifold();
 			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
@@ -678,6 +721,7 @@ CollisionManifold CollisionManager::CapsuleToCircle(GameObjectEntity* capsuleA, 
 		if (circB->GetComponent<CircleColliderComponent>()->m_IsTrigger == true)
 		{
 			circB->GetComponent<CircleColliderComponent>()->TriggerQuery(capsuleA);
+			t_ColMani = CollisionManifold();
 			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
@@ -750,6 +794,7 @@ CollisionManifold CollisionManager::CapsuleToRectangle(GameObjectEntity* capsule
 		{
 			capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(rectB);
 			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(capsuleA);
+			t_ColMani = CollisionManifold();
 			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
@@ -757,6 +802,7 @@ CollisionManifold CollisionManager::CapsuleToRectangle(GameObjectEntity* capsule
 		if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true)
 		{
 			capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(rectB);
+			t_ColMani = CollisionManifold();
 			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
@@ -764,6 +810,7 @@ CollisionManifold CollisionManager::CapsuleToRectangle(GameObjectEntity* capsule
 		if (rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
 		{
 			rectB->GetComponent<RectangleColliderComponent>()->TriggerQuery(capsuleA);
+			t_ColMani = CollisionManifold();
 			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
@@ -844,6 +891,7 @@ CollisionManifold CollisionManager::CapsuleToCapsule(GameObjectEntity* capsuleA,
 		{
 			capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(capsuleB);
 			capsuleB->GetComponent<CapsuleColliderComponent>()->TriggerQuery(capsuleA);
+			t_ColMani = CollisionManifold();
 			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
@@ -851,6 +899,7 @@ CollisionManifold CollisionManager::CapsuleToCapsule(GameObjectEntity* capsuleA,
 		if (capsuleA->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true)
 		{
 			capsuleA->GetComponent<CapsuleColliderComponent>()->TriggerQuery(capsuleB);
+			t_ColMani = CollisionManifold();
 			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
@@ -858,6 +907,7 @@ CollisionManifold CollisionManager::CapsuleToCapsule(GameObjectEntity* capsuleA,
 		if (capsuleB->GetComponent<CapsuleColliderComponent>()->m_IsTrigger == true)
 		{
 			capsuleB->GetComponent<CapsuleColliderComponent>()->TriggerQuery(capsuleA);
+			t_ColMani = CollisionManifold();
 			t_ColMani.m_HasCollision = true;
 			return t_ColMani;
 		}
