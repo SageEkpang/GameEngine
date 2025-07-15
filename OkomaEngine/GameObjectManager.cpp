@@ -6,7 +6,7 @@ GameObjectManager::GameObjectManager()
     m_PhysicsManager.SetDrawColliders(true);
     m_PhysicsManager.SetDrawDebugVelocity(true);
     // m_PhysicsManager.SetDrawDebugGravity(true);
-    CameraVector.clear();
+    m_GameObjectsVector.clear();
 
 }
 
@@ -28,13 +28,19 @@ void GameObjectManager::Showcase()
 void GameObjectManager::AddGameObject(GameObjectEntity* gameObject)
 {
     // TODO: Instead of the game object, should take in the components from the game objects
+    // 
+    // 
+    // TODO_INSTEAD: Take in a copy, make a new gameobject here
+    // 
+    // 
+    // 
     // NOTE: Checks if the game object has a physics component on it, so it can simulate physics
     if (gameObject->HasComponent<Rigidbody2DComponent>()) { m_PhysicsManager.AddPhysicsObject(gameObject); }
     if (gameObject->HasComponent<RenderComponent>()) { m_RenderManager.AddRenderObject(gameObject); }
     if (gameObject->HasComponent<CameraComponent>()) 
     { 
         m_CurrentCamera = &gameObject->GetComponent<CameraComponent>()->m_Camera; 
-        CameraVector.push_back(gameObject);
+        m_GameObjectsVector.push_back(gameObject);
     }
 
 }
@@ -57,7 +63,7 @@ void GameObjectManager::ProcessGameObject(float deltaTime)
     m_RenderManager.Update(deltaTime);
     m_PhysicsManager.Update(deltaTime);
 
-    for (auto& v : CameraVector)
+    for (auto& v : m_GameObjectsVector)
     {
         v->Update(deltaTime);
     }

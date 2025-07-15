@@ -108,8 +108,8 @@ public: // OPERATOR OVERLOAD FUNCTION(s)
 
     OKVector2 operator -()
     {
-        -x;
-        -y;
+        x = x > 0 ? x *= -1 : x;
+        y = y > 0 ? y *= -1 : y;
         return *this;
     }
 

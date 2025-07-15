@@ -23,7 +23,6 @@ void ColliderEntity::TriggerQuery(GameObjectEntity* gameObject)
 	{
 		m_Quered = true;
 
-
 		// NOTE: Game Object has entered trigger
 		if (m_ObjectList.find(gameObject) == m_ObjectList.end() && gameObject->FindChildComponent<ColliderEntity>()->m_HasCollided == true)
 		{

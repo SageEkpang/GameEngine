@@ -258,10 +258,10 @@ CollisionManifold CollisionManager::RectangleToRectangle(GameObjectEntity* rectA
 
 	if (rectA->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true || rectB->GetComponent<RectangleColliderComponent>()->m_IsTrigger == true)
 	{
-
-
-		// TODO: Finished this
-		if (true)
+		// NOTE: Check if the Rectangles are in Each Other
+		if ( 
+			(RectCentreA.x < (RectCentreB.x + RectScaleB.x) && (RectCentreA.x + RectScaleA.x) > RectCentreB.x) && 
+			(RectCentreA.y < (RectCentreB.y + RectScaleB.y) && (RectCentreA.y + RectScaleA.y) > RectCentreB.y))
 		{
 			rectA->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
 			rectB->GetComponent<RectangleColliderComponent>()->m_HasCollided = true;
@@ -555,6 +555,23 @@ CollisionManifold CollisionManager::RectangleToCircle(GameObjectEntity* rectA, G
 
 	OKVector2<float> NearPoint = OKVector2<float>(0, 0);
 
+	#pragma region Trigger Area Collision
+
+
+
+
+
+
+
+
+	#pragma endregion
+
+		
+
+
+
+	#pragma region Physics Collision
+
 	if (t_CircPositionA.x < TopLeftCorner.x)
 	{
 		OKVector2<float> LeftSide = ProjectPointOntoLine(
@@ -661,6 +678,8 @@ CollisionManifold CollisionManager::RectangleToCircle(GameObjectEntity* rectA, G
 			rectA->GetComponent<RectangleColliderComponent>()->TriggerQuery(circB);
 		}
 	}
+
+	#pragma endregion
 
 	return t_ColMani;
 }
