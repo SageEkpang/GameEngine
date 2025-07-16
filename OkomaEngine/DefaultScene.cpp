@@ -24,7 +24,6 @@ DefaultScene::DefaultScene()
 DefaultScene::~DefaultScene()
 {
 
-
 }
 
 void DefaultScene::Update(const float deltaTime)
