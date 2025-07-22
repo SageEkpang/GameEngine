@@ -26,7 +26,7 @@ void PhysicsManager::Update(const float deltaTime)
 			if (i == j) { continue; }
 
 			// NOTE: Check if the physics component does have a collider on it, if not, we do not want to do anything with it
-			if (t_PhysicsObjects[i]->FindChildComponent<ComponentEntity>() == nullptr || t_PhysicsObjects[j]->FindChildComponent<ComponentEntity>() == nullptr) { continue; }
+			if (t_PhysicsObjects[i]->FindChildComponent<PhysicsEntity>() == nullptr || t_PhysicsObjects[j]->FindChildComponent<PhysicsEntity>() == nullptr) { continue; }
 
 			// NOTE: Check Collisions between the two physics components
 			m_CollisionManifold = m_ColliderManager.CheckCollisions(t_PhysicsObjects[i], t_PhysicsObjects[j]);

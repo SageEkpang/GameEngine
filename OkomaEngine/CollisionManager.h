@@ -18,29 +18,16 @@ class CapsuleColliderComponent;
 class ComplexColliderComponent;
 class PointColliderComponent;
 
-
-// TRIGGER STUFF
-/*
-    Rectangle to Rectangle -> Double Checks
-    Circle to Circle -> Double Checks
-    Circle to Rectangle -> Double Checks
-
-*/
-
-
-
 enum Collider_Type_Collisions
 {
     // Physics Collider (Work on this )
     COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_RECTANGLE, // Done
     COLLIDER_TYPE_COLLISIONS_CIRCLE_TO_CIRCLE, // Done
-    COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_CIRCLE, // Need to work on
-
+    COLLIDER_TYPE_COLLISIONS_RECTANGLE_TO_CIRCLE, // Done
 
     COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CIRCLE, // Done
-    COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_RECTANGLE, // Need to Tweak
+    COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_RECTANGLE, // Done
     COLLIDER_TYPE_COLLISIONS_CAPSULE_TO_CAPSULE, // Done
-
 
     COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_ORIENTED,
     COLLIDER_TYPE_COLLISIONS_ORIENTED_TO_RECTANGLE,
