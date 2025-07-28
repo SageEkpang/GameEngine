@@ -27,13 +27,6 @@ void GameObjectManager::Showcase()
 
 void GameObjectManager::AddGameObject(GameObjectEntity* gameObject)
 {
-    // TODO: Instead of the game object, should take in the components from the game objects
-    // 
-    // 
-    // TODO_INSTEAD: Take in a copy, make a new gameobject here
-    // 
-    // 
-    // 
     // NOTE: Checks if the game object has a physics component on it, so it can simulate physics
     if (gameObject->HasComponent<Rigidbody2DComponent>()) { m_PhysicsManager.AddPhysicsObject(gameObject); }
     if (gameObject->HasComponent<RenderComponent>()) { m_RenderManager.AddRenderObject(gameObject); }

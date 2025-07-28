@@ -6,18 +6,11 @@ TestScene::TestScene()
 	m_Name = "TestScene";
 
 	{
+		GameObjectEntity m_CircleObjectTwo;
 		m_CircleObjectTwo.m_Transform.position = OKVector2<float>(0, 0);
 		m_CircleObjectTwo.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
 		m_CircleObjectTwo.AddComponent<CircleColliderComponent>()->Construct(40);
 		AddObject(&m_CircleObjectTwo);
-	}
-
-	{
-		//m_OtherObject.m_Transform.position = OKVector2<float>(-180, -200);
-		//m_OtherObject.AddComponent<Rigidbody2DComponent>()->Construct(100, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
-		//m_OtherObject.AddComponent<CapsuleColliderComponent>()->Construct(40, 80);
-		//m_OtherObject.GetComponent<CapsuleColliderComponent>()->m_IsTrigger = true;
-		//AddObject(&m_OtherObject);
 	}
 
 	// floor
@@ -47,6 +40,6 @@ void TestScene::Update(const float deltaTime)
 
 void TestScene::Draw()
 {
-	SceneEntity::Draw();
+	
 
 }
