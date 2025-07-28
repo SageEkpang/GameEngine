@@ -140,20 +140,22 @@ inline T GameObjectEntity::AddComponent()
 			m_ComponentIndex = MAX_COMPONENTS;
 			throw;
 		}
+
+		m_Components[std::type_index(typeid(T))] = T();
+
+		auto t_Index = m_Components.find(std::type_index(typeid(T)));
+		t_Index->second.m_Owner = this;
+		// t_Index->second.m_ID;
+
+		if (t_Index != m_Components.end())
+		{
+			return static_cast<T*>(&t_Index->second);
+		}
 	}
 	catch (...)
 	{
 		printf("Max Component count has been reached");
-		return nullptr;
 	}
-	
-	m_Components[std::type_index(typeid(T))] = T();
-
-	auto t_Index = m_Components.find(std::type_index(typeid(T)));
-	t_Index->second->m_Owner = this;
-	// t_Index->second->m_ID;
-
-	return t_Index == m_Components.end() ? nullptr : static_cast<T*>(t_Index->second);
 }
 
 /// <summary>
@@ -192,10 +194,10 @@ inline T* GameObjectEntity::FindChildComponent()
 	T* t_Result = nullptr;
 	for (auto& [ComponentId, ComponentType] : m_Components)
 	{
-		t_Result = dynamic_cast<T*>(ComponentType);
+		t_Result = dynamic_cast<T*>(&ComponentType);
 		if (t_Result) 
 		{ 
-			break; 
+			break;
 		}
 	}
 
@@ -213,7 +215,7 @@ inline std::type_index GameObjectEntity::FindChildComponentID()
 	T* t_Result = nullptr;
 	for (auto& [ComponentId, ComponentType] : m_Components)
 	{
-		t_Result = dynamic_cast<T*>(ComponentType);
+		t_Result = dynamic_cast<T*>(&ComponentType);
 		if (t_Result) 
 		{ 
 			return ComponentId;
@@ -233,7 +235,7 @@ inline T GameObjectEntity::GetComponent()
 {
 	auto t_Index = m_Components.find(std::type_index(typeid(T)));
 
-	if (t_Index == m_Components.end())
+	if (t_Index != m_Components.end())
 	{
 		return static_cast<T&>(t_Index->second);
 	}

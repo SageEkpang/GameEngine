@@ -54,8 +54,8 @@ public:
 	}
 
 	// SETTER FUNCTION(s)
-	inline void SpawnObject(GameObjectEntity* object) { m_GameObjectManager.AddGameObject(object); }
-	inline void AddObject(GameObjectEntity* object) { m_GameObjectManager.AddGameObject(object); }
+	inline void SpawnObject(GameObjectEntity prefab) { m_GameObjectManager.AddGameObject(prefab); }
+	inline void AddObject(GameObjectEntity object) { m_GameObjectManager.AddGameObject(object); }
 	inline void RemoveObject(GameObjectEntity* object) { m_GameObjectManager.RemoveGameObject(object); }
 };
 

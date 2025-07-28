@@ -25,15 +25,17 @@ void GameObjectManager::Showcase()
     ShowcaseGameObject();
 }
 
-void GameObjectManager::AddGameObject(GameObjectEntity* gameObject)
+void GameObjectManager::AddGameObject(GameObjectEntity gameObject)
 {
     // NOTE: Checks if the game object has a physics component on it, so it can simulate physics
-    if (gameObject->HasComponent<Rigidbody2DComponent>()) { m_PhysicsManager.AddPhysicsObject(gameObject); }
-    if (gameObject->HasComponent<RenderComponent>()) { m_RenderManager.AddRenderObject(gameObject); }
-    if (gameObject->HasComponent<CameraComponent>()) 
+    m_GameObjectsVector.push_back(gameObject);
+    int t_Index = m_GameObjectsVector.size() - 1;
+
+    if (gameObject.HasComponent<Rigidbody2DComponent>()) { m_PhysicsManager.AddPhysicsObject(&m_GameObjectsVector[t_Index]); }
+    if (gameObject.HasComponent<RenderComponent>()) { m_RenderManager.AddRenderObject(&m_GameObjectsVector[t_Index]); }
+    if (gameObject.HasComponent<CameraComponent>()) 
     { 
-        m_CurrentCamera = &gameObject->GetComponent<CameraComponent>().m_Camera; 
-        m_GameObjectsVector.push_back(gameObject);
+        // m_CurrentCamera = &(gameObject->GetComponent<CameraComponent>()).m_Camera; 
     }
 
 }
@@ -58,7 +60,7 @@ void GameObjectManager::ProcessGameObject(float deltaTime)
 
     for (auto& v : m_GameObjectsVector)
     {
-        v->Update(deltaTime);
+        v.Update(deltaTime);
     }
 }
 

@@ -6,11 +6,11 @@ TestScene::TestScene()
 	m_Name = "TestScene";
 
 	{
-		//GameObjectEntity m_CircleObjectTwo;
-		//m_CircleObjectTwo.m_Transform.position = OKVector2<float>(0, 0);
-		//m_CircleObjectTwo.AddComponent<Rigidbody2DComponent>()->Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
-		//m_CircleObjectTwo.AddComponent<CircleColliderComponent>()->Construct(40);
-		//AddObject(&m_CircleObjectTwo);
+		GameObjectEntity m_CircleObjectTwo;
+		m_CircleObjectTwo.m_Transform.position = OKVector2<float>(0, 0);
+		m_CircleObjectTwo.AddComponent<Rigidbody2DComponent>().Construct(10, RIGIDBODY_MOVEMENT_TYPE_DYNAMIC);
+		m_CircleObjectTwo.AddComponent<CircleColliderComponent>().Construct(40);
+		AddObject(m_CircleObjectTwo);
 	}
 
 	// floor
