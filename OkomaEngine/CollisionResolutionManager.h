@@ -17,11 +17,11 @@ public:
 	~CollisionResolutionManager();
 
 	// BASE FUNCTION(s)
-	void ResolveCollision(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB, float coefRest, CollisionManifold collisionManifold);
+	void ResolveCollision(GameObjectEntity* gameObjectA, GameObjectEntity* gameObjectB, float coefRest, CollisionManifold collisionManifold);
 
 private:
 
-	OKVector2<float> CalculateSeperatingVelocity(GameObjectEntity* rigidbodyA, GameObjectEntity* rigidbodyB);
+	OKVector2<float> CalculateSeperatingVelocity(GameObjectEntity* gameObjectA, GameObjectEntity* gameObjectB);
 };
 
 #endif
