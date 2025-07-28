@@ -34,17 +34,17 @@ public: // PROTECTED VARIABLE(s)
     OKVector2<float> m_Velocity{};
 
     // NOTE: Coefficient of Drag
-    mutable float m_Drag{ 0.2f };
-    mutable float m_DragFluidDensity{ 1.4f };
-    mutable float m_DragCrossSectionalArea{ 1.f };
+    mutable float m_Drag{ 0.2f }; // 0 - 1 // NOTE: Nth / 100
+    mutable float m_DragFluidDensity{ 1.0f };
+    mutable float m_DragCrossSectionalArea{ 1.0f };
 
     // NOTE: Coefficient of Lift
-    mutable float m_Lift{ 1.f };
-    mutable float m_LiftFluidDensity{ 1.4f };
-    mutable float m_LiftCrossSectionalArea{ 1.f };
+    mutable float m_Lift{ 1.f }; // 0 - 1 // NOTE: Nth / 100
+    mutable float m_LiftFluidDensity{ 1.0f };
+    mutable float m_LiftCrossSectionalArea{ 1.0f };
 
     // NOTE: Coefficient of Friction
-    mutable float m_Friction{ 1.f };
+    mutable float m_Friction{ 1.f }; // 0 - 1 // NOTE: Nth / 100
 
     bool m_SimulateGravity = true;
     bool m_SimulateDrag = false;
