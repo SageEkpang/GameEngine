@@ -74,6 +74,7 @@ public: // PUBLIC FUNCTION(s)
     inline int GetObjectCount() { return (int)m_ObjectList.size(); }
 
     // SETTER FUNCTION(s)
+    inline void HasCollided(bool hasCollided) { m_HasCollided = hasCollided; }
 
 };
 

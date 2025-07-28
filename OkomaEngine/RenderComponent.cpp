@@ -21,8 +21,8 @@ void RenderComponent::Construct()
 void RenderComponent::Construct(int width, int height)
 {
 	m_Image = RenderManager::m_SavedTextures["Blank"];
-	m_Width = width;
-	m_Height = height;
+	m_Width = float(width);
+	m_Height = float(height);
 }
 
 void RenderComponent::Construct(const char* imageName)
@@ -93,8 +93,8 @@ void RenderComponent::Construct(const char* imageName, int width, int height)
 
 			// NOTE: If there is no texture, then use Blank by default
 			m_Image = RenderManager::m_SavedTextures["Blank"];
-			m_Width = width;
-			m_Height = height;
+			m_Width = float(width);
+			m_Height = float(height);
 
 			return;
 		}
@@ -107,8 +107,8 @@ void RenderComponent::Construct(const char* imageName, int width, int height)
 		m_Image = RenderManager::m_SavedTextures[t_ImageName];
 	}
 
-	m_Width = width;
-	m_Height = height;
+	m_Width = float(width);
+	m_Height = float(height);
 }
 
 void RenderComponent::Update(const float deltaTime)

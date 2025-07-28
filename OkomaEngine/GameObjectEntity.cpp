@@ -17,13 +17,13 @@ GameObjectEntity::~GameObjectEntity()
 {
 	if (!m_Components.empty())
 	{
-		for (auto& [ComponentType, Component] : m_Components)
-		{
-			if (Component == nullptr) { continue; }
+		//for (auto& [ComponentType, Component] : m_Components)
+		//{
+		//	if (Component == nullptr) { continue; }
 
-			delete Component;
-			Component = nullptr;
-		}
+		//	delete Component;
+		//	Component = nullptr;
+		//}
 	}
 
 	m_Parent = nullptr;
@@ -46,7 +46,7 @@ void GameObjectEntity::Update(const float deltaTime)
 	{
 		for (auto& [ComponentType, Component] : m_Components)
 		{
-			Component->Update(deltaTime);
+			Component.Update(deltaTime);
 		}
 	}
 }
@@ -58,7 +58,7 @@ void GameObjectEntity::Draw()
 	{
 		for (auto& [ComponentType, Component] : m_Components)
 		{
-			Component->Draw();
+			Component.Draw();
 		}
 	}
 }

@@ -47,7 +47,7 @@ private:
 	std::bitset<MAX_COMPONENTS> m_ComponentBitMask;
 
 	// COMPONENT ARRAY(s)
-	std::unordered_map<std::type_index, ComponentEntity*> m_Components;
+	std::unordered_map<std::type_index, ComponentEntity> m_Components;
 
 	// TODO: Find out how to make this work
 	GameObjectEntity* m_Parent;
@@ -106,7 +106,7 @@ public:
 
 	// HELPER FUNCTION(s)
 	template<std::derived_from<ComponentEntity> T>
-	T* AddComponent();
+	T AddComponent();
 
 	template<std::derived_from<ComponentEntity> T>
 	void RemoveComponent();
@@ -118,7 +118,7 @@ public:
 	std::type_index FindChildComponentID();
 
 	template<std::derived_from<ComponentEntity> T>
-	T* GetComponent();
+	T GetComponent();
 
 	template<std::derived_from<ComponentEntity> T>
 	bool HasComponent();
@@ -130,7 +130,7 @@ public:
 /// </summary>
 /// <typeparam name="T"></typeparam>
 template<std::derived_from<ComponentEntity> T>
-inline T* GameObjectEntity::AddComponent()
+inline T GameObjectEntity::AddComponent()
 {
 	try
 	{
@@ -147,7 +147,7 @@ inline T* GameObjectEntity::AddComponent()
 		return nullptr;
 	}
 	
-	m_Components[std::type_index(typeid(T))] = new T();
+	m_Components[std::type_index(typeid(T))] = T();
 
 	auto t_Index = m_Components.find(std::type_index(typeid(T)));
 	t_Index->second->m_Owner = this;
@@ -193,7 +193,10 @@ inline T* GameObjectEntity::FindChildComponent()
 	for (auto& [ComponentId, ComponentType] : m_Components)
 	{
 		t_Result = dynamic_cast<T*>(ComponentType);
-		if (t_Result) { break; }
+		if (t_Result) 
+		{ 
+			break; 
+		}
 	}
 
 	return t_Result;
@@ -226,10 +229,16 @@ inline std::type_index GameObjectEntity::FindChildComponentID()
 /// <typeparam name="T"></typeparam>
 /// <returns></returns>
 template<std::derived_from<ComponentEntity> T>
-inline T* GameObjectEntity::GetComponent()
+inline T GameObjectEntity::GetComponent()
 {
 	auto t_Index = m_Components.find(std::type_index(typeid(T)));
-	return t_Index == m_Components.end() ? nullptr : static_cast<T*>(t_Index->second);
+
+	if (t_Index == m_Components.end())
+	{
+		return static_cast<T&>(t_Index->second);
+	}
+
+	// return t_Index == m_Components.end() ? nullptr : static_cast<T&>(t_Index->second);
 }
 
 /// <summary>

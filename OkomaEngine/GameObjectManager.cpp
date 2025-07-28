@@ -32,7 +32,7 @@ void GameObjectManager::AddGameObject(GameObjectEntity* gameObject)
     if (gameObject->HasComponent<RenderComponent>()) { m_RenderManager.AddRenderObject(gameObject); }
     if (gameObject->HasComponent<CameraComponent>()) 
     { 
-        m_CurrentCamera = &gameObject->GetComponent<CameraComponent>()->m_Camera; 
+        m_CurrentCamera = &gameObject->GetComponent<CameraComponent>().m_Camera; 
         m_GameObjectsVector.push_back(gameObject);
     }
 

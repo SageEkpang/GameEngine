@@ -27,10 +27,10 @@ void CollisionResolutionManager::ResolveCollision(GameObjectEntity* gameObjectA,
 
 	if (gameObjectA->HasComponent<Rigidbody2DComponent>())
 	{
-		m_RigidbodyObjectAMass = gameObjectA->GetComponent<Rigidbody2DComponent>()->m_Mass;
-		m_RigidbodyObjectAInverseMass = gameObjectA->GetComponent<Rigidbody2DComponent>()->GetInverseMass();
+		m_RigidbodyObjectAMass = gameObjectA->GetComponent<Rigidbody2DComponent>().m_Mass;
+		m_RigidbodyObjectAInverseMass = gameObjectA->GetComponent<Rigidbody2DComponent>().GetInverseMass();
 
-		if (gameObjectA->GetComponent<Rigidbody2DComponent>()->m_RigidbodyMovementType == RIGIDBODY_MOVEMENT_TYPE_STATIC)
+		if (gameObjectA->GetComponent<Rigidbody2DComponent>().m_RigidbodyMovementType == RIGIDBODY_MOVEMENT_TYPE_STATIC)
 		{
 			m_RigidbodyObjectAMass = FLT_MAX;
 			m_RigidbodyObjectAInverseMass = 1.f / FLT_MAX;
@@ -39,10 +39,10 @@ void CollisionResolutionManager::ResolveCollision(GameObjectEntity* gameObjectA,
 
 	if (gameObjectB->HasComponent<Rigidbody2DComponent>())
 	{
-		m_RigidbodyObjectBMass = gameObjectB->GetComponent<Rigidbody2DComponent>()->m_Mass;
-		m_RigidbodyObjectBInverseMass = gameObjectB->GetComponent<Rigidbody2DComponent>()->GetInverseMass();
+		m_RigidbodyObjectBMass = gameObjectB->GetComponent<Rigidbody2DComponent>().m_Mass;
+		m_RigidbodyObjectBInverseMass = gameObjectB->GetComponent<Rigidbody2DComponent>().GetInverseMass();
 
-		if (gameObjectB->GetComponent<Rigidbody2DComponent>()->m_RigidbodyMovementType == RIGIDBODY_MOVEMENT_TYPE_STATIC)
+		if (gameObjectB->GetComponent<Rigidbody2DComponent>().m_RigidbodyMovementType == RIGIDBODY_MOVEMENT_TYPE_STATIC)
 		{
 			m_RigidbodyObjectBMass = FLT_MAX;
 			m_RigidbodyObjectBInverseMass = 1.f / FLT_MAX;
@@ -71,7 +71,7 @@ void CollisionResolutionManager::ResolveCollision(GameObjectEntity* gameObjectA,
 
 	// NOTE: Velocity / Position Solving
 	if (gameObjectA->HasComponent<Rigidbody2DComponent>() 
-		&& gameObjectA->GetComponent<Rigidbody2DComponent>()->GetRigidbodyMovementType() == RIGIDBODY_MOVEMENT_TYPE_DYNAMIC)
+		&& gameObjectA->GetComponent<Rigidbody2DComponent>().GetRigidbodyMovementType() == RIGIDBODY_MOVEMENT_TYPE_DYNAMIC)
 	{
 		// NOTE: Seperate the 2 objects away from each other if they are still interpentrating
 		if (collisionManifold.m_PenetrationDepth != 0) { gameObjectA->m_Transform.position += t_MoveOutA; }
@@ -82,12 +82,12 @@ void CollisionResolutionManager::ResolveCollision(GameObjectEntity* gameObjectA,
 		float impulseY = impMag * collisionManifold.m_CollisionNormal.y;
 
 		// NOTE: Apply calculation to the new objects
-		gameObjectA->GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(impulseX / gameObjectA->GetComponent<Rigidbody2DComponent>()->m_Mass);
-		gameObjectA->GetComponent<Rigidbody2DComponent>()->ApplyImpulseY(impulseY / gameObjectA->GetComponent<Rigidbody2DComponent>()->m_Mass);
+		gameObjectA->GetComponent<Rigidbody2DComponent>().ApplyImpulseX(impulseX / gameObjectA->GetComponent<Rigidbody2DComponent>().m_Mass);
+		gameObjectA->GetComponent<Rigidbody2DComponent>().ApplyImpulseY(impulseY / gameObjectA->GetComponent<Rigidbody2DComponent>().m_Mass);
 	}
 
 	if (gameObjectB->HasComponent<Rigidbody2DComponent>() 
-		&& gameObjectB->GetComponent<Rigidbody2DComponent>()->GetRigidbodyMovementType() == RIGIDBODY_MOVEMENT_TYPE_DYNAMIC)
+		&& gameObjectB->GetComponent<Rigidbody2DComponent>().GetRigidbodyMovementType() == RIGIDBODY_MOVEMENT_TYPE_DYNAMIC)
 	{
 		// NOTE: Seperate the 2 objects away from each other if they are still interpentrating
 		if (collisionManifold.m_PenetrationDepth != 0) { gameObjectB->m_Transform.position += t_MoveOutB; }
@@ -98,8 +98,8 @@ void CollisionResolutionManager::ResolveCollision(GameObjectEntity* gameObjectA,
 		float impulseY = impMag * collisionManifold.m_CollisionNormal.y;
 
 		// NOTE: Apply calculation to the new objects
-		gameObjectB->GetComponent<Rigidbody2DComponent>()->ApplyImpulseX(-1 * impulseX / gameObjectB->GetComponent<Rigidbody2DComponent>()->m_Mass);
-		gameObjectB->GetComponent<Rigidbody2DComponent>()->ApplyImpulseY(-1 * impulseY / gameObjectB->GetComponent<Rigidbody2DComponent>()->m_Mass);
+		gameObjectB->GetComponent<Rigidbody2DComponent>().ApplyImpulseX(-1 * impulseX / gameObjectB->GetComponent<Rigidbody2DComponent>().m_Mass);
+		gameObjectB->GetComponent<Rigidbody2DComponent>().ApplyImpulseY(-1 * impulseY / gameObjectB->GetComponent<Rigidbody2DComponent>().m_Mass);
 	}
 }
 
@@ -114,7 +114,7 @@ OKVector2<float> CollisionResolutionManager::CalculateSeperatingVelocity(GameObj
 	}
 	else
 	{
-		t_RelativeVelocity = gameObjectA->GetComponent<Rigidbody2DComponent>()->m_Velocity;
+		t_RelativeVelocity = gameObjectA->GetComponent<Rigidbody2DComponent>().m_Velocity;
 	}
 
 	if (!gameobjectB->HasComponent<Rigidbody2DComponent>())
@@ -123,7 +123,7 @@ OKVector2<float> CollisionResolutionManager::CalculateSeperatingVelocity(GameObj
 	}
 	else
 	{
-		t_RelativeVelocity -= gameobjectB->GetComponent<Rigidbody2DComponent>()->m_Velocity;
+		t_RelativeVelocity -= gameobjectB->GetComponent<Rigidbody2DComponent>().m_Velocity;
 	}
 
 	return t_RelativeVelocity;

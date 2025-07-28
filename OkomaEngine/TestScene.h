@@ -12,7 +12,7 @@ class TestScene : public SceneEntity
 private:
 
 	// GameObjectEntity m_CircleObjectTwo;
-	GameObjectEntity m_Floor;
+	// GameObjectEntity m_Floor;
 
 public:
 
