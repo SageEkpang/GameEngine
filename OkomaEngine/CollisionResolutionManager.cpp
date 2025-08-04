@@ -103,7 +103,7 @@ void CollisionResolutionManager::ResolveCollision(GameObjectEntity* gameObjectA,
 	}
 }
 
-OKVector2<float> CollisionResolutionManager::CalculateSeperatingVelocity(GameObjectEntity* gameObjectA, GameObjectEntity* gameobjectB)
+OKVector2<float> CollisionResolutionManager::CalculateSeperatingVelocity(GameObjectEntity* gameObjectA, GameObjectEntity* gameObjectB)
 {
 	// NOTE: Calculate the Relative Velocity / Seperating Velocity
 	OKVector2<float> t_RelativeVelocity = OKVector2<float>();
@@ -117,13 +117,13 @@ OKVector2<float> CollisionResolutionManager::CalculateSeperatingVelocity(GameObj
 		t_RelativeVelocity = gameObjectA->GetComponent<Rigidbody2DComponent>()->m_Velocity;
 	}
 
-	if (!gameobjectB->HasComponent<Rigidbody2DComponent>())
+	if (!gameObjectB->HasComponent<Rigidbody2DComponent>())
 	{
 		t_RelativeVelocity -= OKVector2<float>(0.f, 0.f);
 	}
 	else
 	{
-		t_RelativeVelocity -= gameobjectB->GetComponent<Rigidbody2DComponent>()->m_Velocity;
+		t_RelativeVelocity -= gameObjectB->GetComponent<Rigidbody2DComponent>()->m_Velocity;
 	}
 
 	return t_RelativeVelocity;
