@@ -175,6 +175,7 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioComponent.h" />
@@ -219,6 +220,7 @@
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TimeStepConstants.h" />
+    <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="WindowConstants.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

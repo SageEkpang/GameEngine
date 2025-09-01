@@ -99,3 +99,4 @@ OrientedRectangleColliderComponent::~OrientedRectangleColliderComponent()
 	m_Scale = OKVector2<float>(0.f, 0.f);
 	m_Rotation = 0.f;
 }
+

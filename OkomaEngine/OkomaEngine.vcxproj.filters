@@ -132,6 +132,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Components\TransformComponents">
+      <UniqueIdentifier>{d3274503-3acc-45fd-ab37-ce6ec6212d72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\TransformComponents\Header">
+      <UniqueIdentifier>{bd902323-c6e6-4354-9228-7d58aec0a4d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\TransformComponents\Source">
+      <UniqueIdentifier>{9190cdc9-13d2-427a-aa8b-bec301728961}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -253,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="RenderManager.cpp">
       <Filter>Managers\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformComponent.cpp">
+      <Filter>Components\TransformComponents\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -384,6 +396,9 @@
     </ClInclude>
     <ClInclude Include="RenderManager.h">
       <Filter>Managers\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformComponent.h">
+      <Filter>Components\TransformComponents\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

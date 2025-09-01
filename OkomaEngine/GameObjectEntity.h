@@ -18,6 +18,8 @@
 #include <typeinfo>
 
 // DERIVED COMPONENT CLASSE(s)
+#include "TransformComponent.h"
+
 #include "RectangleColliderComponent.h"
 #include "CircleColliderComponent.h"
 #include "CapsuleColliderComponent.h"
